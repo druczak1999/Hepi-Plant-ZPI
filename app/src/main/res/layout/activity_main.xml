@@ -11,8 +11,8 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginLeft="92dp"
         android:layout_marginBottom="504dp"
         android:fontFamily="@font/cantata_one"
         android:text="Hepi Plant"
@@ -24,10 +24,10 @@
         android:id="@+id/ikonaHapi"
         android:layout_width="247dp"
         android:layout_height="337dp"
-        android:layout_marginStart="82dp"
-        android:layout_marginLeft="82dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name"
-        app:srcCompat="@drawable/ikonaHepiPlant" />
+        app:srcCompat="@drawable/plant" />
 </androidx.constraintlayout.widget.ConstraintLayout>
