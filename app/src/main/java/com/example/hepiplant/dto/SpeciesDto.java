@@ -1,6 +1,6 @@
 package com.example.hepiplant.dto;
 
-import com.hepiplant.backend.entity.enums.Placement;
+import com.example.hepiplant.dto.enums.Placement;
 
 public class SpeciesDto {
 

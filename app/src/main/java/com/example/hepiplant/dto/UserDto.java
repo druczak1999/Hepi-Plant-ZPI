@@ -1,6 +1,7 @@
 package com.example.hepiplant.dto;
 
-import com.hepiplant.backend.entity.enums.Permission;
+
+import com.example.hepiplant.dto.enums.Permission;
 
 public class UserDto {
 
