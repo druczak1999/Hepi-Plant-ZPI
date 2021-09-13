@@ -42,8 +42,8 @@ public class TestBackend extends AppCompatActivity {
         try {
             postData.put("username", intent.getExtras().getString("userName"));
             postData.put("email", intent.getExtras().getString("userEmail"));
-            postData.put("login", "login");
-            postData.put("password", intent.getExtras().getString("userId"));
+            postData.put("uId", intent.getExtras().getString("userId"));
+
 
         } catch (JSONException e) {
             e.printStackTrace();
