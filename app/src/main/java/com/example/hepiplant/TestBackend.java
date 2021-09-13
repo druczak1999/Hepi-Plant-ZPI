@@ -44,7 +44,6 @@ public class TestBackend extends AppCompatActivity {
             postData.put("email", intent.getExtras().getString("userEmail"));
             postData.put("uId", intent.getExtras().getString("userId"));
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -68,7 +67,7 @@ public class TestBackend extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                textView.setText(error.toString());
+                textView.setText(error.getMessage());
             }
         });
 //
