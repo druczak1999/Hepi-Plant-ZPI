@@ -1,16 +1,25 @@
 package com.example.hepiplant.dto;
 
-import com.hepiplant.backend.entity.enums.Permission;
+
+import com.example.hepiplant.dto.enums.Permission;
 
 public class UserDto {
 
+    private Long id;
     private String username;
-    private String login;
-    private String password;
+    private String uId;
     private String email;
     private Permission permission;
 
     public UserDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -21,20 +30,12 @@ public class UserDto {
         this.username = username;
     }
 
-    public String getLogin() {
-        return login;
+    public String getuId() {
+        return uId;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 
     public String getEmail() {

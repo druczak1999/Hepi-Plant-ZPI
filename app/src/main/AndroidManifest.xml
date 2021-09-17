@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".TestBackend"></activity>
+        <activity android:name=".FireBase"></activity>
+        <activity android:name=".TestBackend" />
         <activity android:name=".Uzytkownik" />
         <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
