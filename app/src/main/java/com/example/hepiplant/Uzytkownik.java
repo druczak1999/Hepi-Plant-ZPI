@@ -14,9 +14,9 @@ public class Uzytkownik extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uzytkownik);
-        Toolbar myToolbar =  findViewById(R.id.toolbar);
+        Toolbar myToolbar =  findViewById(R.id.toolbarTest);
+        myToolbar.setTitle("");
         setSupportActionBar(myToolbar);
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

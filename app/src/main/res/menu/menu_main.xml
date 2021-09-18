@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/miCompose"
-        android:icon="@drawable/ludzik"
-        app:showAsAction="ifRoom"
-        android:title="Compose">
-    </item>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <item
         android:id="@+id/miProfile"
+        android:icon="@drawable/ludzik"
+        android:title="Profil użytkownika"
+        app:showAsAction="ifRoom"
+
+        />
+    <item
+        android:id="@+id/more"
         android:icon="@drawable/kropki"
         app:showAsAction="ifRoom|withText"
-        android:title="Profile">
+        android:title="Wyloguj się"
+        >
+        <menu>
+            <item
+                android:id="@+id/infoMenu"
+                android:title="Informacje"
+                app:showAsAction="never"
+                />
+            <item
+                android:id="@+id/wyloguj"
+                android:title="Wyloguj się"
+                app:showAsAction="never"
+                />
+        </menu>
     </item>
+
+
 </menu>
