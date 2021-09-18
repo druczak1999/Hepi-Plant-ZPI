@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "767046087218",
+    "project_id": "hepiplant",
+    "storage_bucket": "hepiplant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767046087218:android:d3cbe0de939f88c65c022b",
+        "android_client_info": {
+          "package_name": "com.example.hepiplant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767046087218-5okg6vdtquule79h99ahc0216eipda07.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnRg7Gd6_UANHjAzIo0yhIN2EZpaP8K4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767046087218-5okg6vdtquule79h99ahc0216eipda07.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
