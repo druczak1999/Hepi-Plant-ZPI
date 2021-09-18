@@ -4,6 +4,7 @@ import com.example.hepiplant.dto.enums.Placement;
 
 public class SpeciesDto {
 
+    private Long id;
     private String name;
     private int wateringFrequency;
     private int fertilizingFrequency;
@@ -13,6 +14,14 @@ public class SpeciesDto {
     private Long categoryId;
 
     public SpeciesDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
