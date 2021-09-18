@@ -7,7 +7,7 @@ public class UserDto {
 
     private Long id;
     private String username;
-    private String uId;
+    private String uid;
     private String email;
     private Permission permission;
 
@@ -30,12 +30,12 @@ public class UserDto {
         this.username = username;
     }
 
-    public String getuId() {
-        return uId;
+    public String getUid() {
+        return uid;
     }
 
-    public void setuId(String uId) {
-        this.uId = uId;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {
