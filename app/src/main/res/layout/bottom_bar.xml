@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonDom"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="40dp"
@@ -24,10 +24,10 @@
             android:elevation="8dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonForum"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="335dp"
+            android:layout_marginLeft="290dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/dom"

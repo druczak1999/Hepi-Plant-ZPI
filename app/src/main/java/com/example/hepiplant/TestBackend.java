@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.dto.UserDto;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,15 +38,16 @@ public class TestBackend extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarTest);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+
         Intent intent = this.getIntent();
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://192.168.1.17:8080/users";
+        String url ="http://192.168.0.45:8080/users";
 
         JSONObject postData = new JSONObject();
         try {
             postData.put("username", intent.getExtras().getString("userName"));
             postData.put("email", intent.getExtras().getString("userEmail"));
-            postData.put("uId", intent.getExtras().getString("userId"));
+            postData.put("uid", intent.getExtras().getString("userId"));
 
         } catch (JSONException e) {
             e.printStackTrace();
