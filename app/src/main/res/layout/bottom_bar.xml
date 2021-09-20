@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,17 +9,17 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_gravity="bottom"
         android:background="@color/colorPrimaryLight"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintEnd_toEndOf="parent">
+        android:clipToPadding="false"
+        app:itemHorizontalTranslationEnabled="false">
 
         <Button
             android:id="@+id/buttonDom"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="left|center_vertical"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="15dp"
             android:background="@drawable/forum"
             android:elevation="8dp" />
 
@@ -27,13 +27,11 @@
             android:id="@+id/buttonForum"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="290dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="40dp"
             android:background="@drawable/dom"
             android:elevation="8dp" />
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
