@@ -1,10 +1,27 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+    <style name="ListItemTitleFont" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/colorDarkFont</item>
+    </style>
+    <style name="ListItemDescriptionFont" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorDarkFont</item>
+    </style>
+    <style name="PageTitleFont" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- być może do zmiany czcionka -->
+        <item name="android:fontFamily">@font/cantata_one</item>
+        <item name="android:textSize">36sp</item>
+        <item name="android:textColor">@color/colorDarkFont</item>
     </style>
 
 </resources>
