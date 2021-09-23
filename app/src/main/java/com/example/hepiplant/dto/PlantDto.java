@@ -1,6 +1,5 @@
 package com.example.hepiplant.dto;
 
-
 import java.time.LocalDateTime;
 
 public class PlantDto {
@@ -10,8 +9,9 @@ public class PlantDto {
     private String purchaseDate;
     private String location;
     private Long categoryId;
-    private Long speciesId;
+    private SpeciesDto species;
     private Long userId;
+    private ScheduleDto schedule;
 
     public PlantDto() {
     }
@@ -56,12 +56,12 @@ public class PlantDto {
         this.categoryId = categoryId;
     }
 
-    public Long getSpeciesId() {
-        return speciesId;
+    public SpeciesDto getSpecies() {
+        return species;
     }
 
-    public void setSpeciesId(Long speciesId) {
-        this.speciesId = speciesId;
+    public void setSpecies(SpeciesDto species) {
+        this.species = species;
     }
 
     public Long getUserId() {
@@ -71,4 +71,13 @@ public class PlantDto {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
+    public ScheduleDto getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(ScheduleDto schedule) {
+        this.schedule = schedule;
+    }
+
 }
