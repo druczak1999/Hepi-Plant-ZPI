@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -25,6 +26,8 @@ import java.util.List;
 
 public class FireBase extends AppCompatActivity {
 
+    private static final String TAG = "FireBaseActivity";
+
     // [START auth_fui_create_launcher]
     // See: https://developer.android.com/training/basics/intents/result
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
@@ -40,12 +43,14 @@ public class FireBase extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fire_base);
         createSignInIntent();
     }
 
     public void createSignInIntent() {
+        Log.v(TAG, "Entering createSignInIntent()");
         // [START auth_fui_create_intent]
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -64,11 +69,12 @@ public class FireBase extends AppCompatActivity {
 
     // [START auth_fui_result]
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
+        Log.v(TAG, "Entering onSignInResult()");
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Intent intent = new Intent(getApplicationContext(),TestBackend.class);
+            Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
             intent.putExtra("userId",user.getUid());
             intent.putExtra("userEmail",user.getEmail());
             intent.putExtra("userName",user.getDisplayName());
@@ -83,6 +89,7 @@ public class FireBase extends AppCompatActivity {
     // [END auth_fui_result]
 
     public void signOut() {
+        Log.v(TAG, "Entering signOut()");
         // [START auth_fui_signout]
         AuthUI.getInstance()
                 .signOut(this)
@@ -95,6 +102,7 @@ public class FireBase extends AppCompatActivity {
     }
 
     public void delete() {
+        Log.v(TAG, "Entering delete()");
         // [START auth_fui_delete]
         AuthUI.getInstance()
                 .delete(this)
