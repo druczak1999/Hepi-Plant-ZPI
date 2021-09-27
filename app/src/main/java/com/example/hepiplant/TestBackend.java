@@ -5,11 +5,13 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.dto.UserDto;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,11 +36,13 @@ public class TestBackend extends AppCompatActivity {
         setContentView(R.layout.activity_test_backend);
         TextView textView = (TextView) findViewById(R.id.tv1);
 
+
         Toolbar toolbar = findViewById(R.id.toolbarTest);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         Intent intent = this.getIntent();
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="http://192.168.0.45:8080/users";
 
@@ -68,6 +71,9 @@ public class TestBackend extends AppCompatActivity {
                         StringBuilder sb = new StringBuilder("Response is: \n"+data.getUsername());
                         //Arrays.stream(data).forEach(p -> sb.append(p.getUsername()).append("\n"));
                         textView.setText(sb);
+//                        String uri = intent.getExtras().getString("photo");
+//                        Uri photoUri = Uri.parse(uri);
+//                        imageView.setImageURI(photoUri);
                     }
                 }, new Response.ErrorListener() {
             @Override
