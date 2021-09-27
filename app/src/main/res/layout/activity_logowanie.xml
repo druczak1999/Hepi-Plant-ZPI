@@ -20,10 +20,10 @@
         android:textColor="#AAA1A1"
         android:fontFamily="@font/roboto"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/plantNameTextView" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/plantNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="108dp"

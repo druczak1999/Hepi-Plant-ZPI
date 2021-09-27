@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="list_item_height">150</dimen>
-    <dimen name="margin_medium">10</dimen>
+    <dimen name="list_item_height">150sp</dimen>
+    <dimen name="margin_medium">10sp</dimen>
+    <dimen name="margin_small">5sp</dimen>
 </resources>
