@@ -54,8 +54,7 @@ public class FireBase extends AppCompatActivity {
         // [START auth_fui_create_intent]
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+                new AuthUI.IdpConfig.EmailBuilder().build());
 
         // Create and launch sign-in intent
         Intent signInIntent = AuthUI.getInstance()
@@ -78,6 +77,8 @@ public class FireBase extends AppCompatActivity {
             intent.putExtra("userId",user.getUid());
             intent.putExtra("userEmail",user.getEmail());
             intent.putExtra("userName",user.getDisplayName());
+//            if(user.getPhotoUrl()!=null)
+//                intent.putExtra("photo",user.getPhotoUrl().toString());
             startActivity(intent);
         } else {
             // Sign in failed. If response is null the user canceled the
