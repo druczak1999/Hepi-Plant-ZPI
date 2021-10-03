@@ -29,30 +29,17 @@ import java.util.List;
 public class AddPlant extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private static final String TAG = "AddPlant";
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plant);
-        Spinner spinnerGat = (Spinner)findViewById(R.id.editGatunek);
-        spinnerGat.setOnItemSelectedListener(this);
-        List<String> species = new ArrayList<String>();
-        species = getSpeciesFromDB();
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, species);
-        dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGat.setAdapter(dtoArrayAdapter);
-        Log.v(TAG, "Entering spinnerCat");
-
-//        Spinner spinnerCat = (Spinner)findViewById(R.id.editKategoria);
-//        spinnerCat.setOnItemSelectedListener(this);
-//        List<String> categories = new ArrayList<String>();
-//        categories = getCategoriesFromDB();
-//        ArrayAdapter<String> dtoArrayAdapterCat = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-//        dtoArrayAdapterCat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerCat.setAdapter(dtoArrayAdapterCat);
+        getSpeciesFromDB();
+        getCategoriesFromDB();
     }
 
-    public List<String> getSpeciesFromDB(){
-        List<String> species = new ArrayList<String>();
+    public void getSpeciesFromDB(){
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="http://192.168.0.45:8080/species";
 
@@ -68,11 +55,11 @@ public class AddPlant extends AppCompatActivity implements AdapterView.OnItemSel
                         SpeciesDto[] data = new SpeciesDto[]{};
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
-
+                        List<String> sp = new ArrayList<String>();
                        for (int i=0;i<data.length;i++){
-                           species.add(data[i].getName());
+                           sp.add(data[i].getName());
                        }
-
+                        getSpecies(sp);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -83,10 +70,18 @@ public class AddPlant extends AppCompatActivity implements AdapterView.OnItemSel
 
 // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
-        return  species;
     }
-    public List<String> getCategoriesFromDB(){
-        List<String> categories = new ArrayList<String>();
+    public void getSpecies(List<String> species){
+        Log.v(TAG,"Species size"+species.size());
+
+        Spinner spinnerGat = (Spinner)findViewById(R.id.editGatunek);
+        spinnerGat.setOnItemSelectedListener(this);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
+        dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGat.setAdapter(dtoArrayAdapter);
+    }
+    public void getCategoriesFromDB(){
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="http://192.168.0.45:8080/categories";
 
@@ -102,10 +97,11 @@ public class AddPlant extends AppCompatActivity implements AdapterView.OnItemSel
                         CategoryDto[] data = new CategoryDto[]{};
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
-
+                        List<String> categories = new ArrayList<String>();
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
                         }
+                        getCategories(categories);
 
                     }
                 }, new Response.ErrorListener() {
@@ -117,7 +113,15 @@ public class AddPlant extends AppCompatActivity implements AdapterView.OnItemSel
 
 // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
-        return  categories;
+    }
+
+    public void getCategories(List<String> categories){
+        Log.v(TAG,"Species size"+categories.size());
+        Spinner spinnerCat = (Spinner)findViewById(R.id.editKategoria);
+        spinnerCat.setOnItemSelectedListener(this);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+        dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCat.setAdapter(dtoArrayAdapter);
     }
 
     @Override
