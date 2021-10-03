@@ -18,11 +18,10 @@
         <activity android:name=".FireBase" />
         <activity android:name=".AddPlant"></activity>
         <activity android:name=".ImageTest" />
-        <activity android:name=".FireBase" />
         <activity android:name=".TestBackend" />
         <activity android:name=".Uzytkownik" />
         <activity android:name=".Logowanie" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

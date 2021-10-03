@@ -73,7 +73,7 @@ public class FireBase extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+            Intent intent = new Intent(getApplicationContext(),TestBackend.class);
             intent.putExtra("userId",user.getUid());
             intent.putExtra("userEmail",user.getEmail());
             intent.putExtra("userName",user.getDisplayName());

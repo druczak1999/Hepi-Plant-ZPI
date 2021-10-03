@@ -27,7 +27,7 @@ public class Uzytkownik extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TestBackend.class);
+                Intent intent = new Intent(getApplicationContext(), AddPlant.class);
                 startActivity(intent);
             }
         });
@@ -37,6 +37,14 @@ public class Uzytkownik extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), TestBackend.class);
+                startActivity(intent);
+            }
+        });
+        Button button1 = findViewById(R.id.buttonForum);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ImageTest.class);
                 startActivity(intent);
             }
         });
