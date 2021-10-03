@@ -6,46 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".Uzytkownik">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@android:color/white"
-        tools:ignore="MissingConstraints"></androidx.appcompat.widget.Toolbar>
+    <include
+        android:id="@+id/toolbarTest"
+        layout="@layout/toolbar">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="676dp"
-        android:background="@color/colorPrimaryLight"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@android:color/white"
-        tools:ignore="MissingConstraints"></androidx.appcompat.widget.Toolbar>
+    </include>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="27dp"
-        android:layout_height="102dp"
-        app:srcCompat="@drawable/ludzik"
-        tools:layout_editor_absoluteX="368dp"
-        tools:layout_editor_absoluteY="-23dp"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="89dp"
-        android:layout_height="29dp"
-        app:srcCompat="@drawable/kropki"
-        tools:layout_editor_absoluteX="-17dp"
-        tools:layout_editor_absoluteY="16dp"
-        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/przywitanie"
@@ -58,7 +24,7 @@
         android:text="Witaj, Ola234!"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbarTest" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -204,42 +170,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="40dp"
-        android:layout_height="98dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
-        android:layout_marginTop="48dp"
-        app:layout_constraintStart_toStartOf="@+id/toolbar2"
-        app:layout_constraintTop_toBottomOf="@+id/nazwa7"
-        app:srcCompat="@drawable/forum"
-        />
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="43dp"
-        android:layout_height="97dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar2"
-        app:layout_constraintTop_toBottomOf="@+id/switch1"
-        app:srcCompat="@drawable/dom" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="62dp"
-        android:layout_height="55dp"
-        android:layout_marginEnd="116dp"
-        android:layout_marginRight="116dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:clickable="true"
-        android:scaleType="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView7"
-        app:maxImageSize="34dp"
-        app:srcCompat="@drawable/kwiatek" />
+    <include layout="@layout/bottom_bar"></include>
+    <include layout="@layout/floatingbutton"
+        >
+    </include>>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
