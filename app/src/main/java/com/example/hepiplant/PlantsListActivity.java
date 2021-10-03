@@ -1,9 +1,11 @@
 package com.example.hepiplant;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -37,6 +39,7 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plants_list);
+        setBottomBarOnItemClickListeners();
 
         recyclerView = findViewById(R.id.plantsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -81,5 +84,23 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         plants = gson.fromJson(String.valueOf(response), PlantDto[].class);
         adapter.updateData(plants);
         adapter.notifyItemRangeChanged(0, plants.length);
+    }
+
+    private void setBottomBarOnItemClickListeners(){
+        Button buttonHome = (Button) findViewById(R.id.buttonDom);
+        buttonHome.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                layoutManager.scrollToPositionWithOffset(0, 0);;
+            }
+        });
+
+        Button buttonForum = (Button) findViewById(R.id.buttonForum);
+        buttonForum.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

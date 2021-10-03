@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.hepiplant.fragments.SalesOffersListFragment;
 import com.example.hepiplant.fragments.PostsListFragment;
+import com.example.hepiplant.fragments.SalesOffersListFragment;
 
 public class ForumFragmentPagerAdapter extends FragmentPagerAdapter {
 

@@ -93,7 +93,7 @@ public class PostsListFragment extends Fragment {
     }
 
     private void initView() {
-        postsRecyclerView = postsFragmentView.findViewById(R.id.offersRecyclerView);
+        postsRecyclerView = postsFragmentView.findViewById(R.id.postsRecyclerView);
     }
 
     private void setLayoutManager() {

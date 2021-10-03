@@ -1,8 +1,5 @@
 package com.example.hepiplant.dto;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class EventDto {
     private String eventName;
     private String eventDescription;
