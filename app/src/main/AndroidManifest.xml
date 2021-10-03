@@ -13,6 +13,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ForumTabsActivity"
+            android:exported="true" />
+        <activity
             android:name=".PlantsListActivity"
             android:exported="true" />
         <activity android:name=".FireBase" />

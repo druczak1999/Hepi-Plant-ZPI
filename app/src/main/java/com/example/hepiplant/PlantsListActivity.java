@@ -18,15 +18,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.hepiplant.adapter.CustomPlantsRecyclerViewAdapter;
+import com.example.hepiplant.adapter.recyclerview.PlantsRecyclerViewAdapter;
 import com.example.hepiplant.dto.PlantDto;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
-public class PlantsListActivity extends AppCompatActivity implements CustomPlantsRecyclerViewAdapter.ItemClickListener {
+public class PlantsListActivity extends AppCompatActivity implements PlantsRecyclerViewAdapter.ItemClickListener {
 
-    CustomPlantsRecyclerViewAdapter adapter;
+    PlantsRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
     private static final String TAG = "PlantsListActivity";
     private int testUserId = 1;
@@ -64,10 +64,9 @@ public class PlantsListActivity extends AppCompatActivity implements CustomPlant
         Log.v(TAG, "Sending the request to " + url);
         queue.add(jsonArrayRequest);
         // set up the RecyclerView
-        adapter = new CustomPlantsRecyclerViewAdapter(this, plants);
+        adapter = new PlantsRecyclerViewAdapter(this, plants);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="list_item_height">150sp</dimen>
+    <dimen name="margin_big">15sp</dimen>
     <dimen name="margin_medium">10sp</dimen>
     <dimen name="margin_small">5sp</dimen>
+    <dimen name="padding_bottom">50sp</dimen>
 </resources>
