@@ -4,12 +4,17 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,10 +26,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.adapter.recyclerview.PlantsRecyclerViewAdapter;
+import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.PlantDto;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+
+import java.io.IOException;
 
 public class PlantsListActivity extends AppCompatActivity implements PlantsRecyclerViewAdapter.ItemClickListener {
 
@@ -41,11 +50,31 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         setContentView(R.layout.activity_plants_list);
         setBottomBarOnItemClickListeners();
 
+        Toolbar toolbar = findViewById(R.id.plantsListToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddPlant.class);
+                startActivity(intent);
+            }
+        });
+
         recyclerView = findViewById(R.id.plantsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // data to populate the RecyclerView with
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://10.0.0.118:8080/plants/user/" + testUserId;
+        final Configuration config = (Configuration) getApplicationContext();
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String url =config.getUrl()+"plants/user/"+testUserId;
+
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -102,5 +131,31 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.wyloguj:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.infoMenu:
+                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.miProfile:
+                Intent intent = new Intent(this, Uzytkownik.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 }
