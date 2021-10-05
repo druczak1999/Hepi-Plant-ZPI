@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="@dimen/margin_medium"
+    android:layout_marginVertical="@dimen/margin_small"
+    android:gravity="center_vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_rectangle_green">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="@dimen/margin_medium"
+            android:layout_marginHorizontal="@dimen/margin_big"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/postDateTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/forum_date_holder"
+                android:textAppearance="@style/ForumDateFont" />
+
+            <TextView
+                android:id="@+id/postTitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/post_title_holder"
+                android:textAppearance="@style/ListItemTitleFont" />
+
+            <TextView
+                android:id="@+id/postTagsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/post_tags_holder"
+                android:textAppearance="@style/ForumDateFont" />
+
+            <TextView
+                android:id="@+id/postBodyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/post_body_holder"
+                android:textAppearance="@style/ListItemDescriptionFont" />
+
+            <TextView
+                android:id="@+id/postCommentsCountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/post_comments_holder"
+                android:textAppearance="@style/ForumDateFont" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</FrameLayout>

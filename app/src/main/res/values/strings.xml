@@ -3,5 +3,11 @@
     <string name="plant_name_holder">Name of plant</string>
     <string name="plant_species_holder">Plant species</string>
     <string name="plants_list_title">Twoje rośliny</string>
+    <string name="forum_date_holder">1 stycznia 2021</string>
+    <string name="post_title_holder">Tytuł</string>
+    <string name="post_tags_holder">#tagi</string>
+    <string name="post_body_holder">Treść</string>
+    <string name="post_comments_holder">0 komentarzy</string>
+    <string name="post_price_holder">10 zł</string>
 
 </resources>
