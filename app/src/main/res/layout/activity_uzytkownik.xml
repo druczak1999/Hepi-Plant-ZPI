@@ -173,11 +173,11 @@
 
 
     <include layout="@layout/bottom_bar"></include>
-    <include layout="@layout/floatingbutton"
-        >
-    </include>>
 
-
+    <include
+        layout="@layout/floatingbutton"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"></include>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
