@@ -4,21 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".User">
+    tools:context=".UserActivity">
+    <include
+        android:id="@+id/toolbarTest"
+        layout="@layout/toolbar">
+    </include>
 
 
     <TextView
         android:id="@+id/przywitanie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="100dp"
         android:fontFamily="@font/cantata_one"
         android:text=""
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <ImageView
         android:id="@+id/imageView3"
@@ -142,7 +146,16 @@
         app:layout_constraintHorizontal_bias="0.848"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginBottom="?actionBarSize" />
 
+    <include
+        android:id="@+id/plantsListBottomBar"
+        layout="@layout/bottom_bar" />
+
+    <include
+        layout="@layout/floatingbutton"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="-47dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

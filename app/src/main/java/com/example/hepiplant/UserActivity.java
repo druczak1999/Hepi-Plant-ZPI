@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,7 +23,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +35,6 @@ public class User extends AppCompatActivity {
         Button change = (Button) findViewById(R.id.change);
 
 
-        //Toolbar myToolbar =  findViewById(R.id.toolbar);
-        //setSupportActionBar(myToolbar);
         Intent intent = this.getIntent();
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="http://192.168.0.220:8080/users";
@@ -49,7 +48,6 @@ public class User extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println("PO POST DATA");
         // Request a string response from the provided URL.
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
                 new Response.Listener<JSONObject>() {
@@ -59,7 +57,6 @@ public class User extends AppCompatActivity {
                         // Display the response string.
 
                         String str = String.valueOf(response); //http request
-                        System.out.println("TUUUUUUUUUUUUUUUUUUUUUUUU"+str);
                         UserDto data = new UserDto();
                         Gson gson = new Gson();
                         data = gson.fromJson(str, UserDto.class);

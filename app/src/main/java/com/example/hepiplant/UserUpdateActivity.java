@@ -1,27 +1,13 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.hepiplant.dto.UserDto;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class UserUpdateActivity extends AppCompatActivity {
 
@@ -41,7 +27,7 @@ public class UserUpdateActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), User.class);
+                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                 intent.putExtra("userId", id);
                 intent.putExtra("userEmail", email);
                 intent.putExtra("userName", textView.toString());

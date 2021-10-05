@@ -26,7 +26,7 @@
         <activity android:name=".AddPlant" />
         <activity android:name=".ImageTest" />
         <activity android:name=".TestBackend" />
-        <activity android:name=".User" />
+        <activity android:name=".UserActivity" />
         <activity android:name=".UserUpdateActivity"></activity>
         <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
