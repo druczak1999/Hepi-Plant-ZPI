@@ -12,16 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".CalendarActivity"></activity>
         <activity
             android:name=".PlantsListActivity"
             android:exported="true" />
         <activity android:name=".FireBase" />
-        <activity android:name=".AddPlant"></activity>
+        <activity android:name=".AddPlant" />
         <activity android:name=".ImageTest" />
         <activity android:name=".TestBackend" />
         <activity android:name=".Uzytkownik" />
         <activity android:name=".Logowanie" />
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
