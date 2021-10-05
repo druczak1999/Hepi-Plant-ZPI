@@ -1,9 +1,11 @@
 package com.example.hepiplant;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -18,15 +20,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.hepiplant.adapter.CustomPlantsRecyclerViewAdapter;
+import com.example.hepiplant.adapter.recyclerview.PlantsRecyclerViewAdapter;
 import com.example.hepiplant.dto.PlantDto;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
-public class PlantsListActivity extends AppCompatActivity implements CustomPlantsRecyclerViewAdapter.ItemClickListener {
+public class PlantsListActivity extends AppCompatActivity implements PlantsRecyclerViewAdapter.ItemClickListener {
 
-    CustomPlantsRecyclerViewAdapter adapter;
+    PlantsRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
     private static final String TAG = "PlantsListActivity";
     private int testUserId = 1;
@@ -37,6 +39,7 @@ public class PlantsListActivity extends AppCompatActivity implements CustomPlant
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plants_list);
+        setBottomBarOnItemClickListeners();
 
         recyclerView = findViewById(R.id.plantsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -64,10 +67,9 @@ public class PlantsListActivity extends AppCompatActivity implements CustomPlant
         Log.v(TAG, "Sending the request to " + url);
         queue.add(jsonArrayRequest);
         // set up the RecyclerView
-        adapter = new CustomPlantsRecyclerViewAdapter(this, plants);
+        adapter = new PlantsRecyclerViewAdapter(this, plants);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override
@@ -82,5 +84,23 @@ public class PlantsListActivity extends AppCompatActivity implements CustomPlant
         plants = gson.fromJson(String.valueOf(response), PlantDto[].class);
         adapter.updateData(plants);
         adapter.notifyItemRangeChanged(0, plants.length);
+    }
+
+    private void setBottomBarOnItemClickListeners(){
+        Button buttonHome = (Button) findViewById(R.id.buttonDom);
+        buttonHome.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                layoutManager.scrollToPositionWithOffset(0, 0);;
+            }
+        });
+
+        Button buttonForum = (Button) findViewById(R.id.buttonForum);
+        buttonForum.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -1,7 +1,5 @@
 package com.example.hepiplant.dto;
 
-import java.time.LocalDateTime;
-
 public class PlantDto {
 
     private Long id;

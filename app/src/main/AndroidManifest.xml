@@ -14,6 +14,9 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".CalendarActivity"></activity>
         <activity
+            android:name=".ForumTabsActivity"
+            android:exported="true" />
+        <activity
             android:name=".PlantsListActivity"
             android:exported="true" />
         <activity android:name=".FireBase" />

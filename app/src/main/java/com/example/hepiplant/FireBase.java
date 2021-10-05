@@ -1,13 +1,13 @@
 package com.example.hepiplant;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -71,6 +71,7 @@ public class FireBase extends AppCompatActivity {
         Log.v(TAG, "Entering onSignInResult()");
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
+            Log.v(TAG, "Sign in successful");
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Intent intent = new Intent(getApplicationContext(),TestBackend.class);
@@ -81,10 +82,13 @@ public class FireBase extends AppCompatActivity {
 //                intent.putExtra("photo",user.getPhotoUrl().toString());
             startActivity(intent);
         } else {
-            // Sign in failed. If response is null the user canceled the
-            // sign-in flow using the back button. Otherwise check
-            // response.getError().getErrorCode() and handle the error.
-            // ...
+            Log.v(TAG, "Result code: " + result.getResultCode());
+            Log.v(TAG, "Sign in failed. Response: "+
+                    response.getError().getMessage()+" Code: " +
+                    response.getError().getErrorCode() + " Cause: "+
+                    response.getError().getCause());
+            Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
+            startActivity(intent);
         }
     }
     // [END auth_fui_result]
