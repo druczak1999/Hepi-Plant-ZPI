@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "767046087218-la9f40t14lc3rpenj58j6lphj4hlo8cq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hepiplant",
+            "certificate_hash": "be7e23cb8ddfb0efd6ac1091396eb7ef56337868"
+          }
+        },
+        {
+          "client_id": "767046087218-qj0fhad5r18o1d6jdf1re2p7kr87ve5f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hepiplant",
+            "certificate_hash": "5b31fd04def7f500b8a0ae58a2eea1b9676a7644"
+          }
+        },
+        {
           "client_id": "767046087218-5okg6vdtquule79h99ahc0216eipda07.apps.googleusercontent.com",
           "client_type": 3
         }

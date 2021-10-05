@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ForumTabsActivity">
+
+    <include
+        android:id="@+id/forumToolbar"
+        layout="@layout/toolbar" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/forumTabsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/forumToolbar" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/forumViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/forumTabsLayout"
+        app:layout_constraintBottom_toTopOf="@+id/forumBottomBar"
+        android:layout_marginTop="@dimen/spaceForToolbarAndTabs"
+            android:layout_marginBottom="?actionBarSize"/>
+
+    <include
+        android:id="@+id/forumBottomBar"
+        layout="@layout/bottom_bar" />
+    <include layout="@layout/floatingbutton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

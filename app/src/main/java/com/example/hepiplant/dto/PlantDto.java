@@ -1,13 +1,12 @@
 package com.example.hepiplant.dto;
 
-import java.time.LocalDateTime;
-
 public class PlantDto {
 
     private Long id;
     private String name;
     private String purchaseDate;
     private String location;
+    private String photo;
     private Long categoryId;
     private SpeciesDto species;
     private Long userId;
@@ -46,6 +45,14 @@ public class PlantDto {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public Long getCategoryId() {

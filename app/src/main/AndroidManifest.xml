@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.hepiplant">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="com.example.hepiplant.configuration.Configuration"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".FireBase"></activity>
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:ignore="Instantiatable">
+        <activity android:name=".CalendarActivity"></activity>
+        <activity
+            android:name=".ForumTabsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PlantsListActivity"
+            android:exported="true" />
+        <activity android:name=".FireBase" />
+        <activity android:name=".AddPlant" />
+        <activity android:name=".ImageTest" />
         <activity android:name=".TestBackend" />
         <activity android:name=".User" />
         <activity android:name=".UserUpdateActivity"></activity>
