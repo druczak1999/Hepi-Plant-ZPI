@@ -1,14 +1,22 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
@@ -20,6 +28,9 @@ import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +38,7 @@ import java.util.List;
 public class FireBase extends AppCompatActivity {
 
     private static final String TAG = "FireBaseActivity";
+    private static final String BASE_URL = "http://192.168.0.150:8080";
 
     // [START auth_fui_create_launcher]
     // See: https://developer.android.com/training/basics/intents/result
@@ -74,12 +86,8 @@ public class FireBase extends AppCompatActivity {
             Log.v(TAG, "Sign in successful");
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Intent intent = new Intent(getApplicationContext(),TestBackend.class);
-            intent.putExtra("userId",user.getUid());
-            intent.putExtra("userEmail",user.getEmail());
-            intent.putExtra("userName",user.getDisplayName());
-//            if(user.getPhotoUrl()!=null)
-//                intent.putExtra("photo",user.getPhotoUrl().toString());
+            makePostUserRequest(user);
+            Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
             startActivity(intent);
         } else {
             Log.v(TAG, "Result code: " + result.getResultCode());
@@ -193,5 +201,34 @@ public class FireBase extends AppCompatActivity {
             }
         }
         // [END auth_fui_email_link_catch]
+    }
+
+    private void makePostUserRequest(FirebaseUser user){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = BASE_URL + "/users";
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("username", user.getDisplayName());
+            postData.put("email", user.getEmail());
+            postData.put("uid", user.getUid());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
+            new Response.Listener<JSONObject>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.v(TAG, "POST user request successful. Returned user: " + response);
+                    // todo set global var userId
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.v(TAG, "POST user request unsuccessful. Error message: " + error.getMessage());
+                }
+        });
+        queue.add(jsonArrayRequest);
     }
 }
