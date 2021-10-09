@@ -42,7 +42,6 @@ public class TestBackend extends AppCompatActivity {
         setContentView(R.layout.activity_test_backend);
         TextView textView = (TextView) findViewById(R.id.tv1);
 
-
         Toolbar toolbar = findViewById(R.id.toolbarTest);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -112,7 +111,7 @@ public class TestBackend extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.infoMenu:
-                Toast.makeText(this,"Infomacje",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Informacje",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.miProfile:
                 Intent intent = new Intent(this, Uzytkownik.class);

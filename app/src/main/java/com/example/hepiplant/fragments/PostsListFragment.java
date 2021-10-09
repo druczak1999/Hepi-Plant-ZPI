@@ -23,10 +23,13 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.PostsRecyclerViewAdapter;
+import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.PostDto;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+
+import java.io.IOException;
 
 public class PostsListFragment extends Fragment {
 
@@ -69,7 +72,14 @@ public class PostsListFragment extends Fragment {
     private void sendRequestForData(){
         // data to populate the RecyclerView with
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url ="http://10.0.0.118:8080/posts";
+        final Configuration config = (Configuration) getActivity().getApplicationContext();
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String url =config.getUrl() + "posts";
+
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)

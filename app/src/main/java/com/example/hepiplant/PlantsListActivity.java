@@ -40,7 +40,7 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
     PlantsRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
     private static final String TAG = "PlantsListActivity";
-    private int testUserId = 1;
+    private Long UserId = 1L;
     private PlantDto[] plants = new PlantDto[]{};
 
     @Override
@@ -58,7 +58,7 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AddPlant.class);
+                Intent intent = new Intent(getApplicationContext(), PlantAddActivity.class);
                 startActivity(intent);
             }
         });
@@ -73,7 +73,8 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String url =config.getUrl()+"plants/user/"+testUserId;
+        Log.v(TAG, "POST user id " + config.getUserId());
+        String url = config.getUrl()+"plants/user/"+config.getUserId();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {

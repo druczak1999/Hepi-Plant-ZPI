@@ -26,9 +26,7 @@
     <item
         android:id="@+id/miProfile"
         android:icon="@drawable/ludzik"
-
         android:title="Profil użytkownika"
-
         app:showAsAction="ifRoom" />
 
 
