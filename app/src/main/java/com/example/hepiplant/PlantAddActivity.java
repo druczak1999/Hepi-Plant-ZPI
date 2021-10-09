@@ -46,10 +46,14 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 public class PlantAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -281,7 +285,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(String response) {
                         // Display the response string.
-                        String str = response; //http request
+                        String str = null; //http request
+                        try {
+                            str = new String(response.getBytes("ISO-8859-1"),"UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                         SpeciesDto[] data = new SpeciesDto[]{};
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
@@ -326,18 +335,24 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
         // Request a string response from the provided URL.
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+                new Response.Listener<String>(){
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
                         // Display the response string.
-                        String str = response; //http request
+                        String str = null; //http request
+                        try {
+                            str = new String(response.getBytes("ISO-8859-1"),"UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                         CategoryDto[] data = new CategoryDto[]{};
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
                         for (int i = 0; i < data.length; i++) {
                             categories.add(data[i].getName());
+
                         }
                         getCategories(categories);
 
@@ -352,6 +367,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
     }
+
+
 
     public void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
