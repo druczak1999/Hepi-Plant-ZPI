@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddPlant">
+    tools:context=".PlantAddActivity">
 
     <include
         android:id="@+id/include"
@@ -12,41 +12,17 @@
 
     <include layout="@layout/bottom_bar"></include>
 
-    <ImageButton
-        android:id="@+id/addImageBut"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/addimagebutton"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Dodaj"
-        app:layout_constraintVertical_bias="0.064" />
-
-    <TextView
-        android:id="@+id/Dodaj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:fontFamily="@font/cantata_one"
-        android:text="Dodaj nową roślinę"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="340dp"
-        android:layout_marginBottom="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="600dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDodajRosline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,12 +30,34 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/Dodaj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/cantata_one"
+                android:text="Dodaj nową roślinę"
+                android:textSize="30sp" />
+
+            <ImageButton
+                android:id="@+id/addImageBut"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:layout_gravity="center"
+
+                android:layout_marginTop="30dp"
+                android:background="@null"
+                android:scaleType="fitXY"
+                android:src="@drawable/addimagebutton"
+                app:layout_constraintVertical_bias="0.064" />
+
+            <TextView
                 android:id="@+id/Nazwa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
 
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="0dp"
                 android:fontFamily="@font/cantata_one"
                 android:text="Nazwa"
                 android:textSize="24sp"
@@ -77,10 +75,8 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
-
-                android:inputType="textEmailAddress"
-                android:textColor="#AAA1A1" />
+                android:fontFamily="@font/roboto"
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/Gatunek"
@@ -100,8 +96,8 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_spinner"
+                android:theme="@style/SpinnerTheme"
 
-                android:fontFamily="@font/cantata_one"
 
                 />
 
@@ -123,11 +119,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_spinner"
-                android:ems="10"
-                android:fontFamily="@font/cantata_one"
-
-                android:textColor="#AAA1A1"
-                android:textSize="20sp" />
+                android:theme="@style/SpinnerTheme" />
 
             <TextView
                 android:id="@+id/Podlewanie"
@@ -136,24 +128,21 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/cantata_one"
-                android:onClick="dodajRoslineDoBazy"
                 android:text="Częstość podlewania"
                 android:textSize="24sp" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/editPodlewanie"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
-
                 android:layout_marginRight="20dp"
-                android:background="@drawable/rounded_edittext"
+                android:background="@drawable/rounded_spinner"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
+                android:fontFamily="@font/roboto"
                 android:text="..."
-                android:textColor="#AAA1A1"
-                android:textSize="20sp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/Pomieszczenie"
@@ -175,11 +164,9 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
-
+                android:fontFamily="@font/roboto"
                 android:text="..."
-                android:textColor="#AAA1A1"
-                android:textSize="20sp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/DataZakupu"
@@ -197,18 +184,16 @@
                 android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
-
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/calendar"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
-
+                android:fontFamily="@font/roboto"
                 android:gravity="start"
                 android:text="..."
+
                 android:textAlignment="viewStart"
-                android:textColor="#AAA1A1"
-                android:textSize="20sp" />
+                android:textSize="15dp" />
 
         </LinearLayout>
     </ScrollView>
