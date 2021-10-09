@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,18 +17,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.UserDto;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserActivity extends AppCompatActivity {
+import java.io.IOException;
 
+public class UserActivity extends AppCompatActivity {
+    private static final String TAG = "UserActivity";
+    Configuration configuration = new Configuration();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        setBottomBarOnItemClickListeners();
         TextView textView = (TextView) findViewById(R.id.nazwa2);
         TextView textView1 = (TextView) findViewById(R.id.przywitanie);
         TextView textView2 = (TextView) findViewById(R.id.nazwa4);
@@ -37,44 +42,35 @@ public class UserActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://192.168.0.220:8080/users";
-
-        JSONObject postData = new JSONObject();
+        final Configuration config = (Configuration) getApplicationContext();
         try {
-            postData.put("username", intent.getExtras().getString("userName"));
-            postData.put("email", intent.getExtras().getString("userEmail"));
-            postData.put("uid", intent.getExtras().getString("userId"));
-
-        } catch (JSONException e) {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        String url =config.getUrl()+"users/"+config.getUserId();
+
+
         // Request a string response from the provided URL.
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         // Display the response string.
-
+                        Log.v(TAG, "Request successful. Response is: " + response);
                         String str = String.valueOf(response); //http request
                         UserDto data = new UserDto();
                         Gson gson = new Gson();
                         data = gson.fromJson(str, UserDto.class);
 
-                        //String sb = new String(data.getUsername());
-                        //Arrays.stream(data).forEach(p -> sb.append(p.getUsername()).append("\n"));
                         textView.setText(data.getUsername());
-                        //String sb2 = new String(data.getEmail());
                         textView2.setText(data.getEmail());
                         textView1.setText("Witaj "+data.getUsername()+"!");
-                        UserDto finalData = data;
                         change.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getApplicationContext(), UserUpdateActivity.class);
-                                intent.putExtra("userId", finalData.getId());
-                                intent.putExtra("userEmail", finalData.getEmail());
-                                intent.putExtra("userName", finalData.getUsername());
                                 startActivity(intent);
                             }
                         });
@@ -82,6 +78,7 @@ public class UserActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
                 textView.setText(error.getMessage());
             }
         });
@@ -93,4 +90,21 @@ public class UserActivity extends AppCompatActivity {
 //        getMenuInflater().inflate(R.menu.menu_main, menu);
 //        return true;
 //    }
+    private void setBottomBarOnItemClickListeners(){
+        Button buttonHome = (Button) findViewById(R.id.buttonDom);
+        buttonHome.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button buttonForum = (Button) findViewById(R.id.buttonForum);
+        buttonForum.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 }

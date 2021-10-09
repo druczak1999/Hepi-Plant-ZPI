@@ -59,13 +59,6 @@ public class ForumTabsActivity extends AppCompatActivity
             }
         });
 
-//        Button buttonUser = (Button) findViewById(R.id.button);
-//        buttonHome.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         Button buttonForum = (Button) findViewById(R.id.buttonForum);
         buttonForum.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -116,7 +116,7 @@ public class TestBackend extends AppCompatActivity {
                 Toast.makeText(this,"Informacje",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.miProfile:
-                Intent intent = new Intent(this, User.class);
+                Intent intent = new Intent(this, UserActivity.class);
                 startActivity(intent);
                 return true;
             default:

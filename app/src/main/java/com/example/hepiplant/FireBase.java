@@ -42,7 +42,6 @@ import java.util.List;
 public class FireBase extends AppCompatActivity {
 
     private static final String TAG = "FireBaseActivity";
-    private static final String BASE_URL = "http://192.168.0.150:8080";
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -126,7 +125,13 @@ public class FireBase extends AppCompatActivity {
 
     private void makePostUserRequest(FirebaseUser user){
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = BASE_URL + "/users";
+        final Configuration config = (Configuration) getApplicationContext();
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String url = config.getUrl() + "/users";
         JSONObject postData = new JSONObject();
         try {
             postData.put("username", user.getDisplayName());

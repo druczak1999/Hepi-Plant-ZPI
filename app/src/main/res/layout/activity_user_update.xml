@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".UserActivity">
 
+    <include
+        android:id="@+id/toolbarTest"
+        layout="@layout/toolbar"></include>
 
     <ImageView
         android:id="@+id/imageView3"
@@ -64,12 +67,13 @@
         android:id="@+id/nazwa7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="53dp"
+        android:layout_marginTop="52dp"
         android:fontFamily="@font/cantata_one"
         android:text="Powiadomienia"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintHorizontal_bias="0.563"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/save"
         app:layout_constraintVertical_bias="0.0" />
@@ -118,20 +122,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.951" />
+        app:layout_constraintVertical_bias="0.818" />
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="80dp"
         android:layout_height="24dp"
 
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginRight="64dp"
         android:checked="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/save"
-        app:layout_constraintVertical_bias="0.307" />
+        app:layout_constraintVertical_bias="0.242" />
 
+    <include
+        android:id="@+id/plantsListBottomBar"
+        layout="@layout/bottom_bar" />
 
+    <include
+        layout="@layout/floatingbutton"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-33dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

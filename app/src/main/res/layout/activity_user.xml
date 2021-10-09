@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserActivity">
+
     <include
         android:id="@+id/toolbarTest"
-        layout="@layout/toolbar">
-    </include>
+        layout="@layout/toolbar"></include>
 
 
     <TextView
@@ -78,15 +78,15 @@
         android:id="@+id/nazwa7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="91dp"
         android:fontFamily="@font/cantata_one"
         android:text="Powiadomienia"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.188"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.809" />
 
     <TextView
         android:id="@+id/nazwa2"
@@ -134,20 +134,19 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView5"
         app:layout_constraintVertical_bias="0.901" />
 
+
     <Switch
         android:id="@+id/switch1"
         android:layout_width="80dp"
         android:layout_height="24dp"
 
-        android:layout_marginTop="88dp"
         android:checked="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.848"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_marginBottom="?actionBarSize" />
+        app:layout_constraintHorizontal_bias="0.64"
+        app:layout_constraintStart_toEndOf="@+id/nazwa7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.811" />
 
     <include
         android:id="@+id/plantsListBottomBar"
@@ -156,6 +155,6 @@
     <include
         layout="@layout/floatingbutton"
         tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-47dp" />
+        tools:layout_editor_absoluteY="-16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

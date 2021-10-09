@@ -28,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.adapter.recyclerview.PlantsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.PlantDto;
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
@@ -54,14 +55,14 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AddPlant.class);
-                startActivity(intent);
-            }
-        });
+//        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+//        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), AddPlant.class);
+//                startActivity(intent);
+//            }
+//        });
 
         recyclerView = findViewById(R.id.plantsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -150,7 +151,7 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
                 Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.miProfile:
-                Intent intent = new Intent(this, Uzytkownik.class);
+                Intent intent = new Intent(this, UserActivity.class);
                 startActivity(intent);
                 return true;
             default:
