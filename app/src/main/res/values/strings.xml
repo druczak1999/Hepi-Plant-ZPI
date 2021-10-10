@@ -9,5 +9,7 @@
     <string name="post_body_holder">Treść</string>
     <string name="post_comments_holder">0 komentarzy</string>
     <string name="post_price_holder">10 zł</string>
+    <string name="username_holder">Username</string>
+    <string name="comment_body_holder">To nie ma tak, że dobrze, albo że niedobrze. Gdybym miał powiedzieć, co cenię w życiu najbardziej, powiedziałbym, że ludzi. Ludzi, którzy podali mi pomocną dłoń, kiedy sobie nie radziłem, kiedy byłem sam, i co ciekawe, to właśnie przypadkowe spotkania wpływają na nasze życie.</string>
 
 </resources>

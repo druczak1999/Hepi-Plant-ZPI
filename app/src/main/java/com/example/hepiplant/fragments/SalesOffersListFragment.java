@@ -1,7 +1,9 @@
 package com.example.hepiplant.fragments;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.hepiplant.PostActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.SalesOffersRecyclerViewAdapter;
 import com.example.hepiplant.dto.SalesOfferDto;
@@ -28,14 +31,17 @@ import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
-public class SalesOffersListFragment extends Fragment {
+public class SalesOffersListFragment extends Fragment implements
+        SalesOffersRecyclerViewAdapter.ItemClickListener {
+
+    private static final String TAG = "SalesOffersListFragment";
+    private static final String BASE_URL = "http://10.0.0.163:8080";
 
     private View offersFragmentView;
     private RecyclerView offersRecyclerView;
     private SalesOffersRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
-    private static final String TAG = "SalesOffersListFragment";
-    private SalesOfferDto[] posts = new SalesOfferDto[]{};
+    private SalesOfferDto[] salesOffers = new SalesOfferDto[]{};
 
     public SalesOffersListFragment() {
     }
@@ -61,32 +67,36 @@ public class SalesOffersListFragment extends Fragment {
 
         initView();
         setLayoutManager();
-        sendRequestForData();
+        makeDataRequest();
 
         return offersFragmentView;
     }
 
-    private void sendRequestForData(){
+    // todo change for sales offer
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.v(TAG, "onItemClick()");
+        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
+        intent.putExtra("salesOffer", (Parcelable) salesOffers[position]); // todo investigate
+        startActivity(intent);
+    }
+
+    private void makeDataRequest(){
         // data to populate the RecyclerView with
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url ="http://10.0.0.118:8080/salesoffers";
+        String url = BASE_URL + "/salesoffers";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.v(TAG, "Request successful. Response is: " + response);
-                        onResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-                NetworkResponse networkResponse = error.networkResponse;
-                if (networkResponse != null) {
-                    Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            new Response.Listener<JSONArray>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(JSONArray response) {
+                    onResponseReceived(response);
                 }
-            }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    onErrorResponseReceived(error);
+                }
         });
         Log.v(TAG, "Sending the request to " + url);
         queue.add(jsonArrayRequest);
@@ -102,15 +112,23 @@ public class SalesOffersListFragment extends Fragment {
     }
 
     private void setAdapter() {
-        adapter = new SalesOffersRecyclerViewAdapter(getActivity(), posts);
-        adapter.setClickListener((SalesOffersRecyclerViewAdapter.ItemClickListener) getActivity());
+        adapter = new SalesOffersRecyclerViewAdapter(getActivity(), salesOffers);
+        adapter.setClickListener(this);
         offersRecyclerView.setAdapter(adapter);
     }
 
     private void onResponseReceived(JSONArray response){
         Log.v(TAG, "onResponseReceived()");
         Gson gson = new Gson();
-        posts = gson.fromJson(String.valueOf(response), SalesOfferDto[].class);
+        salesOffers = gson.fromJson(String.valueOf(response), SalesOfferDto[].class);
         setAdapter();
+    }
+
+    private void onErrorResponseReceived(VolleyError error){
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
     }
 }

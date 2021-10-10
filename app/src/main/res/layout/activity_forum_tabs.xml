@@ -29,6 +29,8 @@
     <include
         android:id="@+id/forumBottomBar"
         layout="@layout/bottom_bar" />
-    <include layout="@layout/floatingbutton" />
+    <include
+        android:id="@+id/forumFloatingButton"
+        layout="@layout/floatingbutton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
