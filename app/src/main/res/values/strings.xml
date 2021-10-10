@@ -4,6 +4,7 @@
     <string name="plant_species_holder">Plant species</string>
     <string name="plants_list_title">Twoje rośliny</string>
     <string name="forum_date_holder">1 stycznia 2021</string>
+    <string name="sales_offer_location_holder">Kraków</string>
     <string name="post_title_holder">Tytuł</string>
     <string name="post_tags_holder">#tagi</string>
     <string name="post_body_holder">Treść</string>
@@ -11,5 +12,7 @@
     <string name="post_price_holder">10 zł</string>
     <string name="username_holder">Username</string>
     <string name="comment_body_holder">To nie ma tak, że dobrze, albo że niedobrze. Gdybym miał powiedzieć, co cenię w życiu najbardziej, powiedziałbym, że ludzi. Ludzi, którzy podali mi pomocną dłoń, kiedy sobie nie radziłem, kiedy byłem sam, i co ciekawe, to właśnie przypadkowe spotkania wpływają na nasze życie.</string>
+    <string name="add_comment">Dodaj komentarz</string>
+    <string name="add">Dodaj</string>
 
 </resources>

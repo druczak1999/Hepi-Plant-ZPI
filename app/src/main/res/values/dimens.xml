@@ -10,4 +10,6 @@
     <dimen name="spaceForToolbarAndTabs">104sp</dimen>
     <dimen name="spaceForBottomBar">112sp</dimen>
     <dimen name="one_sp">1sp</dimen>
+    <dimen name="button_small_width">80sp</dimen>
+    <dimen name="button_small_height">40sp</dimen>
 </resources>

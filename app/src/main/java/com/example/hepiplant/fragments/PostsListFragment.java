@@ -17,11 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.PostActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.PostsRecyclerViewAdapter;
@@ -30,17 +28,17 @@ import com.example.hepiplant.dto.PostDto;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+
 import java.io.IOException;
 
 public class PostsListFragment extends Fragment implements PostsRecyclerViewAdapter.ItemClickListener {
 
     private static final String TAG = "PostsListFragment";
-    private static final String BASE_URL = "http://10.0.0.163:8080";
 
+    private Configuration config;
     private View postsFragmentView;
     private RecyclerView postsRecyclerView;
     private PostsRecyclerViewAdapter adapter;
-    private RecyclerView recyclerView;
     private PostDto[] posts = new PostDto[]{};
 
     public PostsListFragment() {
@@ -57,6 +55,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
+        config = (Configuration) getActivity().getApplicationContext();
     }
 
     @Nullable
@@ -67,9 +66,15 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
         initView();
         setLayoutManager();
-        makeDataRequest();
+        makeGetDataRequest();
 
         return postsFragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        makeGetDataRequest();
     }
 
     @Override
@@ -80,23 +85,15 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         startActivity(intent);
     }
 
-    private void makeDataRequest(){
-        // data to populate the RecyclerView with
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        final Configuration config = (Configuration) getActivity().getApplicationContext();
-        try {
-            config.setUrl(config.readProperties());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String url =config.getUrl() + "posts";
+    private void makeGetDataRequest(){
+        String url = getRequestUrl();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
             new Response.Listener<JSONArray>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONArray response) {
-                    onResponseReceived(response);
+                    onGetResponseReceived(response);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -105,11 +102,21 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             }
         });
         Log.v(TAG, "Sending the request to " + url);
-        queue.add(jsonArrayRequest);
+        config.getQueue().add(jsonArrayRequest);
     }
 
-    private void onResponseReceived(JSONArray response){
-        Log.v(TAG, "onResponseReceived()");
+    @NonNull
+    private String getRequestUrl() {
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return config.getUrl() + "posts";
+    }
+
+    private void onGetResponseReceived(JSONArray response){
+        Log.v(TAG, "onGetResponseReceived()");
         Gson gson = new Gson();
         posts = gson.fromJson(String.valueOf(response), PostDto[].class);
         setAdapter();

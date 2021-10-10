@@ -26,29 +26,31 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.adapter.recyclerview.CommentsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CommentDto;
-import com.example.hepiplant.dto.PostDto;
+import com.example.hepiplant.dto.SalesOfferDto;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Locale;
 
-public class PostActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
+public class SalesOfferActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
 
-    private static final String TAG = "PostActivity";
+    private static final String TAG = "SalesOfferActivity";
+    private static final String CURRENCY = "zł";
 
     private Configuration config;
     private CommentsRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
-    private PostDto post;
+    private SalesOfferDto salesOffer;
     private CommentDto[] comments = new CommentDto[]{};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_sales_offer);
 
         config = (Configuration) getApplicationContext();
         initView();
@@ -64,7 +66,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     }
 
     public void onAddButtonClick(View v){
-        EditText editText = findViewById(R.id.addPostCommentEditText);
+        EditText editText = findViewById(R.id.addSalesOfferCommentEditText);
         String commentBody = editText.getText().toString();
         String placeholder = String.valueOf(R.string.add_comment);
         if(!placeholder.equals(commentBody)){
@@ -72,7 +74,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             try {
                 postData.put("body", commentBody);
                 postData.put("userId", config.getUserId());
-                postData.put("postId", post.getId());
+                postData.put("postId", salesOffer.getId());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -129,14 +131,14 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "posts/" + getIntent().getExtras().get("postId");
+        return config.getUrl() + "salesoffers/" + getIntent().getExtras().get("salesOfferId");
     }
 
     private void onGetResponseReceived(JSONObject response){
         Log.v(TAG, "onGetResponseReceived()");
         Gson gson = new Gson();
-        post = gson.fromJson(String.valueOf(response), PostDto.class);
-        comments = post.getComments().toArray(comments);
+        salesOffer = gson.fromJson(String.valueOf(response), SalesOfferDto.class);
+        comments = salesOffer.getComments().toArray(comments);
         if(adapter == null){
             setAdapter();
             setupViewsData();
@@ -172,7 +174,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     }
 
     private void initView() {
-        recyclerView = findViewById(R.id.postCommentsRecyclerViewSingle);
+        recyclerView = findViewById(R.id.salesOfferCommentsRecyclerViewSingle);
     }
 
     private void setLayoutManager() {
@@ -189,20 +191,23 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Log.v(TAG, "Refreshing displayed data()");
         adapter.updateData(comments);
         adapter.notifyItemRangeChanged(0, comments.length);
-        TextView commentsTextView = findViewById(R.id.postCommentsCountTextViewSingle);
-        int commentsCount = post.getComments().size();
+        TextView commentsTextView = findViewById(R.id.salesOfferCommentsCountTextViewSingle);
+        int commentsCount = salesOffer.getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         commentsTextView.setText(commentsText);
     }
 
     private void setupViewsData() {
-        TextView dateTextView = findViewById(R.id.postDateTextViewSingle);
-        dateTextView.setText(post.getCreatedDate());
-        TextView titleTextView = findViewById(R.id.postTitleTextViewSingle);
-        titleTextView.setText(post.getTitle());
-        TextView tagsTextView = findViewById(R.id.postTagsTextViewSingle);
+        TextView priceTextView = findViewById(R.id.offerPriceTextViewSingle);
+        priceTextView.setText(String.format(Locale.GERMANY,"%.2f %s",
+                salesOffer.getPrice().doubleValue(), CURRENCY));
+        TextView dateTextView = findViewById(R.id.offerLocationTextViewSingle);
+        dateTextView.setText(salesOffer.getLocation());
+        TextView titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
+        titleTextView.setText(salesOffer.getTitle());
+        TextView tagsTextView = findViewById(R.id.salesOfferTagsTextViewSingle);
         StringBuilder tags = new StringBuilder();
-        for (String s : post.getTags()) {
+        for (String s : salesOffer.getTags()) {
             tags.append(" #").append(s);
         }
         if(tags.toString().length() == 0){
@@ -211,10 +216,10 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
         }
-        TextView bodyTextView = findViewById(R.id.postBodyTextViewSingle);
-        bodyTextView.setText(post.getBody());
-        TextView commentsTextView = findViewById(R.id.postCommentsCountTextViewSingle);
-        int commentsCount = post.getComments().size();
+        TextView bodyTextView = findViewById(R.id.salesOfferBodyTextViewSingle);
+        bodyTextView.setText(salesOffer.getBody());
+        TextView commentsTextView = findViewById(R.id.salesOfferCommentsCountTextViewSingle);
+        int commentsCount = salesOffer.getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         commentsTextView.setText(commentsText);
     }

@@ -1,5 +1,7 @@
 package com.example.hepiplant.adapter.recyclerview;
 
+import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,11 +21,9 @@ import java.util.List;
 public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "PostsRVAdapter";
-    private static final String COMMENTS_SUFFIX = " komentarz";
     private List<PostDto> dataSet;
     private ItemClickListener clickListener;
 
-    // Provide a reference to the type of views that you are using (custom ViewHolder).
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView date;
         private final TextView title;
@@ -35,11 +35,11 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             super(view);
             view.setOnClickListener(this);
 
-            date = (TextView) view.findViewById(R.id.postDateTextView);
-            title = (TextView) view.findViewById(R.id.postTitleTextView);
-            tags = (TextView) view.findViewById(R.id.postTagsTextView);
-            body = (TextView) view.findViewById(R.id.postBodyTextView);
-            comments = (TextView) view.findViewById(R.id.postCommentsCountTextView);
+            date = view.findViewById(R.id.postDateTextView);
+            title = view.findViewById(R.id.postTitleTextView);
+            tags = view.findViewById(R.id.postTagsTextView);
+            body = view.findViewById(R.id.postBodyTextView);
+            comments = view.findViewById(R.id.postCommentsCountTextView);
         }
 
         public TextView getDate() {
@@ -68,12 +68,10 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         }
     }
 
-    // Initialize the dataset of the Adapter.
     public PostsRecyclerViewAdapter(Context context, PostDto[] dataSet) {
         this.dataSet = new ArrayList<>(Arrays.asList(dataSet));
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
@@ -83,7 +81,6 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         return new ViewHolder(view);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Log.v(TAG, "onBindViewHolder() position: "+position);
@@ -100,27 +97,24 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             viewHolder.getTags().setText(tags.toString().trim());
         }
         viewHolder.getBody().setText(dataSet.get(position).getBody());
-        String commentsText = dataSet.get(position).getComments().size() + COMMENTS_SUFFIX; //todo add końcówka dla słowa komentarz
+        int commentsCount = dataSet.get(position).getComments().size();
+        String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         viewHolder.getComments().setText(commentsText);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return dataSet.size();
     }
 
-    // convenience method for getting data at click position
     public PostDto getItem(int id) {
         return dataSet.get(id);
     }
 
-    // allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
         this.clickListener = itemClickListener;
     }
 
-    // Parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }
