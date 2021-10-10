@@ -26,10 +26,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.PostActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.SalesOffersRecyclerViewAdapter;
+import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import java.io.IOException;
 
 public class SalesOffersListFragment extends Fragment implements
         SalesOffersRecyclerViewAdapter.ItemClickListener {
@@ -84,7 +86,14 @@ public class SalesOffersListFragment extends Fragment implements
     private void makeDataRequest(){
         // data to populate the RecyclerView with
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = BASE_URL + "/salesoffers";
+        final Configuration config = (Configuration) getActivity().getApplicationContext();
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String url =config.getUrl() + "salesoffers";
+
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
             new Response.Listener<JSONArray>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)

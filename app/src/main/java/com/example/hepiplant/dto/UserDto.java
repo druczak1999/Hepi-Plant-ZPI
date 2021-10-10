@@ -3,7 +3,9 @@ package com.example.hepiplant.dto;
 
 import com.example.hepiplant.dto.enums.Permission;
 
-public class UserDto {
+import org.json.JSONObject;
+
+public class UserDto extends JSONObject {
 
     private Long id;
     private String username;

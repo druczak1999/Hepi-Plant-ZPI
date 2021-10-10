@@ -25,10 +25,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.PostActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.PostsRecyclerViewAdapter;
+import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.PostDto;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import java.io.IOException;
 
 public class PostsListFragment extends Fragment implements PostsRecyclerViewAdapter.ItemClickListener {
 
@@ -81,7 +83,14 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private void makeDataRequest(){
         // data to populate the RecyclerView with
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = BASE_URL + "/posts";
+        final Configuration config = (Configuration) getActivity().getApplicationContext();
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String url =config.getUrl() + "posts";
+
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
             new Response.Listener<JSONArray>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)

@@ -4,37 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Uzytkownik">
+    tools:context=".UserActivity">
 
     <include
         android:id="@+id/toolbarTest"
-        layout="@layout/toolbar">
-
-    </include>
-
-
-    <TextView
-        android:id="@+id/przywitanie"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginLeft="88dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/cantata_one"
-        android:text="Witaj, Ola234!"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarTest" />
+        layout="@layout/toolbar"></include>
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="115dp"
         android:layout_height="113dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginLeft="148dp"
-        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.537"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/przywitanie"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.127"
         app:srcCompat="@drawable/rounded_edittext" />
 
     <ImageView
@@ -44,11 +29,12 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
+        android:alpha="0.7"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:srcCompat="@drawable/ludzik"
-        android:alpha="0.7"/>
+        app:srcCompat="@drawable/ludzik" />
+
 
     <TextView
         android:id="@+id/nazwa"
@@ -56,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="68dp"
         android:fontFamily="@font/cantata_one"
         android:text="Nazwa użytkownika"
         android:textSize="20sp"
@@ -69,49 +55,39 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="164dp"
         android:fontFamily="@font/cantata_one"
         android:text="Email"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-    <TextView
-        android:id="@+id/nazwa5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="188dp"
-        android:fontFamily="@font/cantata_one"
-        android:text="Hasło"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <TextView
         android:id="@+id/nazwa7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="316dp"
+        android:layout_marginTop="52dp"
         android:fontFamily="@font/cantata_one"
         android:text="Powiadomienia"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintHorizontal_bias="0.563"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/save"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
+    <EditText
         android:id="@+id/nazwa2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="104dp"
         android:alpha="0.8"
         android:fontFamily="@font/cantata_one"
-        android:text="Ola234"
+        android:text=" "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
@@ -122,62 +98,51 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="204dp"
         android:alpha="0.8"
         android:fontFamily="@font/cantata_one"
-        android:text="aleksandra99@op.pl"
+        android:text=" "
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/nazwa7"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintVertical_bias="0.045" />
 
-    <TextView
-        android:id="@+id/nazwa6"
+    <Button
+        android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="228dp"
-        android:alpha="0.8"
-        android:fontFamily="@font/cantata_one"
-        android:text="********"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginLeft="148dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginLeft="136dp"
         android:layout_marginBottom="180dp"
         android:fontFamily="@font/cantata_one"
-        android:text="Zmień dane"
+        android:text="Zapisz dane"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:layout_constraintVertical_bias="0.818" />
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="80dp"
         android:layout_height="24dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="124dp"
 
+        android:layout_marginEnd="64dp"
+        android:layout_marginRight="64dp"
         android:checked="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/save"
+        app:layout_constraintVertical_bias="0.242" />
 
+    <include
+        android:id="@+id/plantsListBottomBar"
+        layout="@layout/bottom_bar" />
 
-
-    <include layout="@layout/bottom_bar"></include>
-    <include layout="@layout/floatingbutton"
-        >
-    </include>>
-
-
-
-
+    <include
+        layout="@layout/floatingbutton"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-33dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
