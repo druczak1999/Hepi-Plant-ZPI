@@ -125,7 +125,7 @@ public class FireBase extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String url =config.getUrl() + "/users";
+        String url = config.getUrl() + "/users";
         JSONObject postData = new JSONObject();
         try {
             postData.put("username", user.getDisplayName());

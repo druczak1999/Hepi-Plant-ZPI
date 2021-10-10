@@ -30,7 +30,8 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ImageTest" />
         <activity android:name=".TestBackend" />
-        <activity android:name=".Uzytkownik" />
+        <activity android:name=".UserActivity" />
+        <activity android:name=".UserUpdateActivity"></activity>
         <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
             <intent-filter>
