@@ -23,10 +23,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.firebase.ui.auth.util.ExtraConstants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
@@ -42,6 +40,7 @@ import java.util.List;
 public class FireBase extends AppCompatActivity {
 
     private static final String TAG = "FireBaseActivity";
+
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -81,19 +80,14 @@ public class FireBase extends AppCompatActivity {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
             Log.v(TAG, "Sign in successful");
-
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             makePostUserRequest(user);
-            Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-            startActivity(intent);
         } else {
             Log.v(TAG, "Result code: " + result.getResultCode());
             Log.v(TAG, "Sign in failed. Response: "+
                     response.getError().getMessage()+" Code: " +
                     response.getError().getErrorCode() + " Cause: "+
                     response.getError().getCause());
-            Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
-            startActivity(intent);
         }
     }
 
@@ -153,7 +147,9 @@ public class FireBase extends AppCompatActivity {
                     data = gson.fromJson(str, UserDto.class);
                     final Configuration config = (Configuration) getApplicationContext();
                     config.setUserId(data.getId());
-
+                    Log.v(TAG, "POST user id " + config.getUserId());
+                    Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+                    startActivity(intent);
                 }
             }, new Response.ErrorListener() {
                 @Override

@@ -43,7 +43,6 @@ public class TestBackend extends AppCompatActivity {
         setContentView(R.layout.activity_test_backend);
         TextView textView = (TextView) findViewById(R.id.tv1);
 
-
         Toolbar toolbar = findViewById(R.id.toolbarTest);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);

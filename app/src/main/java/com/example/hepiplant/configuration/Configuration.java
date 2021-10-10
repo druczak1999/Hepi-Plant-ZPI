@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class Configuration extends Application {
     private String url;
-    private long userId;
+    private Long userId;
     //backend security
     private String token;
 
@@ -23,11 +23,11 @@ public class Configuration extends Application {
         this.url = url;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
