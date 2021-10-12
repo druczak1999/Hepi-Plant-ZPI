@@ -1,6 +1,8 @@
 package com.example.hepiplant.dto;
 
-public class PlantDto {
+import java.io.Serializable;
+
+public class PlantDto implements Serializable {
 
     private Long id;
     private String name;

@@ -2,7 +2,9 @@ package com.example.hepiplant.dto;
 
 import com.example.hepiplant.dto.enums.Placement;
 
-public class SpeciesDto {
+import java.io.Serializable;
+
+public class SpeciesDto implements Serializable {
 
     private Long id;
     private String name;
