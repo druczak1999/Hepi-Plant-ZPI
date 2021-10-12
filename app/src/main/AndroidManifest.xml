@@ -4,11 +4,11 @@
     package="com.example.hepiplant">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.example.hepiplant.configuration.Configuration"
+        android:name=".configuration.Configuration"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,27 +17,29 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
-        <activity android:name=".CalendarActivity"></activity>
+        <activity android:name=".PlantViewActivity"></activity>
+        <activity android:name=".CalendarActivity" />
         <activity
             android:name=".PostActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".SalesOfferActivity"
+        <activity
+            android:name=".SalesOfferActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ForumTabsActivity"
             android:exported="true" />
         <activity
             android:name=".PlantsListActivity"
-            android:exported="true"
-            />
+            android:exported="true" />
         <activity android:name=".FireBase" />
-        <activity android:name=".PlantAddActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".PlantAddActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ImageTest" />
         <activity android:name=".TestBackend" />
         <activity android:name=".UserActivity" />
-        <activity android:name=".UserUpdateActivity"></activity>
+        <activity android:name=".UserUpdateActivity" />
         <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -46,8 +48,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

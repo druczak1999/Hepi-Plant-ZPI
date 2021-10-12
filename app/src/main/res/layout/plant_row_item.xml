@@ -17,9 +17,11 @@
             android:layout_width="130sp"
             android:layout_height="130sp"
             android:layout_margin="@dimen/margin_medium"
-            android:elevation="3sp"
-            android:background="@drawable/rounded_square"
-            app:srcCompat="@drawable/kwiatek" />
+            android:background="@drawable/rounded_edittext"
+            android:src="@drawable/kwiatek"
+            android:scaleType='fitXY'
+            android:padding='5sp'
+            android:visibility='visible'/>
 
         <LinearLayout
             android:layout_width="match_parent"
