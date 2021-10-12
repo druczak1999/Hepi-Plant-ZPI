@@ -42,7 +42,15 @@ public class ForumTabsActivity extends AppCompatActivity
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.forumTabsLayout);
         tabLayout.setupWithViewPager(viewPager);
-}
+
+        FloatingActionButton buttonAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent2 = new Intent(getApplicationContext(), QuestionActivity.class);
+                startActivity(intent2);
+            }
+        });
+    }
 
     // todo
     @Override

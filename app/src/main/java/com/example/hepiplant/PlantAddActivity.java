@@ -36,8 +36,8 @@ import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
 
 import com.google.gson.Gson;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+//import com.theartofdev.edmodo.cropper.CropImage;
+//import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +46,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -188,17 +189,17 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 //                intent.setType("image/*");
 //                intent.setAction(Intent.ACTION_GET_CONTENT);
 //                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-                cropImage();
+                //cropImage();
             }
         });
 
     }
 
-    private void cropImage(){
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .start(this);
-    }
+//    private void cropImage(){
+//        CropImage.activity()
+//                .setGuidelines(CropImageView.Guidelines.ON)
+//                .start(this);
+//    }
 
 //    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 //    @Override
@@ -241,27 +242,27 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 dateedittext.setText(data.getExtras().getString("data"));
             }
         }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                addImageButton.setImageURI(resultUri);
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-                byte[] image = stream.toByteArray();
-                imageToSend = image;
-                img_str = Base64.encodeToString(image, 0);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
+//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if (resultCode == RESULT_OK) {
+//                Uri resultUri = result.getUri();
+//                addImageButton.setImageURI(resultUri);
+//                Bitmap bitmap = null;
+//                try {
+//                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+//                byte[] image = stream.toByteArray();
+//                imageToSend = image;
+//                img_str = Base64.encodeToString(image, 0);
+//            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                Exception error = result.getError();
+//            }
+        //}
     }
 
     public void getSpeciesFromDB() {
@@ -331,7 +332,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(String response) {
                         // Display the response string.
-                        String str = response; //http request
+                        String str = null; //http request
+                        try {
+                            str = new String(response.getBytes("ISO-8859-1"),"UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                         CategoryDto[] data = new CategoryDto[]{};
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
