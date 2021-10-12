@@ -1,5 +1,7 @@
 package com.example.hepiplant.adapter.recyclerview;
 
+import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +26,6 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
     private List<SalesOfferDto> dataSet;
     private ItemClickListener clickListener;
 
-    // Provide a reference to the type of views that you are using (custom ViewHolder).
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView price;
         private final TextView location;
@@ -37,12 +38,12 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
             super(view);
             view.setOnClickListener(this);
 
-            price = (TextView) view.findViewById(R.id.offerPriceTextView);
-            location = (TextView) view.findViewById(R.id.offerLocationTextView);
-            title = (TextView) view.findViewById(R.id.offerTitleTextView);
-            tags = (TextView) view.findViewById(R.id.offerTagsTextView);
-            body = (TextView) view.findViewById(R.id.offerBodyTextView);
-            comments = (TextView) view.findViewById(R.id.offerCommentsCountTextView);
+            price = view.findViewById(R.id.offerPriceTextView);
+            location = view.findViewById(R.id.offerLocationTextView);
+            title = view.findViewById(R.id.offerTitleTextView);
+            tags = view.findViewById(R.id.offerTagsTextView);
+            body = view.findViewById(R.id.offerBodyTextView);
+            comments = view.findViewById(R.id.offerCommentsCountTextView);
         }
 
         public TextView getPrice() {
@@ -75,12 +76,10 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
         }
     }
 
-    // Initialize the dataset of the Adapter.
     public SalesOffersRecyclerViewAdapter(Context context, SalesOfferDto[] dataSet) {
         this.dataSet = new ArrayList<>(Arrays.asList(dataSet));
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
@@ -90,7 +89,6 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
         return new ViewHolder(view);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Log.v(TAG, "onBindViewHolder() position: "+position);
@@ -109,25 +107,24 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
             viewHolder.getTags().setText(tags.toString().trim());
         }
         viewHolder.getBody().setText(dataSet.get(position).getBody());
+        int commentsCount = dataSet.get(position).getComments().size();
+        String commentsText = commentsCount + getCommentsSuffix(commentsCount);
+        viewHolder.getComments().setText(commentsText);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return dataSet.size();
     }
 
-    // convenience method for getting data at click position
     public SalesOfferDto getItem(int id) {
         return dataSet.get(id);
     }
 
-    // allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
         this.clickListener = itemClickListener;
     }
 
-    // Parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }

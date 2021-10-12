@@ -1,5 +1,6 @@
 package com.example.hepiplant.fragments;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.hepiplant.PostActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.PostsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
@@ -31,13 +31,14 @@ import org.json.JSONArray;
 
 import java.io.IOException;
 
-public class PostsListFragment extends Fragment {
+public class PostsListFragment extends Fragment implements PostsRecyclerViewAdapter.ItemClickListener {
 
+    private static final String TAG = "PostsListFragment";
+
+    private Configuration config;
     private View postsFragmentView;
     private RecyclerView postsRecyclerView;
     private PostsRecyclerViewAdapter adapter;
-    private RecyclerView recyclerView;
-    private static final String TAG = "PostsListFragment";
     private PostDto[] posts = new PostDto[]{};
 
     public PostsListFragment() {
@@ -54,6 +55,7 @@ public class PostsListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
+        config = (Configuration) getActivity().getApplicationContext();
     }
 
     @Nullable
@@ -64,42 +66,68 @@ public class PostsListFragment extends Fragment {
 
         initView();
         setLayoutManager();
-        sendRequestForData();
+        makeGetDataRequest();
 
         return postsFragmentView;
     }
 
-    private void sendRequestForData(){
-        // data to populate the RecyclerView with
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        final Configuration config = (Configuration) getActivity().getApplicationContext();
+    @Override
+    public void onResume() {
+        super.onResume();
+        makeGetDataRequest();
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.v(TAG, "onItemClick()");
+        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
+        intent.putExtra("postId", posts[position].getId());
+        startActivity(intent);
+    }
+
+    private void makeGetDataRequest(){
+        String url = getRequestUrl();
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+            new Response.Listener<JSONArray>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(JSONArray response) {
+                    onGetResponseReceived(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                onErrorResponseReceived(error);
+            }
+        });
+        Log.v(TAG, "Sending the request to " + url);
+        config.getQueue().add(jsonArrayRequest);
+    }
+
+    @NonNull
+    private String getRequestUrl() {
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String url =config.getUrl() + "posts";
+        return config.getUrl() + "posts";
+    }
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.v(TAG, "Request successful. Response is: " + response);
-                        onResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-                NetworkResponse networkResponse = error.networkResponse;
-                if (networkResponse != null) {
-                    Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
-                }
-            }
-        });
-        Log.v(TAG, "Sending the request to " + url);
-        queue.add(jsonArrayRequest);
+    private void onGetResponseReceived(JSONArray response){
+        Log.v(TAG, "onGetResponseReceived()");
+        Gson gson = new Gson();
+        posts = gson.fromJson(String.valueOf(response), PostDto[].class);
+        setAdapter();
+    }
+
+    private void onErrorResponseReceived(VolleyError error){
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
     }
 
     private void initView() {
@@ -113,14 +141,7 @@ public class PostsListFragment extends Fragment {
 
     private void setAdapter() {
         adapter = new PostsRecyclerViewAdapter(getActivity(), posts);
-        adapter.setClickListener((PostsRecyclerViewAdapter.ItemClickListener) getActivity());
+        adapter.setClickListener(this);
         postsRecyclerView.setAdapter(adapter);
-    }
-
-    private void onResponseReceived(JSONArray response){
-        Log.v(TAG, "onResponseReceived()");
-        Gson gson = new Gson();
-        posts = gson.fromJson(String.valueOf(response), PostDto[].class);
-        setAdapter();
     }
 }

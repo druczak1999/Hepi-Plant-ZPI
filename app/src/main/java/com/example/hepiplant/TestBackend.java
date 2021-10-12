@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.UserDto;
+import com.firebase.ui.auth.data.model.User;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -114,7 +115,7 @@ public class TestBackend extends AppCompatActivity {
                 Toast.makeText(this,"Informacje",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.miProfile:
-                Intent intent = new Intent(this, Uzytkownik.class);
+                Intent intent = new Intent(this, UserActivity.class);
                 startActivity(intent);
                 return true;
             default:

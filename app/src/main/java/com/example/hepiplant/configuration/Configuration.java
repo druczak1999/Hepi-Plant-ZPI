@@ -2,9 +2,10 @@ package com.example.hepiplant.configuration;
 
 import android.app.Application;
 import android.content.res.AssetManager;
-import android.util.Log;
 
-import java.io.FileNotFoundException;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -14,6 +15,7 @@ public class Configuration extends Application {
     private Long userId;
     //backend security
     private String token;
+    private RequestQueue queue;
 
     public String getUrl() {
         return url;
@@ -37,6 +39,13 @@ public class Configuration extends Application {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public RequestQueue getQueue() {
+        if (queue == null){
+            queue = Volley.newRequestQueue(this);
+        }
+        return queue;
     }
 
     public String readProperties() throws IOException {

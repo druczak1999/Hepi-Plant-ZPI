@@ -20,11 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.adapter.recyclerview.PlantsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.PlantDto;
@@ -37,10 +35,11 @@ import java.io.IOException;
 
 public class PlantsListActivity extends AppCompatActivity implements PlantsRecyclerViewAdapter.ItemClickListener {
 
-    PlantsRecyclerViewAdapter adapter;
-    RecyclerView recyclerView;
     private static final String TAG = "PlantsListActivity";
-    private Long UserId = 1L;
+
+    private Configuration config;
+    private PlantsRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
     private PlantDto[] plants = new PlantDto[]{};
 
     @Override
@@ -48,58 +47,21 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plants_list);
+
+        config = (Configuration) getApplicationContext();
+
+        initView();
+        setLayoutManager();
+        setAdapter();
+        makeGetDataRequest();
         setBottomBarOnItemClickListeners();
+        setupToolbar();
+    }
 
-        Toolbar toolbar = findViewById(R.id.plantsListToolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantAddActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        recyclerView = findViewById(R.id.plantsRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // data to populate the RecyclerView with
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final Configuration config = (Configuration) getApplicationContext();
-        try {
-            config.setUrl(config.readProperties());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Log.v(TAG, "POST user id " + config.getUserId());
-        String url = config.getUrl()+"plants/user/"+config.getUserId();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.v(TAG, "Request successful. Response is: " + response);
-                        onResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-                NetworkResponse networkResponse = error.networkResponse;
-                if (networkResponse != null) {
-                    Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
-                }
-            }
-        });
-        Log.v(TAG, "Sending the request to " + url);
-        queue.add(jsonArrayRequest);
-        // set up the RecyclerView
-        adapter = new PlantsRecyclerViewAdapter(this, plants);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+    @Override
+    public void onResume() {
+        super.onResume();
+        makeGetDataRequest();
     }
 
     @Override
@@ -108,12 +70,91 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
-    private void onResponseReceived(JSONArray response){
-        Log.v(TAG, "onResponseReceived()");
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.wyloguj:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.infoMenu:
+                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.miProfile:
+                Intent intent = new Intent(this, UserActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    private void makeGetDataRequest(){
+        String url = getRequestUrl();
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+            new Response.Listener<JSONArray>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(JSONArray response) {
+                    onGetResponseReceived(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    onErrorResponseReceived(error);
+                }
+        });
+        Log.v(TAG, "Sending the request to " + url);
+        config.getQueue().add(jsonArrayRequest);
+    }
+
+    @NonNull
+    private String getRequestUrl() {
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return config.getUrl() + "plants/user/" + config.getUserId();
+    }
+
+    private void onGetResponseReceived(JSONArray response){
+        Log.v(TAG, "onGetResponseReceived()");
         Gson gson = new Gson();
         plants = gson.fromJson(String.valueOf(response), PlantDto[].class);
         adapter.updateData(plants);
         adapter.notifyItemRangeChanged(0, plants.length);
+    }
+
+    private void onErrorResponseReceived(VolleyError error){
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
+    }
+
+    private void initView() {
+        recyclerView = findViewById(R.id.plantsRecyclerView);
+    }
+
+    private void setLayoutManager() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void setAdapter() {
+        adapter = new PlantsRecyclerViewAdapter(this, plants);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 
     private void setBottomBarOnItemClickListeners(){
@@ -133,30 +174,20 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
             }
         });
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.wyloguj:
-                FireBase fireBase = new FireBase();
-                fireBase.signOut();
-                return true;
-            case R.id.infoMenu:
-                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.miProfile:
-                Intent intent = new Intent(this, Uzytkownik.class);
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.plantsListToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PlantAddActivity.class);
                 startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
+            }
+        });
     }
+
 }

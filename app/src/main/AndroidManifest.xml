@@ -19,6 +19,12 @@
         tools:ignore="Instantiatable">
         <activity android:name=".CalendarActivity"></activity>
         <activity
+            android:name=".PostActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".SalesOfferActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ForumTabsActivity"
             android:exported="true" />
         <activity
@@ -30,7 +36,8 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ImageTest" />
         <activity android:name=".TestBackend" />
-        <activity android:name=".Uzytkownik" />
+        <activity android:name=".UserActivity" />
+        <activity android:name=".UserUpdateActivity"></activity>
         <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
             <intent-filter>
