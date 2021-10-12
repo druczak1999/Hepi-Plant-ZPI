@@ -1,6 +1,8 @@
 package com.example.hepiplant.dto;
 
-public class ScheduleDto {
+import java.io.Serializable;
+
+public class ScheduleDto implements Serializable {
 
     private Long id;
     private int wateringFrequency;

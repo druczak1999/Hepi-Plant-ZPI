@@ -19,6 +19,12 @@
         tools:ignore="Instantiatable">
         <activity android:name=".CalendarActivity"></activity>
         <activity
+            android:name=".PostActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".SalesOfferActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ForumTabsActivity"
             android:exported="true" />
         <activity

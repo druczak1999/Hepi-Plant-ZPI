@@ -1,9 +1,10 @@
 package com.example.hepiplant.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class SalesOfferDto {
+public class SalesOfferDto implements Serializable {
 
     private Long id;
     private String title;
@@ -15,6 +16,7 @@ public class SalesOfferDto {
     private String updatedDate;
     private Long userId;
     private Long categoryId;
+    private List<CommentDto> comments;
 
     public SalesOfferDto() {
     }
@@ -97,5 +99,13 @@ public class SalesOfferDto {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<CommentDto> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDto> comments) {
+        this.comments = comments;
     }
 }

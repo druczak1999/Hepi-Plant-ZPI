@@ -6,6 +6,10 @@
     <dimen name="margin_small">5sp</dimen>
     <dimen name="padding_bottom">50sp</dimen>
     <dimen name="spaceForToolbar">56sp</dimen>
+    <dimen name="spaceForToolbarAndGap">61sp</dimen>
     <dimen name="spaceForToolbarAndTabs">104sp</dimen>
     <dimen name="spaceForBottomBar">112sp</dimen>
+    <dimen name="one_sp">1sp</dimen>
+    <dimen name="button_small_width">80sp</dimen>
+    <dimen name="button_small_height">40sp</dimen>
 </resources>

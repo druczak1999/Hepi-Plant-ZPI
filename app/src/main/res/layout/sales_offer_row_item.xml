@@ -32,7 +32,7 @@
                 android:id="@+id/offerLocationTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/forum_date_holder"
+                android:text="@string/sales_offer_location_holder"
                 android:textAppearance="@style/ForumDateFont" />
 
             <TextView

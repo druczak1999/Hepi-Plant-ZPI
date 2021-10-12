@@ -1,6 +1,8 @@
 package com.example.hepiplant.dto;
 
-public class EventDto {
+import java.io.Serializable;
+
+public class EventDto implements Serializable {
     private String eventName;
     private String eventDescription;
     private String eventDate;

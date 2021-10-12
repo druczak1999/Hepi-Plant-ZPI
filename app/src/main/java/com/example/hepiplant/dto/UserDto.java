@@ -5,7 +5,9 @@ import com.example.hepiplant.dto.enums.Permission;
 
 import org.json.JSONObject;
 
-public class UserDto extends JSONObject {
+import java.io.Serializable;
+
+public class UserDto extends JSONObject implements Serializable {
 
     private Long id;
     private String username;
