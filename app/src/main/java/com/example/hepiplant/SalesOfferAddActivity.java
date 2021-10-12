@@ -36,6 +36,8 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_offer_add);
         getCategoriesFromDB();
+
+
     }
 
     public void getCategoriesFromDB() {
@@ -95,14 +97,11 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (parent.getAdapter().toString() == "android.widget.ArrayAdapter@9536607") {
-            categoryId = position;
+        Spinner cspin = (Spinner) parent;
+        if(cspin.getId() == R.id.editKategoria)
+        {
+            categoryId = position+1;
         }
-
-
-        String item = parent.getItemAtPosition(position).toString();
-
-
     }
 
     @Override
