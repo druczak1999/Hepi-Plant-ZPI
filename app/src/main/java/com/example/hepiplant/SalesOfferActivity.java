@@ -3,12 +3,14 @@ package com.example.hepiplant;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -218,6 +220,20 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         }
         TextView bodyTextView = findViewById(R.id.salesOfferBodyTextViewSingle);
         bodyTextView.setText(salesOffer.getBody());
+        ImageView photoImageView = findViewById(R.id.salesOfferPhotoImageViewSingle);
+        if(salesOffer.getPhoto()!=null){
+            Log.v(TAG,"Attempting photo bind for data: " + salesOffer.getPhoto());
+            try {
+                photoImageView.setImageURI(Uri.parse(salesOffer.getPhoto()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            } catch (Exception e) {
+                e.getMessage();
+            }
+        } else {
+            photoImageView.setVisibility(View.GONE);
+        }
         TextView commentsTextView = findViewById(R.id.salesOfferCommentsCountTextViewSingle);
         int commentsCount = salesOffer.getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);

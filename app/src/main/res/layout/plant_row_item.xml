@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/plantIconImageView"
-            android:layout_width="130sp"
-            android:layout_height="130sp"
+            android:layout_width="@dimen/plant_photo_row_item_dimen"
+            android:layout_height="@dimen/plant_photo_row_item_dimen"
             android:layout_margin="@dimen/margin_medium"
             android:background="@drawable/rounded_edittext"
             android:src="@drawable/kwiatek"

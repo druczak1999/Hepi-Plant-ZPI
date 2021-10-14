@@ -12,6 +12,7 @@ public class SalesOfferDto implements Serializable {
     private String location;
     private BigDecimal price;
     private List<String> tags;
+    private String photo;
     private String createdDate;
     private String updatedDate;
     private Long userId;
@@ -67,6 +68,14 @@ public class SalesOfferDto implements Serializable {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getCreatedDate() {

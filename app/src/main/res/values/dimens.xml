@@ -12,4 +12,7 @@
     <dimen name="one_sp">1sp</dimen>
     <dimen name="button_small_width">80sp</dimen>
     <dimen name="button_small_height">40sp</dimen>
+    <dimen name="plant_photo_row_item_dimen">130sp</dimen>
+    <dimen name="forum_photo_height">200sp</dimen>
+    <dimen name="elevation_3sp">3sp</dimen>
 </resources>
