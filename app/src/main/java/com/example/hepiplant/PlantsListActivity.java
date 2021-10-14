@@ -67,7 +67,34 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this,PlantViewActivity.class);
+        intent.putExtra("plantName",plants[position].getName());
+        if(plants[position].getSpecies()!=null){
+            intent.putExtra("species",plants[position].getSpecies().getName());
+            intent.putExtra("soil",plants[position].getSpecies().getSoil());
+            intent.putExtra("placement",plants[position].getSpecies().getPlacement().toString());
+        }
+        else{
+            intent.putExtra("species","");
+            intent.putExtra("soil","");
+            intent.putExtra("placement","");
+        }
+        intent.putExtra("watering",String.valueOf(plants[position].getSchedule().getWateringFrequency()));
+        intent.putExtra("fertilizing",String.valueOf(plants[position].getSchedule().getFertilizingFrequency()));
+        intent.putExtra("misting",String.valueOf(plants[position].getSchedule().getMistingFrequency()));
+        if(plants[position].getCategoryId()!=null)
+        intent.putExtra("category",plants[position].getCategoryId().toString());
+        else intent.putExtra("category","");
+        if(plants[position].getLocation()!=null)
+        intent.putExtra("location",plants[position].getLocation());
+        else intent.putExtra("location","");
+        if(plants[position].getPurchaseDate()!=null)
+        intent.putExtra("date",plants[position].getPurchaseDate());
+        else intent.putExtra("date","");
+        if(plants[position].getPhoto()!=null)
+        intent.putExtra("photo", plants[position].getPhoto());
+        else intent.putExtra("photo", "");
+        startActivity(intent);
     }
 
     @Override

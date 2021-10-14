@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Date;
+
 public class CalendarActivity extends AppCompatActivity {
 
     CalendarView calendarView;
@@ -20,6 +22,7 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         calendarView = findViewById(R.id.calendarView);
+        calendarView.setMaxDate(new Date().getTime());
         button = findViewById(R.id.buttonDate);
         textView = findViewById(R.id.textViewDate);
 
