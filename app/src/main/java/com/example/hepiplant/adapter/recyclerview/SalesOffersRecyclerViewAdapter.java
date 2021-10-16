@@ -3,10 +3,13 @@ package com.example.hepiplant.adapter.recyclerview;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +35,7 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
         private final TextView title;
         private final TextView tags;
         private final TextView body;
+        private final ImageView photo;
         private final TextView comments;
 
         public ViewHolder(View view) {
@@ -43,6 +47,7 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
             title = view.findViewById(R.id.offerTitleTextView);
             tags = view.findViewById(R.id.offerTagsTextView);
             body = view.findViewById(R.id.offerBodyTextView);
+            photo = view.findViewById(R.id.offerPhotoImageView);
             comments = view.findViewById(R.id.offerCommentsCountTextView);
         }
 
@@ -64,6 +69,10 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
 
         public TextView getBody() {
             return body;
+        }
+
+        public ImageView getPhoto() {
+            return photo;
         }
 
         public TextView getComments() {
@@ -107,6 +116,20 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
             viewHolder.getTags().setText(tags.toString().trim());
         }
         viewHolder.getBody().setText(dataSet.get(position).getBody());
+        ImageView photoImageView = viewHolder.getPhoto();
+        if(dataSet.get(position).getPhoto()!=null){
+            Log.v(TAG,"Attempting photo bind for data: " + dataSet.get(position).getPhoto());
+            try {
+                photoImageView.setImageURI(Uri.parse(dataSet.get(position).getPhoto()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            } catch (Exception e) {
+                e.getMessage();
+            }
+        } else {
+            photoImageView.setVisibility(View.GONE);
+        }
         int commentsCount = dataSet.get(position).getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         viewHolder.getComments().setText(commentsText);

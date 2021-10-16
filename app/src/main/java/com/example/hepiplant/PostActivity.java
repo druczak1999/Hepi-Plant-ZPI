@@ -3,12 +3,15 @@ package com.example.hepiplant;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -213,6 +216,20 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         }
         TextView bodyTextView = findViewById(R.id.postBodyTextViewSingle);
         bodyTextView.setText(post.getBody());
+        ImageView photoImageView = findViewById(R.id.postPhotoImageViewSingle);
+        if(post.getPhoto()!=null){
+            Log.v(TAG,"Attempting photo bind for data: " + post.getPhoto());
+            try {
+                photoImageView.setImageURI(Uri.parse(post.getPhoto()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            } catch (Exception e) {
+                e.getMessage();
+            }
+        } else {
+            photoImageView.setVisibility(View.GONE);
+        }
         TextView commentsTextView = findViewById(R.id.postCommentsCountTextViewSingle);
         int commentsCount = post.getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
