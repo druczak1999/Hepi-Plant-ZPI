@@ -1,25 +1,37 @@
 package com.example.hepiplant;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.PostDto;
+import com.example.hepiplant.dto.SalesOfferDto;
 import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -36,7 +48,65 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_offer_add);
         getCategoriesFromDB();
+        TextView tytul = (EditText) findViewById(R.id.editTytul);
+        TextView tresc = (EditText) findViewById(R.id.editTresc);
+        TextView lokalizacja = (EditText) findViewById(R.id.editLokalizacja);
+        TextView cena = (EditText) findViewById(R.id.editCena);
+        Button dodaj = (Button) findViewById(R.id.buttonDodajOferte);
+        getCategoriesFromDB();
+        dodaj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                final Configuration config = (Configuration) getApplicationContext();
+                try {
+                    config.setUrl(config.readProperties());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+                String url = config.getUrl() + "salesoffers";
+                JSONObject postData = new JSONObject();
+                try {
+                    postData.put("title", tytul.getText().toString());
+                    postData.put("categoryId", categoryId);
+                    postData.put("userId", config.getUserId());
+                    postData.put("body", tresc.getText().toString());
+                    postData.put("location", lokalizacja.getText().toString());
+                    postData.put("price", cena.getText().toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.v(TAG, String.valueOf(postData));
+                JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.N)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.v(TAG, "ONResponse");
+                                String str = String.valueOf(response); //http request
+                                SalesOfferDto data = new SalesOfferDto();
+                                Gson gson = new Gson();
+                                data = gson.fromJson(str, SalesOfferDto.class);
+                                StringBuilder sb = new StringBuilder("Response is: \n" + data.getTitle());
+                                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                                startActivity(intent);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+                        Log.v(TAG, String.valueOf(postData));
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if (networkResponse != null) {
+                            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+                        }
+                    }
+                });
+                queue.add(jsonArrayRequest);
+            }
+        });
 
     }
 
