@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlantViewActivity">
+
+    <include
+        android:id="@+id/includeToolbarPlantView"
+        layout="@layout/toolbar"></include>
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/bottom_bar"></include>\
+    <include layout="@layout/floatingbutton"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="570dp"
+        app:layout_constraintBottom_toBottomOf="@+id/include2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.427"
+        android:layout_marginBottom="@dimen/spaceForBottomBar"
+        android:layout_marginTop="@dimen/spaceForToolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/PlantName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                style="@style/PageTitleFont"
+                android:text="Nazwa rośliny"
+                 />
+
+            <ImageView
+                android:id="@+id/plantImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/rounded_edittext"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/kwiatek"
+                />
+
+            <TextView
+                android:id="@+id/SpeciesView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:fontFamily="@font/roboto"
+                android:layout_marginTop="30dp"
+                android:text="Gatunek"
+                style = "@style/DetailsFontTitle"
+                />
+
+            <TextView
+                android:id="@+id/SpeciesValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Gatunek"
+                style = "@style/DetailsFontValue"
+                />
+
+            <TextView
+                android:id="@+id/CategoryView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Kategoria"
+                style = "@style/DetailsFontTitle"
+                 />
+
+            <TextView
+                android:id="@+id/CategoryValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Kategoria"
+                style = "@style/DetailsFontValue"/>
+
+            <TextView
+                android:id="@+id/WateringView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Częstość podlewania"
+                style = "@style/DetailsFontTitle"
+
+                 />
+
+            <TextView
+                android:id="@+id/WateringValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                style = "@style/DetailsFontValue"
+                android:layout_marginTop="10dp"
+                android:text="Co 3 dni"
+
+                 />
+
+            <TextView
+                android:id="@+id/FertilizingView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Częstość nawożenia"
+                style = "@style/DetailsFontTitle"
+                />
+
+            <TextView
+                android:id="@+id/FertilizingValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+
+                android:layout_marginTop="10dp"
+                android:text="Co 14 dni"
+                style = "@style/DetailsFontValue"/>
+
+            <TextView
+                android:id="@+id/MistingView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Częstość zraszania"
+                style = "@style/DetailsFontTitle"
+                 />
+
+            <TextView
+                android:id="@+id/MistingValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Co 4 dni"
+                style = "@style/DetailsFontValue" />
+
+            <TextView
+                android:id="@+id/SoilView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Rodzaj gleby"
+                style = "@style/DetailsFontTitle"
+                 />
+
+            <TextView
+                android:id="@+id/SoilValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Żyzna"
+                style = "@style/DetailsFontValue" />
+
+            <TextView
+                android:id="@+id/LocationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Stanowisko"
+                style = "@style/DetailsFontTitle"
+                />
+
+            <TextView
+                android:id="@+id/LocationValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Jasne"
+                style = "@style/DetailsFontValue"/>
+
+            <TextView
+                android:id="@+id/PlacementView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Pomieszczenie"
+                style = "@style/DetailsFontTitle"
+                 />
+
+            <TextView
+                android:id="@+id/PlacementValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                style = "@style/DetailsFontValue"
+                android:layout_marginTop="10dp"
+                android:text="Pokój"
+                 />
+
+            <TextView
+                android:id="@+id/DateView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+
+                android:layout_marginTop="10dp"
+                android:text="Data zakupu"
+                style = "@style/DetailsFontTitle"
+                 />
+
+            <TextView
+                android:id="@+id/DateValueView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                style = "@style/DetailsFontValue"
+                android:layout_marginTop="10dp"
+                android:text="14 lipca 2021"
+                />
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
