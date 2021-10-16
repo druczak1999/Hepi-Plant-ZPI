@@ -224,7 +224,6 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
         });
     }
 
-
     private void cropImage() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -280,6 +279,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
 
         queue.add(jsonArrayRequest);
     }
+
     private void patchRequestPlant(){
         patchRequestSchedule();
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -379,7 +379,6 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
         PlantDto data = new PlantDto();
         Gson gson = new Gson();
         data = gson.fromJson(str, PlantDto.class);
-
     }
 
 }

@@ -10,12 +10,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -211,7 +216,9 @@ public class PlantViewActivity extends AppCompatActivity {
                 Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.deletePlant:
-                Toast.makeText(this.getApplicationContext(),"Usuwam rosline",Toast.LENGTH_SHORT).show();
+                Intent intent3 = new Intent(this, PopUpDelete.class);
+                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
+                startActivity(intent3);
                 return true;
             case R.id.editPlant:
                 Intent intent = prepareIntent();
@@ -226,5 +233,6 @@ public class PlantViewActivity extends AppCompatActivity {
         }
 
     }
+
 
 }
