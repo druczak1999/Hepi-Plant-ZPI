@@ -13,7 +13,9 @@
     <include
         android:id="@+id/include2"
         layout="@layout/bottom_bar"></include>\
-    <include layout="@layout/floatingbutton"></include>
+    <include
+        android:id="@+id/floatingActionButtonPlantView"
+        layout="@layout/floatingbutton"></include>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -48,10 +50,11 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/rounded_edittext"
+                android:background="@drawable/rounded_square"
+                android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                android:src="@drawable/kwiatek"
+                app:srcCompat="@drawable/kwiatek"
                 />
 
             <TextView

@@ -3,30 +3,32 @@ package com.example.hepiplant;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.example.hepiplant.dto.PlantDto;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -45,6 +47,7 @@ public class PlantViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_view);
         setupViewsData();
+        setupToolbar();
     }
 
     private void setupViewsData(){
@@ -62,24 +65,6 @@ public class PlantViewActivity extends AppCompatActivity {
         plantImage = findViewById(R.id.plantImage);
         setBottomBarOnItemClickListeners();
         setTextsToRealValues();
-    }
-
-    private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setTextsToRealValues(){
@@ -101,6 +86,9 @@ public class PlantViewActivity extends AppCompatActivity {
         date.setText(getIntent().getExtras().getString("date").replaceFirst("00:00:00",""));
         if(!getIntent().getExtras().getString("photo").isEmpty())
         plantImage.setImageURI(Uri.parse(getIntent().getExtras().getString("photo")));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+           plantImage.setClipToOutline(true);
+        }
 
     }
 
@@ -155,4 +143,88 @@ public class PlantViewActivity extends AppCompatActivity {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
     }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.includeToolbarPlantView);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PlantAddActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setBottomBarOnItemClickListeners(){
+        Button buttonHome = findViewById(R.id.buttonDom);
+        buttonHome.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button buttonForum = findViewById(R.id.buttonForum);
+        buttonForum.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private Intent prepareIntent(){
+        Intent intent = new Intent(getApplicationContext(),EditPlantActivity.class);
+        intent.putExtra("name",plantName.getText().toString());
+        intent.putExtra("photo",getIntent().getExtras().getString("photo"));
+        intent.putExtra("species",species.getText());
+        intent.putExtra("watering",getIntent().getExtras().getString("watering"));
+        intent.putExtra("fertilizing",getIntent().getExtras().getString("fertilizing"));
+        intent.putExtra("misting",getIntent().getExtras().getString("misting"));
+        intent.putExtra("placement",placement.getText());
+        intent.putExtra("date",date.getText());
+        Log.v(TAG, "Id: "+getIntent().getExtras().getLong("plantId"));
+        intent.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
+        intent.putExtra("scheduleId",getIntent().getExtras().getLong("scheduleId"));
+        return intent;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_plant, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.deletePlant:
+                Toast.makeText(this.getApplicationContext(),"Usuwam rosline",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.editPlant:
+                Intent intent = prepareIntent();
+                startActivity(intent);
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
 }

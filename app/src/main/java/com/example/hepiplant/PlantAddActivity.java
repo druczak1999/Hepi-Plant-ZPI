@@ -140,6 +140,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePlant(response);
+                        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+                        startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -149,8 +151,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         });
 
         queue.add(jsonArrayRequest);
-        Toast.makeText(getApplicationContext(), "Dodano rosline", Toast.LENGTH_SHORT).show();
-        this.onBackPressed();
     }
 
     private JSONObject makeSpeciesJSON(){
@@ -268,6 +268,9 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 Uri resultUri = result.getUri();
                 addImageButton.setImageURI(resultUri);
                 img_str=resultUri.toString();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addImageButton.setClipToOutline(true);
+                }
                 Log.v(TAG, img_str);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();

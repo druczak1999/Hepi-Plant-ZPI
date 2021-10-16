@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -91,6 +92,9 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
         if(dataSet.get(position).getPhoto()!=null){
             try {
                 viewHolder.getImage().setImageURI(Uri.parse(dataSet.get(position).getPhoto()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    viewHolder.getImage().setClipToOutline(true);
+                }
             } catch (Exception e) {
                 e.getMessage();
 

@@ -17,7 +17,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
-        <activity android:name=".PlantViewActivity"></activity>
+        <activity android:name=".EditPlantActivity"></activity>
+        <activity android:name=".PlantViewActivity" />
         <activity android:name=".CalendarActivity" />
         <activity
             android:name=".PostActivity"
