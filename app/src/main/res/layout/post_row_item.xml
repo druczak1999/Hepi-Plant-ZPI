@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:layout_marginHorizontal="@dimen/margin_medium"
@@ -47,6 +48,17 @@
                 android:layout_marginBottom="@dimen/margin_small"
                 android:text="@string/post_body_holder"
                 android:textAppearance="@style/ListItemDescriptionFont" />
+
+            <ImageView
+                android:id="@+id/postPhotoImageView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/forum_photo_height"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:background="@drawable/rounded_square"
+                android:elevation="@dimen/elevation_3sp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/kwiatek" />
 
             <TextView
                 android:id="@+id/postCommentsCountTextView"
