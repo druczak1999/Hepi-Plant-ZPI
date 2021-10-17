@@ -35,7 +35,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class SalesOfferActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
 
@@ -101,7 +103,12 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonObjectRequest);
     }
@@ -121,7 +128,12 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonObjectRequest);
     }
@@ -138,8 +150,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private void onGetResponseReceived(JSONObject response){
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        salesOffer = gson.fromJson(String.valueOf(response), SalesOfferDto.class);
+        salesOffer = config.getGson().fromJson(String.valueOf(response), SalesOfferDto.class);
         comments = salesOffer.getComments().toArray(comments);
         if(adapter == null){
             setAdapter();
@@ -238,6 +249,12 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         int commentsCount = salesOffer.getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         commentsTextView.setText(commentsText);
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 
 }

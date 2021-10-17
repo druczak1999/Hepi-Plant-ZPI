@@ -32,6 +32,8 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlantsListActivity extends AppCompatActivity implements PlantsRecyclerViewAdapter.ItemClickListener {
 
@@ -139,7 +141,12 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
                 public void onErrorResponse(VolleyError error) {
                     onErrorResponseReceived(error);
                 }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonArrayRequest);
     }
@@ -156,8 +163,7 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        plants = gson.fromJson(String.valueOf(response), PlantDto[].class);
+        plants = config.getGson().fromJson(String.valueOf(response), PlantDto[].class);
         adapter.updateData(plants);
         adapter.notifyItemRangeChanged(0, plants.length);
     }
@@ -215,6 +221,12 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
                 startActivity(intent);
             }
         });
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 
 }
