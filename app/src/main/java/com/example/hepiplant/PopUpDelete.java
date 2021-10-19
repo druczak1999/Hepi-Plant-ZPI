@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PopUpDelete extends AppCompatActivity {
 
@@ -93,7 +95,12 @@ public class PopUpDelete extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonArrayRequest);
     }
@@ -104,5 +111,11 @@ public class PopUpDelete extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 }

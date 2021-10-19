@@ -39,7 +39,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EditPlantActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -119,7 +121,12 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
 
         queue.add(jsonArrayRequest);
     }
@@ -275,7 +282,12 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
 
         queue.add(jsonArrayRequest);
     }
@@ -302,7 +314,12 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
 
         queue.add(jsonArrayRequest);
     }
@@ -379,6 +396,12 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
         PlantDto data = new PlantDto();
         Gson gson = new Gson();
         data = gson.fromJson(str, PlantDto.class);
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 
 }

@@ -37,6 +37,8 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class PlantViewActivity extends AppCompatActivity {
@@ -118,7 +120,12 @@ public class PlantViewActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonArrayRequest);
     }
@@ -233,5 +240,10 @@ public class PlantViewActivity extends AppCompatActivity {
 
     }
 
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
+    }
 
 }

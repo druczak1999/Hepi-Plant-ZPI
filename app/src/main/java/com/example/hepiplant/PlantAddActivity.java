@@ -41,7 +41,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PlantAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -148,7 +150,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
 
         queue.add(jsonArrayRequest);
     }
@@ -301,7 +308,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
 
         queue.add(jsonArrayRequest);
     }
@@ -336,7 +348,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) { onErrorResponsePlant(error);}
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         queue.add(jsonArrayRequest);
     }
 
@@ -376,5 +393,11 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 }

@@ -25,10 +25,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserActivity extends AppCompatActivity {
     private static final String TAG = "UserActivity";
-    Configuration configuration = new Configuration();
+    private Configuration config;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +41,9 @@ public class UserActivity extends AppCompatActivity {
         TextView textView2 = (TextView) findViewById(R.id.nazwa4);
         Button change = (Button) findViewById(R.id.change);
 
-
         Intent intent = this.getIntent();
         RequestQueue queue = Volley.newRequestQueue(this);
-        final Configuration config = (Configuration) getApplicationContext();
+        config = (Configuration) getApplicationContext();
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
@@ -80,8 +81,13 @@ public class UserActivity extends AppCompatActivity {
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
                 textView.setText(error.getMessage());
             }
-        });
-        queue.add(jsonArrayRequest);
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
+        config.getQueue().add(jsonArrayRequest);
     }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,5 +111,12 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        Log.v(TAG,"Token: "+config.getToken());
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 }

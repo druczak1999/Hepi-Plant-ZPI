@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/rounded_button">
 
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_marginTop="28dp"
         android:background="@drawable/rounded_edittext"
         android:text="Tak"
-        android:layout_marginLeft="@dimen/margin_big"
+        android:layout_marginLeft="40sp"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -39,7 +39,7 @@
         style="@style/ButtonSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/margin_big"
+        android:layout_marginRight="40sp"
         android:layout_marginTop="28dp"
         android:background="@drawable/rounded_edittext"
         android:text="Nie"
