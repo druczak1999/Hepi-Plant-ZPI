@@ -19,9 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.UserDto;
-import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -36,9 +34,9 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         setBottomBarOnItemClickListeners();
-        TextView textView = (TextView) findViewById(R.id.nazwa2);
-        TextView textView1 = (TextView) findViewById(R.id.przywitanie);
-        TextView textView2 = (TextView) findViewById(R.id.nazwa4);
+        TextView textView = (TextView) findViewById(R.id.usernameValueUserView);
+        TextView textView1 = (TextView) findViewById(R.id.userNameUserview);
+        TextView textView2 = (TextView) findViewById(R.id.emailValueUserView);
         Button change = (Button) findViewById(R.id.change);
 
         Intent intent = this.getIntent();
