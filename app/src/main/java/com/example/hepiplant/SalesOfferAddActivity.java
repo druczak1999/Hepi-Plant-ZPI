@@ -42,7 +42,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SalesOfferAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "AddSalesOffer";
@@ -52,6 +54,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
     ImageView addImageButton;
     TextView hasztagi;
     private static final int PICK_IMAGE = 2;
+    private Configuration config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
             @Override
             public void onClick(View v) {
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                final Configuration config = (Configuration) getApplicationContext();
+                config = (Configuration) getApplicationContext();
                 try {
                     config.setUrl(config.readProperties());
                 } catch (IOException e) {
@@ -124,7 +127,12 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
                         }
                     }
-                });
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        return prepareRequestHeaders();
+                    }
+                };
                 queue.add(jsonArrayRequest);
             }
         });
@@ -208,7 +216,12 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };;
 
 // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
@@ -235,5 +248,11 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 }

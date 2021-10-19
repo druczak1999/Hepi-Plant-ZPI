@@ -303,5 +303,4 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }

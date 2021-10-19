@@ -26,10 +26,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserUpdateActivity extends AppCompatActivity {
     private static final String TAG = "UserUpdateActivity";
     private UserDto userDto;
+    private Configuration config;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +43,7 @@ public class UserUpdateActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         RequestQueue queue = Volley.newRequestQueue(this);
-        final Configuration config = (Configuration) getApplicationContext();
+        config = (Configuration) getApplicationContext();
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
@@ -71,7 +74,12 @@ public class UserUpdateActivity extends AppCompatActivity {
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
                 textView.setText(error.getMessage());
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         queue.add(jsonArrayRequest);
         save.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -97,7 +105,12 @@ public class UserUpdateActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage());
                     }
-                });
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        return prepareRequestHeaders();
+                    }
+                };
                 queue.add(jsonArrayRequest);
                 Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                 startActivity(intent);
@@ -121,5 +134,11 @@ public class UserUpdateActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 }
