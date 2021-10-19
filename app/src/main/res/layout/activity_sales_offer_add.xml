@@ -60,7 +60,7 @@
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/addimagebutton"/>
-            
+
             <TextView
                 android:id="@+id/Tytul"
                 android:layout_width="match_parent"
