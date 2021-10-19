@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.127" />
+        app:layout_constraintVertical_bias="0.199" />
 
     <TextView
         android:id="@+id/nazwa"
@@ -127,5 +127,5 @@
     <include
         layout="@layout/floatingbutton"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-33dp" />
+        tools:layout_editor_absoluteY="43dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,38 +13,28 @@
 
     <TextView
         android:id="@+id/przywitanie"
+        style="@style/PageTitleFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="88dp"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/PageTitleFont"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="115dp"
         android:layout_height="113dp"
-        android:layout_marginTop="28dp"
+        android:background="@drawable/rounded_edittext"
+        android:padding="20sp"
+        android:src="@drawable/ludzik"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/przywitanie"
-        app:srcCompat="@drawable/rounded_edittext" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="67dp"
-        android:layout_height="87dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:alpha="0.7"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:srcCompat="@drawable/ludzik" />
+        app:layout_constraintVertical_bias="0.076"></ImageView>
 
     <TextView
         android:id="@+id/nazwa"
@@ -98,18 +88,16 @@
 
     <TextView
         android:id="@+id/nazwa4"
+        style="@style/DetailsFontValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="204dp"
         android:alpha="0.8"
+
         android:text=" "
-        app:layout_constraintBottom_toTopOf="@+id/nazwa7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.0"
-        style="@style/DetailsFontValue"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <Button
@@ -123,9 +111,10 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.71" />
+        app:layout_constraintTop_toBottomOf="@+id/nazwa3"
+        app:layout_constraintVertical_bias="0.186" />
 
     <Switch
         android:id="@+id/switch1"
@@ -146,7 +135,7 @@
 
     <include
         layout="@layout/floatingbutton"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-16dp" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-97dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

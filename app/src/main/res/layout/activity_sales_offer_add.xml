@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="Dodaj nową ofertę sprzedaży"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
@@ -33,10 +33,10 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="593dp"
-        android:layout_marginBottom="88dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="550dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDodajOferte"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Dodaj">
 
@@ -53,41 +53,41 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="10dp"
+                android:adjustViewBounds="true"
                 android:background="@drawable/rounded_square"
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/addimagebutton"/>
+                app:srcCompat="@drawable/addimagebutton" />
 
             <TextView
                 android:id="@+id/Tytul"
+                style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Tytuł"
-                style="@style/DetailsFontTitle"/>
+                android:text="Tytuł" />
 
             <EditText
                 android:id="@+id/editTytul"
+                style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
-                android:text="..."
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                style="@style/DetailsFontValue"/>
+                android:text="..." />
 
             <TextView
                 android:id="@+id/Kategoria"
+                style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
-                android:text="Kategoria"
-                style="@style/DetailsFontTitle"/>
+                android:text="Kategoria" />
 
             <Spinner
                 android:id="@+id/editKategoria"
@@ -98,99 +98,96 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_spinner"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
-                android:textColor="#AAA1A1"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/Tresc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="Treść"
-                style="@style/DetailsFontTitle"/>
-
-            <EditText
-                android:id="@+id/editTresc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/rounded_edittext"
-                android:ems="10"
-                android:text="..."
-                android:fontFamily="@font/cantata_one"
-                android:gravity="top|start"
-                android:inputType="textMultiLine"
-                style="@style/DetailsFontValue" />
-
-            <TextView
-                android:id="@+id/Lokalizacja"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="Lokalizacja"
-                style="@style/DetailsFontTitle" />
-
-            <EditText
-                android:id="@+id/editLokalizacja"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
-                android:text="..."
-                android:background="@drawable/rounded_edittext"
-                android:ems="10"
-                style="@style/DetailsFontValue" />
-
-            <TextView
-                android:id="@+id/Cena"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="Cena"
-                style="@style/DetailsFontTitle" />
-
-            <EditText
-                android:id="@+id/editCena"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
-                android:text="..."
-                android:background="@drawable/rounded_edittext"
-                android:ems="10"
-                android:inputType="numberDecimal"
                 style="@style/DetailsFontValue"/>
 
             <TextView
-                android:id="@+id/Hasztagi"
+                android:id="@+id/Tresc"
+                style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="#Hasztagi"
-                style="@style/DetailsFontTitle" />
+                android:text="Treść" />
 
             <EditText
-                android:id="@+id/editHasztagi"
+                android:id="@+id/editTresc"
+                style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
-                android:text="..."
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                style="@style/DetailsFontValue" />
+                android:text="..." />
+
+            <TextView
+                android:id="@+id/Lokalizacja"
+                style="@style/DetailsFontTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Lokalizacja" />
+
+            <EditText
+                android:id="@+id/editLokalizacja"
+                style="@style/DetailsFontValue"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/rounded_edittext"
+                android:ems="10"
+                android:text="..." />
+
+            <TextView
+                android:id="@+id/Cena"
+                style="@style/DetailsFontTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Cena" />
+
+            <EditText
+                android:id="@+id/editCena"
+                style="@style/DetailsFontValue"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/rounded_edittext"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:text="..." />
+
+            <TextView
+                android:id="@+id/Hasztagi"
+                style="@style/DetailsFontTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="#Hasztagi" />
+
+            <EditText
+                android:id="@+id/editHasztagi"
+                style="@style/DetailsFontValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/rounded_edittext"
+                android:ems="10"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:text="..." />
 
         </LinearLayout>
     </ScrollView>
@@ -200,13 +197,13 @@
         android:layout_width="115dp"
         android:layout_height="45dp"
         android:background="@drawable/rounded_button"
+        android:elevation="18dp"
         android:fontFamily="@font/cantata_one"
         android:text="Dodaj"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:elevation="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
