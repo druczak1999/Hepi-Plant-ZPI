@@ -26,7 +26,6 @@ public class ForumTabsActivity extends AppCompatActivity {
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_tabs);
-
         setBottomBarOnItemClickListeners();
         setupViewPager();
     }

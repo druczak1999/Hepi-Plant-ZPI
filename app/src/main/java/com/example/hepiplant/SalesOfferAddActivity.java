@@ -1,6 +1,7 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,7 +30,10 @@ import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.google.gson.Gson;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -36,24 +41,38 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SalesOfferAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "AddSalesOffer";
     Spinner spinnerCat;
     int categoryId;
+    String img_str = null;
+    ImageView addImageButton;
+    TextView hasztagi;
+    private static final int PICK_IMAGE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_offer_add);
+        img_str=null;
         getCategoriesFromDB();
         TextView tytul = (EditText) findViewById(R.id.editTytul);
         TextView tresc = (EditText) findViewById(R.id.editTresc);
+        addImageButton =  findViewById(R.id.addImageBut);
         TextView lokalizacja = (EditText) findViewById(R.id.editLokalizacja);
+        hasztagi = (EditText) findViewById(R.id.editHasztagi);
         TextView cena = (EditText) findViewById(R.id.editCena);
         Button dodaj = (Button) findViewById(R.id.buttonDodajOferte);
         getCategoriesFromDB();
+        addImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cropImage();
+            }
+        });
         dodaj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +89,8 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                 try {
                     postData.put("title", tytul.getText().toString());
                     postData.put("categoryId", categoryId);
+                    postData.put("tags", hashReading());
+                    postData.put("photo", img_str);
                     postData.put("userId", config.getUserId());
                     postData.put("body", tresc.getText().toString());
                     postData.put("location", lokalizacja.getText().toString());
@@ -109,7 +130,44 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         });
 
     }
-
+    private JSONArray hashReading()
+    {
+        int listSize = 0;
+        List<String> hashList = new ArrayList<String>(Arrays.asList(hasztagi.getText().toString().replace(" ", "").split("#")));
+        hashList.removeAll(Arrays.asList("", null));
+        Log.v(TAG, String.valueOf(hashList));
+        JSONArray hash = new JSONArray();
+        if(hashList.size()>5) listSize = 5;
+        else listSize = hashList.size();
+        for(int i=0; i<listSize; i++) {
+            hash.put(hashList.get(i));
+        }
+        return hash;
+    }
+    private void cropImage() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .start(this);
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Log.v(TAG, "cropActivity");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                addImageButton.setImageURI(resultUri);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addImageButton.setClipToOutline(true);
+                }
+                img_str=resultUri.toString();
+                Log.v(TAG, img_str);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
     public void getCategoriesFromDB() {
 
         RequestQueue queue = Volley.newRequestQueue(this);

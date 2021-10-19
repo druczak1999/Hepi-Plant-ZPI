@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,17 +27,18 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.PostDto;
 import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PostAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -47,6 +47,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     int categoryId=0;
     String img_str = null;
     ImageView addImageButton;
+    TextView hasztagi;
     private static final int PICK_IMAGE = 2;
 
     @Override
@@ -60,6 +61,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         TextView tresc = (EditText) findViewById(R.id.editTresc);
         addImageButton =  findViewById(R.id.addImageBut);
         Button dodaj = (Button) findViewById(R.id.buttonDodajPost);
+        hasztagi = (EditText) findViewById(R.id.editHasztagi);
         getCategoriesFromDB();
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,10 +84,11 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                 JSONObject postData = new JSONObject();
                 try {
                     postData.put("title", tytul.getText().toString());
-                    postData.put("categoryId", categoryId);
-                    postData.put("userId", config.getUserId());
                     postData.put("body", tresc.getText().toString());
+                    postData.put("tags", hashReading());
                     postData.put("photo", img_str);
+                    postData.put("userId", config.getUserId());
+                    postData.put("categoryId", categoryId);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -120,6 +123,20 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             }
     });
     }
+    private JSONArray hashReading()
+    {
+        int listSize = 0;
+        List<String> hashList = new ArrayList<String>(Arrays.asList(hasztagi.getText().toString().replace(" ", "").split("#")));
+        hashList.removeAll(Arrays.asList("", null));
+        Log.v(TAG, String.valueOf(hashList));
+        JSONArray hash = new JSONArray();
+        if(hashList.size()>5) listSize = 5;
+        else listSize = hashList.size();
+        for(int i=0; i<listSize; i++) {
+            hash.put(hashList.get(i));
+        }
+        return hash;
+    }
     private void cropImage() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -134,10 +151,10 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
                 addImageButton.setImageURI(resultUri);
-                img_str=resultUri.toString();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     addImageButton.setClipToOutline(true);
                 }
+                img_str=resultUri.toString();
                 Log.v(TAG, img_str);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
