@@ -24,7 +24,7 @@
         app:layout_constraintVertical_bias="0.199" />
 
     <TextView
-        android:id="@+id/nazwa"
+        android:id="@+id/userNameUserViewSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -36,7 +36,7 @@
         style="@style/DetailsFontTitle"/>
 
     <TextView
-        android:id="@+id/nazwa3"
+        android:id="@+id/emailUserView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -49,7 +49,7 @@
 
 
     <TextView
-        android:id="@+id/nazwa7"
+        android:id="@+id/notificationUserView"
         style="@style/DetailsFontTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/nazwa2"
+        android:id="@+id/usernameValueUserView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -78,7 +78,7 @@
         style="@style/DetailsFontValue"/>
 
     <TextView
-        android:id="@+id/nazwa4"
+        android:id="@+id/emailValueUserView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -86,7 +86,7 @@
         android:layout_marginTop="204dp"
         android:alpha="0.8"
         android:text=" "
-        app:layout_constraintBottom_toTopOf="@+id/nazwa7"
+        app:layout_constraintBottom_toTopOf="@+id/notificationUserView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
         app:layout_constraintVertical_bias="0.045"

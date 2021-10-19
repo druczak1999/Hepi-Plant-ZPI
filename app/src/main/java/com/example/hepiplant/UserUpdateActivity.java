@@ -20,7 +20,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.UserDto;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,8 +36,8 @@ public class UserUpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_update);
-        TextView textView = (EditText) findViewById(R.id.nazwa2);
-        TextView textView2 = (TextView) findViewById(R.id.nazwa4);
+        TextView textView = (EditText) findViewById(R.id.usernameValueUserView);
+        TextView textView2 = (TextView) findViewById(R.id.emailValueUserView);
         Button save = (Button) findViewById(R.id.save);
 
         Intent intent = this.getIntent();

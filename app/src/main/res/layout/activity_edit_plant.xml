@@ -96,7 +96,8 @@
                 android:ems="10"
                 android:text="0"
                 style="@style/DetailsFontValue"
-                android:inputType="numberSigned"/>
+                android:inputType="numberSigned"
+                android:drawableRight="@drawable/dni"/>
 
             <TextView
                 android:id="@+id/FertilizingView"
@@ -119,7 +120,8 @@
                 android:ems="10"
                 android:text="0"
                 style="@style/DetailsFontValue"
-                android:inputType="numberSigned"/>
+                android:inputType="numberSigned"
+                android:drawableRight="@drawable/dni"/>
 
             <TextView
                 android:id="@+id/MistingView"
@@ -142,7 +144,8 @@
                 android:ems="10"
                 android:text="0"
                 style="@style/DetailsFontValue"
-                android:inputType="numberSigned"/>
+                android:inputType="numberSigned"
+                android:drawableRight="@drawable/dni"/>
 
 
             <TextView

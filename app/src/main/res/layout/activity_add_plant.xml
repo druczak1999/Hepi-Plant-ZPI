@@ -136,7 +136,8 @@
                 android:ems="10"
                 android:text="0"
                 style="@style/DetailsFontValue"
-                android:inputType="numberSigned"/>
+                android:inputType="numberSigned"
+                android:drawableRight="@drawable/dni"/>
 
 
             <TextView
