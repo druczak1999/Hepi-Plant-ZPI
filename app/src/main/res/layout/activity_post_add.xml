@@ -21,16 +21,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:fontFamily="@font/cantata_one"
         android:text="Dodaj nowy post"
-        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        style="@style/PageTitleFont"/>
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="430dp"
+        android:layout_width="match_parent"
         android:layout_height="593dp"
         android:layout_marginBottom="88dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,15 +61,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/cantata_one"
                 android:text="Tytuł"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.084"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                style="@style/DetailsFontTitle"/>
 
             <EditText
                 android:id="@+id/editTytul"
@@ -81,10 +74,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
-
-                android:inputType="textEmailAddress"
-                android:textColor="#AAA1A1" />
+                style="@style/DetailsFontValue"/>
 
             <TextView
                 android:id="@+id/Kategoria"
@@ -92,9 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/cantata_one"
                 android:text="Kategoria"
-                android:textSize="24sp" />
+                style="@style/DetailsFontTitle"/>
 
             <Spinner
                 android:id="@+id/editKategoria"
@@ -105,25 +94,20 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_spinner"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
-
-                android:textColor="#AAA1A1"
-                android:textSize="20sp" />
+                style="@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/Tresc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/cantata_one"
                 android:text="Treść"
-                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                style="@style/DetailsFontTitle"/>
 
             <EditText
                 android:id="@+id/editTresc"
@@ -135,9 +119,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
-                android:inputType="textMultiLine"
-                android:textColor="#AAA1A1" />
+                style="@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/Hasztagi"
@@ -145,13 +127,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/cantata_one"
                 android:text="#Hasztagi"
-                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                style="@style/DetailsFontTitle"/>
 
             <EditText
                 android:id="@+id/editHasztagi"
@@ -162,11 +143,9 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:fontFamily="@font/cantata_one"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:textColor="#AAA1A1"
-                android:textSize="20dp" />
+                style="@style/DetailsFontValue"/>
 
         </LinearLayout>
     </ScrollView>
