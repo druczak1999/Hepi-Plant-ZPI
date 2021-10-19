@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.hepiplant.adapter.pager.ForumFragmentPagerAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 public class ForumTabsActivity extends AppCompatActivity {
@@ -25,7 +26,6 @@ public class ForumTabsActivity extends AppCompatActivity {
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_tabs);
-
         setBottomBarOnItemClickListeners();
         setupViewPager();
     }
@@ -40,6 +40,14 @@ public class ForumTabsActivity extends AppCompatActivity {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.forumTabsLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        FloatingActionButton buttonAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent2 = new Intent(getApplicationContext(), QuestionActivity.class);
+                startActivity(intent2);
+            }
+        });
     }
 
     private void setBottomBarOnItemClickListeners(){
