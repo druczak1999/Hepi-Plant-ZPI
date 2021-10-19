@@ -172,7 +172,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     public void getCategoriesFromDB(){
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        final Configuration config = (Configuration) getApplicationContext();
+        config = (Configuration) getApplicationContext();
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
