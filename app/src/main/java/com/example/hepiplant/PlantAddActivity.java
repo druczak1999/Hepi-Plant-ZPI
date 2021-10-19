@@ -223,8 +223,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, "ONResponse");
         String str = String.valueOf(response); //http request
         PlantDto data = new PlantDto();
-        Gson gson = new Gson();
-        data = gson.fromJson(str, PlantDto.class);
+        data = config.getGson().fromJson(str, PlantDto.class);
 
     }
 
@@ -288,8 +287,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     public void onResponse(String response) {
                         String str=onResponseStr(response);
                         SpeciesDto[] data = new SpeciesDto[]{};
-                        Gson gson = new Gson();
-                        data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
+                        data = config.getGson().fromJson(String.valueOf(str), SpeciesDto[].class);
                         speciesDtos = data;
                         List<String> sp = new ArrayList<String>();
                         sp.add("Brak");
@@ -327,8 +325,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     public void onResponse(String response) {
                         String str = onResponseStr(response);
                         CategoryDto[] data = new CategoryDto[]{};
-                        Gson gson = new Gson();
-                        data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
+                        data = config.getGson().fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
                         categories.add("Brak");
                         for (int i = 0; i < data.length; i++) {

@@ -135,8 +135,7 @@ public class PlantViewActivity extends AppCompatActivity {
 
     private String onGetResponseReceived(JSONObject response){
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        CategoryDto categoryDto = gson.fromJson(String.valueOf(response), CategoryDto.class);
+        CategoryDto categoryDto = config.getGson().fromJson(String.valueOf(response), CategoryDto.class);
         Log.v(TAG,categoryDto.getName());
         return categoryDto.getName();
     }

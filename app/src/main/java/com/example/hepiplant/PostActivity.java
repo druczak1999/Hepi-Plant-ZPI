@@ -39,6 +39,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PostActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
 
@@ -103,7 +105,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonObjectRequest);
     }
@@ -123,7 +130,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonObjectRequest);
     }
@@ -140,8 +152,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void onGetResponseReceived(JSONObject response) {
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        post = gson.fromJson(String.valueOf(response), PostDto.class);
+        post = config.getGson().fromJson(String.valueOf(response), PostDto.class);
         comments = post.getComments().toArray(comments);
         if (adapter == null) {
             setAdapter();
@@ -240,6 +251,14 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         commentsTextView.setText(commentsText);
     }
 
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -274,4 +293,5 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }
