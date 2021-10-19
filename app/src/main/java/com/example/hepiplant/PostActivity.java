@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,6 +64,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         setLayoutManager();
         makeGetDataRequest();
         setBottomBarOnItemClickListeners();
+        setupToolbar();
     }
 
     @Override
@@ -71,6 +73,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
+    private void setupToolbar()
+    {
+        Toolbar toolbar = findViewById(R.id.includeToolbarPostView);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
     public void onAddButtonClick(View v) {
         EditText editText = findViewById(R.id.addPostCommentEditText);
         String commentBody = editText.getText().toString();
@@ -280,10 +288,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 //                Intent intent3 = new Intent(this, PopUpDelete.class);
 //                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
 //                startActivity(intent3);
+                Toast.makeText(this.getApplicationContext(), "Informacje 3", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.editPost:
 //                Intent intent = prepareIntent();
 //                startActivity(intent);
+                Toast.makeText(this.getApplicationContext(), "Informacje 2", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);
