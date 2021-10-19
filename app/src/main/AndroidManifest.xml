@@ -40,6 +40,11 @@
         <activity android:name=".TestBackend" />
         <activity android:name=".UserActivity" />
         <activity android:name=".UserUpdateActivity" />
+        <activity android:name=".PostAddActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".QuestionActivity"></activity>
+        <activity android:name=".SalesOfferAddActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
             <intent-filter>

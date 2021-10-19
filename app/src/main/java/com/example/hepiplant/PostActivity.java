@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,11 +71,11 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
-    public void onAddButtonClick(View v){
+    public void onAddButtonClick(View v) {
         EditText editText = findViewById(R.id.addPostCommentEditText);
         String commentBody = editText.getText().toString();
         String placeholder = String.valueOf(R.string.add_comment);
-        if(!placeholder.equals(commentBody)){
+        if (!placeholder.equals(commentBody)) {
             JSONObject postData = new JSONObject();
             try {
                 postData.put("body", commentBody);
@@ -87,19 +90,19 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         }
     }
 
-    private void makeGetDataRequest(){
+    private void makeGetDataRequest() {
         String url = getRequestUrl();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-            new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(JSONObject response) {
-                    onGetResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+                new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
         }) {
@@ -112,19 +115,19 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         config.getQueue().add(jsonObjectRequest);
     }
 
-    private void makePostDataRequest(JSONObject postData){
+    private void makePostDataRequest(JSONObject postData) {
         String url = getRequestUrl() + "/comments";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
-            new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(JSONObject response) {
-                    makeGetDataRequest();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+                new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        makeGetDataRequest();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
         }) {
@@ -147,11 +150,11 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         return config.getUrl() + "posts/" + getIntent().getExtras().get("postId");
     }
 
-    private void onGetResponseReceived(JSONObject response){
+    private void onGetResponseReceived(JSONObject response) {
         Log.v(TAG, "onGetResponseReceived()");
         post = config.getGson().fromJson(String.valueOf(response), PostDto.class);
         comments = post.getComments().toArray(comments);
-        if(adapter == null){
+        if (adapter == null) {
             setAdapter();
             setupViewsData();
         } else {
@@ -159,7 +162,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         }
     }
 
-    private void onErrorResponseReceived(VolleyError error){
+    private void onErrorResponseReceived(VolleyError error) {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
@@ -167,12 +170,13 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         }
     }
 
-    private void setBottomBarOnItemClickListeners(){
+    private void setBottomBarOnItemClickListeners() {
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                layoutManager.scrollToPositionWithOffset(0, 0);;
+                layoutManager.scrollToPositionWithOffset(0, 0);
+                ;
             }
         });
 
@@ -199,7 +203,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         recyclerView.setAdapter(adapter);
     }
 
-    private void refreshDisplayedData(){
+    private void refreshDisplayedData() {
         Log.v(TAG, "Refreshing displayed data()");
         adapter.updateData(comments);
         adapter.notifyItemRangeChanged(0, comments.length);
@@ -219,7 +223,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         for (String s : post.getTags()) {
             tags.append(" #").append(s);
         }
-        if(tags.toString().length() == 0){
+        if (tags.toString().length() == 0) {
             tagsTextView.setVisibility(View.GONE);
         } else {
             tagsTextView.setVisibility(View.VISIBLE);
@@ -228,8 +232,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         TextView bodyTextView = findViewById(R.id.postBodyTextViewSingle);
         bodyTextView.setText(post.getBody());
         ImageView photoImageView = findViewById(R.id.postPhotoImageViewSingle);
-        if(post.getPhoto()!=null){
-            Log.v(TAG,"Attempting photo bind for data: " + post.getPhoto());
+        if (post.getPhoto() != null) {
+            Log.v(TAG, "Attempting photo bind for data: " + post.getPhoto());
             try {
                 photoImageView.setImageURI(Uri.parse(post.getPhoto()));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -247,10 +251,47 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         commentsTextView.setText(commentsText);
     }
 
+
     private Map<String, String> prepareRequestHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + config.getToken());
         return headers;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_post, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.deletePost:
+//                Intent intent3 = new Intent(this, PopUpDelete.class);
+//                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
+//                startActivity(intent3);
+                return true;
+            case R.id.editPost:
+//                Intent intent = prepareIntent();
+//                startActivity(intent);
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }
