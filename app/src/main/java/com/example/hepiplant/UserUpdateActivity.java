@@ -59,9 +59,8 @@ public class UserUpdateActivity extends AppCompatActivity {
                         Log.v(TAG, "Request successful. Response is: " + response);
                         String str = String.valueOf(response); //http request
 
-                        Gson gson = new Gson();
                         UserDto data = new UserDto();
-                        data = gson.fromJson(str, UserDto.class);
+                        data = config.getGson().fromJson(str, UserDto.class);
                         userDto = data;
                         textView.setText(data.getUsername());
                         textView2.setText(data.getEmail());

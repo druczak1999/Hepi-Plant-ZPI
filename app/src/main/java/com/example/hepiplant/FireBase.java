@@ -12,12 +12,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
+import com.example.hepiplant.dto.AuthenticationResponseDto;
 import com.example.hepiplant.dto.UserDto;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -41,6 +40,7 @@ public class FireBase extends AppCompatActivity {
 
     private static final String TAG = "FireBaseActivity";
 
+    private Configuration config;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -57,6 +57,9 @@ public class FireBase extends AppCompatActivity {
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fire_base);
+
+        config = (Configuration) getApplicationContext();
+
         createSignInIntent();
     }
 
@@ -118,14 +121,12 @@ public class FireBase extends AppCompatActivity {
     }
 
     private void makePostUserRequest(FirebaseUser user){
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final Configuration config = (Configuration) getApplicationContext();
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String url = config.getUrl() + "/users";
+        String url = config.getUrl() + "users";
         JSONObject postData = new JSONObject();
         try {
             postData.put("username", user.getDisplayName());
@@ -140,16 +141,8 @@ public class FireBase extends AppCompatActivity {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.v(TAG, "POST user request successful. Returned user: " + response);
-                    String str = String.valueOf(response); //http request
-                    UserDto data = new UserDto();
-                    Gson gson = new Gson();
-                    data = gson.fromJson(str, UserDto.class);
-                    final Configuration config = (Configuration) getApplicationContext();
-                    config.setUserId(data.getId());
-                    Log.v(TAG, "POST user id " + config.getUserId());
-                    Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-                    startActivity(intent);
+                    onPostResponseReceived(response);
+                    makeTokenRequest(user);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -157,6 +150,49 @@ public class FireBase extends AppCompatActivity {
                     Log.v(TAG, "POST user request unsuccessful. Error message: " + error.getMessage());
                 }
         });
-        queue.add(jsonArrayRequest);
+        config.getQueue().add(jsonArrayRequest);
     }
+
+    private void makeTokenRequest(FirebaseUser user){
+        String url = config.getUrl() + "authenticate";
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("email", user.getEmail());
+            postData.put("uid", user.getUid());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
+                new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onTokenReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v(TAG, "POST authenticate request unsuccessful. Error message: " + error.getMessage());
+            }
+        });
+        config.getQueue().add(jsonArrayRequest);
+    }
+
+    private void onPostResponseReceived(JSONObject response) {
+        Log.v(TAG, "POST user request successful. Returned user: " + response);
+        UserDto data = new UserDto();
+        data = config.getGson().fromJson(String.valueOf(response), UserDto.class);
+        config.setUserId(data.getId());
+        Log.v(TAG, "POST user id " + config.getUserId());
+    }
+
+    private void onTokenReceived(JSONObject response) {
+        AuthenticationResponseDto data = new AuthenticationResponseDto();
+        data = config.getGson().fromJson(String.valueOf(response), AuthenticationResponseDto.class);
+        config.setToken(data.getJwt());
+        Log.v(TAG, "POST authentication request successful. Returned token: " + response);
+        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        startActivity(intent);
+    }
+
 }

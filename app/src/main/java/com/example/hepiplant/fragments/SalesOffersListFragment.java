@@ -30,6 +30,8 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SalesOffersListFragment extends Fragment implements
         SalesOffersRecyclerViewAdapter.ItemClickListener {
@@ -101,7 +103,12 @@ public class SalesOffersListFragment extends Fragment implements
                 public void onErrorResponse(VolleyError error) {
                     onErrorResponseReceived(error);
                 }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonArrayRequest);
     }
@@ -145,4 +152,11 @@ public class SalesOffersListFragment extends Fragment implements
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
     }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
+    }
+
 }
