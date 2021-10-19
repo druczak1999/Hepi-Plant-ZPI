@@ -30,12 +30,13 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="593dp"
-        android:layout_marginBottom="88dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="550dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDodajPost"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Dodaj">
+        app:layout_constraintTop_toBottomOf="@+id/Dodaj"
+        app:layout_constraintVertical_bias="0.321">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,55 +51,56 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="10dp"
+                android:adjustViewBounds="true"
                 android:background="@drawable/rounded_square"
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/addimagebutton"/>
+                app:srcCompat="@drawable/addimagebutton" />
 
             <TextView
                 android:id="@+id/Tytul"
+                style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Tytuł"
-                style="@style/DetailsFontTitle"/>
+                android:text="Tytuł" />
 
             <EditText
                 android:id="@+id/editTytul"
+                style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
-                android:text="..."
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                style="@style/DetailsFontValue"/>
+                android:text="..." />
 
             <TextView
                 android:id="@+id/Kategoria"
+                style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
-                android:text="Kategoria"
-                style="@style/DetailsFontTitle"/>
+                android:text="Kategoria" />
 
             <Spinner
                 android:id="@+id/editKategoria"
+                style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_spinner"
-                android:ems="10"
-                style="@style/DetailsFontValue" />
+                android:ems="10" />
 
             <TextView
                 android:id="@+id/Tresc"
+                style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -107,24 +109,24 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3"
-                style="@style/DetailsFontTitle"/>
+                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
             <EditText
                 android:id="@+id/editTresc"
-                android:gravity="top|start"
+                style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
-                android:text="..."
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                style="@style/DetailsFontValue" />
+                android:gravity="top|start"
+                android:text="..." />
 
             <TextView
                 android:id="@+id/Hasztagi"
+                style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -133,22 +135,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3"
-                style="@style/DetailsFontTitle"/>
+                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
             <EditText
                 android:id="@+id/editHasztagi"
+                style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
-                android:text="..."
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                style="@style/DetailsFontValue"/>
+                android:text="..." />
 
         </LinearLayout>
     </ScrollView>
