@@ -3,7 +3,6 @@ package com.example.hepiplant;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,22 +33,24 @@ import com.example.hepiplant.adapter.recyclerview.CommentsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CommentDto;
 import com.example.hepiplant.dto.PostDto;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PostActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
 
     private static final String TAG = "PostActivity";
-
     private Configuration config;
     private CommentsRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private PostDto post;
     private CommentDto[] comments = new CommentDto[]{};
+    TextView dateTextView, titleTextView, tagsTextView, bodyTextView;
+    ImageView photoImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         setLayoutManager();
         makeGetDataRequest();
         setBottomBarOnItemClickListeners();
+        setupToolbar();
     }
 
     @Override
@@ -69,6 +72,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
+    private void setupToolbar()
+    {
+        Toolbar toolbar = findViewById(R.id.includeToolbarPostView);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
     public void onAddButtonClick(View v) {
         EditText editText = findViewById(R.id.addPostCommentEditText);
         String commentBody = editText.getText().toString();
@@ -103,7 +112,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonObjectRequest);
     }
@@ -123,7 +137,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonObjectRequest);
     }
@@ -140,8 +159,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void onGetResponseReceived(JSONObject response) {
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        post = gson.fromJson(String.valueOf(response), PostDto.class);
+        post = config.getGson().fromJson(String.valueOf(response), PostDto.class);
         comments = post.getComments().toArray(comments);
         if (adapter == null) {
             setAdapter();
@@ -203,11 +221,11 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     }
 
     private void setupViewsData() {
-        TextView dateTextView = findViewById(R.id.postDateTextViewSingle);
+        dateTextView = findViewById(R.id.postDateTextViewSingle);
         dateTextView.setText(post.getCreatedDate());
-        TextView titleTextView = findViewById(R.id.postTitleTextViewSingle);
+        titleTextView = findViewById(R.id.postTitleTextViewSingle);
         titleTextView.setText(post.getTitle());
-        TextView tagsTextView = findViewById(R.id.postTagsTextViewSingle);
+        tagsTextView = findViewById(R.id.postTagsTextViewSingle);
         StringBuilder tags = new StringBuilder();
         for (String s : post.getTags()) {
             tags.append(" #").append(s);
@@ -218,9 +236,9 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
         }
-        TextView bodyTextView = findViewById(R.id.postBodyTextViewSingle);
+        bodyTextView = findViewById(R.id.postBodyTextViewSingle);
         bodyTextView.setText(post.getBody());
-        ImageView photoImageView = findViewById(R.id.postPhotoImageViewSingle);
+        photoImageView = findViewById(R.id.postPhotoImageViewSingle);
         if (post.getPhoto() != null) {
             Log.v(TAG, "Attempting photo bind for data: " + post.getPhoto());
             try {
@@ -240,11 +258,31 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         commentsTextView.setText(commentsText);
     }
 
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_post, menu);
         return true;
+    }
+    private Intent prepareIntent(){
+        Intent intent = new Intent(getApplicationContext(),PostEditActivity.class);
+        intent.putExtra("id", post.getId());
+        intent.putExtra("name", titleTextView.getText().toString());
+        intent.putExtra("body", bodyTextView.getText().toString());
+        intent.putExtra("tags", tagsTextView.getText().toString());
+        if(post.getPhoto()!=null)
+        intent.putExtra("photo", post.getPhoto());
+        else intent.putExtra("photo", "");
+        intent.putExtra("category", post.getCategoryId());
+        return intent;
     }
 
     @Override
@@ -261,10 +299,11 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 //                Intent intent3 = new Intent(this, PopUpDelete.class);
 //                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
 //                startActivity(intent3);
+                Toast.makeText(this.getApplicationContext(), "Informacje 3", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.editPost:
-//                Intent intent = prepareIntent();
-//                startActivity(intent);
+                Intent intent = prepareIntent();
+                startActivity(intent);
                 return true;
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);

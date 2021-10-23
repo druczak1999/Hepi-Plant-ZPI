@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,7 +39,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class SalesOfferActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
 
@@ -47,6 +53,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     private RecyclerView recyclerView;
     private SalesOfferDto salesOffer;
     private CommentDto[] comments = new CommentDto[]{};
+    TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView;
+    ImageView photoImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         setLayoutManager();
         makeGetDataRequest();
         setBottomBarOnItemClickListeners();
+        setupToolbar();
     }
 
     @Override
@@ -66,7 +75,12 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         Log.v(TAG, "onItemClick()");
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
-
+    private void setupToolbar()
+    {
+        Toolbar toolbar = findViewById(R.id.includeToolbarSalesOfferView);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
     public void onAddButtonClick(View v){
         EditText editText = findViewById(R.id.addSalesOfferCommentEditText);
         String commentBody = editText.getText().toString();
@@ -101,7 +115,12 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonObjectRequest);
     }
@@ -121,7 +140,12 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonObjectRequest);
     }
@@ -138,8 +162,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private void onGetResponseReceived(JSONObject response){
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        salesOffer = gson.fromJson(String.valueOf(response), SalesOfferDto.class);
+        salesOffer = config.getGson().fromJson(String.valueOf(response), SalesOfferDto.class);
         comments = salesOffer.getComments().toArray(comments);
         if(adapter == null){
             setAdapter();
@@ -200,14 +223,14 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     }
 
     private void setupViewsData() {
-        TextView priceTextView = findViewById(R.id.offerPriceTextViewSingle);
+        priceTextView = findViewById(R.id.offerPriceTextViewSingle);
         priceTextView.setText(String.format(Locale.GERMANY,"%.2f %s",
                 salesOffer.getPrice().doubleValue(), CURRENCY));
-        TextView dateTextView = findViewById(R.id.offerLocationTextViewSingle);
+        dateTextView = findViewById(R.id.offerLocationTextViewSingle);
         dateTextView.setText(salesOffer.getLocation());
-        TextView titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
+        titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
         titleTextView.setText(salesOffer.getTitle());
-        TextView tagsTextView = findViewById(R.id.salesOfferTagsTextViewSingle);
+        tagsTextView = findViewById(R.id.salesOfferTagsTextViewSingle);
         StringBuilder tags = new StringBuilder();
         for (String s : salesOffer.getTags()) {
             tags.append(" #").append(s);
@@ -218,9 +241,9 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
         }
-        TextView bodyTextView = findViewById(R.id.salesOfferBodyTextViewSingle);
+        bodyTextView = findViewById(R.id.salesOfferBodyTextViewSingle);
         bodyTextView.setText(salesOffer.getBody());
-        ImageView photoImageView = findViewById(R.id.salesOfferPhotoImageViewSingle);
+        photoImageView = findViewById(R.id.salesOfferPhotoImageViewSingle);
         if(salesOffer.getPhoto()!=null){
             Log.v(TAG,"Attempting photo bind for data: " + salesOffer.getPhoto());
             try {
@@ -238,6 +261,59 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         int commentsCount = salesOffer.getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         commentsTextView.setText(commentsText);
+    }
+    private Intent prepareIntent(){
+        Intent intent = new Intent(getApplicationContext(), SalesOfferEditActivity.class);
+        intent.putExtra("id", salesOffer.getId());
+        intent.putExtra("name", titleTextView.getText().toString());
+        intent.putExtra("body", bodyTextView.getText().toString());
+        intent.putExtra("tags", tagsTextView.getText().toString());
+        intent.putExtra("price", salesOffer.getPrice().toString());
+        intent.putExtra("location", dateTextView.getText().toString());
+        if(salesOffer.getPhoto()!=null)
+            intent.putExtra("photo", salesOffer.getPhoto());
+        else intent.putExtra("photo", "");
+        intent.putExtra("category", salesOffer.getCategoryId());
+        return intent;
+    }
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_sales_offer, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.deleteSalesOffer:
+//                Intent intent3 = new Intent(this, PopUpDelete.class);
+//                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
+//                startActivity(intent3);
+                Toast.makeText(this.getApplicationContext(), "Informacje 3", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.editSalesOffer:
+                Intent intent = prepareIntent();
+                startActivity(intent);
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

@@ -39,19 +39,6 @@
         app:layout_constraintTop_toBottomOf="@+id/Add"
         app:layout_constraintVertical_bias="0.321">
 
-        android:id="@+id/Dodaj"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:fontFamily="@font/cantata_one"
-        android:text="Edytuj post"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
