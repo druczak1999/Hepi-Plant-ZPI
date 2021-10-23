@@ -27,7 +27,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -36,7 +35,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -59,12 +57,12 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         setContentView(R.layout.activity_sales_offer_add);
         img_str=null;
         getCategoriesFromDB();
-        TextView tytul = (EditText) findViewById(R.id.editTytul);
-        TextView tresc = (EditText) findViewById(R.id.editTresc);
-        addImageButton =  findViewById(R.id.addImageBut);
-        TextView lokalizacja = (EditText) findViewById(R.id.editLokalizacja);
-        hasztagi = (EditText) findViewById(R.id.editHasztagi);
-        TextView cena = (EditText) findViewById(R.id.editCena);
+        TextView tytul = (EditText) findViewById(R.id.editTitle);
+        TextView tresc = (EditText) findViewById(R.id.editBody);
+        addImageButton =  findViewById(R.id.editImageBut);
+        TextView lokalizacja = (EditText) findViewById(R.id.editLocation);
+        hasztagi = (EditText) findViewById(R.id.editTags);
+        TextView cena = (EditText) findViewById(R.id.editPrice);
         Button dodaj = (Button) findViewById(R.id.buttonDodajOferte);
         getCategoriesFromDB();
         addImageButton.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +110,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                                 data = gson.fromJson(str, SalesOfferDto.class);
                                 StringBuilder sb = new StringBuilder("Response is: \n" + data.getTitle());
                                 Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                                intent.putExtra("tab", 1);
                                 startActivity(intent);
                             }
                         }, new Response.ErrorListener() {
@@ -216,7 +215,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
 
     public void getCategories(List<String> categories) {
         Log.v(TAG, "Categories size" + categories.size());
-        spinnerCat = (Spinner) findViewById(R.id.editKategoria);
+        spinnerCat = (Spinner) findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -226,7 +225,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner cspin = (Spinner) parent;
-        if(cspin.getId() == R.id.editKategoria)
+        if(cspin.getId() == R.id.editCategory)
         {
             categoryId = position+1;
         }

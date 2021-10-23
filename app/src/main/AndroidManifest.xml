@@ -45,6 +45,8 @@
         <activity android:name=".QuestionActivity"></activity>
         <activity android:name=".SalesOfferAddActivity"
             android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".PostEditActivity" />
+        <activity android:name=".SalesOfferEditActivity" />
         <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
             <intent-filter>

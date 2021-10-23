@@ -57,11 +57,11 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         setContentView(R.layout.activity_post_add);
         img_str=null;
         getCategoriesFromDB();
-        TextView tytul = (EditText) findViewById(R.id.editTytul);
-        TextView tresc = (EditText) findViewById(R.id.editTresc);
-        addImageButton =  findViewById(R.id.addImageBut);
+        TextView tytul = (EditText) findViewById(R.id.editTitle);
+        TextView tresc = (EditText) findViewById(R.id.editBody);
+        addImageButton =  findViewById(R.id.editImageBut);
         Button dodaj = (Button) findViewById(R.id.buttonDodajPost);
-        hasztagi = (EditText) findViewById(R.id.editHasztagi);
+        hasztagi = (EditText) findViewById(R.id.editTags);
         getCategoriesFromDB();
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,7 +208,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     }
     public void getCategories(List<String> categories){
         Log.v(TAG,"Categories size"+categories.size());
-        spinnerCat = (Spinner)findViewById(R.id.editKategoria);
+        spinnerCat = (Spinner)findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener( this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -217,7 +217,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner cspin = (Spinner) parent;
-        if(cspin.getId() == R.id.editKategoria)
+        if(cspin.getId() == R.id.editCategory)
         {
             categoryId = position+1;
         }
