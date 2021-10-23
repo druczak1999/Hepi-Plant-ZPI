@@ -24,7 +24,6 @@ import com.android.volley.toolbox.Volley;
 
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.UserDto;
-import com.firebase.ui.auth.data.model.User;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -107,11 +106,11 @@ public class TestBackend extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.wyloguj:
+            case R.id.logoff:
                 FireBase fireBase = new FireBase();
                 fireBase.signOut();
                 return true;
-            case R.id.infoMenu:
+            case R.id.informationAboutApp:
                 Toast.makeText(this,"Informacje",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.miProfile:

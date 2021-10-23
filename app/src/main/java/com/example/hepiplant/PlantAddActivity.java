@@ -39,7 +39,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PlantAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -138,17 +140,22 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePlant(response);
+                        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+                        startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
 
         queue.add(jsonArrayRequest);
-        Toast.makeText(getApplicationContext(), "Dodano rosline", Toast.LENGTH_SHORT).show();
-        this.onBackPressed();
     }
 
     private JSONObject makeSpeciesJSON(){
@@ -221,8 +228,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, "ONResponse");
         String str = String.valueOf(response); //http request
         PlantDto data = new PlantDto();
-        Gson gson = new Gson();
-        data = gson.fromJson(str, PlantDto.class);
+        data = config.getGson().fromJson(str, PlantDto.class);
 
     }
 
@@ -266,6 +272,9 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 Uri resultUri = result.getUri();
                 addImageButton.setImageURI(resultUri);
                 img_str=resultUri.toString();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addImageButton.setClipToOutline(true);
+                }
                 Log.v(TAG, img_str);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -283,8 +292,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     public void onResponse(String response) {
                         String str=onResponseStr(response);
                         SpeciesDto[] data = new SpeciesDto[]{};
-                        Gson gson = new Gson();
-                        data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
+                        data = config.getGson().fromJson(String.valueOf(str), SpeciesDto[].class);
                         speciesDtos = data;
                         List<String> sp = new ArrayList<String>();
                         sp.add("Brak");
@@ -298,7 +306,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
 
         queue.add(jsonArrayRequest);
     }
@@ -322,8 +335,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     public void onResponse(String response) {
                         String str = onResponseStr(response);
                         CategoryDto[] data = new CategoryDto[]{};
-                        Gson gson = new Gson();
-                        data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
+                        data = config.getGson().fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
                         categories.add("Brak");
                         for (int i = 0; i < data.length; i++) {
@@ -334,7 +346,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) { onErrorResponsePlant(error);}
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         queue.add(jsonArrayRequest);
     }
 
@@ -374,5 +391,11 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 }

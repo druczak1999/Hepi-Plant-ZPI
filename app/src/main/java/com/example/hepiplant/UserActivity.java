@@ -19,30 +19,29 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.UserDto;
-import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserActivity extends AppCompatActivity {
     private static final String TAG = "UserActivity";
-    Configuration configuration = new Configuration();
+    private Configuration config;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         setBottomBarOnItemClickListeners();
-        TextView textView = (TextView) findViewById(R.id.nazwa2);
-        TextView textView1 = (TextView) findViewById(R.id.przywitanie);
-        TextView textView2 = (TextView) findViewById(R.id.nazwa4);
+        TextView textView = (TextView) findViewById(R.id.usernameValueUserView);
+        TextView textView1 = (TextView) findViewById(R.id.userNameUserview);
+        TextView textView2 = (TextView) findViewById(R.id.emailValueUserView);
         Button change = (Button) findViewById(R.id.change);
-
 
         Intent intent = this.getIntent();
         RequestQueue queue = Volley.newRequestQueue(this);
-        final Configuration config = (Configuration) getApplicationContext();
+        config = (Configuration) getApplicationContext();
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
@@ -61,8 +60,7 @@ public class UserActivity extends AppCompatActivity {
                         Log.v(TAG, "Request successful. Response is: " + response);
                         String str = String.valueOf(response); //http request
                         UserDto data = new UserDto();
-                        Gson gson = new Gson();
-                        data = gson.fromJson(str, UserDto.class);
+                        data = config.getGson().fromJson(str, UserDto.class);
 
                         textView.setText(data.getUsername());
                         textView2.setText(data.getEmail());
@@ -81,8 +79,13 @@ public class UserActivity extends AppCompatActivity {
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
                 textView.setText(error.getMessage());
             }
-        });
-        queue.add(jsonArrayRequest);
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
+        config.getQueue().add(jsonArrayRequest);
     }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,5 +109,12 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        Log.v(TAG,"Token: "+config.getToken());
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 }

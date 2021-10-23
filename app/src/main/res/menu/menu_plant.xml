@@ -19,7 +19,17 @@
                 android:id="@+id/logoff"
                 android:title="Wyloguj się"
                 app:showAsAction="never"
+                />
+            <item
+                android:id="@+id/editPlant"
+                android:title="Edytuj roślinę"
+                app:showAsAction="never"
 
+                />
+            <item
+                android:id="@+id/deletePlant"
+                android:title="Usuń roślinę"
+                app:showAsAction="never"
                 />
         </menu>
     </item>

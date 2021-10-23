@@ -276,11 +276,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         intent.putExtra("category", salesOffer.getCategoryId());
         return intent;
     }
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -314,6 +310,11 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 
 }

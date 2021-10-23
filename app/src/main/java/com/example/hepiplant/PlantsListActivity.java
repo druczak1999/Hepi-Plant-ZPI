@@ -32,6 +32,8 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlantsListActivity extends AppCompatActivity implements PlantsRecyclerViewAdapter.ItemClickListener {
 
@@ -68,6 +70,9 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
         Intent intent = new Intent(this,PlantViewActivity.class);
+        Log.v(TAG,String.valueOf(plants[position].getId()));
+        intent.putExtra("plantId",plants[position].getId());
+        intent.putExtra("scheduleId",plants[position].getSchedule().getId());
         intent.putExtra("plantName",plants[position].getName());
         if(plants[position].getSpecies()!=null){
             intent.putExtra("species",plants[position].getSpecies().getName());
@@ -107,11 +112,11 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.wyloguj:
+            case R.id.logoff:
                 FireBase fireBase = new FireBase();
                 fireBase.signOut();
                 return true;
-            case R.id.infoMenu:
+            case R.id.informationAboutApp:
                 Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.miProfile:
@@ -139,7 +144,12 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
                 public void onErrorResponse(VolleyError error) {
                     onErrorResponseReceived(error);
                 }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonArrayRequest);
     }
@@ -156,8 +166,7 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        plants = gson.fromJson(String.valueOf(response), PlantDto[].class);
+        plants = config.getGson().fromJson(String.valueOf(response), PlantDto[].class);
         adapter.updateData(plants);
         adapter.notifyItemRangeChanged(0, plants.length);
     }
@@ -215,6 +224,12 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
                 startActivity(intent);
             }
         });
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 
 }

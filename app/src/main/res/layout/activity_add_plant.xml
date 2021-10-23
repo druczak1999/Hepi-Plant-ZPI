@@ -36,6 +36,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 style="@style/PageTitleFont"
+                android:textSize="32dp"
                 android:text="Dodaj nową roślinę"
                 />
 
@@ -45,9 +46,11 @@
                 android:layout_height="115dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/addimagebutton"
+                android:background="@drawable/rounded_square"
+                android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+                app:srcCompat="@drawable/addimagebutton"
                 />
 
             <TextView
@@ -56,13 +59,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="0dp"
-
                 android:text="Nazwa"
                 style="@style/DetailsFontTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.084"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                />
 
             <EditText
                 android:id="@+id/editPlantName"
@@ -137,7 +136,8 @@
                 android:ems="10"
                 android:text="0"
                 style="@style/DetailsFontValue"
-                android:inputType="numberSigned"/>
+                android:inputType="numberSigned"
+                android:drawableRight="@drawable/dni"/>
 
 
             <TextView

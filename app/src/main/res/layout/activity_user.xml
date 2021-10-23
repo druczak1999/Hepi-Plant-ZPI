@@ -12,148 +12,126 @@
 
 
     <TextView
-        android:id="@+id/przywitanie"
+        android:id="@+id/userNameUserview"
+        style="@style/PageTitleFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:fontFamily="@font/cantata_one"
-        android:text=""
-        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:text="..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbarTest" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="115dp"
         android:layout_height="113dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginLeft="148dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/przywitanie"
-        app:srcCompat="@drawable/rounded_edittext" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="67dp"
-        android:layout_height="87dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:alpha="0.7"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:srcCompat="@drawable/ludzik" />
-
-    <TextView
-        android:id="@+id/nazwa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="48dp"
-        android:fontFamily="@font/cantata_one"
-        android:text="Nazwa użytkownika"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-    <TextView
-        android:id="@+id/nazwa3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="156dp"
-        android:fontFamily="@font/cantata_one"
-        android:text="Email"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-    <TextView
-        android:id="@+id/nazwa7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/cantata_one"
-        android:text="Powiadomienia"
-        android:textSize="20sp"
+        android:background="@drawable/rounded_edittext"
+        android:padding="20sp"
+        android:src="@drawable/ludzik"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.188"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.809" />
+        app:layout_constraintTop_toBottomOf="@+id/userNameUserview"
+        app:layout_constraintVertical_bias="0.046" />
 
     <TextView
-        android:id="@+id/nazwa2"
+        android:id="@+id/userNameUserViewSmall"
+        style="@style/DetailsFontTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="96dp"
-        android:alpha="0.8"
-        android:fontFamily="@font/cantata_one"
-        android:text=" "
-        android:textSize="20sp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:text="Nazwa użytkownika"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/nazwa4"
+        android:id="@+id/usernameValueUserView"
+        style="@style/DetailsFontValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="35dp"
+        android:alpha="0.8"
+        android:text="..."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userNameUserViewSmall" />
+
+    <TextView
+        android:id="@+id/emailUserView"
+        style="@style/DetailsFontTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="204dp"
-        android:alpha="0.8"
-        android:fontFamily="@font/cantata_one"
-        android:text=" "
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/nazwa7"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="35dp"
+        android:text="Email"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameValueUserView" />
+
+    <TextView
+        android:id="@+id/emailValueUserView"
+        style="@style/DetailsFontValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="35dp"
+        android:alpha="0.8"
+        android:text="..."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailUserView" />
+
+
+    <TextView
+        android:id="@+id/notificationUserView"
+        style="@style/DetailsFontTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:text="Powiadomienia"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change" />
 
     <Button
         android:id="@+id/change"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="180dp"
+        android:layout_width="151dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_button"
         android:fontFamily="@font/cantata_one"
         android:text="Zmień dane"
-        android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.901" />
-
+        app:layout_constraintTop_toBottomOf="@+id/emailValueUserView" />
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="80dp"
         android:layout_height="24dp"
 
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
         android:checked="true"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.64"
-        app:layout_constraintStart_toEndOf="@+id/nazwa7"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.811" />
+        app:layout_constraintTop_toBottomOf="@+id/change" />
 
     <include
         android:id="@+id/plantsListBottomBar"
-        layout="@layout/bottom_bar" />
+        layout="@layout/bottom_bar" ></include>
 
     <include
+        android:id="@+id/UserViewFloatingButton"
         layout="@layout/floatingbutton"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-16dp" />
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="-236dp"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

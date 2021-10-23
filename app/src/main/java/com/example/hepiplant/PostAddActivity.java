@@ -39,7 +39,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "AddPost";
@@ -49,6 +51,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     ImageView addImageButton;
     TextView hasztagi;
     private static final int PICK_IMAGE = 2;
+    private Configuration config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,7 +76,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onClick(View v) {
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                final Configuration config = (Configuration) getApplicationContext();
+                config = (Configuration) getApplicationContext();
                 try {
                     config.setUrl(config.readProperties());
                 } catch (IOException e) {
@@ -118,7 +121,12 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
                         }
                     }
-                });
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        return prepareRequestHeaders();
+                    }
+                };
                 queue.add(jsonArrayRequest);
             }
     });
@@ -164,7 +172,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     public void getCategoriesFromDB(){
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        final Configuration config = (Configuration) getApplicationContext();
+        config = (Configuration) getApplicationContext();
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
@@ -201,7 +209,12 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
 
 // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
@@ -226,5 +239,11 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private Map<String, String> prepareRequestHeaders(){
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + config.getToken());
+        return headers;
     }
 }
