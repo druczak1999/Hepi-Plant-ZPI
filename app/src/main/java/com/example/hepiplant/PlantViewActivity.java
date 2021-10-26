@@ -10,17 +10,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +27,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -41,11 +35,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.example.hepiplant.helper.LangUtils.getFrequency;
+
 public class PlantViewActivity extends AppCompatActivity {
 
-    TextView plantName, species, category, watering, fertilizing, misting, soil, location, placement, date;
-    ImageView plantImage;
-    String categoryName = null;
+    private TextView plantName, species, category, watering, fertilizing, misting, soil, location, placement, date;
+    private ImageView plantImage;
+    private String categoryName = null;
     private Configuration config;
     private static final String TAG = "PlantViewActivity";
 
@@ -84,9 +80,9 @@ public class PlantViewActivity extends AppCompatActivity {
         else{
             category.setText("");
         }
-        watering.setText("Co "+getIntent().getExtras().getString("watering")+" dni");
-        fertilizing.setText("Co "+getIntent().getExtras().getString("fertilizing")+" dni");
-        misting.setText("Co "+getIntent().getExtras().getString("misting")+" dni");
+        watering.setText(getFrequency("watering", getIntent()));
+        fertilizing.setText(getFrequency("fertilizing", getIntent()));
+        misting.setText(getFrequency("misting", getIntent()));
         soil.setText(getIntent().getExtras().getString("soil"));
         placement.setText(getIntent().getExtras().getString("location"));
         location.setText(getIntent().getExtras().getString("placement").toLowerCase());
@@ -96,7 +92,6 @@ public class PlantViewActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
            plantImage.setClipToOutline(true);
         }
-
     }
 
     private void getCategoryName(int id){
@@ -111,7 +106,7 @@ public class PlantViewActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         categoryName = onGetResponseReceived(response);
-                        Log.v(TAG,"In set categoyr "+categoryName);
+                        Log.v(TAG,"In set category "+categoryName);
                         if(categoryName!=null)
                         category.setText(categoryName);
                     }
@@ -189,7 +184,7 @@ public class PlantViewActivity extends AppCompatActivity {
     }
 
     private Intent prepareIntent(){
-        Intent intent = new Intent(getApplicationContext(),EditPlantActivity.class);
+        Intent intent = new Intent(getApplicationContext(), PlantEditActivity.class);
         intent.putExtra("name",plantName.getText().toString());
         intent.putExtra("photo",getIntent().getExtras().getString("photo"));
         intent.putExtra("species",species.getText());
@@ -237,7 +232,6 @@ public class PlantViewActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     private Map<String, String> prepareRequestHeaders(){

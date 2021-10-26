@@ -21,7 +21,7 @@
             android:theme="@style/AppTheme.CustomTheme">
 
         </activity>
-        <activity android:name=".EditPlantActivity" />
+        <activity android:name=".PlantEditActivity" />
         <activity android:name=".PlantViewActivity" />
         <activity android:name=".CalendarActivity" />
         <activity
@@ -41,8 +41,6 @@
         <activity
             android:name=".PlantAddActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ImageTest" />
-        <activity android:name=".TestBackend" />
         <activity android:name=".UserActivity" />
         <activity android:name=".UserUpdateActivity" />
         <activity android:name=".PostAddActivity"
@@ -50,7 +48,6 @@
         <activity android:name=".QuestionActivity"></activity>
         <activity android:name=".SalesOfferAddActivity"
             android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

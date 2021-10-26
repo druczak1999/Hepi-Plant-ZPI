@@ -43,18 +43,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EditPlantActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class PlantEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    EditText plantName, watering, fertilizing, misting, placement;
-    Spinner spinnerGat;
-    ImageView plantImage;
-    Button date, editPlant;
+    private EditText plantName, watering, fertilizing, misting, placement;
+    private Spinner spinnerGat;
+    private ImageView plantImage;
+    private Button date, editPlant;
     private Configuration config;
     private static final String TAG = "PlantEditActivity";
-    public SpeciesDto speciesDto;
-    SpeciesDto[] speciesDtos;
-    String img_str;
-    Long plantId;
+    private SpeciesDto speciesDto;
+    private SpeciesDto[] speciesDtos;
+    private String img_str;
+    private Long plantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,6 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void setupViewsData(){
-
         editPlant = findViewById(R.id.buttonEditPlant);
         plantName = findViewById(R.id.PlantNameEdit);
         spinnerGat = findViewById(R.id.speciesEdit);
@@ -96,6 +95,20 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
         Log.v(TAG,"plant Id: "+plantId);
     }
 
+    private void onGetResponseSpecies(String response){
+        String str=onResponseStr(response);
+        SpeciesDto[] data = new SpeciesDto[]{};
+        Gson gson = new Gson();
+        data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
+        speciesDtos = data;
+        List<String> sp = new ArrayList<String>();
+        sp.add("Brak");
+        for (int i = 0; i < data.length; i++) {
+            sp.add(data[i].getName());
+        }
+        getSpecies(sp);
+    }
+
     private void getSpeciesFromDB() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = getRequestUrl() + "species";
@@ -104,17 +117,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
-                        String str=onResponseStr(response);
-                        SpeciesDto[] data = new SpeciesDto[]{};
-                        Gson gson = new Gson();
-                        data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
-                        speciesDtos = data;
-                        List<String> sp = new ArrayList<String>();
-                        sp.add("Brak");
-                        for (int i = 0; i < data.length; i++) {
-                            sp.add(data[i].getName());
-                        }
-                        getSpecies(sp);
+                        onGetResponseSpecies(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -165,12 +168,10 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
             if(position==0) speciesDto = null;
             else speciesDto = speciesDtos[position-1];
         }
-
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     @NonNull
     private String getRequestUrl() {
@@ -237,7 +238,6 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                 .start(this);
     }
 
-    //For result with date and image
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v(TAG, "onActivityResult");
@@ -249,6 +249,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                 Log.v(TAG, date.getText().toString());
             }
         }
+
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             Log.v(TAG, "cropActivity");
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -306,8 +307,6 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePlant(response);
-                        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-                        startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -346,6 +345,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
 
     private JSONObject makeScheduleJSON() {
         JSONObject scheduleJ = new JSONObject();
+
         try {
             scheduleJ.put("id",getIntent().getExtras().getLong("scheduleId"));
             scheduleJ.put("wateringFrequency", watering.getText());
@@ -360,8 +360,8 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
 
     private JSONObject makePostDataJson(JSONObject speciesJson,JSONObject scheduleJ){
         JSONObject postData = new JSONObject();
-        try {
 
+        try {
             if(plantName.getText().toString().equals("..."))  postData.put("name", "");
             else postData.put("name", plantName.getText().toString());
             Log.v(TAG,date.getText().toString());
@@ -396,6 +396,8 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
         PlantDto data = new PlantDto();
         Gson gson = new Gson();
         data = gson.fromJson(str, PlantDto.class);
+        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        startActivity(intent);
     }
 
     private Map<String, String> prepareRequestHeaders(){

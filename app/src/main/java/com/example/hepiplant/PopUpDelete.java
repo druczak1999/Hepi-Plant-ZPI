@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class PopUpDelete extends AppCompatActivity {
 
-    Button yes, no;
+    private Button yes, no;
     private Configuration config;
     private static final String TAG = "PopUpDelete";
 

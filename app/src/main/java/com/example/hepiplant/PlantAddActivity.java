@@ -49,14 +49,14 @@ import java.util.Map;
 public class PlantAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "AddPlant";
-    Button dateEditText, addPlantButton;
-    ImageView addImageButton;
-    Spinner spinnerGat, spinnerCat;
-    EditText plantName, location, wateringText;
-    String img_str = null;
-    int categoryId, watering;
-    public SpeciesDto speciesDto;
-    SpeciesDto[] speciesDtos;
+    private Button dateEditText, addPlantButton;
+    private ImageView addImageButton;
+    private Spinner spinnerGat, spinnerCat;
+    private EditText plantName, location, wateringText;
+    private String img_str;
+    private int categoryId, watering;
+    private SpeciesDto speciesDto;
+    private SpeciesDto[] speciesDtos;
     private Configuration config;
     private static final int PICK_IMAGE = 2;
 
@@ -74,10 +74,10 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         location = findViewById(R.id.editPlantLocation);
         wateringText = findViewById(R.id.editWatering);
         addPlantButton = findViewById(R.id.buttonAddPlant);
-        getSpeciesFromDB();
-        getCategoriesFromDB();
         dateEditText = findViewById(R.id.editPlantDate);
         addImageButton = findViewById(R.id.addImageBut);
+        getSpeciesFromDB();
+        getCategoriesFromDB();
         setOnClickListeners();
     }
 
@@ -142,8 +142,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePlant(response);
-                        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-                        startActivity(intent);
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -231,7 +230,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         String str = String.valueOf(response); //http request
         PlantDto data = new PlantDto();
         data = config.getGson().fromJson(str, PlantDto.class);
-
+        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        startActivity(intent);
     }
 
     private void onErrorResponsePlant(VolleyError error){
@@ -283,6 +283,18 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             }
         }
     }
+    private void onGetResponseSpecies(String response){
+        String str=onResponseStr(response);
+        SpeciesDto[] data = new SpeciesDto[]{};
+        data = config.getGson().fromJson(String.valueOf(str), SpeciesDto[].class);
+        speciesDtos = data;
+        List<String> sp = new ArrayList<String>();
+        sp.add("Brak");
+        for (int i = 0; i < data.length; i++) {
+            sp.add(data[i].getName());
+        }
+        getSpecies(sp);
+    }
 
     private void getSpeciesFromDB() {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -292,16 +304,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
-                        String str=onResponseStr(response);
-                        SpeciesDto[] data = new SpeciesDto[]{};
-                        data = config.getGson().fromJson(String.valueOf(str), SpeciesDto[].class);
-                        speciesDtos = data;
-                        List<String> sp = new ArrayList<String>();
-                        sp.add("Brak");
-                        for (int i = 0; i < data.length; i++) {
-                            sp.add(data[i].getName());
-                        }
-                        getSpecies(sp);
+                        onGetResponseSpecies(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -327,6 +330,18 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         spinnerGat.setAdapter(dtoArrayAdapter);
     }
 
+    private void onGetResponseCategories(String response){
+        String str = onResponseStr(response);
+        CategoryDto[] data = new CategoryDto[]{};
+        data = config.getGson().fromJson(String.valueOf(str), CategoryDto[].class);
+        List<String> categories = new ArrayList<String>();
+        categories.add("Brak");
+        for (int i = 0; i < data.length; i++) {
+            categories.add(data[i].getName());
+        }
+        getCategories(categories);
+    }
+
     private void getCategoriesFromDB() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = getRequestUrl() + "categories";
@@ -335,15 +350,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
-                        String str = onResponseStr(response);
-                        CategoryDto[] data = new CategoryDto[]{};
-                        data = config.getGson().fromJson(String.valueOf(str), CategoryDto[].class);
-                        List<String> categories = new ArrayList<String>();
-                        categories.add("Brak");
-                        for (int i = 0; i < data.length; i++) {
-                            categories.add(data[i].getName());
-                        }
-                        getCategories(categories);
+                        onGetResponseCategories(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
