@@ -10,7 +10,7 @@
     <application
         android:name=".configuration.Configuration"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/hepi_plant_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -19,7 +19,6 @@
         tools:ignore="Instantiatable">
         <activity android:name=".PopUpDelete"
             android:theme="@style/AppTheme.CustomTheme">
-
         </activity>
         <activity android:name=".PlantEditActivity" />
         <activity android:name=".PlantViewActivity" />
@@ -43,11 +42,13 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".UserActivity" />
         <activity android:name=".UserUpdateActivity" />
-        <activity android:name=".PostAddActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".QuestionActivity"></activity>
-        <activity android:name=".SalesOfferAddActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".PostAddActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".QuestionActivity" />
+        <activity
+            android:name=".SalesOfferAddActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

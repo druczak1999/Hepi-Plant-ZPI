@@ -72,7 +72,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="..."
+                android:hint="..."
                 style="@style/DetailsFontValue" />
 
             <TextView
@@ -161,7 +161,7 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 style="@style/DetailsFontValue"
-                android:text="..."
+                android:hint="..."
                  />
 
             <TextView
@@ -185,7 +185,7 @@
                 android:drawableRight="@drawable/calendar"
                 android:ems="10"
                 android:gravity="start|center_vertical"
-                android:text="..."
+                android:hint="..."
                 style="@style/DetailsFontValue"
                 android:textAlignment="viewStart"
                  />

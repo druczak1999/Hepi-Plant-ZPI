@@ -165,7 +165,7 @@
                 android:layout_marginLeft="30dp"
                 style = "@style/DetailsFontValue"
                 android:layout_marginTop="10dp"
-                android:text="Pokój"
+                android:hint="..."
                 />
 
             <TextView
@@ -190,7 +190,7 @@
                 android:drawableRight="@drawable/calendar"
                 android:ems="10"
                 android:gravity="start|center_vertical"
-                android:text="..."
+                android:hint="..."
                 style="@style/DetailsFontValue"
                 android:textAlignment="viewStart"
                 />

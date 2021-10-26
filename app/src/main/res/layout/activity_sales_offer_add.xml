@@ -78,7 +78,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
                 android:id="@+id/Kategoria"
@@ -121,7 +121,7 @@
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
                 android:id="@+id/Lokalizacja"
@@ -142,7 +142,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
                 android:id="@+id/Cena"
@@ -164,7 +164,7 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:inputType="numberDecimal"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
                 android:id="@+id/Hasztagi"
@@ -187,7 +187,7 @@
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:text="..." />
+                android:hint="..." />
 
         </LinearLayout>
     </ScrollView>
