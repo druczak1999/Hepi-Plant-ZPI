@@ -49,8 +49,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     private RecyclerView recyclerView;
     private PostDto post;
     private CommentDto[] comments = new CommentDto[]{};
-    TextView dateTextView, titleTextView, tagsTextView, bodyTextView;
-    ImageView photoImageView;
+    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView;
+    private ImageView photoImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +67,25 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        makeGetDataRequest();
+    }
+
+    @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemLongCLick(View view, int position) {
+        Log.v(TAG, "onItemLongClick()");
+        Intent intent3 = new Intent(this, PopUpDeleteComment.class);
+        intent3.putExtra("type", "posts");
+        intent3.putExtra("postId",getIntent().getExtras().getLong("postId"));
+        intent3.putExtra("commentId", post.getComments().get(position).getId());
+        startActivity(intent3);
     }
 
     private void setupToolbar()
@@ -101,13 +117,13 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         String url = getRequestUrl();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
+            new Response.Listener<JSONObject>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(JSONObject response) {
+                    onGetResponseReceived(response);
+                }
+            }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
@@ -161,6 +177,24 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Log.v(TAG, "onGetResponseReceived()");
         post = config.getGson().fromJson(String.valueOf(response), PostDto.class);
         comments = post.getComments().toArray(comments);
+        int tempSize = 0;
+        for (int i = 0; i < comments.length; i++) {
+            if (comments[i]!= null)
+            {
+                tempSize+=1;
+            }
+        }
+        CommentDto[] tempComments = new CommentDto[tempSize];
+        int a = 0;
+        for (int i = 0; i < comments.length; i++) {
+            if (comments[i]!= null)
+            {
+                tempComments[a] = comments[i];
+                a++;
+            }
+        }
+        comments = tempComments;
+
         if (adapter == null) {
             setAdapter();
             setupViewsData();
@@ -212,6 +246,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void refreshDisplayedData() {
         Log.v(TAG, "Refreshing displayed data()");
+        adapter.notifyItemRangeRemoved(0, adapter.getItemCount());
         adapter.updateData(comments);
         adapter.notifyItemRangeChanged(0, comments.length);
         TextView commentsTextView = findViewById(R.id.postCommentsCountTextViewSingle);
@@ -268,8 +303,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_post, menu);
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_post, menu);
         return true;
     }
     private Intent prepareIntent(){
@@ -296,10 +331,9 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
                 Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.deletePost:
-//                Intent intent3 = new Intent(this, PopUpDelete.class);
-//                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
-//                startActivity(intent3);
-                Toast.makeText(this.getApplicationContext(), "Informacje 3", Toast.LENGTH_SHORT).show();
+                Intent intent3 = new Intent(this, PopUpDeletePost.class);
+                intent3.putExtra("postId",getIntent().getExtras().getLong("postId"));
+                startActivity(intent3);
                 return true;
             case R.id.editPost:
                 Intent intent = prepareIntent();

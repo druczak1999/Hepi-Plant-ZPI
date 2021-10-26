@@ -29,6 +29,7 @@ import java.util.Map;
 public class UserActivity extends AppCompatActivity {
     private static final String TAG = "UserActivity";
     private Configuration config;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

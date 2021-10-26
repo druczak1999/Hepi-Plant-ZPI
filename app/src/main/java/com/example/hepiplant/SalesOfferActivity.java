@@ -53,8 +53,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     private RecyclerView recyclerView;
     private SalesOfferDto salesOffer;
     private CommentDto[] comments = new CommentDto[]{};
-    TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView;
-    ImageView photoImageView;
+    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView;
+    private ImageView photoImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +71,27 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        makeGetDataRequest();
+    }
+
+    @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onItemLongCLick(View view, int position) {
+        Log.v(TAG, "onItemLongClick()");
+        Intent intent3 = new Intent(this, PopUpDeleteComment.class);
+        intent3.putExtra("type", "salesoffers");
+        intent3.putExtra("postId",getIntent().getExtras().getLong("postId"));
+        intent3.putExtra("commentId", salesOffer.getComments().get(position).getId());
+        startActivity(intent3);
+    }
+
     private void setupToolbar()
     {
         Toolbar toolbar = findViewById(R.id.includeToolbarSalesOfferView);
@@ -164,6 +181,24 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         Log.v(TAG, "onGetResponseReceived()");
         salesOffer = config.getGson().fromJson(String.valueOf(response), SalesOfferDto.class);
         comments = salesOffer.getComments().toArray(comments);
+        int tempSize = 0;
+        for (int i = 0; i < comments.length; i++) {
+            if (comments[i]!= null)
+            {
+                tempSize+=1;
+            }
+        }
+        CommentDto[] tempComments = new CommentDto[tempSize];
+        int a = 0;
+        for (int i = 0; i < comments.length; i++) {
+            if (comments[i]!= null)
+            {
+                tempComments[a] = comments[i];
+                a++;
+            }
+        }
+        comments = tempComments;
+
         if(adapter == null){
             setAdapter();
             setupViewsData();
@@ -214,6 +249,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private void refreshDisplayedData(){
         Log.v(TAG, "Refreshing displayed data()");
+        adapter.notifyItemRangeRemoved(0, adapter.getItemCount());
         adapter.updateData(comments);
         adapter.notifyItemRangeChanged(0, comments.length);
         TextView commentsTextView = findViewById(R.id.salesOfferCommentsCountTextViewSingle);
@@ -294,10 +330,9 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.deleteSalesOffer:
-//                Intent intent3 = new Intent(this, PopUpDelete.class);
-//                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
-//                startActivity(intent3);
-                Toast.makeText(this.getApplicationContext(), "Informacje 3", Toast.LENGTH_SHORT).show();
+                Intent intent3 = new Intent(this, PopUpDeleteSalesOffer.class);
+                intent3.putExtra("salesOfferId",getIntent().getExtras().getLong("salesOfferId"));
+                startActivity(intent3);
                 return true;
             case R.id.editSalesOffer:
                 Intent intent = prepareIntent();

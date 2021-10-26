@@ -45,11 +45,11 @@ import java.util.Map;
 
 public class PostAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "AddPost";
-    Spinner spinnerCat;
-    int categoryId=0;
-    String img_str = null;
-    ImageView addImageButton;
-    TextView hasztagi;
+    private Spinner spinnerCat;
+    private int categoryId=0;
+    private String img_str = null;
+    private ImageView addImageButton;
+    private TextView hasztagi;
     private static final int PICK_IMAGE = 2;
     private Configuration config;
 

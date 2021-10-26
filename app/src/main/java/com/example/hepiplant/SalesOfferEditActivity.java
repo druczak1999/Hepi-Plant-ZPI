@@ -51,13 +51,13 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     private static final String TAG = "EditSalesOffer";
     private static final String CURRENCY = "zł";
     private Configuration config;
-    long categoryId=0;
-    long salesOfferId = 0;
-    ImageView salesOfferImage;
-    Spinner spinnerCat;
-    EditText salesOfferName, salesOfferBody, salesOfferTags, salesOfferPrice, salesOfferLocation;
-    String img_str;
-    Button editSalesOffer;
+    private long categoryId=0;
+    private long salesOfferId = 0;
+    private ImageView salesOfferImage;
+    private Spinner spinnerCat;
+    private EditText salesOfferName, salesOfferBody, salesOfferTags, salesOfferPrice, salesOfferLocation;
+    private String img_str;
+    private Button editSalesOffer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

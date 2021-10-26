@@ -19,7 +19,15 @@
         tools:ignore="Instantiatable">
         <activity android:name=".PopUpDelete"
             android:theme="@style/AppTheme.CustomTheme">
-
+        </activity>
+        <activity android:name=".PopUpDeletePost"
+            android:theme="@style/AppTheme.CustomTheme">
+        </activity>
+        <activity android:name=".PopUpDeleteComment"
+            android:theme="@style/AppTheme.CustomTheme">
+        </activity>
+        <activity android:name=".PopUpDeleteSalesOffer"
+            android:theme="@style/AppTheme.CustomTheme">
         </activity>
         <activity android:name=".EditPlantActivity" />
         <activity android:name=".PlantViewActivity" />
@@ -50,8 +58,10 @@
         <activity android:name=".QuestionActivity"></activity>
         <activity android:name=".SalesOfferAddActivity"
             android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".PostEditActivity" />
-        <activity android:name=".SalesOfferEditActivity" />
+        <activity android:name=".PostEditActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".SalesOfferEditActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Logowanie" />
         <activity android:name=".MainActivity">
             <intent-filter>

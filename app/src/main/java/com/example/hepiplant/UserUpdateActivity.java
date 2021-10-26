@@ -32,6 +32,7 @@ public class UserUpdateActivity extends AppCompatActivity {
     private static final String TAG = "UserUpdateActivity";
     private UserDto userDto;
     private Configuration config;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

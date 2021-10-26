@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class QuestionActivity extends AppCompatActivity {
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
@@ -18,6 +19,7 @@ public class QuestionActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         Button salesOffer = (Button) findViewById(R.id.oferta);
         salesOffer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

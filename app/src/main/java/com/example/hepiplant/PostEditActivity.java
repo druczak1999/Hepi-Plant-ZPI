@@ -48,13 +48,13 @@ import java.util.Map;
 public class PostEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "EditPost";
     private Configuration config;
-    long categoryId=0;
-    long postId = 0;
-    ImageView postImage;
-    Spinner spinnerCat;
-    EditText postName, postBody, postTags;
-    String img_str;
-    Button editPost;
+    private long categoryId=0;
+    private long postId = 0;
+    private ImageView postImage;
+    private Spinner spinnerCat;
+    private EditText postName, postBody, postTags;
+    private String img_str;
+    private Button editPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

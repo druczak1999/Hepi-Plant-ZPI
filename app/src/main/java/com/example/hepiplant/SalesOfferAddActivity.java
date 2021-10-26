@@ -46,11 +46,11 @@ import java.util.Map;
 
 public class SalesOfferAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "AddSalesOffer";
-    Spinner spinnerCat;
-    int categoryId;
-    String img_str = null;
-    ImageView addImageButton;
-    TextView hasztagi;
+    private Spinner spinnerCat;
+    private int categoryId;
+    private String img_str = null;
+    private ImageView addImageButton;
+    private TextView hasztagi;
     private static final int PICK_IMAGE = 2;
     private Configuration config;
 
