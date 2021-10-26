@@ -15,6 +15,3 @@ https://docs.google.com/document/d/1Xbgc2BDEDuK0rGWrnrSTpJa6sixCzOIw0X6WsLtagbE/
 
 Functional requirements:
 https://docs.google.com/document/d/1hSKlijJq7Kb15CtqrB4JJpfYuXZH7sL4NJLkmJNNd-w/edit?usp=sharing
-
-Test Coverage Report:
-https://drive.google.com/file/d/1VvH4eA7TxtwTvR31scnu3x8bpqL-JgiC/view?usp=sharing
