@@ -5,6 +5,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,12 +34,18 @@ import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -257,7 +265,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
     }
-    //For result with date and image
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v(TAG, "onActivityResult");
@@ -277,12 +285,43 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     addImageButton.setClipToOutline(true);
                 }
+                saveImageToFirebase();
                 Log.v(TAG, img_str);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
         }
     }
+
+    private void saveImageToFirebase() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        String [] array = img_str.split("/");
+        String path = "userPlants/"+config.getUserId()+"/"+array[array.length-1];
+        StorageReference imagesRef = storageRef.child(path);
+        addImageButton.setDrawingCacheEnabled(true);
+        addImageButton.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) addImageButton.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] dataB = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(dataB);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+            }
+        });
+        img_str = path;
+        Log.v(TAG, img_str);
+    }
+
     private void onGetResponseSpecies(String response){
         String str=onResponseStr(response);
         SpeciesDto[] data = new SpeciesDto[]{};

@@ -1,9 +1,13 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +34,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PostDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -35,6 +46,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -162,13 +176,43 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     addImageButton.setClipToOutline(true);
                 }
-                img_str=resultUri.toString();
-                Log.v(TAG, img_str);
+                img_str = resultUri.toString();
+                saveImageToFirebase();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
         }
     }
+
+    private void saveImageToFirebase() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        String [] array = img_str.split("/");
+        String path = "posts/"+array[array.length-1];
+        StorageReference imagesRef = storageRef.child(path);
+        addImageButton.setDrawingCacheEnabled(true);
+        addImageButton.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) addImageButton.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] dataB = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(dataB);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+            }
+        });
+        img_str = path;
+        Log.v(TAG, img_str);
+    }
+
     public void getCategoriesFromDB(){
 
         RequestQueue queue = Volley.newRequestQueue(this);

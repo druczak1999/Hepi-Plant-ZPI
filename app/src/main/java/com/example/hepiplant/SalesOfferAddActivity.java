@@ -1,6 +1,8 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +15,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,6 +33,11 @@ import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -38,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -138,6 +148,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         });
 
     }
+
     private JSONArray hashReading()
     {
         int listSize = 0;
@@ -157,6 +168,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v(TAG, "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
@@ -165,17 +177,48 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
+                img_str = resultUri.toString();
                 addImageButton.setImageURI(resultUri);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     addImageButton.setClipToOutline(true);
                 }
-                img_str=resultUri.toString();
-                Log.v(TAG, img_str);
+                saveImageToFirebase();
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
         }
     }
+
+    private void saveImageToFirebase() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        String [] array = img_str.split("/");
+        String path = "salesOffers/"+array[array.length-1];
+        StorageReference imagesRef = storageRef.child(path);
+        addImageButton.setDrawingCacheEnabled(true);
+        addImageButton.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) addImageButton.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] dataB = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(dataB);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+            }
+        });
+        img_str = path;
+        Log.v(TAG, img_str);
+    }
+
     public void getCategoriesFromDB() {
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -223,7 +266,6 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
             }
         };;
 
-// Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
     }
 
