@@ -140,8 +140,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePlant(response);
-                        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-                        startActivity(intent);
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
