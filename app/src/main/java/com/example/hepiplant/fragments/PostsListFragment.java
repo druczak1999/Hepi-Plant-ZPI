@@ -84,6 +84,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         Log.v(TAG, "onItemClick()");
         Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
         intent.putExtra("postId", posts[position].getId());
+        intent.putExtra("userId", posts[position].getUserId());
         startActivity(intent);
     }
 

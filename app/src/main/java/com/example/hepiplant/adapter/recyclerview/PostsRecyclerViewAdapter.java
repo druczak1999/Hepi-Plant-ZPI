@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.PostDto;
+import com.example.hepiplant.dto.UserDto;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -42,6 +43,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         private final TextView body;
         private final ImageView photo;
         private final TextView comments;
+        private final TextView author;
 
         public ViewHolder(View view) {
             super(view);
@@ -53,6 +55,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             body = view.findViewById(R.id.postBodyTextView);
             photo = view.findViewById(R.id.postPhotoImageView);
             comments = view.findViewById(R.id.postCommentsCountTextView);
+            author = view.findViewById(R.id.postAuthorTextView);
         }
 
         public TextView getDate() {
@@ -79,6 +82,8 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             return comments;
         }
 
+        public TextView getAuthor(){ return author; }
+
         @Override
         public void onClick(View view) {
             if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
@@ -103,6 +108,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         Log.v(TAG, "onBindViewHolder() position: "+position);
         viewHolder.getDate().setText(dataSet.get(position).getCreatedDate());
         viewHolder.getTitle().setText(dataSet.get(position).getTitle());
+        viewHolder.getAuthor().setText(dataSet.get(position).getUsername());
         StringBuilder tags = new StringBuilder();
         for (String s : dataSet.get(position).getTags()) {
             tags.append(" #").append(s);

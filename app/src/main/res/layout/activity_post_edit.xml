@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SalesOfferAddActivity">
+    tools:context=".PostEditActivity">
 
     <include
         android:id="@+id/include"
@@ -16,35 +16,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"></include>
 
-
     <TextView
         android:id="@+id/Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Dodaj nową ofertę sprzedaży"
-        android:textSize="22sp"
+        android:text="Edytuj post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
         style="@style/PageTitleFont"/>
 
-
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="550dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDodajOferte"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDodajPost"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Add">
+        app:layout_constraintTop_toBottomOf="@+id/Add"
+        app:layout_constraintVertical_bias="0.321">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
             <ImageButton
                 android:id="@+id/editImageBut"
@@ -91,14 +89,14 @@
 
             <Spinner
                 android:id="@+id/editCategory"
+                style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_spinner"
-                android:ems="10"
-                style="@style/DetailsFontValue"/>
+                android:ems="10" />
 
             <TextView
                 android:id="@+id/Body"
@@ -107,7 +105,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Treść" />
+                android:text="Treść"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.084"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
             <EditText
                 android:id="@+id/editBody"
@@ -120,50 +122,6 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:gravity="top|start"
-                android:inputType="textMultiLine"
-                android:hint="..." />
-
-            <TextView
-                android:id="@+id/Location"
-                style="@style/DetailsFontTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="Lokalizacja" />
-
-            <EditText
-                android:id="@+id/editLocation"
-                style="@style/DetailsFontValue"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/rounded_edittext"
-                android:ems="10"
-                android:hint="..." />
-
-            <TextView
-                android:id="@+id/Price"
-                style="@style/DetailsFontTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="Cena" />
-
-            <EditText
-                android:id="@+id/editPrice"
-                style="@style/DetailsFontValue"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/rounded_edittext"
-                android:ems="10"
-                android:inputType="numberDecimal"
                 android:hint="..." />
 
             <TextView
@@ -173,7 +131,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="#Hasztagi" />
+                android:text="#Hasztagi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.084"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
             <EditText
                 android:id="@+id/editTags"
@@ -193,17 +155,17 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/buttonDodajOferte"
+        android:id="@+id/editPost"
         android:layout_width="115dp"
         android:layout_height="45dp"
         android:background="@drawable/rounded_button"
-        android:elevation="18dp"
         android:fontFamily="@font/cantata_one"
-        android:text="Dodaj"
+        android:text="Edytuj"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:elevation="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

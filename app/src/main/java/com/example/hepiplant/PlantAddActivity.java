@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -83,7 +82,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         wateringText = findViewById(R.id.editWatering);
         addPlantButton = findViewById(R.id.buttonAddPlant);
         dateEditText = findViewById(R.id.editPlantDate);
-        addImageButton = findViewById(R.id.addImageBut);
+        addImageButton = findViewById(R.id.editImageBut);
         getSpeciesFromDB();
         getCategoriesFromDB();
         setOnClickListeners();
@@ -150,7 +149,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePlant(response);
-
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override

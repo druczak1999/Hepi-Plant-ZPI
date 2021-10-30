@@ -63,6 +63,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     private RecyclerView recyclerView;
     private PostDto post;
     private CommentDto[] comments = new CommentDto[]{};
+    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView;
+    private ImageView photoImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +81,34 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        Log.v(TAG, "onItemClick()");
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    protected void onResume() {
+        super.onResume();
+        makeGetDataRequest();
     }
 
-    private void setupToolbar()
-    {
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.v(TAG, "onItemClick()");
+    }
+
+    @Override
+    public void onItemLongCLick(View view, int position) {
+        if (post.getComments().get(position).getUserId() == config.getUserId()){
+            Log.v(TAG, "onItemLongClick()");
+            Intent intent3 = new Intent(this, PopUpDeleteComment.class);
+            intent3.putExtra("type", "posts");
+            intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+            intent3.putExtra("commentId", post.getComments().get(position).getId());
+            startActivity(intent3);
+    }
+    }
+
+    private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.includeToolbarPostView);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
     }
+
     public void onAddButtonClick(View v) {
         EditText editText = findViewById(R.id.addPostCommentEditText);
         String commentBody = editText.getText().toString();
@@ -113,13 +132,13 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         String url = getRequestUrl();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
+            new Response.Listener<JSONObject>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(JSONObject response) {
+                    onGetResponseReceived(response);
+                }
+            }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
@@ -173,6 +192,24 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Log.v(TAG, "onGetResponseReceived()");
         post = config.getGson().fromJson(String.valueOf(response), PostDto.class);
         comments = post.getComments().toArray(comments);
+        int tempSize = 0;
+        for (int i = 0; i < comments.length; i++) {
+            if (comments[i]!= null)
+            {
+                tempSize+=1;
+            }
+        }
+        CommentDto[] tempComments = new CommentDto[tempSize];
+        int a = 0;
+        for (int i = 0; i < comments.length; i++) {
+            if (comments[i]!= null)
+            {
+                tempComments[a] = comments[i];
+                a++;
+            }
+        }
+        comments = tempComments;
+
         if (adapter == null) {
             setAdapter();
             setupViewsData();
@@ -224,6 +261,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void refreshDisplayedData() {
         Log.v(TAG, "Refreshing displayed data()");
+        adapter.notifyItemRangeRemoved(0, adapter.getItemCount());
         adapter.updateData(comments);
         adapter.notifyItemRangeChanged(0, comments.length);
         TextView commentsTextView = findViewById(R.id.postCommentsCountTextViewSingle);
@@ -233,11 +271,11 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     }
 
     private void setupViewsData() {
-        TextView dateTextView = findViewById(R.id.postDateTextViewSingle);
+        dateTextView = findViewById(R.id.postDateTextViewSingle);
         dateTextView.setText(post.getCreatedDate());
-        TextView titleTextView = findViewById(R.id.postTitleTextViewSingle);
+        titleTextView = findViewById(R.id.postTitleTextViewSingle);
         titleTextView.setText(post.getTitle());
-        TextView tagsTextView = findViewById(R.id.postTagsTextViewSingle);
+        tagsTextView = findViewById(R.id.postTagsTextViewSingle);
         StringBuilder tags = new StringBuilder();
         for (String s : post.getTags()) {
             tags.append(" #").append(s);
@@ -248,9 +286,9 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
         }
-        TextView bodyTextView = findViewById(R.id.postBodyTextViewSingle);
+        bodyTextView = findViewById(R.id.postBodyTextViewSingle);
         bodyTextView.setText(post.getBody());
-        ImageView photoImageView = findViewById(R.id.postPhotoImageViewSingle);
+        photoImageView = findViewById(R.id.postPhotoImageViewSingle);
         if (post.getPhoto() != null) {
             Log.v(TAG, "Attempting photo bind for data: " + post.getPhoto());
             getPhotoFromFirebase(photoImageView, post);
@@ -298,12 +336,31 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         return headers;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_post, menu);
+        Configuration config = (Configuration) getApplicationContext();
+        if(getIntent().getExtras().get("userId") == config.getUserId()) {
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_post, menu);
+        }
+        else{
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_main, menu);
+        }
         return true;
+    }
+
+    private Intent prepareIntent(){
+        Intent intent = new Intent(getApplicationContext(),PostEditActivity.class);
+        intent.putExtra("id", post.getId());
+        intent.putExtra("name", titleTextView.getText().toString());
+        intent.putExtra("body", bodyTextView.getText().toString());
+        intent.putExtra("tags", tagsTextView.getText().toString());
+        if(post.getPhoto()!=null)
+            intent.putExtra("photo", post.getPhoto());
+        else intent.putExtra("photo", "");
+            intent.putExtra("category", post.getCategoryId());
+        return intent;
     }
 
     @Override
@@ -317,15 +374,13 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
                 Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.deletePost:
-//                Intent intent3 = new Intent(this, PopUpDelete.class);
-//                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
-//                startActivity(intent3);
-                Toast.makeText(this.getApplicationContext(), "Informacje 3", Toast.LENGTH_SHORT).show();
+                    Intent intent3 = new Intent(this, PopUpDeletePost.class);
+                    intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+                    startActivity(intent3);
                 return true;
             case R.id.editPost:
-//                Intent intent = prepareIntent();
-//                startActivity(intent);
-                Toast.makeText(this.getApplicationContext(), "Informacje 2", Toast.LENGTH_SHORT).show();
+                    Intent intent = prepareIntent();
+                    startActivity(intent);
                 return true;
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);

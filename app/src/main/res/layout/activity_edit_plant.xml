@@ -161,8 +161,11 @@
             <EditText
                 android:id="@+id/placementEdit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/rounded_edittext"
                 style = "@style/DetailsFontValue"
                 android:layout_marginTop="10dp"
                 android:hint="..."
@@ -173,7 +176,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-
                 android:layout_marginTop="10dp"
                 android:text="Data zakupu"
                 style = "@style/DetailsFontTitle"
