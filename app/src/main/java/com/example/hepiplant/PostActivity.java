@@ -376,6 +376,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             case R.id.deletePost:
                     Intent intent3 = new Intent(this, PopUpDeletePost.class);
                     intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+                    intent3.putExtra("photo",  post.getPhoto());
                     startActivity(intent3);
                 return true;
             case R.id.editPost:
