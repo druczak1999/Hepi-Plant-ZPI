@@ -41,7 +41,7 @@
                 />
 
             <ImageView
-                android:id="@+id/addImageBut"
+                android:id="@+id/editImageBut"
                 android:layout_width="115dp"
                 android:layout_height="115dp"
                 android:layout_gravity="center"

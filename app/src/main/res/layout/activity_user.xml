@@ -12,19 +12,21 @@
 
 
     <TextView
-        android:id="@+id/userNameUserview"
+        android:id="@+id/userName"
         style="@style/PageTitleFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="..."
+        android:hint="..."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
+        android:inputType = "textMultiLine"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/toolbarTest" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/profilePhoto"
         android:layout_width="115dp"
         android:layout_height="113dp"
         android:background="@drawable/rounded_edittext"
@@ -33,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userNameUserview"
+        app:layout_constraintTop_toBottomOf="@+id/userName"
         app:layout_constraintVertical_bias="0.046" />
 
     <TextView
@@ -46,7 +48,7 @@
         android:layout_marginTop="30dp"
         android:text="Nazwa użytkownika"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
     <TextView
         android:id="@+id/usernameValueUserView"
@@ -113,7 +115,7 @@
         app:layout_constraintTop_toBottomOf="@+id/emailValueUserView" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/noticeSwitch"
         android:layout_width="80dp"
         android:layout_height="24dp"
 

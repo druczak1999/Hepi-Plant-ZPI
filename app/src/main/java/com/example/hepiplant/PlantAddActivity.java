@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -32,7 +31,6 @@ import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
-import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONException;
@@ -77,7 +75,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         getSpeciesFromDB();
         getCategoriesFromDB();
         dateEditText = findViewById(R.id.editPlantDate);
-        addImageButton = findViewById(R.id.addImageBut);
+        addImageButton = findViewById(R.id.editImageBut);
         setOnClickListeners();
     }
 
@@ -142,8 +140,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePlant(response);
-                        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-                        startActivity(intent);
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override

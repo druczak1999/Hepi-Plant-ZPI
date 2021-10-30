@@ -21,10 +21,11 @@
 
             <TextView
                 android:id="@+id/commentUsernameTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="@string/username_holder"
+                android:inputType = "textMultiLine"
                 android:textAppearance="@style/ForumUsernameFont" />
 
             <Space

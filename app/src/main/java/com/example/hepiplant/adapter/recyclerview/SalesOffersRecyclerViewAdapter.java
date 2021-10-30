@@ -37,6 +37,7 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
         private final TextView body;
         private final ImageView photo;
         private final TextView comments;
+        private final TextView author;
 
         public ViewHolder(View view) {
             super(view);
@@ -49,6 +50,7 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
             body = view.findViewById(R.id.offerBodyTextView);
             photo = view.findViewById(R.id.offerPhotoImageView);
             comments = view.findViewById(R.id.offerCommentsCountTextView);
+            author = view.findViewById(R.id.postAuthorTextView);
         }
 
         public TextView getPrice() {
@@ -74,6 +76,8 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
         public ImageView getPhoto() {
             return photo;
         }
+
+        public TextView getAuthor(){ return author; }
 
         public TextView getComments() {
             return comments;
@@ -105,6 +109,7 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
                 dataSet.get(position).getPrice().doubleValue(), CURRENCY));
         viewHolder.getLocation().setText(dataSet.get(position).getLocation());
         viewHolder.getTitle().setText(dataSet.get(position).getTitle());
+        viewHolder.getAuthor().setText(dataSet.get(position).getUsername());
         StringBuilder tags = new StringBuilder();
         for (String s : dataSet.get(position).getTags()) {
             tags.append(" #").append(s);
