@@ -126,7 +126,6 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     private void makeGetDataRequest(){

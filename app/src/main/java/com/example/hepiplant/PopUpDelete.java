@@ -84,6 +84,7 @@ public class PopUpDelete extends AppCompatActivity {
     }
 
     private void deletePlant(){
+        Log.v(TAG,String.valueOf(getIntent().getExtras().getLong("plantId")));
         String url = getRequestUrl(Objects.requireNonNull(getIntent().getExtras()).getLong("plantId"));
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
