@@ -1,5 +1,7 @@
 package com.example.hepiplant.helper;
 
+import android.content.Intent;
+
 public class LangUtils {
 
     public static String getCommentsSuffix(final int commentsCount){
@@ -11,5 +13,11 @@ public class LangUtils {
             return comments_base + "e";
         }
         return comments_base + "y";
+    }
+
+    public static String getFrequency(final String action, Intent intent){
+        final String what = "Co";
+        final String days = "dni";
+        return what +" "+ intent.getExtras().getString(action) +" "+ days;
     }
 }

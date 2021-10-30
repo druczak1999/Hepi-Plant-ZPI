@@ -5,6 +5,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,11 +33,18 @@ import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -47,14 +56,14 @@ import java.util.Map;
 public class PlantAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "AddPlant";
-    Button dateEditText, addPlantButton;
-    ImageView addImageButton;
-    Spinner spinnerGat, spinnerCat;
-    EditText plantName, location, wateringText;
-    String img_str = null;
-    int categoryId, watering;
-    public SpeciesDto speciesDto;
-    SpeciesDto[] speciesDtos;
+    private Button dateEditText, addPlantButton;
+    private ImageView addImageButton;
+    private Spinner spinnerGat, spinnerCat;
+    private EditText plantName, location, wateringText;
+    private String img_str;
+    private int categoryId, watering;
+    private SpeciesDto speciesDto;
+    private SpeciesDto[] speciesDtos;
     private Configuration config;
     private static final int PICK_IMAGE = 2;
 
@@ -72,10 +81,10 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         location = findViewById(R.id.editPlantLocation);
         wateringText = findViewById(R.id.editWatering);
         addPlantButton = findViewById(R.id.buttonAddPlant);
-        getSpeciesFromDB();
-        getCategoriesFromDB();
         dateEditText = findViewById(R.id.editPlantDate);
         addImageButton = findViewById(R.id.editImageBut);
+        getSpeciesFromDB();
+        getCategoriesFromDB();
         setOnClickListeners();
     }
 
@@ -228,7 +237,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         String str = String.valueOf(response); //http request
         PlantDto data = new PlantDto();
         data = config.getGson().fromJson(str, PlantDto.class);
-
+        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        startActivity(intent);
     }
 
     private void onErrorResponsePlant(VolleyError error){
@@ -254,7 +264,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
     }
-    //For result with date and image
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v(TAG, "onActivityResult");
@@ -274,11 +284,54 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     addImageButton.setClipToOutline(true);
                 }
+                saveImageToFirebase();
                 Log.v(TAG, img_str);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
         }
+    }
+
+    private void saveImageToFirebase() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        String [] array = img_str.split("/");
+        String path = "userPlants/"+config.getUserId()+"/"+array[array.length-1];
+        StorageReference imagesRef = storageRef.child(path);
+        addImageButton.setDrawingCacheEnabled(true);
+        addImageButton.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) addImageButton.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] dataB = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(dataB);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+            }
+        });
+        img_str = path;
+        Log.v(TAG, img_str);
+    }
+
+    private void onGetResponseSpecies(String response){
+        String str=onResponseStr(response);
+        SpeciesDto[] data = new SpeciesDto[]{};
+        data = config.getGson().fromJson(String.valueOf(str), SpeciesDto[].class);
+        speciesDtos = data;
+        List<String> sp = new ArrayList<String>();
+        sp.add("Brak");
+        for (int i = 0; i < data.length; i++) {
+            sp.add(data[i].getName());
+        }
+        getSpecies(sp);
     }
 
     private void getSpeciesFromDB() {
@@ -289,16 +342,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
-                        String str=onResponseStr(response);
-                        SpeciesDto[] data = new SpeciesDto[]{};
-                        data = config.getGson().fromJson(String.valueOf(str), SpeciesDto[].class);
-                        speciesDtos = data;
-                        List<String> sp = new ArrayList<String>();
-                        sp.add("Brak");
-                        for (int i = 0; i < data.length; i++) {
-                            sp.add(data[i].getName());
-                        }
-                        getSpecies(sp);
+                        onGetResponseSpecies(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -324,6 +368,18 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         spinnerGat.setAdapter(dtoArrayAdapter);
     }
 
+    private void onGetResponseCategories(String response){
+        String str = onResponseStr(response);
+        CategoryDto[] data = new CategoryDto[]{};
+        data = config.getGson().fromJson(String.valueOf(str), CategoryDto[].class);
+        List<String> categories = new ArrayList<String>();
+        categories.add("Brak");
+        for (int i = 0; i < data.length; i++) {
+            categories.add(data[i].getName());
+        }
+        getCategories(categories);
+    }
+
     private void getCategoriesFromDB() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = getRequestUrl() + "categories";
@@ -332,15 +388,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
-                        String str = onResponseStr(response);
-                        CategoryDto[] data = new CategoryDto[]{};
-                        data = config.getGson().fromJson(String.valueOf(str), CategoryDto[].class);
-                        List<String> categories = new ArrayList<String>();
-                        categories.add("Brak");
-                        for (int i = 0; i < data.length; i++) {
-                            categories.add(data[i].getName());
-                        }
-                        getCategories(categories);
+                        onGetResponseCategories(response);
                     }
                 }, new Response.ErrorListener() {
             @Override

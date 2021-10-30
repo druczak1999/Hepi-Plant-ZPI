@@ -6,21 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +28,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.SalesOfferDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONObject;
 
@@ -41,11 +42,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.example.hepiplant.helper.LangUtils.getFrequency;
+
 public class PlantViewActivity extends AppCompatActivity {
 
-    TextView plantName, species, category, watering, fertilizing, misting, soil, location, placement, date;
-    ImageView plantImage;
-    String categoryName = null;
+    private TextView plantName, species, category, watering, fertilizing, misting, soil, location, placement, date;
+    private ImageView plantImage;
+    private String categoryName = null;
     private Configuration config;
     private static final String TAG = "PlantViewActivity";
 
@@ -84,19 +87,48 @@ public class PlantViewActivity extends AppCompatActivity {
         else{
             category.setText("");
         }
-        watering.setText("Co "+getIntent().getExtras().getString("watering")+" dni");
-        fertilizing.setText("Co "+getIntent().getExtras().getString("fertilizing")+" dni");
-        misting.setText("Co "+getIntent().getExtras().getString("misting")+" dni");
+        watering.setText(getFrequency("watering", getIntent()));
+        fertilizing.setText(getFrequency("fertilizing", getIntent()));
+        misting.setText(getFrequency("misting", getIntent()));
         soil.setText(getIntent().getExtras().getString("soil"));
         placement.setText(getIntent().getExtras().getString("location"));
         location.setText(getIntent().getExtras().getString("placement").toLowerCase());
         date.setText(getIntent().getExtras().getString("date").replaceFirst("00:00:00",""));
-        if(!getIntent().getExtras().getString("photo").isEmpty())
-        plantImage.setImageURI(Uri.parse(getIntent().getExtras().getString("photo")));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-           plantImage.setClipToOutline(true);
+        if(!getIntent().getExtras().getString("photo").isEmpty()){
+            getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo") );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                plantImage.setClipToOutline(true);
+            }
         }
+    }
 
+    private static void getPhotoFromFirebase(ImageView photoImageView, String post) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        Log.v(TAG, post);
+
+        StorageReference pathReference = storageRef.child(post);
+        final long ONE_MEGABYTE = 2048 * 2048;
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Log.v(TAG,"IN on success");
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+                        bytes.length);
+                photoImageView.setImageBitmap(bitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.v(TAG,"IN on failure");
+                Log.v(TAG,exception.getMessage());
+                Log.v(TAG,exception.getCause().toString());
+            }
+        });
     }
 
     private void getCategoryName(int id){
@@ -111,7 +143,7 @@ public class PlantViewActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         categoryName = onGetResponseReceived(response);
-                        Log.v(TAG,"In set categoyr "+categoryName);
+                        Log.v(TAG,"In set category "+categoryName);
                         if(categoryName!=null)
                         category.setText(categoryName);
                     }
@@ -189,7 +221,7 @@ public class PlantViewActivity extends AppCompatActivity {
     }
 
     private Intent prepareIntent(){
-        Intent intent = new Intent(getApplicationContext(),EditPlantActivity.class);
+        Intent intent = new Intent(getApplicationContext(), PlantEditActivity.class);
         intent.putExtra("name",plantName.getText().toString());
         intent.putExtra("photo",getIntent().getExtras().getString("photo"));
         intent.putExtra("species",species.getText());
@@ -224,6 +256,7 @@ public class PlantViewActivity extends AppCompatActivity {
             case R.id.deletePlant:
                 Intent intent3 = new Intent(this, PopUpDelete.class);
                 intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
+                intent3.putExtra("photo", getIntent().getExtras().getString("photo"));
                 startActivity(intent3);
                 return true;
             case R.id.editPlant:
@@ -237,7 +270,6 @@ public class PlantViewActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     private Map<String, String> prepareRequestHeaders(){

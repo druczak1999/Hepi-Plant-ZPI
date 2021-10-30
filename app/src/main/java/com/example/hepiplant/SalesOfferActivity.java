@@ -3,6 +3,8 @@ package com.example.hepiplant;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,7 +34,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.adapter.recyclerview.CommentsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CommentDto;
+import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -285,7 +292,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         if(salesOffer.getPhoto()!=null){
             Log.v(TAG,"Attempting photo bind for data: " + salesOffer.getPhoto());
             try {
-                photoImageView.setImageURI(Uri.parse(salesOffer.getPhoto()));
+                getPhotoFromFirebase(photoImageView, salesOffer);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     photoImageView.setClipToOutline(true);
                 }
@@ -299,6 +306,35 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         int commentsCount = salesOffer.getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         commentsTextView.setText(commentsText);
+    }
+
+    private static void getPhotoFromFirebase(ImageView photoImageView, SalesOfferDto post) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        Log.v(TAG, post.getPhoto());
+
+        StorageReference pathReference = storageRef.child(post.getPhoto());
+        final long ONE_MEGABYTE = 2048 * 2048;
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Log.v(TAG,"IN on success");
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+                        bytes.length);
+                photoImageView.setImageBitmap(bitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.v(TAG,"IN on failure");
+                Log.v(TAG,exception.getMessage());
+                Log.v(TAG,exception.getCause().toString());
+            }
+        });
     }
 
     private Intent prepareIntent(){

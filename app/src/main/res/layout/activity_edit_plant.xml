@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditPlantActivity">
+    tools:context=".PlantEditActivity">
 
     <include
         android:id="@+id/ToolbarEditPlant"
@@ -163,11 +163,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 style = "@style/DetailsFontValue"
-                android:text="Pokój"
+                android:layout_marginTop="10dp"
+                android:hint="..."
                 />
 
             <TextView
@@ -191,7 +191,7 @@
                 android:drawableRight="@drawable/calendar"
                 android:ems="10"
                 android:gravity="start|center_vertical"
-                android:text="..."
+                android:hint="..."
                 style="@style/DetailsFontValue"
                 android:textAlignment="viewStart"
                 />

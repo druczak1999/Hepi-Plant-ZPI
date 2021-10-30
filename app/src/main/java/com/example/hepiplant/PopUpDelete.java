@@ -21,6 +21,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.hepiplant.configuration.Configuration;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
@@ -29,10 +33,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class PopUpDelete extends AppCompatActivity {
 
-    Button yes, no;
+    private Button yes, no;
     private Configuration config;
     private static final String TAG = "PopUpDelete";
 
@@ -79,12 +84,14 @@ public class PopUpDelete extends AppCompatActivity {
     }
 
     private void deletePlant(){
-        String url = getRequestUrl(getIntent().getExtras().getLong("plantId"));
+        Log.v(TAG,String.valueOf(getIntent().getExtras().getLong("plantId")));
+        String url = getRequestUrl(Objects.requireNonNull(getIntent().getExtras()).getLong("plantId"));
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
+                        if(!getIntent().getExtras().getString("photo").isEmpty()) deletePhotoFromFirebase();
                         Log.v(TAG, response);
                         Toast.makeText(getApplicationContext(),"Usunięto roślinę",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
@@ -103,6 +110,24 @@ public class PopUpDelete extends AppCompatActivity {
         };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonArrayRequest);
+    }
+
+    private void deletePhotoFromFirebase(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference imageRef = storageRef.child(getIntent().getExtras().getString("photo"));
+        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+               Toast.makeText(getApplicationContext(),"Delete photo from Firebase storage",Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"Unsuccessful delete photo from Firebase storage",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     private void onErrorResponseReceived(VolleyError error){
