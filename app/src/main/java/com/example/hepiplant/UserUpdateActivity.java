@@ -32,14 +32,20 @@ public class UserUpdateActivity extends AppCompatActivity {
     private static final String TAG = "UserUpdateActivity";
     private UserDto userDto;
     private Configuration config;
+    private TextView usernameValue, userEmail;
+    private Button save;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_update);
-        TextView textView = (EditText) findViewById(R.id.usernameValueUserView);
-        TextView textView2 = (TextView) findViewById(R.id.emailValueUserView);
-        Button save = (Button) findViewById(R.id.save);
+        setBottomBarOnItemClickListeners();
+        setupViewsData();
+        getRequestUser();
+        editRequestUser();
+    }
 
+    private void getRequestUser(){
         Intent intent = this.getIntent();
         RequestQueue queue = Volley.newRequestQueue(this);
         config = (Configuration) getApplicationContext();
@@ -49,7 +55,6 @@ public class UserUpdateActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String url =config.getUrl()+"users/"+config.getUserId();
-
 
         // Request a string response from the provided URL.
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -64,14 +69,14 @@ public class UserUpdateActivity extends AppCompatActivity {
                         UserDto data = new UserDto();
                         data = config.getGson().fromJson(str, UserDto.class);
                         userDto = data;
-                        textView.setText(data.getUsername());
-                        textView2.setText(data.getEmail());
+                        usernameValue.setText(data.getUsername());
+                        userEmail.setText(data.getEmail());
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-                textView.setText(error.getMessage());
+                usernameValue.setText(error.getMessage());
             }
         }){
             @Override
@@ -80,25 +85,31 @@ public class UserUpdateActivity extends AppCompatActivity {
             }
         };
         queue.add(jsonArrayRequest);
+    }
+
+    private void editRequestUser()
+    {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url =config.getUrl()+"users/"+config.getUserId();
         save.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "On Click. Attempting patch request"+userDto.getUsername());
                 JSONObject postData = new JSONObject();
                 try {
-                    postData.put("username", textView.getText().toString());
+                    postData.put("username", usernameValue.getText().toString());
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.v(TAG, "On Click. Attempting patch request"+textView.getText().toString());
+                Log.v(TAG, "On Click. Attempting patch request"+usernameValue.getText().toString());
                 JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
                         new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG, "Request successful. Response is: " + response);
-                    }
+                            @RequiresApi(api = Build.VERSION_CODES.N)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.v(TAG, "Request successful. Response is: " + response);
+                            }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -111,12 +122,17 @@ public class UserUpdateActivity extends AppCompatActivity {
                     }
                 };
                 queue.add(jsonArrayRequest);
-                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
-
     }
+
+    private void setupViewsData(){
+        usernameValue = (EditText) findViewById(R.id.usernameValueUserView);
+        userEmail = (TextView) findViewById(R.id.emailValueUserView);
+        save = (Button) findViewById(R.id.save);
+    }
+
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = (Button) findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {

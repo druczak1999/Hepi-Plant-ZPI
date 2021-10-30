@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"></include>
 
     <TextView
-        android:id="@+id/Dodaj"
+        android:id="@+id/Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Dodaj"
+        app:layout_constraintTop_toBottomOf="@+id/Add"
         app:layout_constraintVertical_bias="0.321">
 
         <LinearLayout
@@ -46,7 +46,7 @@
 
 
             <ImageButton
-                android:id="@+id/addImageBut"
+                android:id="@+id/editImageBut"
                 android:layout_width="115dp"
                 android:layout_height="115dp"
                 android:layout_gravity="center"
@@ -59,7 +59,7 @@
                 app:srcCompat="@drawable/addimagebutton" />
 
             <TextView
-                android:id="@+id/Tytul"
+                android:id="@+id/Title"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:text="Tytuł" />
 
             <EditText
-                android:id="@+id/editTytul"
+                android:id="@+id/editTitle"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -77,10 +77,10 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
-                android:id="@+id/Kategoria"
+                android:id="@+id/Category"
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                 android:text="Kategoria" />
 
             <Spinner
-                android:id="@+id/editKategoria"
+                android:id="@+id/editCategory"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -100,7 +100,7 @@
                 android:ems="10" />
 
             <TextView
-                android:id="@+id/Tresc"
+                android:id="@+id/Body"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,10 +110,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
             <EditText
-                android:id="@+id/editTresc"
+                android:id="@+id/editBody"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,10 +123,10 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:gravity="top|start"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
-                android:id="@+id/Hasztagi"
+                android:id="@+id/Tags"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,10 +136,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
             <EditText
-                android:id="@+id/editHasztagi"
+                android:id="@+id/editTags"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:text="..." />
+                android:hint="..." />
 
         </LinearLayout>
     </ScrollView>

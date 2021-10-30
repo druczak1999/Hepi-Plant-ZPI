@@ -23,7 +23,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
     private ItemClickListener clickListener;
 
     // Provide a reference to the type of views that you are using (custom ViewHolder).
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private final TextView username;
         private final TextView date;
         private final TextView body;
@@ -31,7 +31,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-
+            view.setOnLongClickListener(this);
             username = (TextView) view.findViewById(R.id.commentUsernameTextView);
             date = (TextView) view.findViewById(R.id.commentDateTextView);
             body = (TextView) view.findViewById(R.id.commentBodyTextView);
@@ -52,6 +52,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
         @Override
         public void onClick(View view) {
             if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (clickListener != null) clickListener.onItemLongCLick(v, getAdapterPosition());
+            return false;
         }
     }
 
@@ -98,6 +104,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
     // Parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+        void onItemLongCLick(View view, int position);
     }
 
     // Change the dataset of the adapter (call adapter.notifyItemRangeChanged() afterwards)

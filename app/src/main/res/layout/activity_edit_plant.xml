@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditPlantActivity">
+    tools:context=".PlantEditActivity">
 
     <include
         android:id="@+id/ToolbarEditPlant"
@@ -161,11 +161,13 @@
             <EditText
                 android:id="@+id/placementEdit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/rounded_edittext"
                 style = "@style/DetailsFontValue"
                 android:layout_marginTop="10dp"
-                android:text="Pokój"
+                android:hint="..."
                 />
 
             <TextView
@@ -173,7 +175,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-
                 android:layout_marginTop="10dp"
                 android:text="Data zakupu"
                 style = "@style/DetailsFontTitle"
@@ -190,7 +191,7 @@
                 android:drawableRight="@drawable/calendar"
                 android:ems="10"
                 android:gravity="start|center_vertical"
-                android:text="..."
+                android:hint="..."
                 style="@style/DetailsFontValue"
                 android:textAlignment="viewStart"
                 />

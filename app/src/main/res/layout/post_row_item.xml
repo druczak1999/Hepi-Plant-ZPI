@@ -34,6 +34,14 @@
                 android:textAppearance="@style/ListItemTitleFont" />
 
             <TextView
+                android:id="@+id/postAuthorTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="@string/post_title_holder"
+                android:textAppearance="@style/ListItemTitleFont" />
+
+            <TextView
                 android:id="@+id/postTagsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

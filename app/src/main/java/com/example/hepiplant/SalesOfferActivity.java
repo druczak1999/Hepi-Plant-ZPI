@@ -3,10 +3,15 @@ package com.example.hepiplant;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +34,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.adapter.recyclerview.CommentsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CommentDto;
+import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -49,6 +60,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     private RecyclerView recyclerView;
     private SalesOfferDto salesOffer;
     private CommentDto[] comments = new CommentDto[]{};
+    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView;
+    private ImageView photoImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +74,37 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         setLayoutManager();
         makeGetDataRequest();
         setBottomBarOnItemClickListeners();
+        setupToolbar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        makeGetDataRequest();
     }
 
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemLongCLick(View view, int position) {
+        Log.v(TAG, "onItemLongClick()");
+        Configuration config = (Configuration) getApplicationContext();
+        if (getIntent().getExtras().get("userId") == config.getUserId()) {
+            Intent intent3 = new Intent(this, PopUpDeleteComment.class);
+            intent3.putExtra("type", "salesoffers");
+            intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+            intent3.putExtra("commentId", salesOffer.getComments().get(position).getId());
+            startActivity(intent3);
+        }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.includeToolbarSalesOfferView);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
     }
 
     public void onAddButtonClick(View v){
@@ -152,6 +190,24 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         Log.v(TAG, "onGetResponseReceived()");
         salesOffer = config.getGson().fromJson(String.valueOf(response), SalesOfferDto.class);
         comments = salesOffer.getComments().toArray(comments);
+        int tempSize = 0;
+        for (int i = 0; i < comments.length; i++) {
+            if (comments[i]!= null)
+            {
+                tempSize+=1;
+            }
+        }
+        CommentDto[] tempComments = new CommentDto[tempSize];
+        int a = 0;
+        for (int i = 0; i < comments.length; i++) {
+            if (comments[i]!= null)
+            {
+                tempComments[a] = comments[i];
+                a++;
+            }
+        }
+        comments = tempComments;
+
         if(adapter == null){
             setAdapter();
             setupViewsData();
@@ -202,6 +258,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private void refreshDisplayedData(){
         Log.v(TAG, "Refreshing displayed data()");
+        adapter.notifyItemRangeRemoved(0, adapter.getItemCount());
         adapter.updateData(comments);
         adapter.notifyItemRangeChanged(0, comments.length);
         TextView commentsTextView = findViewById(R.id.salesOfferCommentsCountTextViewSingle);
@@ -211,14 +268,14 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     }
 
     private void setupViewsData() {
-        TextView priceTextView = findViewById(R.id.offerPriceTextViewSingle);
+        priceTextView = findViewById(R.id.offerPriceTextViewSingle);
         priceTextView.setText(String.format(Locale.GERMANY,"%.2f %s",
                 salesOffer.getPrice().doubleValue(), CURRENCY));
-        TextView dateTextView = findViewById(R.id.offerLocationTextViewSingle);
+        dateTextView = findViewById(R.id.offerLocationTextViewSingle);
         dateTextView.setText(salesOffer.getLocation());
-        TextView titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
+        titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
         titleTextView.setText(salesOffer.getTitle());
-        TextView tagsTextView = findViewById(R.id.salesOfferTagsTextViewSingle);
+        tagsTextView = findViewById(R.id.salesOfferTagsTextViewSingle);
         StringBuilder tags = new StringBuilder();
         for (String s : salesOffer.getTags()) {
             tags.append(" #").append(s);
@@ -229,13 +286,13 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
         }
-        TextView bodyTextView = findViewById(R.id.salesOfferBodyTextViewSingle);
+        bodyTextView = findViewById(R.id.salesOfferBodyTextViewSingle);
         bodyTextView.setText(salesOffer.getBody());
-        ImageView photoImageView = findViewById(R.id.salesOfferPhotoImageViewSingle);
+        photoImageView = findViewById(R.id.salesOfferPhotoImageViewSingle);
         if(salesOffer.getPhoto()!=null){
             Log.v(TAG,"Attempting photo bind for data: " + salesOffer.getPhoto());
             try {
-                photoImageView.setImageURI(Uri.parse(salesOffer.getPhoto()));
+                getPhotoFromFirebase(photoImageView, salesOffer);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     photoImageView.setClipToOutline(true);
                 }
@@ -251,10 +308,96 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         commentsTextView.setText(commentsText);
     }
 
+    private static void getPhotoFromFirebase(ImageView photoImageView, SalesOfferDto post) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        Log.v(TAG, post.getPhoto());
+
+        StorageReference pathReference = storageRef.child(post.getPhoto());
+        final long ONE_MEGABYTE = 2048 * 2048;
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Log.v(TAG,"IN on success");
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+                        bytes.length);
+                photoImageView.setImageBitmap(bitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.v(TAG,"IN on failure");
+                Log.v(TAG,exception.getMessage());
+                Log.v(TAG,exception.getCause().toString());
+            }
+        });
+    }
+
+    private Intent prepareIntent(){
+        Intent intent = new Intent(getApplicationContext(), SalesOfferEditActivity.class);
+        intent.putExtra("id", salesOffer.getId());
+        intent.putExtra("name", titleTextView.getText().toString());
+        intent.putExtra("body", bodyTextView.getText().toString());
+        intent.putExtra("tags", tagsTextView.getText().toString());
+        intent.putExtra("price", salesOffer.getPrice().toString());
+        intent.putExtra("location", dateTextView.getText().toString());
+        if(salesOffer.getPhoto()!=null)
+            intent.putExtra("photo", salesOffer.getPhoto());
+        else intent.putExtra("photo", "");
+        intent.putExtra("category", salesOffer.getCategoryId());
+        return intent;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Configuration config = (Configuration) getApplicationContext();
+        if(getIntent().getExtras().get("userId") == config.getUserId()) {
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_sales_offer, menu);
+        }
+        else{
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_main, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.deleteSalesOffer:
+                Intent intent3 = new Intent(this, PopUpDeleteSalesOffer.class);
+                intent3.putExtra("salesOfferId",getIntent().getExtras().getLong("salesOfferId"));
+                intent3.putExtra("photo", salesOffer.getPhoto());
+                startActivity(intent3);
+                return true;
+            case R.id.editSalesOffer:
+                Intent intent = prepareIntent();
+                startActivity(intent);
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private Map<String, String> prepareRequestHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + config.getToken());
         return headers;
     }
-
 }

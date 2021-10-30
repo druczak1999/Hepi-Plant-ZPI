@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -29,16 +30,34 @@ import java.util.Map;
 public class UserActivity extends AppCompatActivity {
     private static final String TAG = "UserActivity";
     private Configuration config;
+    private TextView usernameValue, username, userEmail;
+    private Button change;
+    private ImageView profilePhoto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         setBottomBarOnItemClickListeners();
-        TextView textView = (TextView) findViewById(R.id.usernameValueUserView);
-        TextView textView1 = (TextView) findViewById(R.id.userNameUserview);
-        TextView textView2 = (TextView) findViewById(R.id.emailValueUserView);
-        Button change = (Button) findViewById(R.id.change);
+        setupViewsData();
+        getRequestUser();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getRequestUser();
+    }
+
+    private void setupViewsData(){
+        usernameValue = (TextView) findViewById(R.id.usernameValueUserView);
+        username = (TextView) findViewById(R.id.userName);
+        userEmail = (TextView) findViewById(R.id.emailValueUserView);
+        change = (Button) findViewById(R.id.change);
+        profilePhoto = (ImageView) findViewById(R.id.profilePhoto);
+    }
+
+    private void getRequestUser(){
         Intent intent = this.getIntent();
         RequestQueue queue = Volley.newRequestQueue(this);
         config = (Configuration) getApplicationContext();
@@ -48,8 +67,7 @@ public class UserActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String url =config.getUrl()+"users/"+config.getUserId();
-
-
+        profilePhoto.setImageURI(config.getPhoto());
         // Request a string response from the provided URL.
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -62,9 +80,9 @@ public class UserActivity extends AppCompatActivity {
                         UserDto data = new UserDto();
                         data = config.getGson().fromJson(str, UserDto.class);
 
-                        textView.setText(data.getUsername());
-                        textView2.setText(data.getEmail());
-                        textView1.setText("Witaj "+data.getUsername()+"!");
+                        usernameValue.setText(data.getUsername());
+                        userEmail.setText(data.getEmail());
+                        username.setText("Witaj "+data.getUsername()+"!");
                         change.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View v) {
@@ -77,7 +95,7 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-                textView.setText(error.getMessage());
+                usernameValue.setText(error.getMessage());
             }
         }){
             @Override
@@ -87,12 +105,7 @@ public class UserActivity extends AppCompatActivity {
         };
         config.getQueue().add(jsonArrayRequest);
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
+
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = (Button) findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {

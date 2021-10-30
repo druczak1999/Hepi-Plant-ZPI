@@ -5,6 +5,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +32,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -36,6 +44,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -43,18 +52,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EditPlantActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class PlantEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    EditText plantName, watering, fertilizing, misting, placement;
-    Spinner spinnerGat;
-    ImageView plantImage;
-    Button date, editPlant;
+    private EditText plantName, watering, fertilizing, misting, placement;
+    private Spinner spinnerGat;
+    private ImageView plantImage;
+    private Button date, editPlant;
     private Configuration config;
     private static final String TAG = "PlantEditActivity";
-    public SpeciesDto speciesDto;
-    SpeciesDto[] speciesDtos;
-    String img_str;
-    Long plantId;
+    private SpeciesDto speciesDto;
+    private SpeciesDto[] speciesDtos;
+    private String img_str;
+    private Long plantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +75,6 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void setupViewsData(){
-
         editPlant = findViewById(R.id.buttonEditPlant);
         plantName = findViewById(R.id.PlantNameEdit);
         spinnerGat = findViewById(R.id.speciesEdit);
@@ -83,10 +91,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
 
     private void setValuesToEdit(){
         plantName.setText(getIntent().getExtras().getString("name"));
-        plantImage.setImageURI(Uri.parse(getIntent().getExtras().getString("photo")));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            plantImage.setClipToOutline(true);
-        }
+        getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo"));
         watering.setText(getIntent().getExtras().getString("watering"));
         fertilizing.setText(getIntent().getExtras().getString("fertilizing"));
         misting.setText(getIntent().getExtras().getString("misting"));
@@ -94,6 +99,47 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
         date.setText(getIntent().getExtras().getString("date"));
         plantId = getIntent().getExtras().getLong("plantId");
         Log.v(TAG,"plant Id: "+plantId);
+    }
+
+    private static void getPhotoFromFirebase(ImageView photoImageView, String post) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        Log.v(TAG, post);
+        StorageReference pathReference = storageRef.child(post);
+        final long ONE_MEGABYTE = 2048 * 2048;
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Log.v(TAG,"IN on success");
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+                        bytes.length);
+                photoImageView.setImageBitmap(bitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.v(TAG,"IN on failure");
+                Log.v(TAG,exception.getMessage());
+                Log.v(TAG,exception.getCause().toString());
+            }
+        });
+    }
+
+    private void onGetResponseSpecies(String response){
+        String str=onResponseStr(response);
+        SpeciesDto[] data = new SpeciesDto[]{};
+        Gson gson = new Gson();
+        data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
+        speciesDtos = data;
+        List<String> sp = new ArrayList<String>();
+        sp.add("Brak");
+        for (int i = 0; i < data.length; i++) {
+            sp.add(data[i].getName());
+        }
+        getSpecies(sp);
     }
 
     private void getSpeciesFromDB() {
@@ -104,17 +150,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
-                        String str=onResponseStr(response);
-                        SpeciesDto[] data = new SpeciesDto[]{};
-                        Gson gson = new Gson();
-                        data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
-                        speciesDtos = data;
-                        List<String> sp = new ArrayList<String>();
-                        sp.add("Brak");
-                        for (int i = 0; i < data.length; i++) {
-                            sp.add(data[i].getName());
-                        }
-                        getSpecies(sp);
+                        onGetResponseSpecies(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -165,12 +201,10 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
             if(position==0) speciesDto = null;
             else speciesDto = speciesDtos[position-1];
         }
-
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     @NonNull
     private String getRequestUrl() {
@@ -237,7 +271,6 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                 .start(this);
     }
 
-    //For result with date and image
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v(TAG, "onActivityResult");
@@ -249,6 +282,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                 Log.v(TAG, date.getText().toString());
             }
         }
+
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             Log.v(TAG, "cropActivity");
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -256,6 +290,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                 Uri resultUri = result.getUri();
                 plantImage.setImageURI(resultUri);
                 img_str=resultUri.toString();
+                saveImageToFirebase();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     plantImage.setClipToOutline(true);
                 }
@@ -264,6 +299,35 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                 Exception error = result.getError();
             }
         }
+    }
+
+    private void saveImageToFirebase() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        String [] array = img_str.split("/");
+        String path = "userPlants/"+config.getUserId()+"/"+array[array.length-1];
+        StorageReference imagesRef = storageRef.child(path);
+        plantImage.setDrawingCacheEnabled(true);
+        plantImage.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) plantImage.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] dataB = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(dataB);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+            }
+        });
+        img_str = path;
+        Log.v(TAG, img_str);
     }
 
     private void patchRequestSchedule(){
@@ -306,8 +370,6 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePlant(response);
-                        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-                        startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -346,6 +408,7 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
 
     private JSONObject makeScheduleJSON() {
         JSONObject scheduleJ = new JSONObject();
+
         try {
             scheduleJ.put("id",getIntent().getExtras().getLong("scheduleId"));
             scheduleJ.put("wateringFrequency", watering.getText());
@@ -360,8 +423,8 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
 
     private JSONObject makePostDataJson(JSONObject speciesJson,JSONObject scheduleJ){
         JSONObject postData = new JSONObject();
-        try {
 
+        try {
             if(plantName.getText().toString().equals("..."))  postData.put("name", "");
             else postData.put("name", plantName.getText().toString());
             Log.v(TAG,date.getText().toString());
@@ -396,6 +459,8 @@ public class EditPlantActivity extends AppCompatActivity implements AdapterView.
         PlantDto data = new PlantDto();
         Gson gson = new Gson();
         data = gson.fromJson(str, PlantDto.class);
+        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        startActivity(intent);
     }
 
     private Map<String, String> prepareRequestHeaders(){

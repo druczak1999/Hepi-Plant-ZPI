@@ -20,7 +20,7 @@ public class ForumTabsActivity extends AppCompatActivity {
     private static final String TAG = "ForumTabsActivity";
     private ViewPager viewPager;
     private ForumFragmentPagerAdapter forumFragmentStateAdapter;
-
+    private int tab = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreate()");

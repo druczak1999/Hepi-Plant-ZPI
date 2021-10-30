@@ -13,10 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.PlantDto;
+import com.example.hepiplant.dto.SalesOfferDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,7 +97,8 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
         Log.v(TAG,"photo: "+dataSet.get(position).getPhoto());
         if(dataSet.get(position).getPhoto()!=null){
             try {
-                viewHolder.getImage().setImageURI(Uri.parse(dataSet.get(position).getPhoto()));
+                ImageView photoImageView = viewHolder.getImage();
+                getImageFromFirebase(position, photoImageView, dataSet);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     viewHolder.getImage().setClipToOutline(true);
                 }
@@ -100,6 +107,34 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
 
             }
         }
+    }
+
+    private static void getImageFromFirebase(int position, ImageView photoImageView, List<PlantDto> dataSet) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        Log.v(TAG, dataSet.get(position).getPhoto());
+        StorageReference pathReference = storageRef.child(dataSet.get(position).getPhoto());
+        final long ONE_MEGABYTE = 2048 * 2048;
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Log.v(TAG,"IN on success");
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+                        bytes.length);
+                photoImageView.setImageBitmap(bitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.v(TAG,"IN on failure");
+                Log.v(TAG,exception.getMessage());
+                Log.v(TAG,exception.getCause().toString());
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -3,6 +3,8 @@ package com.example.hepiplant.adapter.recyclerview;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -11,11 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.PostDto;
+import com.example.hepiplant.dto.UserDto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +43,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         private final TextView body;
         private final ImageView photo;
         private final TextView comments;
+        private final TextView author;
 
         public ViewHolder(View view) {
             super(view);
@@ -45,6 +55,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             body = view.findViewById(R.id.postBodyTextView);
             photo = view.findViewById(R.id.postPhotoImageView);
             comments = view.findViewById(R.id.postCommentsCountTextView);
+            author = view.findViewById(R.id.postAuthorTextView);
         }
 
         public TextView getDate() {
@@ -71,6 +82,8 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             return comments;
         }
 
+        public TextView getAuthor(){ return author; }
+
         @Override
         public void onClick(View view) {
             if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
@@ -95,6 +108,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         Log.v(TAG, "onBindViewHolder() position: "+position);
         viewHolder.getDate().setText(dataSet.get(position).getCreatedDate());
         viewHolder.getTitle().setText(dataSet.get(position).getTitle());
+        viewHolder.getAuthor().setText(dataSet.get(position).getUsername());
         StringBuilder tags = new StringBuilder();
         for (String s : dataSet.get(position).getTags()) {
             tags.append(" #").append(s);
@@ -109,20 +123,41 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         ImageView photoImageView = viewHolder.getPhoto();
         if(dataSet.get(position).getPhoto()!=null){
             Log.v(TAG,"Attempting photo bind for data: " + dataSet.get(position).getPhoto());
-            try {
-                photoImageView.setImageURI(Uri.parse(dataSet.get(position).getPhoto()));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    photoImageView.setClipToOutline(true);
-                }
-            } catch (Exception e) {
-                e.getMessage();
-            }
+            getImageFromFirebase(position, photoImageView, dataSet);
         } else {
             photoImageView.setVisibility(View.GONE);
         }
         int commentsCount = dataSet.get(position).getComments().size();
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         viewHolder.getComments().setText(commentsText);
+    }
+
+    private static void getImageFromFirebase(int position, ImageView photoImageView, List<PostDto> dataSet) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        Log.v(TAG, dataSet.get(position).getPhoto());
+        StorageReference pathReference = storageRef.child(dataSet.get(position).getPhoto());
+        final long ONE_MEGABYTE = 2048 * 2048;
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Log.v(TAG,"IN on success");
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+                        bytes.length);
+                photoImageView.setImageBitmap(bitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    photoImageView.setClipToOutline(true);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.v(TAG,"IN on failure");
+                Log.v(TAG,exception.getMessage());
+                Log.v(TAG,exception.getCause().toString());
+            }
+        });
     }
 
     @Override

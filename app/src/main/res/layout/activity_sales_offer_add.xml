@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostAddActivity">
+    tools:context=".SalesOfferAddActivity">
 
     <include
         android:id="@+id/include"
@@ -18,7 +18,7 @@
 
 
     <TextView
-        android:id="@+id/Dodaj"
+        android:id="@+id/Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Dodaj">
+        app:layout_constraintTop_toBottomOf="@+id/Add">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
 
 
             <ImageButton
-                android:id="@+id/addImageBut"
+                android:id="@+id/editImageBut"
                 android:layout_width="115dp"
                 android:layout_height="115dp"
                 android:layout_gravity="center"
@@ -60,7 +60,7 @@
                 app:srcCompat="@drawable/addimagebutton" />
 
             <TextView
-                android:id="@+id/Tytul"
+                android:id="@+id/Title"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                 android:text="Tytuł" />
 
             <EditText
-                android:id="@+id/editTytul"
+                android:id="@+id/editTitle"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -78,10 +78,10 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
-                android:id="@+id/Kategoria"
+                android:id="@+id/Category"
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 android:text="Kategoria" />
 
             <Spinner
-                android:id="@+id/editKategoria"
+                android:id="@+id/editCategory"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
@@ -101,7 +101,7 @@
                 style="@style/DetailsFontValue"/>
 
             <TextView
-                android:id="@+id/Tresc"
+                android:id="@+id/Body"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
                 android:text="Treść" />
 
             <EditText
-                android:id="@+id/editTresc"
+                android:id="@+id/editBody"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -121,10 +121,10 @@
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
-                android:id="@+id/Lokalizacja"
+                android:id="@+id/Location"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                 android:text="Lokalizacja" />
 
             <EditText
-                android:id="@+id/editLokalizacja"
+                android:id="@+id/editLocation"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -142,10 +142,10 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
-                android:id="@+id/Cena"
+                android:id="@+id/Price"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
                 android:text="Cena" />
 
             <EditText
-                android:id="@+id/editCena"
+                android:id="@+id/editPrice"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -164,10 +164,10 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:inputType="numberDecimal"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
-                android:id="@+id/Hasztagi"
+                android:id="@+id/Tags"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
                 android:text="#Hasztagi" />
 
             <EditText
-                android:id="@+id/editHasztagi"
+                android:id="@+id/editTags"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:text="..." />
+                android:hint="..." />
 
         </LinearLayout>
     </ScrollView>
