@@ -329,29 +329,29 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.logoff:
-                    FireBase fireBase = new FireBase();
-                    fireBase.signOut();
-                    return true;
-                case R.id.informationAboutApp:
-                    Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
-                    return true;
-                case R.id.deletePost:
-                        Intent intent3 = new Intent(this, PopUpDeletePost.class);
-                        intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
-                        startActivity(intent3);
-                    return true;
-                case R.id.editPost:
-                        Intent intent = prepareIntent();
-                        startActivity(intent);
-                    return true;
-                case R.id.miProfile:
-                    Intent intent2 = new Intent(this, UserActivity.class);
-                    startActivity(intent2);
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
+        switch (item.getItemId()) {
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.deletePost:
+                    Intent intent3 = new Intent(this, PopUpDeletePost.class);
+                    intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+                    startActivity(intent3);
+                return true;
+            case R.id.editPost:
+                    Intent intent = prepareIntent();
+                    startActivity(intent);
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

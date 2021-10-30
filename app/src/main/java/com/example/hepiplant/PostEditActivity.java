@@ -98,6 +98,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         }
         return config.getUrl();
     }
+
     public void getCategoriesFromDB(){
         RequestQueue queue = Volley.newRequestQueue(this);
         config = (Configuration) getApplicationContext();
