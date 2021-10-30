@@ -13,6 +13,7 @@ public class PostDto implements Serializable {
     private String createdDate;
     private String updatedDate;
     private Long userId;
+    private String username;
     private Long categoryId;
     private List<CommentDto> comments;
 
@@ -74,6 +75,10 @@ public class PostDto implements Serializable {
     public void setUpdatedDate(String updatedDate) {
         this.updatedDate = updatedDate;
     }
+
+    public String getUsername() { return username; }
+
+    public void setUsername(String username) { this.username = username; }
 
     public Long getUserId() {
         return userId;

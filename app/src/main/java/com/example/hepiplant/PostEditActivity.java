@@ -66,6 +66,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         setupViewsData();
         setValuesToEdit();
     }
+
     private void setupViewsData(){
         postName = findViewById(R.id.editTitle);
         spinnerCat = findViewById(R.id.editCategory);
@@ -77,8 +78,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         setBottomBarOnItemClickListeners();
         setOnClickListeners();
     }
-    private void setValuesToEdit()
-    {
+
+    private void setValuesToEdit() {
         postName.setText(getIntent().getExtras().getString("name"));
         postBody.setText(getIntent().getExtras().getString("body"));
         postTags.setText(getIntent().getExtras().getString("tags"));
@@ -87,6 +88,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             postImage.setClipToOutline(true);
         }
     }
+
     @NonNull
     private String getRequestUrl() {
         try {
@@ -97,7 +99,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         return config.getUrl();
     }
     public void getCategoriesFromDB(){
-
         RequestQueue queue = Volley.newRequestQueue(this);
         config = (Configuration) getApplicationContext();
         try {
@@ -106,7 +107,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             e.printStackTrace();
         }
         String url = config.getUrl() + "categories";
-
 
         // Request a string response from the provided URL.
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url,
@@ -125,6 +125,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
+                        categories.add("Brak");
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
                         }
@@ -142,10 +143,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                 return prepareRequestHeaders();
             }
         };
-
 // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
     }
+
     public void getCategories(List<String> categories){
         Log.v(TAG,"Categories size"+categories.size());
         spinnerCat = (Spinner)findViewById(R.id.editCategory);
@@ -154,6 +155,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
     }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner cspin = (Spinner) parent;
@@ -167,11 +169,13 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
     private Map<String, String> prepareRequestHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + config.getToken());
         return headers;
     }
+
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -189,6 +193,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             }
         });
     }
+
     private void setOnClickListeners(){
         setBottomBarOnItemClickListeners();
         postImage.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +204,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         });
 
         onClickAddPost();
-}
+    }
+
     private void onClickAddPost(){
         Log.v(TAG,"onClick Edit");
         editPost.setOnClickListener(new View.OnClickListener() {
@@ -210,6 +216,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             }
         });
     }
+
     private void patchRequestPost(){
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"posts/"+getIntent().getExtras().getLong("id");
@@ -238,6 +245,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
 
         queue.add(jsonArrayRequest);
     }
+
     private JSONObject makePostDataJson(){
         JSONObject postData = new JSONObject();
         try {
@@ -255,11 +263,13 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         }
         return postData;
     }
+
     private void cropImage() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v(TAG, "onActivityResult");
@@ -280,6 +290,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             }
         }
     }
+
     private JSONArray hashReading()
     {
         int listSize = 0;
@@ -294,6 +305,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         }
         return hash;
     }
+
     private void onPostResponsePost(JSONObject response){
         Log.v(TAG, "ONResponse");
         String str = String.valueOf(response); //http request
@@ -301,6 +313,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         Gson gson = new Gson();
         data = gson.fromJson(str, PostDto.class);
     }
+
     private void onErrorResponsePost(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;

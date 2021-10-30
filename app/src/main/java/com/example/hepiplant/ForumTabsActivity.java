@@ -28,14 +28,6 @@ public class ForumTabsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forum_tabs);
         setBottomBarOnItemClickListeners();
         setupViewPager();
-//        Intent intent = getIntent();
-//        tab = intent.getExtras().getInt("tab");
-//        RecyclerView recyclerView = null;
-//        if(tab==1){
-//                recyclerView = (RecyclerView) findViewById(R.id.offersRecyclerView);
-//            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//            layoutManager.scrollToPositionWithOffset(0, 0);
-//        }
     }
 
     private void setupViewPager() {

@@ -11,7 +11,7 @@
         layout="@layout/toolbar"></include>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/profilePhoto"
         android:layout_width="115dp"
         android:layout_height="113dp"
         android:background="@drawable/rounded_edittext"
@@ -32,7 +32,7 @@
         android:layout_marginTop="68dp"
         android:text="Nazwa użytkownika"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
         style="@style/DetailsFontTitle"/>
 
     <TextView
@@ -44,7 +44,7 @@
         android:layout_marginTop="164dp"
         android:text="Email"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
         style="@style/DetailsFontTitle"/>
 
 
@@ -58,7 +58,7 @@
         android:text="Powiadomienia"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintEnd_toStartOf="@+id/noticeSwitch"
         app:layout_constraintHorizontal_bias="0.59"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/save"
@@ -74,7 +74,7 @@
         android:alpha="0.8"
         android:text=" "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
         style="@style/DetailsFontValue"/>
 
     <TextView
@@ -88,7 +88,7 @@
         android:text=" "
         app:layout_constraintBottom_toTopOf="@+id/notificationUserView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
         app:layout_constraintVertical_bias="0.045"
         style="@style/DetailsFontValue"/>
 
@@ -108,7 +108,7 @@
         app:layout_constraintVertical_bias="0.71" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/noticeSwitch"
         android:layout_width="80dp"
         android:layout_height="24dp"
 

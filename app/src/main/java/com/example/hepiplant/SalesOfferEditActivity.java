@@ -69,6 +69,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         setupViewsData();
         setValuesToEdit();
     }
+
     private void setupViewsData(){
         salesOfferName = findViewById(R.id.editTitle);
         spinnerCat = findViewById(R.id.editCategory);
@@ -82,6 +83,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         setBottomBarOnItemClickListeners();
         setOnClickListeners();
     }
+
     private void setValuesToEdit()
     {
         salesOfferName.setText(getIntent().getExtras().getString("name"));
@@ -94,6 +96,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             salesOfferImage.setClipToOutline(true);
         }
     }
+
     @NonNull
     private String getRequestUrl() {
         try {
@@ -103,6 +106,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         }
         return config.getUrl();
     }
+
     public void getCategoriesFromDB(){
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -113,7 +117,6 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             e.printStackTrace();
         }
         String url = config.getUrl() + "categories";
-
 
         // Request a string response from the provided URL.
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url,
@@ -132,6 +135,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
+                        categories.add("Brak");
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
                         }
@@ -141,7 +145,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
             }
         }){
             @Override
@@ -153,6 +157,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
 // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
     }
+
     public void getCategories(List<String> categories){
         Log.v(TAG,"Categories size"+categories.size());
         spinnerCat = (Spinner)findViewById(R.id.editCategory);
@@ -161,6 +166,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
     }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner cspin = (Spinner) parent;
@@ -174,11 +180,13 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
     private Map<String, String> prepareRequestHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + config.getToken());
         return headers;
     }
+
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +204,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             }
         });
     }
+
     private void setOnClickListeners(){
         setBottomBarOnItemClickListeners();
         salesOfferImage.setOnClickListener(new View.OnClickListener() {
@@ -206,7 +215,8 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         });
 
         onClickAddSalesOffer();
-}
+    }
+
     private void onClickAddSalesOffer(){
         Log.v(TAG,"onClick Edit");
         editSalesOffer.setOnClickListener(new View.OnClickListener() {
@@ -217,6 +227,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             }
         });
     }
+
     private void patchRequestSalesOffer(){
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"salesoffers/"+getIntent().getExtras().getLong("id");
@@ -245,6 +256,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
 
         queue.add(jsonArrayRequest);
     }
+
     private JSONObject makeSalesOfferDataJson(){
         JSONObject postData = new JSONObject();
         try {
@@ -265,11 +277,13 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         }
         return postData;
     }
+
     private void cropImage() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v(TAG, "onActivityResult");
@@ -290,6 +304,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             }
         }
     }
+
     private JSONArray hashReading()
     {
         int listSize = 0;
@@ -304,6 +319,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         }
         return hash;
     }
+
     private void onPostResponseSalesOffer(JSONObject response){
         Log.v(TAG, "ONResponse");
         String str = String.valueOf(response); //http request
@@ -311,6 +327,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         Gson gson = new Gson();
         data = gson.fromJson(str, SalesOfferDto.class);
     }
+
     private void onErrorResponseSalesOffer(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;

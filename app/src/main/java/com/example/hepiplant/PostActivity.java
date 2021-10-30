@@ -75,25 +75,26 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-        //Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemLongCLick(View view, int position) {
-        Log.v(TAG, "onItemLongClick()");
-        Intent intent3 = new Intent(this, PopUpDeleteComment.class);
-        intent3.putExtra("type", "posts");
-        intent3.putExtra("postId",getIntent().getExtras().getLong("postId"));
-        intent3.putExtra("commentId", post.getComments().get(position).getId());
-        startActivity(intent3);
+        if (post.getComments().get(position).getUserId() == config.getUserId()){
+            Log.v(TAG, "onItemLongClick()");
+            Intent intent3 = new Intent(this, PopUpDeleteComment.class);
+            intent3.putExtra("type", "posts");
+            intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+            intent3.putExtra("commentId", post.getComments().get(position).getId());
+            startActivity(intent3);
+    }
     }
 
-    private void setupToolbar()
-    {
+    private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.includeToolbarPostView);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
     }
+
     public void onAddButtonClick(View v) {
         EditText editText = findViewById(R.id.addPostCommentEditText);
         String commentBody = editText.getText().toString();
@@ -293,20 +294,26 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         commentsTextView.setText(commentsText);
     }
 
-
     private Map<String, String> prepareRequestHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + config.getToken());
         return headers;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Configuration config = (Configuration) getApplicationContext();
+        if(getIntent().getExtras().get("userId") == config.getUserId()) {
             MenuInflater menuInflater = getMenuInflater();
             menuInflater.inflate(R.menu.menu_post, menu);
+        }
+        else{
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_main, menu);
+        }
         return true;
     }
+
     private Intent prepareIntent(){
         Intent intent = new Intent(getApplicationContext(),PostEditActivity.class);
         intent.putExtra("id", post.getId());
@@ -314,37 +321,37 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         intent.putExtra("body", bodyTextView.getText().toString());
         intent.putExtra("tags", tagsTextView.getText().toString());
         if(post.getPhoto()!=null)
-        intent.putExtra("photo", post.getPhoto());
+            intent.putExtra("photo", post.getPhoto());
         else intent.putExtra("photo", "");
-        intent.putExtra("category", post.getCategoryId());
+            intent.putExtra("category", post.getCategoryId());
         return intent;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logoff:
-                FireBase fireBase = new FireBase();
-                fireBase.signOut();
-                return true;
-            case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.deletePost:
-                Intent intent3 = new Intent(this, PopUpDeletePost.class);
-                intent3.putExtra("postId",getIntent().getExtras().getLong("postId"));
-                startActivity(intent3);
-                return true;
-            case R.id.editPost:
-                Intent intent = prepareIntent();
-                startActivity(intent);
-                return true;
-            case R.id.miProfile:
-                Intent intent2 = new Intent(this, UserActivity.class);
-                startActivity(intent2);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+            switch (item.getItemId()) {
+                case R.id.logoff:
+                    FireBase fireBase = new FireBase();
+                    fireBase.signOut();
+                    return true;
+                case R.id.informationAboutApp:
+                    Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.deletePost:
+                        Intent intent3 = new Intent(this, PopUpDeletePost.class);
+                        intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+                        startActivity(intent3);
+                    return true;
+                case R.id.editPost:
+                        Intent intent = prepareIntent();
+                        startActivity(intent);
+                    return true;
+                case R.id.miProfile:
+                    Intent intent2 = new Intent(this, UserActivity.class);
+                    startActivity(intent2);
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
     }
 }

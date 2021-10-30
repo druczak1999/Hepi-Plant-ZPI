@@ -85,6 +85,7 @@ public class SalesOffersListFragment extends Fragment implements
         Log.v(TAG, "onItemClick()");
         Intent intent = new Intent(getActivity().getApplicationContext(), SalesOfferActivity.class);
         intent.putExtra("salesOfferId", salesOffers[position].getId());
+        intent.putExtra("userId", salesOffers[position].getUserId());
         startActivity(intent);
     }
 

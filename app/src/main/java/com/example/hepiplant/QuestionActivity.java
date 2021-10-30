@@ -17,6 +17,7 @@ public class QuestionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PostAddActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -25,6 +26,7 @@ public class QuestionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent2 = new Intent(getApplicationContext(), SalesOfferAddActivity.class);
                 startActivity(intent2);
+                finish();
             }
         });
     }

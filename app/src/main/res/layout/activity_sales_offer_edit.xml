@@ -16,7 +16,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"></include>
 
-
     <TextView
         android:id="@+id/Add"
         android:layout_width="wrap_content"
@@ -28,7 +27,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
         style="@style/PageTitleFont"/>
-
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -44,7 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
             <ImageButton
                 android:id="@+id/editImageBut"
@@ -78,7 +75,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
                 android:id="@+id/Category"
@@ -121,7 +118,7 @@
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
                 android:id="@+id/Location"
@@ -142,7 +139,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
                 android:id="@+id/Price"
@@ -164,7 +161,7 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:inputType="numberDecimal"
-                android:text="..." />
+                android:hint="..." />
 
             <TextView
                 android:id="@+id/Tags"
@@ -187,7 +184,7 @@
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:text="..." />
+                android:hint="..." />
 
         </LinearLayout>
     </ScrollView>

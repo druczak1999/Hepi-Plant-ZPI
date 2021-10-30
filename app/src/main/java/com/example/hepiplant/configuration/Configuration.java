@@ -2,6 +2,7 @@ package com.example.hepiplant.configuration;
 
 import android.app.Application;
 import android.content.res.AssetManager;
+import android.net.Uri;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -18,6 +19,11 @@ public class Configuration extends Application {
     private String token;
     private RequestQueue queue;
     private Gson gson;
+    private Uri photo;
+
+    public Uri getPhoto() { return photo; }
+
+    public void setPhoto(Uri photo) { this.photo = photo; }
 
     public String getUrl() {
         return url;

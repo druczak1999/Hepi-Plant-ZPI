@@ -79,25 +79,27 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-        //Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemLongCLick(View view, int position) {
         Log.v(TAG, "onItemLongClick()");
-        Intent intent3 = new Intent(this, PopUpDeleteComment.class);
-        intent3.putExtra("type", "salesoffers");
-        intent3.putExtra("postId",getIntent().getExtras().getLong("postId"));
-        intent3.putExtra("commentId", salesOffer.getComments().get(position).getId());
-        startActivity(intent3);
+        Configuration config = (Configuration) getApplicationContext();
+        if (getIntent().getExtras().get("userId") == config.getUserId()) {
+            Intent intent3 = new Intent(this, PopUpDeleteComment.class);
+            intent3.putExtra("type", "salesoffers");
+            intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+            intent3.putExtra("commentId", salesOffer.getComments().get(position).getId());
+            startActivity(intent3);
+        }
     }
 
-    private void setupToolbar()
-    {
+    private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.includeToolbarSalesOfferView);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
     }
+
     public void onAddButtonClick(View v){
         EditText editText = findViewById(R.id.addSalesOfferCommentEditText);
         String commentBody = editText.getText().toString();
@@ -298,6 +300,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         String commentsText = commentsCount + getCommentsSuffix(commentsCount);
         commentsTextView.setText(commentsText);
     }
+
     private Intent prepareIntent(){
         Intent intent = new Intent(getApplicationContext(), SalesOfferEditActivity.class);
         intent.putExtra("id", salesOffer.getId());
@@ -315,10 +318,18 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_sales_offer, menu);
+        Configuration config = (Configuration) getApplicationContext();
+        if(getIntent().getExtras().get("userId") == config.getUserId()) {
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_sales_offer, menu);
+        }
+        else{
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.menu_main, menu);
+        }
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -346,10 +357,10 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private Map<String, String> prepareRequestHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + config.getToken());
         return headers;
     }
-
 }

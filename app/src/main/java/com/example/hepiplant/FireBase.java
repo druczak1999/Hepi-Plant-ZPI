@@ -126,6 +126,14 @@ public class FireBase extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (user.getPhotoUrl()!=null) {
+            Log.v(TAG, "Entering setting photo");
+            config.setPhoto(user.getPhotoUrl());
+        }
+        else
+        {
+            Log.v(TAG, "Photo is null");
+        }
         String url = config.getUrl() + "users";
         JSONObject postData = new JSONObject();
         try {
