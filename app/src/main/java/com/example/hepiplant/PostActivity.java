@@ -73,12 +73,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
-    private void setupToolbar()
-    {
+    private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.includeToolbarPostView);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
     }
+
     public void onAddButtonClick(View v) {
         EditText editText = findViewById(R.id.addPostCommentEditText);
         String commentBody = editText.getText().toString();
@@ -102,13 +102,13 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         String url = getRequestUrl();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
+            new Response.Listener<JSONObject>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(JSONObject response) {
+                    onGetResponseReceived(response);
+                }
+            }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
@@ -259,13 +259,11 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         commentsTextView.setText(commentsText);
     }
 
-
     private Map<String, String> prepareRequestHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + config.getToken());
         return headers;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

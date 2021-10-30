@@ -55,6 +55,9 @@
         <item name="android:textColor">@color/colorDarkFont</item>
         <item name="android:alpha">0.8</item>
     </style>
+    <style name="PopUpTextFont" parent="ForumPriceFont">
+        <item name="android:textSize">18sp</item>
+    </style>
 
     <!-- Buttons -->
     <style name="ButtonUniversal" parent="Theme.AppCompat.Light.NoActionBar">
@@ -65,10 +68,17 @@
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/rounded_button</item>
     </style>
-    <style name="ButtonSmall" parent="ButtonUniversal">
+    <style name="ButtonSmallGreen" parent="ButtonUniversal">
         <item name="android:textSize">16sp</item>
         <item name="android:layout_width">@dimen/button_small_width</item>
         <item name="android:layout_height">@dimen/button_small_height</item>
+    </style>
+    <style name="ButtonSmallWhite" parent="ButtonSmallGreen">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:background">@drawable/rounded_edittext</item>
+    </style>
+    <style name="ButtonSmallAdmin" parent="ButtonSmallWhite">
+        <item name="android:fontFamily">@font/roboto</item>
     </style>
     <!-- Other -->
 
