@@ -17,6 +17,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
+        <activity android:name=".MainAdminActivity"/>
+        <activity android:name=".CategoryEditActivity"/>
         <activity android:name=".PopUpDelete"
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
@@ -26,6 +28,8 @@
         <activity android:name=".PopUpDeleteComment"
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
+        <activity android:name=".PopUpDeleteCategory"
+            android:theme="@style/AppTheme.CustomTheme"/>
         <activity android:name=".PopUpDeleteSalesOffer"
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
