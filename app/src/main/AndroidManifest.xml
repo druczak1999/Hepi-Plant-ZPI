@@ -23,9 +23,6 @@
         <activity android:name=".PopUpDeletePost"
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
-        <activity
-            android:name=".PopUpDeleteCategory"
-            android:theme="@style/AppTheme.CustomTheme" />
         <activity android:name=".PopUpDeleteComment"
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
@@ -33,10 +30,6 @@
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
         <activity android:name=".PlantEditActivity" />
-        <activity
-            android:name=".CategoryEditActivity"
-            android:exported="true" />
-        <activity android:name=".EditPlantActivity" />
         <activity android:name=".PlantViewActivity" />
         <activity android:name=".CalendarActivity" />
         <activity
@@ -46,10 +39,13 @@
         <activity
             android:name=".SalesOfferActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ForumTabsActivity" />
-        <activity android:name=".PlantsListActivity"/>
+        <activity
+            android:name=".ForumTabsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PlantsListActivity"
+            android:exported="true" />
         <activity android:name=".FireBase" />
-        <activity android:name=".MainAdminActivity" />
         <activity
             android:name=".PlantAddActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -62,12 +58,6 @@
         <activity
             android:name=".SalesOfferAddActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".Logowanie" />
-        <activity android:name=".PostAddActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".QuestionActivity"></activity>
-        <activity android:name=".SalesOfferAddActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".PostEditActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".SalesOfferEditActivity"

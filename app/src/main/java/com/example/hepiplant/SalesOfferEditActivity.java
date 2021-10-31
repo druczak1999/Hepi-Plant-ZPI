@@ -360,6 +360,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                 Uri resultUri = result.getUri();
                 salesOfferImage.setImageURI(resultUri);
                 img_str=resultUri.toString();
+                saveImageToFirebase();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     salesOfferImage.setClipToOutline(true);
                 }
