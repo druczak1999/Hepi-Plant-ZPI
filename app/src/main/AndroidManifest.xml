@@ -62,12 +62,6 @@
         <activity
             android:name=".SalesOfferAddActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".Logowanie" />
-        <activity android:name=".PostAddActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".QuestionActivity"></activity>
-        <activity android:name=".SalesOfferAddActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".PostEditActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".SalesOfferEditActivity"
