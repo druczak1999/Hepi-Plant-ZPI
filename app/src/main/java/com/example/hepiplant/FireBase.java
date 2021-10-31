@@ -26,7 +26,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +38,7 @@ import java.util.List;
 public class FireBase extends AppCompatActivity {
 
     private static final String TAG = "FireBaseActivity";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Configuration config;
 
@@ -191,6 +191,7 @@ public class FireBase extends AppCompatActivity {
         UserDto data = new UserDto();
         data = config.getGson().fromJson(String.valueOf(response), UserDto.class);
         config.setUserId(data.getId());
+        config.setUserRoles(data.getRoles());
         Log.v(TAG, "POST user id " + config.getUserId());
     }
 
@@ -199,7 +200,12 @@ public class FireBase extends AppCompatActivity {
         data = config.getGson().fromJson(String.valueOf(response), AuthenticationResponseDto.class);
         config.setToken(data.getJwt());
         Log.v(TAG, "POST authentication request successful. Returned token: " + response);
-        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        Intent intent;
+        if (config.getUserRoles().contains(ROLE_ADMIN)){
+            intent = new Intent(getApplicationContext(), MainAdminActivity.class);
+        } else {
+            intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+        }
         startActivity(intent);
     }
 

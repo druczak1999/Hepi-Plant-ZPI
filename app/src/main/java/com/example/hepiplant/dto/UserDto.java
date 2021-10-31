@@ -1,7 +1,6 @@
 package com.example.hepiplant.dto;
 
-
-import com.example.hepiplant.dto.enums.Permission;
+import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -13,7 +12,7 @@ public class UserDto extends JSONObject implements Serializable {
     private String username;
     private String uid;
     private String email;
-    private Permission permission;
+    private Set<String> roles;
 
     public UserDto() {
     }
@@ -50,11 +49,11 @@ public class UserDto extends JSONObject implements Serializable {
         this.email = email;
     }
 
-    public Permission getPermission() {
-        return permission;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public void setPermission(Permission permission) {
-        this.permission = permission;
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 }

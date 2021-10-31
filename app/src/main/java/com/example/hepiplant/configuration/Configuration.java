@@ -11,11 +11,12 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Set;
 
 public class Configuration extends Application {
     private String url;
     private Long userId;
-    //backend security
+    private Set<String> userRoles;
     private String token;
     private RequestQueue queue;
     private Gson gson;
@@ -41,6 +42,14 @@ public class Configuration extends Application {
         this.userId = userId;
     }
 
+    public Set<String> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<String> userRoles) {
+        this.userRoles = userRoles;
+    }
+
     public String getToken() {
         return token;
     }
@@ -64,7 +73,6 @@ public class Configuration extends Application {
     }
 
     public String readProperties() throws IOException {
-
         Properties prop = new Properties();
         AssetManager assetManager = getApplicationContext().getAssets();
         InputStream inputStream = assetManager.open("config.properties");

@@ -100,7 +100,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
             intent3.putExtra("commentId", post.getComments().get(position).getId());
             startActivity(intent3);
-    }
+        }
     }
 
     private void setupToolbar() {

@@ -142,7 +142,7 @@
                             android:imeActionLabel="@string/add"/>
 
                         <Button
-                            style="@style/ButtonSmall"
+                            style="@style/ButtonSmallGreen"
                             android:layout_marginVertical="@dimen/margin_small"
                             android:layout_alignParentRight="true"
                             android:onClick="onAddButtonClick"

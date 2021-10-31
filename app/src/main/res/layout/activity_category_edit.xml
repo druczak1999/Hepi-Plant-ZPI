@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CategoryEditActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/includeToolbarCategoryEdit"/>
+
+    <TextView
+        android:id="@+id/categoryEditIdHeaderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_medium"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:text="@string/edit_category_id"
+        style = "@style/DetailsFontTitle" />
+
+    <TextView
+        android:id="@+id/categoryEditIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_medium"
+        android:layout_marginHorizontal="@dimen/margin_big"
+        android:text="@string/category_id"
+        style="@style/DetailsFontValue" />
+
+    <TextView
+        android:id="@+id/categoryEditNameHeaderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_medium"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:text="@string/category_name"
+        style = "@style/DetailsFontTitle" />
+
+    <EditText
+        android:id="@+id/categoryNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_medium"
+        android:layout_marginHorizontal="@dimen/margin_big"
+        style="@style/DetailsFontValue"/>
+
+    <Button
+        android:id="@+id/categoryEditSaveButton"
+        style="@style/ButtonSmallAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/save"
+        android:onClick="onSaveButtonClick"/>
+
+</LinearLayout>

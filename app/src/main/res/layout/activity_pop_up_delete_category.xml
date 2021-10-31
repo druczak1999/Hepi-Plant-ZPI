@@ -5,16 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_button">
+    android:background="@drawable/rounded_button"
+    android:backgroundTint="@android:color/darker_gray">
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/categoryDeleteQuestionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/cantata_one"
-        android:text="Czy na pewno chcesz usunąć tą ofertę?"
-        android:textColor="@color/colorPrimaryLight"
+        style="@style/PopUpTextFont"
+        android:text="@string/category_delete_question"
         android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,41 +22,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonYes"
-        style="@style/ButtonSmallGreen"
+        android:id="@+id/buttonCategoryYes"
+        style="@style/ButtonSmallAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:background="@drawable/rounded_edittext"
-        android:text="Tak"
+        android:text="@string/yes"
         android:layout_marginLeft="40sp"
-        android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryDeleteQuestionTextView" />
 
     <Button
-        android:id="@+id/buttonNo"
-        style="@style/ButtonSmallGreen"
+        android:id="@+id/buttonCategoryNo"
+        style="@style/ButtonSmallAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="40sp"
         android:layout_marginTop="28dp"
-        android:background="@drawable/rounded_edittext"
-        android:text="Nie"
-
-        android:textColor="@color/colorPrimary"
+        android:text="@string/no"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryDeleteQuestionTextView" />
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="75dp"
         android:layout_height="63dp"
         android:layout_marginBottom="12dp"
-        android:tint="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/categoryDeleteQuestionTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/delete" />
+        app:srcCompat="@drawable/delete"
+        app:tint="#FFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

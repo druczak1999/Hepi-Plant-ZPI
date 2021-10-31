@@ -4,7 +4,13 @@ import java.io.Serializable;
 
 public class CategoryDto implements Serializable {
 
+    private Long id;
+
     private String name;
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
 
     public String getName() {
         return name;
@@ -13,4 +19,5 @@ public class CategoryDto implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
 }

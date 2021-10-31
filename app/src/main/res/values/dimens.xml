@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="list_item_height">150sp</dimen>
-    <dimen name="margin_big">15sp</dimen>
-    <dimen name="margin_medium">10sp</dimen>
-    <dimen name="margin_small">5sp</dimen>
+    <dimen name="margin_big">16sp</dimen>
+    <dimen name="margin_medium">8sp</dimen>
+    <dimen name="margin_small">4sp</dimen>
     <dimen name="padding_bottom">50sp</dimen>
     <dimen name="spaceForToolbar">56sp</dimen>
     <dimen name="spaceForToolbarAndGap">61sp</dimen>
     <dimen name="spaceForToolbarAndTabs">104sp</dimen>
     <dimen name="spaceForBottomBar">112sp</dimen>
+    <dimen name="spaceForId">35sp</dimen>
+    <dimen name="spaceForIdHeader">20sp</dimen>
     <dimen name="one_sp">1sp</dimen>
     <dimen name="button_small_width">80sp</dimen>
     <dimen name="button_small_height">40sp</dimen>
     <dimen name="plant_photo_row_item_dimen">130sp</dimen>
     <dimen name="forum_photo_height">200sp</dimen>
     <dimen name="elevation_3sp">3sp</dimen>
+    <dimen name="categoryNameWidth">220sp</dimen>
 </resources>

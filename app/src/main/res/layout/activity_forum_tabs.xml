@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/forumTabsLayout"
         app:layout_constraintBottom_toTopOf="@+id/forumBottomBar"
         android:layout_marginTop="@dimen/spaceForToolbarAndTabs"
-            android:layout_marginBottom="?actionBarSize"/>
+        android:layout_marginBottom="?actionBarSize"/>
 
     <include
         android:id="@+id/forumBottomBar"
