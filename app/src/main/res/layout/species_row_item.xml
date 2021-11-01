@@ -18,7 +18,7 @@
         android:layout_marginHorizontal="@dimen/margin_medium">
 
         <TextView
-            android:id="@+id/categoryIdTextView"
+            android:id="@+id/speciesIdTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/id_placeholder"
@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/categoryNameTextView"
+                android:id="@+id/speciesNameTextView"
                 android:layout_width="wrap_content"
                 android:maxWidth="@dimen/rv_item_name_max_width"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/categoryEditLinkTextView"
+                android:id="@+id/speciesEditLinkTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/edit"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/categoryDeleteLinkTextView"
+                android:id="@+id/speciesDeleteLinkTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delete"

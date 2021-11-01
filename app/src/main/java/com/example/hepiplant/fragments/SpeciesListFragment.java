@@ -1,6 +1,5 @@
 package com.example.hepiplant.fragments;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,11 +20,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.hepiplant.CategoryAddActivity;
 import com.example.hepiplant.R;
-import com.example.hepiplant.adapter.recyclerview.CategoriesRecyclerViewAdapter;
+import com.example.hepiplant.adapter.recyclerview.SpeciesRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
-import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.SpeciesDto;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -34,21 +32,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CategoryListFragment extends Fragment implements CategoriesRecyclerViewAdapter.ItemClickListener {
+public class SpeciesListFragment extends Fragment implements SpeciesRecyclerViewAdapter.ItemClickListener {
 
-    private static final String TAG = "CategoryListFragment";
+    private static final String TAG = "SpeciesListFragment";
 
     private Configuration config;
-    private View categoriesFragmentView;
-    private RecyclerView categoriesRecyclerView;
-    private CategoriesRecyclerViewAdapter adapter;
-    private CategoryDto[] categories = new CategoryDto[]{};
+    private View speciesFragmentView;
+    private RecyclerView speciesRecyclerView;
+    private SpeciesRecyclerViewAdapter adapter;
+    private SpeciesDto[] species = new SpeciesDto[]{};
 
-    public CategoryListFragment() {
+    public SpeciesListFragment() {
     }
 
-    public static CategoryListFragment newInstance() {
-        CategoryListFragment fragment = new CategoryListFragment();
+    public static SpeciesListFragment newInstance() {
+        SpeciesListFragment fragment = new SpeciesListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -65,14 +63,14 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreateView()");
-        categoriesFragmentView = inflater.inflate(R.layout.fragment_category_list, container, false);
+        speciesFragmentView = inflater.inflate(R.layout.fragment_species_list, container, false);
 
         initView();
         setLayoutManager();
         makeGetDataRequest();
         setButtonOnClickListener();
 
-        return categoriesFragmentView;
+        return speciesFragmentView;
     }
 
     @Override
@@ -85,7 +83,7 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
 //        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class); //todo change activity to view?
-//        intent.putExtra("postId", categories[position].getId());
+//        intent.putExtra("postId", species[position].getId());
 //        startActivity(intent);
     }
 
@@ -121,13 +119,13 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "categories";
+        return config.getUrl() + "species";
     }
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
         Gson gson = new Gson();
-        categories = gson.fromJson(String.valueOf(response), CategoryDto[].class);
+        species = gson.fromJson(String.valueOf(response), SpeciesDto[].class);
         setAdapter();
     }
 
@@ -140,29 +138,30 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
     }
 
     private void initView() {
-        categoriesRecyclerView = categoriesFragmentView.findViewById(R.id.speciesRecyclerView);
+        speciesRecyclerView = speciesFragmentView.findViewById(R.id.speciesRecyclerView);
     }
 
     private void setLayoutManager() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        categoriesRecyclerView.setLayoutManager(layoutManager);
+        speciesRecyclerView.setLayoutManager(layoutManager);
     }
 
     private void setAdapter() {
-        adapter = new CategoriesRecyclerViewAdapter(getActivity(), categories);
+        adapter = new SpeciesRecyclerViewAdapter(getActivity(), species);
         adapter.setClickListener(this);
-        categoriesRecyclerView.setAdapter(adapter);
+        speciesRecyclerView.setAdapter(adapter);
     }
 
     private void setButtonOnClickListener() {
-        Button addButton = categoriesFragmentView.findViewById(R.id.speciesAddButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), CategoryAddActivity.class);
-                startActivity(intent);
-            }
-        });
+        Button addButton = speciesFragmentView.findViewById(R.id.speciesAddButton);
+        // todo implement
+//        addButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity().getApplicationContext(), SpeciesAddActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     private Map<String, String> prepareRequestHeaders(){

@@ -17,22 +17,29 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
-        <activity android:name=".MainAdminActivity"/>
-        <activity android:name=".CategoryEditActivity"/>
-        <activity android:name=".PopUpDelete"
-            android:theme="@style/AppTheme.CustomTheme">
-        </activity>
-        <activity android:name=".PopUpDeletePost"
-            android:theme="@style/AppTheme.CustomTheme">
-        </activity>
-        <activity android:name=".PopUpDeleteComment"
-            android:theme="@style/AppTheme.CustomTheme">
-        </activity>
-        <activity android:name=".PopUpDeleteCategory"
-            android:theme="@style/AppTheme.CustomTheme"/>
-        <activity android:name=".PopUpDeleteSalesOffer"
-            android:theme="@style/AppTheme.CustomTheme">
-        </activity>
+        <activity
+            android:name=".SpeciesEditActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CategoryAddActivity"
+            android:exported="true" />
+        <activity android:name=".MainAdminActivity" />
+        <activity android:name=".CategoryEditActivity" />
+        <activity
+            android:name=".PopUpDelete"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeletePost"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeleteComment"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeleteCategory"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeleteSalesOffer"
+            android:theme="@style/AppTheme.CustomTheme" />
         <activity android:name=".PlantEditActivity" />
         <activity android:name=".PlantViewActivity" />
         <activity android:name=".CalendarActivity" />
@@ -62,10 +69,12 @@
         <activity
             android:name=".SalesOfferAddActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".PostEditActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".SalesOfferEditActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".PostEditActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".SalesOfferEditActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

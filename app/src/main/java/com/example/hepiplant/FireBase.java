@@ -199,7 +199,7 @@ public class FireBase extends AppCompatActivity {
         AuthenticationResponseDto data = new AuthenticationResponseDto();
         data = config.getGson().fromJson(String.valueOf(response), AuthenticationResponseDto.class);
         config.setToken(data.getJwt());
-        Log.v(TAG, "POST authentication request successful. Returned token: " + response);
+        Log.v(TAG, "POST authentication request successful");
         Intent intent;
         if (config.getUserRoles().contains(ROLE_ADMIN)){
             intent = new Intent(getApplicationContext(), MainAdminActivity.class);

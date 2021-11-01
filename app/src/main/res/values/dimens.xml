@@ -17,5 +17,5 @@
     <dimen name="plant_photo_row_item_dimen">130sp</dimen>
     <dimen name="forum_photo_height">200sp</dimen>
     <dimen name="elevation_3sp">3sp</dimen>
-    <dimen name="categoryNameWidth">220sp</dimen>
+    <dimen name="rv_item_name_max_width">220sp</dimen>
 </resources>

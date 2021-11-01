@@ -4,24 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CategoryEditActivity"
+    tools:context=".CategoryAddActivity"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar"
-        android:id="@+id/includeToolbarCategoryEdit"/>
+        android:id="@+id/includeToolbarCategoryAdd"/>
 
     <TextView
-        android:id="@+id/categoryEditTitleTextView"
+        android:id="@+id/categoryAddTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginVertical="@dimen/margin_medium"
         android:layout_marginHorizontal="@dimen/margin_medium"
-        android:text="@string/edit_category_title"
+        android:text="@string/add_category_title"
         style = "@style/ListItemTitleFont" />
 
     <TextView
-        android:id="@+id/categoryEditNameHeaderTextView"
+        android:id="@+id/categoryAddNameHeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_medium"
@@ -30,7 +30,7 @@
         style = "@style/DetailsFontTitle" />
 
     <EditText
-        android:id="@+id/categoryNameEditEditText"
+        android:id="@+id/categoryNameAddEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_medium"
@@ -38,7 +38,7 @@
         style="@style/DetailsFontValue"/>
 
     <Button
-        android:id="@+id/categoryEditSaveButton"
+        android:id="@+id/categoryAddSaveButton"
         style="@style/ButtonSmallAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

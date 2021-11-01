@@ -23,7 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
-import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.SpeciesDto;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,18 +32,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CategoryEditActivity extends AppCompatActivity {
+public class SpeciesEditActivity extends AppCompatActivity {
 
-    private static final String TAG = "CategoryEditActivity";
+    private static final String TAG = "SpeciesEditActivity";
 
     private Configuration config;
-    private CategoryDto category;
+    private SpeciesDto species;
     private EditText nameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_edit);
+        setContentView(R.layout.activity_species_edit);
 
         config = (Configuration) getApplicationContext();
         makeGetDataRequest();
@@ -78,7 +78,7 @@ public class CategoryEditActivity extends AppCompatActivity {
 
     public void onSaveButtonClick(View view){
         String editedName = nameEditText.getText().toString().trim();
-        if(!category.getName().equals(editedName) && !editedName.isEmpty()){
+        if(!species.getName().equals(editedName) && !editedName.isEmpty()){
             JSONObject postData = new JSONObject();
             try {
                 postData.put("name", editedName);
@@ -90,18 +90,19 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
 
     private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.includeToolbarCategoryEdit);
+        Toolbar toolbar = findViewById(R.id.includeToolbarSpeciesEdit);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
     }
 
     private void setupViewsData() {
-        TextView editTitleView = findViewById(R.id.categoryEditTitleTextView);
-        String editTitle = getResources().getString(R.string.edit_category_title) +
-                " " + category.getId();
+        TextView editTitleView = findViewById(R.id.speciesEditTitleTextView);
+        String editTitle = getResources().getString(R.string.edit_species_title) +
+                " " + species.getId();
         editTitleView.setText(editTitle);
-        nameEditText = findViewById(R.id.categoryNameEditEditText);
-        nameEditText.setText(category.getName());
+        nameEditText = findViewById(R.id.speciesNameEditEditText);
+        nameEditText.setText(species.getName());
+        // todo add the rest of views
     }
 
     private void makeGetDataRequest() {
@@ -133,14 +134,14 @@ public class CategoryEditActivity extends AppCompatActivity {
         String url = getRequestUrl();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
-            new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(JSONObject response) {
-                    makeInfoToast("Edytowano kategorię o id " + category.getId());
-                    finish();
-                }
-            }, new Response.ErrorListener() {
+                new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        makeInfoToast("Edytowano gatunek o id " + species.getId());
+                        finish();
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
@@ -162,12 +163,12 @@ public class CategoryEditActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "categories/" + getIntent().getExtras().get("categoryId");
+        return config.getUrl() + "species/" + getIntent().getExtras().get("speciesId");
     }
 
     private void onGetResponseReceived(JSONObject response) {
         Log.v(TAG, "onGetResponseReceived()");
-        category = config.getGson().fromJson(String.valueOf(response), CategoryDto.class);
+        species = config.getGson().fromJson(String.valueOf(response), SpeciesDto.class);
         setupViewsData();
     }
 
@@ -188,5 +189,4 @@ public class CategoryEditActivity extends AppCompatActivity {
     private void makeInfoToast(String info) {
         Toast.makeText(getApplicationContext(),info,Toast.LENGTH_LONG).show();
     }
-
 }
