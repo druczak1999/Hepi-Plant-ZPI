@@ -31,6 +31,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,10 +48,13 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.time.LocalDateTime.now;
 
 
 public class PlantAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -148,7 +152,9 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
-                        onPostResponsePlant(response);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            onPostResponsePlant(response);
+                        }
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -232,13 +238,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         return postData;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPostResponsePlant(JSONObject response){
         Log.v(TAG, "ONResponse");
         String str = String.valueOf(response); //http request
         PlantDto data = new PlantDto();
         data = config.getGson().fromJson(str, PlantDto.class);
-        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-        startActivity(intent);
     }
 
     private void onErrorResponsePlant(VolleyError error){

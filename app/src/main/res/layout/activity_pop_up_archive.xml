@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/cantata_one"
-        android:text="Czy na pewno chcesz usunąć tę roślinę?"
+        android:text="Czy na pewno wykonano to zadanie?"
         android:textColor="@color/colorPrimaryLight"
         android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonYes"
+        android:id="@+id/buttonYesArchive"
         style="@style/ButtonSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/buttonNo"
+        android:id="@+id/buttonNoArchive"
         style="@style/ButtonSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,6 +55,6 @@
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/delete" />
+        android:src="@drawable/check_box" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

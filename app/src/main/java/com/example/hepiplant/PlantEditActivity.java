@@ -339,7 +339,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -459,8 +458,9 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         PlantDto data = new PlantDto();
         Gson gson = new Gson();
         data = gson.fromJson(str, PlantDto.class);
-        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        Intent intent = new Intent(this,MainTabsActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private Map<String, String> prepareRequestHeaders(){

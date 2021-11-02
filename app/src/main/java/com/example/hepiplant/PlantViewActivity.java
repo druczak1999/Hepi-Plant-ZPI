@@ -206,7 +206,7 @@ public class PlantViewActivity extends AppCompatActivity {
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                 startActivity(intent);
             }
         });
@@ -266,6 +266,11 @@ public class PlantViewActivity extends AppCompatActivity {
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);
                 startActivity(intent2);
+                return true;
+            case R.id.archivePlant:
+                Intent intent1 = new Intent(this,ArchiveActivity.class);
+                intent1.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
+                startActivity(intent1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -10,11 +10,13 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class Configuration extends Application {
     private String url;
     private Long userId;
+    private ArrayList usersPlantsIdList;
     //backend security
     private String token;
     private RequestQueue queue;
@@ -39,6 +41,14 @@ public class Configuration extends Application {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public ArrayList getUsersPlantsIdList() {
+        return usersPlantsIdList;
+    }
+
+    public void setUsersPlantsIdList(ArrayList usersPlantsIdList) {
+        this.usersPlantsIdList = usersPlantsIdList;
     }
 
     public String getToken() {

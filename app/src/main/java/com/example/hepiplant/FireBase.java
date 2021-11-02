@@ -199,7 +199,7 @@ public class FireBase extends AppCompatActivity {
         data = config.getGson().fromJson(String.valueOf(response), AuthenticationResponseDto.class);
         config.setToken(data.getJwt());
         Log.v(TAG, "POST authentication request successful. Returned token: " + response);
-        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         startActivity(intent);
     }
 
