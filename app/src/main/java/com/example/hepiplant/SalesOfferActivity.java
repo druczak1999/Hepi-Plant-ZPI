@@ -68,7 +68,6 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_offer);
-
         config = (Configuration) getApplicationContext();
         initView();
         setLayoutManager();
@@ -343,6 +342,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         intent.putExtra("body", bodyTextView.getText().toString());
         intent.putExtra("tags", tagsTextView.getText().toString());
         intent.putExtra("price", salesOffer.getPrice().toString());
+        Log.v(TAG,"Category id: "+salesOffer.getCategoryId());
+        intent.putExtra("categoryId", salesOffer.getCategoryId().toString());
         intent.putExtra("location", dateTextView.getText().toString());
         if(salesOffer.getPhoto()!=null)
             intent.putExtra("photo", salesOffer.getPhoto());

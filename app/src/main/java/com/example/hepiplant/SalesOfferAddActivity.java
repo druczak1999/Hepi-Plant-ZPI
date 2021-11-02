@@ -267,7 +267,6 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
-                        categories.add("Brak");
                         for (int i = 0; i < data.length; i++) {
                             categories.add(data[i].getName());
                         }

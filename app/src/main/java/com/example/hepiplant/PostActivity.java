@@ -356,6 +356,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         intent.putExtra("name", titleTextView.getText().toString());
         intent.putExtra("body", bodyTextView.getText().toString());
         intent.putExtra("tags", tagsTextView.getText().toString());
+        Log.v(TAG,"Category id: "+post.getCategoryId());
+        intent.putExtra("categoryId", post.getCategoryId().toString());
         if(post.getPhoto()!=null)
             intent.putExtra("photo", post.getPhoto());
         else intent.putExtra("photo", "");
