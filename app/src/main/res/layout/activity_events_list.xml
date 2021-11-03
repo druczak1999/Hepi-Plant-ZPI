@@ -28,7 +28,7 @@
             android:paddingBottom="10sp"
             android:text="Archiwum"
             android:textAppearance="@style/PageTitleFont"
-            android:textSize="25dp"/>
+           />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/eventsArchRecyclerView"

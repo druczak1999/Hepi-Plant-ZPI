@@ -3,6 +3,8 @@ package com.example.hepiplant;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -33,6 +35,7 @@ public class ArchiveActivity extends AppCompatActivity {
     private static final String TAG = "ArchiveActivity";
     private RecyclerView rv;
     private EventsRecyclerViewAdapter adapter;
+    //TODO change view on item in archive
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +44,6 @@ public class ArchiveActivity extends AppCompatActivity {
         rv = findViewById(R.id.eventsArchRecyclerView);
         setLayoutManager();
         makeGetDataRequest();
-//        adapter = new EventsRecyclerViewAdapter(this,events);
-//        rv.setAdapter(adapter);
-//        rv.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     private void makeGetDataRequest() {
@@ -88,10 +87,6 @@ public class ArchiveActivity extends AppCompatActivity {
         Gson gson = new Gson();
         events = gson.fromJson(String.valueOf(response), EventDto[].class);
         Log.v(TAG,"DL: "+events.length);
-        for (EventDto event: events ) {
-            Log.v(TAG,"Czy tak: "+event.isDone());
-        }
-        Log.v(TAG, "DL: "+events.length);
         setAdapter();
     }
 

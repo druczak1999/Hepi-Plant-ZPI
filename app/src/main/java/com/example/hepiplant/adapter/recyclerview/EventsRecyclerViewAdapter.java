@@ -9,13 +9,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.hepiplant.MainTabsActivity;
 import com.example.hepiplant.PopUpArchive;
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.EventDto;
@@ -39,7 +35,6 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         private final TextView event;
         private final TextView plant;
         private final CheckBox checkBox;
-
 
         public ViewHolder(View view) {
             super(view);
@@ -120,6 +115,8 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
                     intent.putExtra("eventDate",dataSet.get(position).getEventDate());
                     intent.putExtra("eventId",dataSet.get(position).getId());
                     intent.putExtra("eventDescription",dataSet.get(position).getEventDescription());
+                    intent.putExtra("plantId",dataSet.get(position).getPlantId());
+                    intent.putExtra("plantName",dataSet.get(position).getPlantName());
                     contextAll.startActivity(intent);
                 }
             }
@@ -147,8 +144,4 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         void onItemClick(View view, int position);
     }
 
-    // Change the dataset of the adapter (call adapter.notifyItemRangeChanged() afterwards)
-    public void updateData(EventDto[] newDataSet){
-        this.dataSet = new ArrayList<>(Arrays.asList(newDataSet));
-    }
 }

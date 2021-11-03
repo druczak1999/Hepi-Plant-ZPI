@@ -17,6 +17,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
+        <activity android:name=".EventViewActivity"></activity>
         <activity android:name=".ArchiveActivity" />
         <activity android:name=".PopUpArchive" />
         <activity android:name=".MainTabsActivity" />

@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.hepiplant.EventViewActivity;
 import com.example.hepiplant.PostActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.EventsRecyclerViewAdapter;
@@ -84,9 +85,11 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
+        Intent intent = new Intent(getActivity().getApplicationContext(), EventViewActivity.class);
         intent.putExtra("eventName", events[position].getEventName());
-        intent.putExtra("plantId", events[position].getPlantId());
+        intent.putExtra("plantName", events[position].getPlantName());
+        intent.putExtra("eventDate",events[position].getEventDate());
+        intent.putExtra("eventDescription",events[position].getEventDescription());
         startActivity(intent);
     }
 
@@ -129,9 +132,6 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
         Log.v(TAG, "onGetResponseReceived()");
         Gson gson = new Gson();
         events = gson.fromJson(String.valueOf(response), EventDto[].class);
-        for (EventDto event: events ) {
-            Log.v(TAG,"Czy tak: "+event.isDone());
-        }
         Log.v(TAG, "DL: "+events.length);
         setAdapter();
     }
