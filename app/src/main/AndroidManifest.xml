@@ -38,6 +38,9 @@
             android:name=".PopUpDeleteCategory"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
+            android:name=".PopUpDeleteSpecies"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
             android:name=".PopUpDeleteSalesOffer"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity android:name=".PlantEditActivity" />

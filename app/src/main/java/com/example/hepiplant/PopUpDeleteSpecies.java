@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class PopUpDeleteCategory extends AppCompatActivity {
+public class PopUpDeleteSpecies extends AppCompatActivity {
 
-    private static final String TAG = "PopUpDeleteCategory";
+    private static final String TAG = "PopUpDeleteSpecies";
 
     private Button yes, no;
     private Configuration config;
@@ -51,8 +51,8 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         yes = findViewById(R.id.adminButtonYes);
         no = findViewById(R.id.adminButtonNo);
 
-        String deleteQuestion = getResources().getString(R.string.category_delete_question) +
-                " " + getIntent().getExtras().getLong("categoryId") +
+        String deleteQuestion = getResources().getString(R.string.species_delete_question) +
+                " " + getIntent().getExtras().getLong("speciesId") +
                 "?";
         questionView.setText(deleteQuestion);
 
@@ -66,7 +66,7 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteCategory();
+                deleteSpecies();
             }
         });
     }
@@ -78,19 +78,19 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "categories/" + id;
+        return config.getUrl() + "species/" + id;
     }
 
-    private void deleteCategory(){
-        String url = getRequestUrl(getIntent().getExtras().getLong("categoryId"));
+    private void deleteSpecies(){
+        String url = getRequestUrl(getIntent().getExtras().getLong("speciesId"));
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
-            new Response.Listener<String>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(String response) {
-                    onResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
+                new Response.Listener<String>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(String response) {
+                        onResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
@@ -108,9 +108,9 @@ public class PopUpDeleteCategory extends AppCompatActivity {
     private void onResponseReceived(String response) {
         Log.v(TAG, response);
         if(response.toLowerCase(Locale.ROOT).contains("successfully deleted")){
-            Toast.makeText(getApplicationContext(),"Usunięto kategorię",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Usunięto gatunek",Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),"Usuwanie kategorii nie powiodło się",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Usuwanie gatunku nie powiodło się",Toast.LENGTH_LONG).show();
         }
         finish();
     }

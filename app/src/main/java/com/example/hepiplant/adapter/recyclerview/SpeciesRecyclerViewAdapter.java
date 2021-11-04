@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hepiplant.PopUpDeleteSpecies;
 import com.example.hepiplant.R;
 import com.example.hepiplant.SpeciesEditActivity;
 import com.example.hepiplant.dto.SpeciesDto;
@@ -90,15 +91,15 @@ public class SpeciesRecyclerViewAdapter extends RecyclerView.Adapter<SpeciesRecy
                 viewHolder.getId().getContext().startActivity(intent);
             }
         });
-//        viewHolder.getDelete().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.v(TAG, "onItemClick() Delete");
-//                Intent intent = new Intent(viewHolder.getId().getContext(), PopUpDeleteSpecies.class);
-//                intent.putExtra("speciesId", dataSet.get(viewHolder.getAdapterPosition()).getId());
-//                viewHolder.getId().getContext().startActivity(intent);
-//            }
-//        });
+        viewHolder.getDelete().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "onItemClick() Delete");
+                Intent intent = new Intent(viewHolder.getId().getContext(), PopUpDeleteSpecies.class);
+                intent.putExtra("speciesId", dataSet.get(viewHolder.getAdapterPosition()).getId());
+                viewHolder.getId().getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override

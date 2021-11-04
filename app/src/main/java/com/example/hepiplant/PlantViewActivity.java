@@ -92,7 +92,7 @@ public class PlantViewActivity extends AppCompatActivity {
         misting.setText(getFrequency("misting", getIntent()));
         soil.setText(getIntent().getExtras().getString("soil"));
         placement.setText(getIntent().getExtras().getString("location"));
-        location.setText(getIntent().getExtras().getString("placement").toLowerCase());
+        location.setText(getIntent().getExtras().getString("placement"));
         date.setText(getIntent().getExtras().getString("date").replaceFirst("00:00:00",""));
         if(!getIntent().getExtras().getString("photo").isEmpty()){
             getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo") );

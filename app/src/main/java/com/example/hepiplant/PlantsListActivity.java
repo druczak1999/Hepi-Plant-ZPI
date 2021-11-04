@@ -77,7 +77,7 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         if(plants[position].getSpecies()!=null){
             intent.putExtra("species",plants[position].getSpecies().getName());
             intent.putExtra("soil",plants[position].getSpecies().getSoil());
-            intent.putExtra("placement",plants[position].getSpecies().getPlacement().toString());
+            intent.putExtra("placement",plants[position].getSpecies().getPlacement().getName());
         }
         else{
             intent.putExtra("species","");

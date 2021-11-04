@@ -5,12 +5,8 @@ import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,15 +38,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -272,7 +264,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void setupViewsData() {
         dateTextView = findViewById(R.id.postDateTextViewSingle);
-        dateTextView.setText(post.getCreatedDate());
+        dateTextView.setText(post.getCreatedDateString());
         titleTextView = findViewById(R.id.postTitleTextViewSingle);
         titleTextView.setText(post.getTitle());
         tagsTextView = findViewById(R.id.postTagsTextViewSingle);

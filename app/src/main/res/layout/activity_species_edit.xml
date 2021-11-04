@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,32 +10,202 @@
     <include layout="@layout/toolbar"
         android:id="@+id/includeToolbarSpeciesEdit"/>
 
-    <TextView
-        android:id="@+id/speciesEditTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginVertical="@dimen/margin_medium"
-        android:layout_marginHorizontal="@dimen/margin_medium"
-        android:text="@string/edit_species_title"
-        style = "@style/ListItemTitleFont" />
-
-    <TextView
-        android:id="@+id/speciesEditNameHeaderTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/margin_medium"
-        android:layout_marginHorizontal="@dimen/margin_medium"
-        android:text="@string/name_placeholder"
-        style = "@style/DetailsFontTitle" />
-
-    <EditText
-        android:id="@+id/speciesNameEditEditText"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/margin_medium"
-        android:layout_marginHorizontal="@dimen/margin_big"
-        style="@style/DetailsFontValue"/>
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/spaceForToolbar"
+        android:layout_marginBottom="@dimen/spaceForBottomButton">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/speciesEditTitleTextView"
+                style="@style/ListItemTitleFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/edit_species_title" />
+
+            <TextView
+                android:id="@+id/speciesEditNameHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/name_placeholder" />
+
+            <EditText
+                android:id="@+id/speciesNameEditEditText"
+                style="@style/DetailsFontValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" />
+
+            <TextView
+                android:id="@+id/speciesEditCategoryHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/category_placeholder" />
+
+            <Spinner
+                android:id="@+id/speciesCategoryEditSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spinner_height"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium"
+                style="@style/DetailsFontValue"/>
+
+            <TextView
+                android:id="@+id/speciesEditWateringFrequencyHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/watering_frequency_placeholder" />
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" >
+
+                <EditText
+                    android:id="@+id/speciesWateringFrequencyEditEditText"
+                    style="@style/DetailsFontValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/days_hint"
+                    android:layout_marginRight="10dp"
+                    style="@style/DetailsFontValue" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/speciesEditFertilizingFrequencyHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/fertilizing_frequency_placeholder" />
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" >
+
+                <EditText
+                    android:id="@+id/speciesFertilizingFrequencyEditEditText"
+                    style="@style/DetailsFontValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/days_hint"
+                    android:layout_marginRight="10dp"
+                    style="@style/DetailsFontValue" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/speciesEditMistingFrequencyHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/misting_frequency_placeholder" />
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" >
+
+                <EditText
+                    android:id="@+id/speciesMistingFrequencyEditEditText"
+                    style="@style/DetailsFontValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/days_hint"
+                    android:layout_marginRight="10dp"
+                    style="@style/DetailsFontValue" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/speciesEditPlacementHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/placement_placeholder" />
+
+            <Spinner
+                android:id="@+id/speciesPlacementEditSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spinner_height"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium"
+                style="@style/DetailsFontValue"/>
+
+            <TextView
+                android:id="@+id/speciesEditSoilHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/soil_placeholder" />
+
+            <EditText
+                android:id="@+id/speciesSoilEditEditText"
+                style="@style/DetailsFontValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <Button
         android:id="@+id/speciesEditSaveButton"
@@ -44,6 +214,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/save"
-        android:onClick="onSaveButtonClick"/>
+        android:onClick="onSaveButtonClick"
+        android:layout_marginVertical="@dimen/margin_big"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
