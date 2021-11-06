@@ -140,7 +140,7 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
     }
 
     private void initView() {
-        categoriesRecyclerView = categoriesFragmentView.findViewById(R.id.speciesRecyclerView);
+        categoriesRecyclerView = categoriesFragmentView.findViewById(R.id.categoryRecyclerView);
     }
 
     private void setLayoutManager() {
