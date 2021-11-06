@@ -60,7 +60,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     private RecyclerView recyclerView;
     private SalesOfferDto salesOffer;
     private CommentDto[] comments = new CommentDto[]{};
-    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView;
+    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView, postAuthorTextView;
     private ImageView photoImageView;
 
     @Override
@@ -68,7 +68,6 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_offer);
-
         config = (Configuration) getApplicationContext();
         initView();
         setLayoutManager();
@@ -90,12 +89,11 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     @Override
     public void onItemLongCLick(View view, int position) {
-        Log.v(TAG, "onItemLongClick()");
-        Configuration config = (Configuration) getApplicationContext();
-        if (getIntent().getExtras().get("userId") == config.getUserId()) {
+        if (salesOffer.getComments().get(position).getUserId() == config.getUserId()){
+            Log.v(TAG, "onItemLongClick()");
             Intent intent3 = new Intent(this, PopUpDeleteComment.class);
             intent3.putExtra("type", "salesoffers");
-            intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+            intent3.putExtra("postId", getIntent().getExtras().getLong("salesOfferId"));
             intent3.putExtra("commentId", salesOffer.getComments().get(position).getId());
             startActivity(intent3);
         }
@@ -275,6 +273,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         dateTextView.setText(salesOffer.getLocation());
         titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
         titleTextView.setText(salesOffer.getTitle());
+        postAuthorTextView = findViewById(R.id.postAuthorTextView);
+        postAuthorTextView.setText(salesOffer.getUsername());
         tagsTextView = findViewById(R.id.salesOfferTagsTextViewSingle);
         StringBuilder tags = new StringBuilder();
         for (String s : salesOffer.getTags()) {
@@ -344,6 +344,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         intent.putExtra("body", bodyTextView.getText().toString());
         intent.putExtra("tags", tagsTextView.getText().toString());
         intent.putExtra("price", salesOffer.getPrice().toString());
+        Log.v(TAG,"Category id: "+salesOffer.getCategoryId());
+        intent.putExtra("categoryId", salesOffer.getCategoryId().toString());
         intent.putExtra("location", dateTextView.getText().toString());
         if(salesOffer.getPhoto()!=null)
             intent.putExtra("photo", salesOffer.getPhoto());

@@ -226,8 +226,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             }
             else postData.put("location", location.getText().toString());
             postData.put("photo", img_str);
-            if(categoryId==0) postData.put("categoryId", null);
-            else postData.put("categoryId", categoryId);
+            postData.put("categoryId", categoryId);
             if(speciesDto == null ) postData.put("species", null);
             else postData.put("species", speciesJson);
             postData.put("userId", config.getUserId());
@@ -333,7 +332,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         data = config.getGson().fromJson(String.valueOf(str), SpeciesDto[].class);
         speciesDtos = data;
         List<String> sp = new ArrayList<String>();
-        sp.add("Brak");
         for (int i = 0; i < data.length; i++) {
             sp.add(data[i].getName());
         }
@@ -379,7 +377,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         CategoryDto[] data = new CategoryDto[]{};
         data = config.getGson().fromJson(String.valueOf(str), CategoryDto[].class);
         List<String> categories = new ArrayList<String>();
-        categories.add("Brak");
         for (int i = 0; i < data.length; i++) {
             categories.add(data[i].getName());
         }
@@ -433,12 +430,10 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Spinner speciesSpinner = (Spinner) parent;
         Spinner categorySpinner = (Spinner) parent;
         if (speciesSpinner.getId() == R.id.editSpecies) {
-            if(position==0) speciesDto = null;
-            else speciesDto = speciesDtos[position-1];
+            speciesDto = speciesDtos[position];
         }
         if (categorySpinner.getId() == R.id.editCategory) {
-            if(position==0) categoryId=0;
-            else categoryId = position;
+            categoryId = position+1;
         }
     }
 

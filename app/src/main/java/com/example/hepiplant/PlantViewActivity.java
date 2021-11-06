@@ -93,6 +93,9 @@ public class PlantViewActivity extends AppCompatActivity {
         watering.setText(getFrequency("watering", getIntent()));
         fertilizing.setText(getFrequency("fertilizing", getIntent()));
         misting.setText(getFrequency("misting", getIntent()));
+        soil.setText(getIntent().getExtras().getString("soil"));
+        placement.setText(getIntent().getExtras().getString("location"));
+        location.setText(getIntent().getExtras().getString("placement"));
         if(!Objects.requireNonNull(getIntent().getExtras().getString("soil")).isEmpty())
             soil.setText(getIntent().getExtras().getString("soil"));
         else
@@ -237,6 +240,8 @@ public class PlantViewActivity extends AppCompatActivity {
         intent.putExtra("name",plantName.getText().toString());
         intent.putExtra("photo",getIntent().getExtras().getString("photo"));
         intent.putExtra("species",species.getText());
+        Log.v(TAG,"Value of species id: "+getIntent().getExtras().getString("speciesId"));
+        intent.putExtra("speciesId", getIntent().getExtras().getString("speciesId"));
         intent.putExtra("watering",getIntent().getExtras().getString("watering"));
         intent.putExtra("fertilizing",getIntent().getExtras().getString("fertilizing"));
         intent.putExtra("misting",getIntent().getExtras().getString("misting"));

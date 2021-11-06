@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Częstość podlewania"
+                android:text="@string/watering_frequency_placeholder"
                 style = "@style/DetailsFontTitle"
 
                  />
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Częstość nawożenia"
+                android:text="@string/fertilizing_frequency_placeholder"
                 style = "@style/DetailsFontTitle"
                 />
 
@@ -146,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Częstość zraszania"
+                android:text="@string/misting_frequency_placeholder"
                 style = "@style/DetailsFontTitle"
                  />
 

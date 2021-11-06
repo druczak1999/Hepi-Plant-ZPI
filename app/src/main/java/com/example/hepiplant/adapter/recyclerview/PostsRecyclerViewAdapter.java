@@ -5,7 +5,6 @@ import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,14 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.PostDto;
-import com.example.hepiplant.dto.UserDto;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -74,9 +71,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             return body;
         }
 
-        public ImageView getPhoto() {
-            return photo;
-        }
+        public ImageView getPhoto() { return photo; }
 
         public TextView getComments() {
             return comments;
@@ -106,7 +101,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Log.v(TAG, "onBindViewHolder() position: "+position);
-        viewHolder.getDate().setText(dataSet.get(position).getCreatedDate());
+        viewHolder.getDate().setText(dataSet.get(position).getCreatedDateString());
         viewHolder.getTitle().setText(dataSet.get(position).getTitle());
         viewHolder.getAuthor().setText(dataSet.get(position).getUsername());
         StringBuilder tags = new StringBuilder();

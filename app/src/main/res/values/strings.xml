@@ -14,5 +14,28 @@
     <string name="comment_body_holder">To nie ma tak, że dobrze, albo że niedobrze. Gdybym miał powiedzieć, co cenię w życiu najbardziej, powiedziałbym, że ludzi. Ludzi, którzy podali mi pomocną dłoń, kiedy sobie nie radziłem, kiedy byłem sam, i co ciekawe, to właśnie przypadkowe spotkania wpływają na nasze życie.</string>
     <string name="add_comment">Dodaj komentarz</string>
     <string name="add">Dodaj</string>
+    <string name="edit">Edytuj</string>
+    <string name="delete">Usuń</string>
+    <string name="name_placeholder">Nazwa</string>
+    <string name="id_placeholder">Id</string>
+    <string name="watering_frequency_placeholder">Częstość podlewania</string>
+    <string name="fertilizing_frequency_placeholder">Częstość nawożenia</string>
+    <string name="misting_frequency_placeholder">Częstość zraszania</string>
+    <string name="placement_placeholder">Stanowisko</string>
+    <string name="soil_placeholder">Rodzaj gleby</string>
+    <string name="category_placeholder">Kategoria</string>
+    <string name="action">Akcja</string>
+    <string name="edit_category_id">Id kategorii</string>
+    <string name="save">Zapisz</string>
+    <string name="category_delete_question">Czy na pewno chcesz usunąć kategorię o id </string>
+    <string name="species_delete_question">Czy na pewno chcesz usunąć gatunek o id </string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="edit_category_title">Edytuj kategorię o id </string>
+    <string name="add_category_title">Dodaj kategorię</string>
+    <string name="edit_species_title">Edytuj gatunek o id </string>
+    <string name="add_species_title">Dodaj gatunek</string>
+    <string name="days_hint">dni</string>
+    <string name="zero">0</string>
 
 </resources>

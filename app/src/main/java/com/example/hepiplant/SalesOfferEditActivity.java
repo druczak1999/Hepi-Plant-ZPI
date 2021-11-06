@@ -144,7 +144,6 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
-                        categories.add("Brak");
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
                         }
@@ -230,6 +229,10 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
+        if(getIntent().getExtras().getString("categoryId") != null) {
+            Log.v(TAG, "Species id value: "+getIntent().getExtras().getString("categoryId"));
+            spinnerCat.setSelection(Integer.parseInt(getIntent().getExtras().getString("categoryId") )-1);
+        }
     }
 
     @Override
@@ -360,6 +363,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                 Uri resultUri = result.getUri();
                 salesOfferImage.setImageURI(resultUri);
                 img_str=resultUri.toString();
+                saveImageToFirebase();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     salesOfferImage.setClipToOutline(true);
                 }

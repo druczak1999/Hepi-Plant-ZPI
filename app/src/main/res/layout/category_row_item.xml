@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="@dimen/margin_medium"
+    android:gravity="center_vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_big"
+        android:layout_marginHorizontal="@dimen/margin_medium">
+
+        <TextView
+            android:id="@+id/categoryIdTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/id_placeholder"
+            style="@style/ListItemDescriptionFont"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/spaceForId"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/categoryNameTextView"
+                android:layout_width="wrap_content"
+                android:maxWidth="@dimen/rv_item_name_max_width"
+                android:layout_height="wrap_content"
+                android:text="@string/name_placeholder"
+                style="@style/ListItemDescriptionFont"/>
+
+            <Space
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/categoryEditLinkTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit"
+                style="@style/ListItemDescriptionFont"
+                android:textColor="@color/colorPrimary"/>
+
+            <Space
+                android:layout_width="@dimen/margin_big"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/categoryDeleteLinkTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delete"
+                style="@style/ListItemDescriptionFont"
+                android:textColor="@color/red" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

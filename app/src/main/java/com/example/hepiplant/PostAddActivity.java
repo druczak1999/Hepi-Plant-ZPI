@@ -89,7 +89,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
-    private JSONObject makeSalesOfferDataJson(){
+    private JSONObject makePostDataJson(){
         JSONObject postData = new JSONObject();
         try {
             postData.put("title", title.getText().toString());
@@ -115,7 +115,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         }
 
         String url = config.getUrl() + "posts";
-        JSONObject postData = makeSalesOfferDataJson();
+        JSONObject postData = makePostDataJson();
         Log.v(TAG, String.valueOf(postData));
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
                 new Response.Listener<JSONObject>() {
@@ -264,7 +264,6 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
-                        categories.add("Brak");
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
                         }

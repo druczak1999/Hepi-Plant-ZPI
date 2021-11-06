@@ -43,6 +43,33 @@
         <activity
             android:name=".PlantEditActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".SpeciesEditActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CategoryAddActivity"
+            android:exported="true" />
+        <activity android:name=".MainAdminActivity" />
+        <activity android:name=".CategoryEditActivity" />
+        <activity
+            android:name=".PopUpDelete"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeletePost"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeleteComment"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeleteCategory"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeleteSpecies"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeleteSalesOffer"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".PlantEditActivity" />
         <activity android:name=".PlantViewActivity" />
         <activity android:name=".CalendarActivity" />
         <activity

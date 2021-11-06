@@ -87,6 +87,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         getSpeciesFromDB();
         setBottomBarOnItemClickListeners();
         setOnClickListeners();
+
     }
 
     private void setValuesToEdit(){
@@ -135,7 +136,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
         speciesDtos = data;
         List<String> sp = new ArrayList<String>();
-        sp.add("Brak");
         for (int i = 0; i < data.length; i++) {
             sp.add(data[i].getName());
         }
@@ -174,6 +174,10 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGat.setAdapter(dtoArrayAdapter);
+        if(getIntent().getExtras().getString("speciesId") != null) {
+            Log.v(TAG, "Species id value: "+getIntent().getExtras().getString("speciesId"));
+            spinnerGat.setSelection(Integer.parseInt(getIntent().getExtras().getString("speciesId") )-1);
+        }
     }
 
     private String onResponseStr(String response){
@@ -198,8 +202,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner speciesSpinner = (Spinner) parent;
         if (speciesSpinner.getId() == R.id.speciesEdit) {
-            if(position==0) speciesDto = null;
-            else speciesDto = speciesDtos[position-1];
+            speciesDto = speciesDtos[position];
         }
     }
 
@@ -439,8 +442,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
             }
             else postData.put("location", placement.getText().toString());
             postData.put("photo", img_str);
-
-            if(speciesDto == null ) postData.put("species", null);
+            Log.v(TAG, "SPINNER"+String.valueOf(spinnerGat.getSelectedItemId()));
+            if(speciesDto == null){
+                Log.v(TAG, "SPINNER"+String.valueOf(spinnerGat.getSelectedItemId()));
+                postData.put("species", null);
+            }
             else postData.put("species", speciesJson);
             postData.put("userId", config.getUserId());
             postData.put("schedule", scheduleJ);

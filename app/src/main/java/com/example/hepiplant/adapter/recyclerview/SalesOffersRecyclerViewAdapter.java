@@ -77,9 +77,7 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
             return tags;
         }
 
-        public TextView getBody() {
-            return body;
-        }
+        public TextView getBody() { return body; }
 
         public ImageView getPhoto() {
             return photo;

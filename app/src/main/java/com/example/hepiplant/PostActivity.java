@@ -5,12 +5,8 @@ import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,15 +38,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +55,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     private RecyclerView recyclerView;
     private PostDto post;
     private CommentDto[] comments = new CommentDto[]{};
-    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView;
+    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, postAuthorTextView;
     private ImageView photoImageView;
 
     @Override
@@ -100,7 +92,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
             intent3.putExtra("commentId", post.getComments().get(position).getId());
             startActivity(intent3);
-    }
+        }
     }
 
     private void setupToolbar() {
@@ -272,10 +264,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void setupViewsData() {
         dateTextView = findViewById(R.id.postDateTextViewSingle);
-        dateTextView.setText(post.getCreatedDate());
+        dateTextView.setText(post.getCreatedDateString());
         titleTextView = findViewById(R.id.postTitleTextViewSingle);
         titleTextView.setText(post.getTitle());
         tagsTextView = findViewById(R.id.postTagsTextViewSingle);
+        postAuthorTextView = findViewById(R.id.postAuthorTextView);
+        postAuthorTextView.setText(post.getUsername());
         StringBuilder tags = new StringBuilder();
         for (String s : post.getTags()) {
             tags.append(" #").append(s);
@@ -356,6 +350,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         intent.putExtra("name", titleTextView.getText().toString());
         intent.putExtra("body", bodyTextView.getText().toString());
         intent.putExtra("tags", tagsTextView.getText().toString());
+        Log.v(TAG,"Category id: "+post.getCategoryId());
+        intent.putExtra("categoryId", post.getCategoryId().toString());
         if(post.getPhoto()!=null)
             intent.putExtra("photo", post.getPhoto());
         else intent.putExtra("photo", "");
