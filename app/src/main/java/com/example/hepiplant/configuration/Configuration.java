@@ -17,7 +17,6 @@ import java.util.Set;
 public class Configuration extends Application {
     private String url;
     private Long userId;
-    private ArrayList usersPlantsIdList;
     //backend security
     private Set<String> userRoles;
     private String token;
@@ -53,13 +52,6 @@ public class Configuration extends Application {
         this.userRoles = userRoles;
     }
 
-    public ArrayList getUsersPlantsIdList() {
-        return usersPlantsIdList;
-    }
-
-    public void setUsersPlantsIdList(ArrayList usersPlantsIdList) {
-        this.usersPlantsIdList = usersPlantsIdList;
-    }
 
     public String getToken() {
         return token;

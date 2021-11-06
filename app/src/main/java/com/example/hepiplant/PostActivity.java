@@ -264,7 +264,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void setupViewsData() {
         dateTextView = findViewById(R.id.postDateTextViewSingle);
-        dateTextView.setText(post.getCreatedDateString());
+        dateTextView.setText(post.getCreatedDate());
         titleTextView = findViewById(R.id.postTitleTextViewSingle);
         titleTextView.setText(post.getTitle());
         tagsTextView = findViewById(R.id.postTagsTextViewSingle);

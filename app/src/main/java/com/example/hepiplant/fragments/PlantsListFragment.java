@@ -157,8 +157,6 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         for (PlantDto plant: plants) {
            plantsIdList.add(plant.getId());
         }
-        config.setUsersPlantsIdList(plantsIdList);
-        Log.v(TAG,config.getUsersPlantsIdList().toString());
         setAdapter();
     }
 
