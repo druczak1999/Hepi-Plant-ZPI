@@ -72,7 +72,7 @@ public class FireBase extends AppCompatActivity {
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .setLogo(R.drawable.plant)      // Set logo drawable
-                .setTheme(R.style.ButtonSmallWhite)
+                .setTheme(R.style.ButtonSmallGreen)
                 .build();
         signInLauncher.launch(signInIntent);
     }

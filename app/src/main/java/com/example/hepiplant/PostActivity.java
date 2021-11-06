@@ -85,7 +85,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     @Override
     public void onItemLongCLick(View view, int position) {
-        if (post.getComments().get(position).getUserId() == config.getUserId()){
+        if (post.getComments().get(position).getUserId().equals(config.getUserId())){
             Log.v(TAG, "onItemLongClick()");
             Intent intent3 = new Intent(this, PopUpDeleteComment.class);
             intent3.putExtra("type", "posts");

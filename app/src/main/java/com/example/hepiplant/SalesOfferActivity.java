@@ -89,7 +89,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     @Override
     public void onItemLongCLick(View view, int position) {
-        if (salesOffer.getComments().get(position).getUserId() == config.getUserId()){
+        if (salesOffer.getComments().get(position).getUserId().equals(config.getUserId())){
             Log.v(TAG, "onItemLongClick()");
             Intent intent3 = new Intent(this, PopUpDeleteComment.class);
             intent3.putExtra("type", "salesoffers");
