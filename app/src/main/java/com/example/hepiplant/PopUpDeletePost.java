@@ -101,7 +101,7 @@ public class PopUpDeletePost extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.v(TAG, response);
-                        if(!getIntent().getExtras().getString("photo").isEmpty()) deletePhotoFromFirebase();
+                        if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
                         Toast.makeText(getApplicationContext(),"Usunięto post",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
                         startActivity(intent);
