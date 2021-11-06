@@ -51,6 +51,14 @@
                         android:textAppearance="@style/ListItemTitleFont" />
 
                     <TextView
+                        android:id="@+id/postAuthorTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:text="Autor"
+                        android:textAppearance="@style/ListItemTitleFont" />
+
+                    <TextView
                         android:id="@+id/postTagsTextViewSingle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

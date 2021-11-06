@@ -60,7 +60,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     private RecyclerView recyclerView;
     private SalesOfferDto salesOffer;
     private CommentDto[] comments = new CommentDto[]{};
-    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView;
+    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView, postAuthorTextView;
     private ImageView photoImageView;
 
     @Override
@@ -273,6 +273,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         dateTextView.setText(salesOffer.getLocation());
         titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
         titleTextView.setText(salesOffer.getTitle());
+        postAuthorTextView = findViewById(R.id.postAuthorTextView);
+        postAuthorTextView.setText(salesOffer.getUsername());
         tagsTextView = findViewById(R.id.salesOfferTagsTextViewSingle);
         StringBuilder tags = new StringBuilder();
         for (String s : salesOffer.getTags()) {

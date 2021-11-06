@@ -63,7 +63,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     private RecyclerView recyclerView;
     private PostDto post;
     private CommentDto[] comments = new CommentDto[]{};
-    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView;
+    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, postAuthorTextView;
     private ImageView photoImageView;
 
     @Override
@@ -276,6 +276,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         titleTextView = findViewById(R.id.postTitleTextViewSingle);
         titleTextView.setText(post.getTitle());
         tagsTextView = findViewById(R.id.postTagsTextViewSingle);
+        postAuthorTextView = findViewById(R.id.postAuthorTextView);
+        postAuthorTextView.setText(post.getUsername());
         StringBuilder tags = new StringBuilder();
         for (String s : post.getTags()) {
             tags.append(" #").append(s);
