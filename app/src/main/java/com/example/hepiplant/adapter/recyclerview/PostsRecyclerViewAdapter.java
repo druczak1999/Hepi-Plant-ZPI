@@ -74,9 +74,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             return body;
         }
 
-        public ImageView getPhoto() {
-            return photo;
-        }
+        public ImageView getPhoto() { return photo; }
 
         public TextView getComments() {
             return comments;

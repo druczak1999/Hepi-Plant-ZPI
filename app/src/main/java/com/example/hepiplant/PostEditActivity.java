@@ -135,7 +135,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
-                        categories.add("Brak");
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
                         }
@@ -164,6 +163,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
+        if(getIntent().getExtras().getString("categoryId") != null) {
+            Log.v(TAG, "Category id value: "+getIntent().getExtras().getString("categoryId"));
+            spinnerCat.setSelection(Integer.parseInt(getIntent().getExtras().getString("categoryId"))-1);
+        }
     }
 
     @Override

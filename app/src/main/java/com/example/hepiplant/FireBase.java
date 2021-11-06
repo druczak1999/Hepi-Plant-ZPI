@@ -71,10 +71,10 @@ public class FireBase extends AppCompatActivity {
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setLogo(R.drawable.plant)
+                .setLogo(R.drawable.plant)      // Set logo drawable
+                .setTheme(R.style.ButtonSmall)
                 .build();
         signInLauncher.launch(signInIntent);
-
     }
 
 
@@ -101,7 +101,7 @@ public class FireBase extends AppCompatActivity {
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
-                        // ...
+                        startActivity(new Intent(getApplicationContext(), FireBase.class));
                     }
                 });
     }
