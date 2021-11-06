@@ -93,8 +93,17 @@ public class EventViewActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.menu_event, menu);
         return true;
+    }
+
+    private Intent prepareIntent(){
+        Intent intent = new Intent(this,EventEditActivity.class);
+        intent.putExtra("eventName", getIntent().getExtras().getString("eventName"));
+        intent.putExtra("eventDate",getIntent().getExtras().getString("eventDate"));
+        intent.putExtra("eventDescription",getIntent().getExtras().getString("eventDescription"));
+        intent.putExtra("eventId",getIntent().getExtras().getLong("eventId"));
+        return intent;
     }
 
     @Override
@@ -110,6 +119,12 @@ public class EventViewActivity extends AppCompatActivity {
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);
                 startActivity(intent2);
+                return true;
+            case R.id.editEvent:
+                Intent intent = prepareIntent();
+                startActivity(intent);
+                return true;
+            case R.id.deleteEvent:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

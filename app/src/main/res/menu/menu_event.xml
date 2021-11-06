@@ -22,14 +22,14 @@
 
                 />
             <item
-            android:id="@+id/editPost"
-            android:title="Edytuj post"
+            android:id="@+id/editEvent"
+            android:title="Edytuj wydarzenie"
             app:showAsAction="never"
 
             />
             <item
-                android:id="@+id/deletePost"
-                android:title="Usuń post"
+                android:id="@+id/deleteEvent"
+                android:title="Usuń wydarzenie"
                 app:showAsAction="never"
                 />
         </menu>

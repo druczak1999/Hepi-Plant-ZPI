@@ -220,7 +220,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                 startActivity(intent);
             }
         });
@@ -235,8 +235,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void setOnClickListeners(){
-        setBottomBarOnItemClickListeners();
-
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

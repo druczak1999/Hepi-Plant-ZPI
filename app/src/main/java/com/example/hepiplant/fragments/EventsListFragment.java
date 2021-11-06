@@ -86,6 +86,7 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
         Intent intent = new Intent(getActivity().getApplicationContext(), EventViewActivity.class);
+        intent.putExtra("eventId", events[position].getId());
         intent.putExtra("eventName", events[position].getEventName());
         intent.putExtra("plantName", events[position].getPlantName());
         intent.putExtra("eventDate",events[position].getEventDate());
