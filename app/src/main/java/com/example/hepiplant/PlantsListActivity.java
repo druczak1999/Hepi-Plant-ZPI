@@ -79,7 +79,7 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
             Log.v(TAG,"Value of species id: "+String.valueOf(plants[position].getSpecies().getId()));
             intent.putExtra("speciesId",plants[position].getSpecies().getId().toString());
             intent.putExtra("soil",plants[position].getSpecies().getSoil());
-            intent.putExtra("placement",plants[position].getSpecies().getPlacement().toString());
+            intent.putExtra("placement",plants[position].getSpecies().getPlacement().getName());
         }
         else{
             intent.putExtra("species","");

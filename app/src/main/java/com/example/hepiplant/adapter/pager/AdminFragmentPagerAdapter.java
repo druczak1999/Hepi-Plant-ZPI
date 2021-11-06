@@ -7,11 +7,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.hepiplant.fragments.CategoryListFragment;
+import com.example.hepiplant.fragments.SpeciesListFragment;
 
 public class AdminFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private final int PAGE_COUNT = 1;
-    private final String[] tabTitles = new String[] { "Kategorie"};
+    private final int PAGE_COUNT = 2;
+    private final String[] tabTitles = new String[] { "Kategorie", "Gatunki"};
     private Context context;
 
     public AdminFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -29,6 +30,8 @@ public class AdminFragmentPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return new CategoryListFragment();
+            case 1:
+                return new SpeciesListFragment();
             default:
                 return null;
         }

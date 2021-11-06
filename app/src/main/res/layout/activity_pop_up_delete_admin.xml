@@ -10,7 +10,7 @@
 
 
     <TextView
-        android:id="@+id/categoryDeleteQuestionTextView"
+        android:id="@+id/adminDeleteQuestionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/PopUpTextFont"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonCategoryYes"
+        android:id="@+id/adminButtonYes"
         style="@style/ButtonSmallAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,10 +30,10 @@
         android:text="@string/yes"
         android:layout_marginLeft="40sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryDeleteQuestionTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/adminDeleteQuestionTextView" />
 
     <Button
-        android:id="@+id/buttonCategoryNo"
+        android:id="@+id/adminButtonNo"
         style="@style/ButtonSmallAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,14 +41,14 @@
         android:layout_marginTop="28dp"
         android:text="@string/no"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryDeleteQuestionTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/adminDeleteQuestionTextView" />
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="75dp"
         android:layout_height="63dp"
         android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/categoryDeleteQuestionTextView"
+        app:layout_constraintBottom_toTopOf="@+id/adminDeleteQuestionTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/delete"

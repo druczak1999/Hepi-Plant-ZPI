@@ -66,7 +66,7 @@
             <EditText
                 android:id="@+id/editPlantName"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="@dimen/spinner_height"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
@@ -87,7 +87,7 @@
             <Spinner
                 android:id="@+id/editSpecies"
                 android:layout_width="fill_parent"
-                android:layout_height="46dp"
+                android:layout_height="@dimen/spinner_height"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
@@ -108,7 +108,7 @@
             <Spinner
                 android:id="@+id/editCategory"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="@dimen/spinner_height"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
@@ -122,19 +122,19 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 style="@style/DetailsFontTitle"
-                android:text="Częstość podlewania"
+                android:text="@string/watering_frequency_placeholder"
                  />
 
             <EditText
                 android:id="@+id/editWatering"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="@dimen/spinner_height"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:text="0"
+                android:text="@string/zero"
                 style="@style/DetailsFontValue"
                 android:inputType="numberSigned"
                 android:drawableRight="@drawable/dni"/>
@@ -153,7 +153,7 @@
             <EditText
                 android:id="@+id/editPlantLocation"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="@dimen/spinner_height"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
 
@@ -177,7 +177,7 @@
             <Button
                 android:id="@+id/editPlantDate"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="@dimen/spinner_height"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
