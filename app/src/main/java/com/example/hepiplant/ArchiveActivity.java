@@ -1,10 +1,12 @@
 package com.example.hepiplant;
 
+
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -17,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.hepiplant.adapter.recyclerview.EventsArchiveRecyclerViewAdapter;
 import com.example.hepiplant.adapter.recyclerview.EventsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
@@ -28,13 +31,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArchiveActivity extends AppCompatActivity {
+public class ArchiveActivity extends AppCompatActivity implements EventsArchiveRecyclerViewAdapter.ItemClickListener{
 
     EventDto[] events;
     private Configuration config;
     private static final String TAG = "ArchiveActivity";
     private RecyclerView rv;
-    private EventsRecyclerViewAdapter adapter;
+    private EventsArchiveRecyclerViewAdapter adapter;
     //TODO change view on item in archive
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,7 @@ public class ArchiveActivity extends AppCompatActivity {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
     }
+
     private Map<String, String> prepareRequestHeaders(){
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + config.getToken());
@@ -104,12 +108,27 @@ public class ArchiveActivity extends AppCompatActivity {
     }
 
     private void setAdapter() {
-        adapter = new EventsRecyclerViewAdapter(this, events);
-//        adapter.setClickListener((EventsRecyclerViewAdapter.ItemClickListener) this);
+        adapter = new EventsArchiveRecyclerViewAdapter(this, events);
+        adapter.setClickListener((EventsArchiveRecyclerViewAdapter.ItemClickListener) this);
         rv.setAdapter(adapter);
     }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.v(TAG, "onItemClick()");
+        Intent intent = new Intent(this, EventViewActivity.class);
+        intent.putExtra("eventId", events[position].getId());
+        intent.putExtra("eventName", events[position].getEventName());
+        intent.putExtra("plantName", events[position].getPlantName());
+        intent.putExtra("eventDate",events[position].getEventDate());
+        intent.putExtra("eventDescription",events[position].getEventDescription());
+        intent.putExtra("place","archive");
+        startActivity(intent);
+    }
+
     private void setLayoutManager() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
     }
+
 }

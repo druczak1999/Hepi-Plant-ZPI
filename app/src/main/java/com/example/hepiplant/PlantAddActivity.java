@@ -99,6 +99,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+                intent.putExtra("event","plant");
                 startActivityForResult(intent, 1);
             }
         });

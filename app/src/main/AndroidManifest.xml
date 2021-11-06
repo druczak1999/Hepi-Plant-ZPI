@@ -17,7 +17,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
-        <activity android:name=".EventEditActivity"></activity>
+        <activity android:name=".PopUpDeleteEvent"
+            android:theme="@style/AppTheme.CustomTheme"/>
+        <activity
+            android:name=".EventEditActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".EventViewActivity" />
         <activity android:name=".ArchiveActivity" />
         <activity

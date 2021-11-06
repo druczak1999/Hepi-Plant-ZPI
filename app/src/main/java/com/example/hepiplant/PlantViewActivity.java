@@ -79,20 +79,32 @@ public class PlantViewActivity extends AppCompatActivity {
 
     private void setTextsToRealValues(){
         plantName.setText(getIntent().getExtras().getString("plantName"));
-        species.setText(getIntent().getExtras().getString("species"));
+        if(!Objects.requireNonNull(getIntent().getExtras().getString("species")).isEmpty())
+            species.setText(getIntent().getExtras().getString("species"));
+        else
+            species.setText("Brak przypisanego gatunku");
         if(getIntent().getExtras().getString("category")!=null && !getIntent().getExtras().getString("category").isEmpty()){
             getCategoryName(Integer.parseInt(Objects.requireNonNull(getIntent().getExtras().getString("category"))));
 
         }
         else{
-            category.setText("");
+            category.setText("Brak przypisanej kategorii");
         }
         watering.setText(getFrequency("watering", getIntent()));
         fertilizing.setText(getFrequency("fertilizing", getIntent()));
         misting.setText(getFrequency("misting", getIntent()));
-        soil.setText(getIntent().getExtras().getString("soil"));
-        placement.setText(getIntent().getExtras().getString("location"));
-        location.setText(getIntent().getExtras().getString("placement").toLowerCase());
+        if(!Objects.requireNonNull(getIntent().getExtras().getString("soil")).isEmpty())
+            soil.setText(getIntent().getExtras().getString("soil"));
+        else
+            soil.setText("Brak zalecanej gleby");
+        if(!Objects.requireNonNull(getIntent().getExtras().getString("location")).isEmpty())
+            placement.setText(getIntent().getExtras().getString("location"));
+        else
+            placement.setText("Brak przypisanego pomieszczenia");
+        if(!Objects.requireNonNull(getIntent().getExtras().getString("placement")).isEmpty())
+            location.setText(getIntent().getExtras().getString("placement").toLowerCase());
+        else
+            location.setText("Brak zalecanego stanowiska");
         date.setText(getIntent().getExtras().getString("date").replaceFirst("00:00:00",""));
         if(!getIntent().getExtras().getString("photo").isEmpty()){
             getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo") );

@@ -91,6 +91,7 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
         intent.putExtra("plantName", events[position].getPlantName());
         intent.putExtra("eventDate",events[position].getEventDate());
         intent.putExtra("eventDescription",events[position].getEventDescription());
+        intent.putExtra("place","list");
         startActivity(intent);
     }
 

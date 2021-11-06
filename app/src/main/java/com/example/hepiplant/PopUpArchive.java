@@ -69,7 +69,7 @@ public class PopUpArchive extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                patchEventResponse();
+                makeGetDataRequest();
             }
         });
     }
@@ -85,7 +85,6 @@ public class PopUpArchive extends AppCompatActivity {
     }
 
     private void patchEventResponse(){
-        makeGetDataRequest();
         JSONObject postData = new JSONObject();
         try {
             postData.put("eventName",getIntent().getExtras().getString("eventName"));
@@ -224,6 +223,7 @@ public class PopUpArchive extends AppCompatActivity {
         Log.v(TAG, "onGetResponseReceived()");
         plant = config.getGson().fromJson(String.valueOf(response), PlantDto.class);
         Log.v(TAG,plant.getName());
+        patchEventResponse();
     }
 
     private void onErrorResponsePlant(VolleyError error){

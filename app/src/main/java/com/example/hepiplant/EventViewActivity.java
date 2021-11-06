@@ -90,13 +90,6 @@ public class EventViewActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_event, menu);
-        return true;
-    }
-
     private Intent prepareIntent(){
         Intent intent = new Intent(this,EventEditActivity.class);
         intent.putExtra("eventName", getIntent().getExtras().getString("eventName"));
@@ -104,6 +97,16 @@ public class EventViewActivity extends AppCompatActivity {
         intent.putExtra("eventDescription",getIntent().getExtras().getString("eventDescription"));
         intent.putExtra("eventId",getIntent().getExtras().getLong("eventId"));
         return intent;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        if(getIntent().getExtras().getString("place").equals("archive"))
+            menuInflater.inflate(R.menu.menu_archive_event, menu);
+        else
+            menuInflater.inflate(R.menu.menu_event, menu);
+        return true;
     }
 
     @Override
@@ -125,6 +128,9 @@ public class EventViewActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.deleteEvent:
+                Intent intent1 = new Intent(this, PopUpDeleteEvent.class);
+                intent1.putExtra("eventId",getIntent().getExtras().getLong("eventId"));
+                startActivity(intent1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

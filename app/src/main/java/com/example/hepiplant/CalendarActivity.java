@@ -22,7 +22,10 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         calendarView = findViewById(R.id.calendarView);
-        calendarView.setMaxDate(new Date().getTime());
+        if(getIntent().getExtras().getString("event").equals("plant"))
+            calendarView.setMaxDate(new Date().getTime());
+        else
+            calendarView.setMinDate(new Date().getTime());
         button = findViewById(R.id.buttonDate);
         textView = findViewById(R.id.textViewDate);
 
