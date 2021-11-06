@@ -101,7 +101,7 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Log.v(TAG, "onBindViewHolder() position: "+position);
-        viewHolder.getDate().setText(dataSet.get(position).getCreatedDateString());
+        viewHolder.getDate().setText(dataSet.get(position).getCreatedDate());
         viewHolder.getTitle().setText(dataSet.get(position).getTitle());
         viewHolder.getAuthor().setText(dataSet.get(position).getUsername());
         StringBuilder tags = new StringBuilder();
