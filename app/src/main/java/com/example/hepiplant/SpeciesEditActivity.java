@@ -26,13 +26,13 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.SpeciesDto;
 import com.example.hepiplant.dto.enums.Placement;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,16 +40,21 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SpeciesEditActivity extends AppCompatActivity {
 
     private static final String TAG = "SpeciesEditActivity";
-    private static final List<Placement> placementList = Arrays.asList(Placement.BARDZO_JASNE, Placement.JASNE, Placement.POLCIENISTE, Placement.ZACIENIONE);
+    private static final List<Placement> placementList = Arrays.asList(
+            Placement.BARDZO_JASNE,
+            Placement.JASNE,
+            Placement.POLCIENISTE,
+            Placement.ZACIENIONE);
 
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private SpeciesDto species;
     private CategoryDto[] categories;
     private EditText nameEditText, wateringEditText, fertilizingEditText,
@@ -65,8 +70,11 @@ public class SpeciesEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_species_edit);
 
         config = (Configuration) getApplicationContext();
-        makeGetDataRequest(getRequestUrl() + "species/" + getIntent().getExtras().get("speciesId"), SpeciesDto.class, false);
-        makeGetDataRequest(getRequestUrl() + "categories", CategoryDto.class, true);
+        requestProcessor = new JSONRequestProcessor(config);
+        speciesResponseHandler = new JSONResponseHandler<>(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
+        makeGetDataRequest(getRequestUrl() + "species/" + getIntent().getExtras().get("speciesId"), false);
+        makeGetDataRequest(getRequestUrl() + "categories", true);
         setupToolbar();
     }
 
@@ -188,7 +196,7 @@ public class SpeciesEditActivity extends AppCompatActivity {
                 selectedPosition = categoryNameList.indexOf(c.getName());
             }
         }
-        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categoryNameList);
+        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categoryNameList);
         categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoriesAdapter);
         categorySpinner.setSelection(selectedPosition);
@@ -201,7 +209,7 @@ public class SpeciesEditActivity extends AppCompatActivity {
         for(Placement p:placementList){
             placementNameList.add(p.getName());
         }
-        ArrayAdapter<String> placementAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, placementNameList);
+        ArrayAdapter<String> placementAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, placementNameList);
         placementAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         placementSpinner.setAdapter(placementAdapter);
         if(species.getPlacement() != null){
@@ -243,58 +251,34 @@ public class SpeciesEditActivity extends AppCompatActivity {
         placementSpinner.setOnItemSelectedListener(placementListener);
     }
 
-    private void makeGetDataRequest(String url, Class clazz, boolean isArrayRequest) {
-        JsonRequest jsonRequest;
-        if(isArrayRequest){
-            jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+    private void makeGetDataRequest(String url, boolean isArrayRequest) {
+        requestProcessor.makeRequest(Request.Method.GET, url, null, isArrayRequest ? RequestType.ARRAY : RequestType.OBJECT,
+            isArrayRequest ? new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response, clazz);
+                        onGetResponseReceived(response);
                     }
-                }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    onErrorResponseReceived(error);
-                }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    return prepareRequestHeaders();
-                }
-            };
-        } else {
-            jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+                } :  new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
-                        onGetResponseReceived(response, clazz);
+                        onGetResponseReceived(response);
                     }
-                }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    onErrorResponseReceived(error);
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    return prepareRequestHeaders();
-                }
-            };
-        }
-
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonRequest);
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onErrorResponseReceived(error);
+            }
+        });
     }
 
     private void makePatchDataRequest(JSONObject postData) {
         String url = getRequestUrl() + "species/" + getIntent().getExtras().get("speciesId");
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
                     makeInfoToast("Edytowano gatunek o id " + species.getId());
@@ -305,15 +289,7 @@ public class SpeciesEditActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        Log.v(TAG, "Post data: " + postData);
-        config.getQueue().add(jsonObjectRequest);
+        });
     }
 
     @NonNull
@@ -326,19 +302,15 @@ public class SpeciesEditActivity extends AppCompatActivity {
         return config.getUrl();
     }
 
-    private void onGetResponseReceived(JSONArray response, Class clazz) {
+    private void onGetResponseReceived(JSONArray response) {
         Log.v(TAG, "onGetResponseReceived() for JSONArray");
-        if(clazz.getSimpleName().equals("CategoryDto")){
-            categories = (CategoryDto[]) config.getGson().fromJson(String.valueOf(response), CategoryDto[].class);
-        }
+        categories = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
         setupViewsData();
     }
 
-    private void onGetResponseReceived(JSONObject response, Class clazz) {
+    private void onGetResponseReceived(JSONObject response) {
         Log.v(TAG, "onGetResponseReceived() for JSONObject");
-        if(clazz.getSimpleName().equals("SpeciesDto")){
-            species = (SpeciesDto) config.getGson().fromJson(String.valueOf(response), clazz);
-        }
+        species = speciesResponseHandler.handleResponse(response, SpeciesDto.class);
         setupViewsData();
     }
 
@@ -348,12 +320,6 @@ public class SpeciesEditActivity extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 
     private void makeInfoToast(String info) {

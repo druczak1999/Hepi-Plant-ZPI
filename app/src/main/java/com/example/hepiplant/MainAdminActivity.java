@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.hepiplant.adapter.pager.AdminFragmentPagerAdapter;
-import com.example.hepiplant.adapter.recyclerview.CategoriesRecyclerViewAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainAdminActivity extends AppCompatActivity {

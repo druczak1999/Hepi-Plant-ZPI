@@ -1,10 +1,9 @@
 package com.example.hepiplant.dto;
 
-import java.util.Set;
-
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public class UserDto extends JSONObject implements Serializable {
 

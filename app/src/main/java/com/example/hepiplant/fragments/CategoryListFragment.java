@@ -20,25 +20,26 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.hepiplant.CategoryAddActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.CategoriesRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.google.gson.Gson;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 
 import org.json.JSONArray;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CategoryListFragment extends Fragment implements CategoriesRecyclerViewAdapter.ItemClickListener {
 
     private static final String TAG = "CategoryListFragment";
 
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private View categoriesFragmentView;
     private RecyclerView categoriesRecyclerView;
     private CategoriesRecyclerViewAdapter adapter;
@@ -59,6 +60,8 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         config = (Configuration) getActivity().getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
     }
 
     @Nullable
@@ -87,12 +90,13 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
 //        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class); //todo change activity to view?
 //        intent.putExtra("postId", categories[position].getId());
 //        startActivity(intent);
+
     }
 
     private void makeGetDataRequest(){
         String url = getRequestUrl();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
             new Response.Listener<JSONArray>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
@@ -102,16 +106,8 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+                    onErrorResponseReceived(error);
+            }});
     }
 
     @NonNull
@@ -126,8 +122,7 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        categories = gson.fromJson(String.valueOf(response), CategoryDto[].class);
+        categories = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
         setAdapter();
     }
 
@@ -163,12 +158,6 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
                 startActivity(intent);
             }
         });
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 
 }

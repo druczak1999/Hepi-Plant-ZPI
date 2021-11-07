@@ -5,7 +5,6 @@ import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hepiplant.R;
-import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

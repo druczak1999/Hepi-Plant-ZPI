@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hepiplant.CategoryEditActivity;
-import com.example.hepiplant.PlantViewActivity;
 import com.example.hepiplant.PopUpDeleteCategory;
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.CategoryDto;
