@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
@@ -60,13 +61,14 @@ import java.util.Map;
 public class PostAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "AddPost";
     private Spinner spinnerCat;
-    private int categoryId=0;
+    private CategoryDto selectedCategory;
     private String img_str = null;
     private ImageView addImageButton;
     private TextView tags, title, body;
     private Button add;
     private static final int PICK_IMAGE = 2;
     private Configuration config;
+    private CategoryDto[] categoryDtos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +99,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             postData.put("tags", hashReading());
             postData.put("photo", img_str);
             postData.put("userId", config.getUserId());
-            postData.put("categoryId", categoryId);
+            postData.put("categoryId", selectedCategory.getId());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -264,8 +266,10 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                         Gson gson = new Gson();
                         data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
+                        categoryDtos = new CategoryDto[data.length];
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
+                            categoryDtos[i] = data[i];
                         }
                         getCategories(categories);
 
@@ -297,12 +301,14 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner cspin = (Spinner) parent;
-        if(cspin.getId() == R.id.editCategory)
-        {
-            categoryId = position+1;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+            for(CategoryDto c : categoryDtos){
+                if(c.getName().equals(selectedItem)){
+                    selectedCategory = c;
+                    break;
+                }
+            }
         }
-    }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
