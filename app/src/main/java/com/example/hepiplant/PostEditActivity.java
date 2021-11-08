@@ -238,12 +238,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
-    }
-
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -290,7 +284,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         JSONObject postData = makePostDataJson();
         Log.v(TAG, String.valueOf(postData));
         Log.v(TAG, "Invoking categoryRequestProcessor");
-        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.ARRAY,
+        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
