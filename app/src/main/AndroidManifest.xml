@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
         <activity
+            android:name=".SpeciesAddActivity"
+            android:exported="true" />
+        <activity
             android:name=".SpeciesEditActivity"
             android:exported="true" />
         <activity
@@ -42,6 +45,9 @@
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
             android:name=".PopUpDeleteSalesOffer"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PopUpDeleteTag"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity android:name=".PlantEditActivity" />
         <activity android:name=".PlantViewActivity" />

@@ -5,7 +5,6 @@ import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,25 +29,23 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.adapter.recyclerview.CommentsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CommentDto;
-import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class SalesOfferActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
 
@@ -56,6 +53,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     private static final String CURRENCY = "zł";
 
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<SalesOfferDto> salesOfferResponseHandler;
     private CommentsRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private SalesOfferDto salesOffer;
@@ -69,6 +68,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_offer);
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        salesOfferResponseHandler = new JSONResponseHandler<>(config);
         initView();
         setLayoutManager();
         makeGetDataRequest();
@@ -126,8 +127,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private void makeGetDataRequest(){
         String url = getRequestUrl();
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
@@ -139,20 +140,13 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonObjectRequest);
+        });
     }
 
     private void makePostDataRequest(JSONObject postData){
         String url = getRequestUrl() + "/comments";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
@@ -164,14 +158,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonObjectRequest);
+        });
     }
 
     @NonNull
@@ -186,7 +173,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private void onGetResponseReceived(JSONObject response){
         Log.v(TAG, "onGetResponseReceived()");
-        salesOffer = config.getGson().fromJson(String.valueOf(response), SalesOfferDto.class);
+        salesOffer = salesOfferResponseHandler.handleResponse(response, SalesOfferDto.class);
         comments = salesOffer.getComments().toArray(comments);
         int tempSize = 0;
         for (int i = 0; i < comments.length; i++) {
@@ -398,11 +385,5 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }

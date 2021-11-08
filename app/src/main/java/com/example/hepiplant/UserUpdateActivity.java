@@ -6,32 +6,33 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.UserDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class UserUpdateActivity extends AppCompatActivity {
+
     private static final String TAG = "UserUpdateActivity";
-    private UserDto userDto;
+
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<UserDto> userResponseHandler;
+    private UserDto userDto;
     private TextView usernameValue, userEmail;
     private Button save;
 
@@ -39,6 +40,9 @@ public class UserUpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_update);
+        config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        userResponseHandler = new JSONResponseHandler<>(config);
         setBottomBarOnItemClickListeners();
         setupViewsData();
         getRequestUser();
@@ -46,31 +50,15 @@ public class UserUpdateActivity extends AppCompatActivity {
     }
 
     private void getRequestUser(){
-        Intent intent = this.getIntent();
-        RequestQueue queue = Volley.newRequestQueue(this);
-        config = (Configuration) getApplicationContext();
-        try {
-            config.setUrl(config.readProperties());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String url =config.getUrl()+"users/"+config.getUserId();
-
-        // Request a string response from the provided URL.
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+        String url = getRequestUrl() +"users/"+config.getUserId();
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         // Display the response string.
-                        Log.v(TAG, "Request successful. Response is: " + response);
-                        String str = String.valueOf(response); //http request
-
-                        UserDto data = new UserDto();
-                        data = config.getGson().fromJson(str, UserDto.class);
-                        userDto = data;
-                        usernameValue.setText(data.getUsername());
-                        userEmail.setText(data.getEmail());
+                        onGetResponse(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -78,19 +66,29 @@ public class UserUpdateActivity extends AppCompatActivity {
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
                 usernameValue.setText(error.getMessage());
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        queue.add(jsonArrayRequest);
+        });
     }
 
-    private void editRequestUser()
-    {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url =config.getUrl()+"users/"+config.getUserId();
+    private void onGetResponse(JSONObject response) {
+        Log.v(TAG, "Request successful. Response is: " + response);
+        UserDto data = new UserDto();
+        data = userResponseHandler.handleResponse(response, UserDto.class);
+        userDto = data;
+        usernameValue.setText(data.getUsername());
+        userEmail.setText(data.getEmail());
+    }
+
+    private String getRequestUrl() {
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return config.getUrl();
+    }
+
+    private void editRequestUser(){
+        String url = getRequestUrl() + "users/"+config.getUserId();
         save.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -103,7 +101,8 @@ public class UserUpdateActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Log.v(TAG, "On Click. Attempting patch request"+usernameValue.getText().toString());
-                JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+                Log.v(TAG, "Invoking categoryRequestProcessor");
+                requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                         new Response.Listener<JSONObject>() {
                             @RequiresApi(api = Build.VERSION_CODES.N)
                             @Override
@@ -115,26 +114,20 @@ public class UserUpdateActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage());
                     }
-                }){
-                    @Override
-                    public Map<String, String> getHeaders() {
-                        return prepareRequestHeaders();
-                    }
-                };
-                queue.add(jsonArrayRequest);
+                });
                 finish();
             }
         });
     }
 
     private void setupViewsData(){
-        usernameValue = (EditText) findViewById(R.id.usernameValueUserView);
-        userEmail = (TextView) findViewById(R.id.emailValueUserView);
-        save = (Button) findViewById(R.id.save);
+        usernameValue = findViewById(R.id.usernameValueUserView);
+        userEmail = findViewById(R.id.emailValueUserView);
+        save = findViewById(R.id.save);
     }
 
     private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = (Button) findViewById(R.id.buttonDom);
+        Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
@@ -142,18 +135,12 @@ public class UserUpdateActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonForum = (Button) findViewById(R.id.buttonForum);
+        Button buttonForum = findViewById(R.id.buttonForum);
         buttonForum.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
                 startActivity(intent);
             }
         });
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }

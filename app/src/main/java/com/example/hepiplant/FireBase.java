@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.AuthenticationResponseDto;
 import com.example.hepiplant.dto.UserDto;
+import com.example.hepiplant.helper.JSONResponseHandler;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
@@ -189,7 +190,8 @@ public class FireBase extends AppCompatActivity {
     private void onPostResponseReceived(JSONObject response) {
         Log.v(TAG, "POST user request successful. Returned user: " + response);
         UserDto data = new UserDto();
-        data = config.getGson().fromJson(String.valueOf(response), UserDto.class);
+        JSONResponseHandler<UserDto> userResponseHandler = new JSONResponseHandler<>(config);
+        data = userResponseHandler.handleResponse(response, UserDto.class);
         config.setUserId(data.getId());
         config.setUserRoles(data.getRoles());
         Log.v(TAG, "POST user id " + config.getUserId());
@@ -197,7 +199,8 @@ public class FireBase extends AppCompatActivity {
 
     private void onTokenReceived(JSONObject response) {
         AuthenticationResponseDto data = new AuthenticationResponseDto();
-        data = config.getGson().fromJson(String.valueOf(response), AuthenticationResponseDto.class);
+        JSONResponseHandler<AuthenticationResponseDto> authResponseHandler = new JSONResponseHandler<>(config);
+        data = authResponseHandler.handleResponse(response, AuthenticationResponseDto.class);
         config.setToken(data.getJwt());
         Log.v(TAG, "POST authentication request successful");
         Intent intent;

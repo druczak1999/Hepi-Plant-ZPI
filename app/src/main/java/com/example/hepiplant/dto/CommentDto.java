@@ -1,6 +1,13 @@
 package com.example.hepiplant.dto;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import com.example.hepiplant.helper.DateUtils;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class CommentDto implements Serializable {
 
@@ -33,6 +40,11 @@ public class CommentDto implements Serializable {
 
     public String getCreatedDate() {
         return createdDate;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LocalDateTime getCreatedLocalDate() {
+        return DateUtils.convertToLocalDateTime(createdDate);
     }
 
     public void setCreatedDate(String createdDate) {

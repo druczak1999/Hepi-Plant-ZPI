@@ -32,9 +32,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
             super(view);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            username = (TextView) view.findViewById(R.id.commentUsernameTextView);
-            date = (TextView) view.findViewById(R.id.commentDateTextView);
-            body = (TextView) view.findViewById(R.id.commentBodyTextView);
+            username = view.findViewById(R.id.commentUsernameTextView);
+            date = view.findViewById(R.id.commentDateTextView);
+            body = view.findViewById(R.id.commentBodyTextView);
         }
 
         public TextView getUsername() {

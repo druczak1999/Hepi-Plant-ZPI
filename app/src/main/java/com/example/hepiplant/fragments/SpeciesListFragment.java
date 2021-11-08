@@ -1,5 +1,6 @@
 package com.example.hepiplant.fragments;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,24 +20,26 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.hepiplant.R;
+import com.example.hepiplant.SpeciesAddActivity;
 import com.example.hepiplant.adapter.recyclerview.SpeciesRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.SpeciesDto;
-import com.google.gson.Gson;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 
 import org.json.JSONArray;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SpeciesListFragment extends Fragment implements SpeciesRecyclerViewAdapter.ItemClickListener {
 
     private static final String TAG = "SpeciesListFragment";
 
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
     private View speciesFragmentView;
     private RecyclerView speciesRecyclerView;
     private SpeciesRecyclerViewAdapter adapter;
@@ -57,6 +60,8 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         config = (Configuration) getActivity().getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        speciesResponseHandler = new JSONResponseHandler<>(config);
     }
 
     @Nullable
@@ -82,16 +87,13 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-//        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class); //todo change activity to view?
-//        intent.putExtra("postId", species[position].getId());
-//        startActivity(intent);
     }
 
     private void makeGetDataRequest(){
         String url = getRequestUrl();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-            new Response.Listener<JSONArray>() {
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                new Response.Listener<JSONArray>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONArray response) {
@@ -102,14 +104,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
                 public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     @NonNull
@@ -124,8 +119,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        species = gson.fromJson(String.valueOf(response), SpeciesDto[].class);
+        species = speciesResponseHandler.handleArrayResponse(response, SpeciesDto[].class);
         setAdapter();
     }
 
@@ -154,20 +148,13 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
 
     private void setButtonOnClickListener() {
         Button addButton = speciesFragmentView.findViewById(R.id.speciesAddButton);
-        // todo implement
-//        addButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getActivity().getApplicationContext(), SpeciesAddActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), SpeciesAddActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
