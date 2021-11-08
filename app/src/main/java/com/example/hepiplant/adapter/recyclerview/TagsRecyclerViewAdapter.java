@@ -10,36 +10,33 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.hepiplant.CategoryEditActivity;
-import com.example.hepiplant.PopUpDeleteCategory;
+import com.example.hepiplant.PopUpDeleteTag;
 import com.example.hepiplant.R;
-import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.TagDto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<CategoriesRecyclerViewAdapter.ViewHolder> {
+public class TagsRecyclerViewAdapter extends RecyclerView.Adapter<TagsRecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "CategoriesRVAdapter";
-    private List<CategoryDto> dataSet;
+    private static final String TAG = "TagsRVAdapter";
+    private List<TagDto> dataSet;
     private ItemClickListener clickListener;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView id;
         private final TextView name;
-        private final TextView edit;
         private final TextView delete;
 
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
 
-            id = view.findViewById(R.id.categoryIdTextView);
-            name = view.findViewById(R.id.categoryNameTextView);
-            edit = view.findViewById(R.id.categoryEditLinkTextView);
-            delete = view.findViewById(R.id.categoryDeleteLinkTextView);
+            id = view.findViewById(R.id.tagIdTextView);
+            name = view.findViewById(R.id.tagNameTextView);
+            delete = view.findViewById(R.id.tagDeleteLinkTextView);
         }
 
         public TextView getId() {
@@ -48,10 +45,6 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<Categori
 
         public TextView getName() {
             return name;
-        }
-
-        public TextView getEdit() {
-            return edit;
         }
 
         public TextView getDelete() {
@@ -64,14 +57,14 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<Categori
         }
     }
 
-    public CategoriesRecyclerViewAdapter(Context context, CategoryDto[] dataSet) {
+    public TagsRecyclerViewAdapter(Context context, TagDto[] dataSet) {
         this.dataSet = new ArrayList<>(Arrays.asList(dataSet));
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.category_row_item, viewGroup, false);
+                .inflate(R.layout.tag_row_item, viewGroup, false);
 
         return new ViewHolder(view);
     }
@@ -80,22 +73,13 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<Categori
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Log.v(TAG, "onBindViewHolder() position: "+position);
         viewHolder.getId().setText(String.format(Locale.GERMANY,"%d", dataSet.get(position).getId()));
-        viewHolder.getName().setText(dataSet.get(position).getName());
-        viewHolder.getEdit().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG, "onItemClick() Edit");
-                Intent intent = new Intent(viewHolder.getId().getContext(), CategoryEditActivity.class);
-                intent.putExtra("categoryId", dataSet.get(viewHolder.getAdapterPosition()).getId());
-                viewHolder.getId().getContext().startActivity(intent);
-            }
-        });
+        viewHolder.getName().setText(String.format("#%s", dataSet.get(position).getName()));
         viewHolder.getDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "onItemClick() Delete");
-                Intent intent = new Intent(viewHolder.getId().getContext(), PopUpDeleteCategory.class);
-                intent.putExtra("categoryId", dataSet.get(viewHolder.getAdapterPosition()).getId());
+                Intent intent = new Intent(viewHolder.getId().getContext(), PopUpDeleteTag.class);
+                intent.putExtra("tagId", dataSet.get(viewHolder.getAdapterPosition()).getId());
                 viewHolder.getId().getContext().startActivity(intent);
             }
         });
@@ -106,7 +90,7 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<Categori
         return dataSet.size();
     }
 
-    public CategoryDto getItem(int id) {
+    public TagDto getItem(int id) {
         return dataSet.get(id);
     }
 
@@ -119,7 +103,7 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<Categori
     }
 
     // Change the dataset of the adapter (call adapter.notifyItemRangeChanged() afterwards)
-    public void updateData(CategoryDto[] newDataSet){
+    public void updateData(TagDto[] newDataSet){
         this.dataSet = new ArrayList<>(Arrays.asList(newDataSet));
     }
 }

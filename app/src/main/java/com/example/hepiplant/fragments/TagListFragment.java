@@ -1,6 +1,5 @@
 package com.example.hepiplant.fragments;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,11 +18,10 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.hepiplant.PostActivity;
 import com.example.hepiplant.R;
-import com.example.hepiplant.adapter.recyclerview.PostsRecyclerViewAdapter;
+import com.example.hepiplant.adapter.recyclerview.TagsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
-import com.example.hepiplant.dto.PostDto;
+import com.example.hepiplant.dto.TagDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
@@ -32,23 +30,23 @@ import org.json.JSONArray;
 
 import java.io.IOException;
 
-public class PostsListFragment extends Fragment implements PostsRecyclerViewAdapter.ItemClickListener {
+public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter.ItemClickListener {
 
-    private static final String TAG = "PostsListFragment";
+    private static final String TAG = "TagListFragment";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<PostDto> postResponseHandler;
-    private View postsFragmentView;
-    private RecyclerView postsRecyclerView;
-    private PostsRecyclerViewAdapter adapter;
-    private PostDto[] posts = new PostDto[]{};
+    private JSONResponseHandler<TagDto> tagResponseHandler;
+    private View tagFragmentView;
+    private RecyclerView tagsRecyclerView;
+    private TagsRecyclerViewAdapter adapter;
+    private TagDto[] tags = new TagDto[]{};
 
-    public PostsListFragment() {
+    public TagListFragment() {
     }
 
-    public static PostsListFragment newInstance() {
-        PostsListFragment fragment = new PostsListFragment();
+    public static TagListFragment newInstance() {
+        TagListFragment fragment = new TagListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -60,20 +58,20 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         super.onCreate(savedInstanceState);
         config = (Configuration) getActivity().getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
-        postResponseHandler = new JSONResponseHandler<>(config);
+        tagResponseHandler = new JSONResponseHandler<>(config);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreateView()");
-        postsFragmentView = inflater.inflate(R.layout.fragment_posts_list, container, false);
+        tagFragmentView = inflater.inflate(R.layout.fragment_tag_list, container, false);
 
         initView();
         setLayoutManager();
         makeGetDataRequest();
 
-        return postsFragmentView;
+        return tagFragmentView;
     }
 
     @Override
@@ -85,17 +83,13 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
-        intent.putExtra("postId", posts[position].getId());
-        intent.putExtra("userId", posts[position].getUserId());
-        startActivity(intent);
     }
 
     private void makeGetDataRequest(){
         String url = getRequestUrl();
         Log.v(TAG, "Invoking categoryRequestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
+            new Response.Listener<JSONArray>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONArray response) {
@@ -104,9 +98,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                    onErrorResponseReceived(error);
+            }});
     }
 
     @NonNull
@@ -116,12 +109,12 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "posts";
+        return config.getUrl() + "tags";
     }
 
     private void onGetResponseReceived(JSONArray response){
-        Log.v(TAG, "onGetResponseReceived(). Data is " + response);
-        posts = postResponseHandler.handleArrayResponse(response, PostDto[].class);
+        Log.v(TAG, "onGetResponseReceived()");
+        tags = tagResponseHandler.handleArrayResponse(response, TagDto[].class);
         setAdapter();
     }
 
@@ -134,18 +127,21 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     }
 
     private void initView() {
-        postsRecyclerView = postsFragmentView.findViewById(R.id.postsRecyclerView);
+        Log.v(TAG, "initView()");
+        tagsRecyclerView = tagFragmentView.findViewById(R.id.tagRecyclerView);
     }
 
     private void setLayoutManager() {
+        Log.v(TAG, "setLayoutManager()");
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        postsRecyclerView.setLayoutManager(layoutManager);
+        tagsRecyclerView.setLayoutManager(layoutManager);
     }
 
     private void setAdapter() {
-        adapter = new PostsRecyclerViewAdapter(getActivity(), posts);
+        Log.v(TAG, "setAdapter()");
+        adapter = new TagsRecyclerViewAdapter(getActivity(), tags);
         adapter.setClickListener(this);
-        postsRecyclerView.setAdapter(adapter);
+        tagsRecyclerView.setAdapter(adapter);
     }
 
 }

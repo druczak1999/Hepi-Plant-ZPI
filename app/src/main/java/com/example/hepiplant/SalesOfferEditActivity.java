@@ -23,22 +23,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -48,18 +45,21 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class SalesOfferEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    private static final String TAG = "EditSalesOffer";
+
+    private static final String TAG = "SalesOfferEditActivity";
     private static final String CURRENCY = "zł";
+
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<SalesOfferDto> salesOfferResponseHandler;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private long categoryId=0;
     private long salesOfferId = 0;
     private ImageView salesOfferImage;
@@ -67,12 +67,17 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     private EditText salesOfferName, salesOfferBody, salesOfferTags, salesOfferPrice, salesOfferLocation;
     private String img_str;
     private Button editSalesOffer;
+    private CategoryDto[] categoryDtos;
+    private CategoryDto selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_offer_edit);
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        salesOfferResponseHandler = new JSONResponseHandler<>(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
         salesOfferId = getIntent().getExtras().getLong("id");
         categoryId = getIntent().getExtras().getLong("category");
         setupViewsData();
@@ -100,7 +105,8 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         salesOfferTags.setText(getIntent().getExtras().getString("tags"));
         salesOfferLocation.setText(getIntent().getExtras().getString("location"));
         salesOfferPrice.setText(getIntent().getExtras().getString("price"));
-        getPhotoFromFirebase(salesOfferImage, getIntent().getExtras().getString("photo"));
+        if(!getIntent().getExtras().getString("photo", "").isEmpty())
+            getPhotoFromFirebase(salesOfferImage, getIntent().getExtras().getString("photo"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             salesOfferImage.setClipToOutline(true);
         }
@@ -117,35 +123,21 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     }
 
     public void getCategoriesFromDB(){
+        String url = getRequestUrl() + "categories";
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        config = (Configuration) getApplicationContext();
-        try {
-            config.setUrl(config.readProperties());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String url = config.getUrl() + "categories";
-
-        // Request a string response from the provided URL.
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
-                    public void onResponse(String response) {
-                        // Display the response string.
-                        String str = null; //http request
-                        try {
-                            str = new String(response.getBytes("ISO-8859-1"),"UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
+                    public void onResponse(JSONArray response) {
                         CategoryDto[] data = new CategoryDto[]{};
-                        Gson gson = new Gson();
-                        data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
-                        List<String> categories = new ArrayList<String>();
+                        data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
+                        List<String> categories = new ArrayList<>();
+                        categoryDtos = new CategoryDto[data.length];
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
+                            categoryDtos[i] = data[i];
                         }
                         getCategories(categories);
 
@@ -155,15 +147,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-// Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private static void getPhotoFromFirebase(ImageView photoImageView, String post) {
@@ -224,23 +208,34 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
 
     public void getCategories(List<String> categories){
         Log.v(TAG,"Categories size"+categories.size());
-        spinnerCat = (Spinner)findViewById(R.id.editCategory);
+        spinnerCat = findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener( this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
         if(getIntent().getExtras().getString("categoryId") != null) {
-            Log.v(TAG, "Species id value: "+getIntent().getExtras().getString("categoryId"));
-            spinnerCat.setSelection(Integer.parseInt(getIntent().getExtras().getString("categoryId") )-1);
+            for(CategoryDto c : categoryDtos){
+                if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
+                    for(String categoryName : categories){
+                        if(categoryName.equals(c.getName())) {
+                            selectedCategory = c;
+                            spinnerCat.setSelection(categories.indexOf(categoryName));
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner cspin = (Spinner) parent;
-        if(cspin.getId() == R.id.editCategory)
-        {
-            categoryId = position+1;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(CategoryDto c : categoryDtos){
+            if(c.getName().equals(selectedItem)){
+                selectedCategory = c;
+                break;
+            }
         }
     }
 
@@ -297,11 +292,11 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     }
 
     private void patchRequestSalesOffer(){
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"salesoffers/"+getIntent().getExtras().getLong("id");
         JSONObject postData = makeSalesOfferDataJson();
         Log.v(TAG, String.valueOf(postData));
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -315,14 +310,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseSalesOffer(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private JSONObject makeSalesOfferDataJson(){
@@ -338,7 +326,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             if(salesOfferLocation.getText().toString().equals("..."))  postData.put("location", "");
             else postData.put("location", salesOfferLocation.getText().toString());
             postData.put("photo", img_str);
-            postData.put("categoryId", categoryId);
+            postData.put("categoryId", selectedCategory.getId());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -391,10 +379,8 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
 
     private void onPostResponseSalesOffer(JSONObject response){
         Log.v(TAG, "ONResponse");
-        String str = String.valueOf(response); //http request
         SalesOfferDto data = new SalesOfferDto();
-        Gson gson = new Gson();
-        data = gson.fromJson(str, SalesOfferDto.class);
+        data = salesOfferResponseHandler.handleResponse(response, SalesOfferDto.class);
     }
 
     private void onErrorResponseSalesOffer(VolleyError error){

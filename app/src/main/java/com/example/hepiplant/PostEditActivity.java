@@ -23,21 +23,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PostDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -47,7 +45,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,8 +52,13 @@ import java.util.List;
 import java.util.Map;
 
 public class PostEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
     private static final String TAG = "EditPost";
+
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<PostDto> postResponseHandler;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private long categoryId=0;
     private long postId = 0;
     private ImageView postImage;
@@ -64,12 +66,18 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private EditText postName, postBody, postTags;
     private String img_str;
     private Button editPost;
+    private CategoryDto[] categoryDtos;
+    private CategoryDto selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_edit);
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        postResponseHandler = new JSONResponseHandler<>(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
+
         postId = getIntent().getExtras().getLong("id");
         categoryId = getIntent().getExtras().getLong("category");
         setupViewsData();
@@ -92,7 +100,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postName.setText(getIntent().getExtras().getString("name"));
         postBody.setText(getIntent().getExtras().getString("body"));
         postTags.setText(getIntent().getExtras().getString("tags"));
-        getPhotoFromFirebase(postImage, getIntent().getExtras().getString("photo"));
+        if(!getIntent().getExtras().getString("photo", "").isEmpty())
+            getPhotoFromFirebase(postImage, getIntent().getExtras().getString("photo"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             postImage.setClipToOutline(true);
         }
@@ -109,34 +118,20 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public void getCategoriesFromDB(){
-        RequestQueue queue = Volley.newRequestQueue(this);
-        config = (Configuration) getApplicationContext();
-        try {
-            config.setUrl(config.readProperties());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String url = config.getUrl() + "categories";
-
-        // Request a string response from the provided URL.
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        String url = getRequestUrl() + "categories";
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
-                    public void onResponse(String response) {
-                        // Display the response string.
-                        String str = null; //http request
-                        try {
-                            str = new String(response.getBytes("ISO-8859-1"),"UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
+                    public void onResponse(JSONArray response) {
                         CategoryDto[] data = new CategoryDto[]{};
-                        Gson gson = new Gson();
-                        data = gson.fromJson(String.valueOf(str), CategoryDto[].class);
+                        data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
+                        categoryDtos = new CategoryDto[data.length];
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
+                            categoryDtos[i] = data[i];
                         }
                         getCategories(categories);
 
@@ -144,16 +139,9 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                onErrorResponsePost(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-// Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest);
+        });
     }
 
     public void getCategories(List<String> categories){
@@ -164,17 +152,28 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
         if(getIntent().getExtras().getString("categoryId") != null) {
-            Log.v(TAG, "Category id value: "+getIntent().getExtras().getString("categoryId"));
-            spinnerCat.setSelection(Integer.parseInt(getIntent().getExtras().getString("categoryId"))-1);
+            for(CategoryDto c : categoryDtos){
+                if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
+                    for(String categoryName : categories) {
+                        if (categoryName.equals(c.getName())) {
+                            selectedCategory = c;
+                            spinnerCat.setSelection(categories.indexOf(categoryName));
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner cspin = (Spinner) parent;
-        if(cspin.getId() == R.id.editCategory)
-        {
-            categoryId = position+1;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(CategoryDto c : categoryDtos){
+            if(c.getName().equals(selectedItem)){
+                selectedCategory = c;
+                break;
+            }
         }
     }
 
@@ -287,11 +286,11 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void patchRequestPost(){
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"posts/"+getIntent().getExtras().getLong("id");
         JSONObject postData = makePostDataJson();
         Log.v(TAG, String.valueOf(postData));
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.ARRAY,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -305,14 +304,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePost(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private JSONObject makePostDataJson(){
@@ -325,7 +317,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             if(postTags.getText().toString().equals("..."))  postData.put("tags", "");
             else postData.put("tags", hashReading());
             postData.put("photo", img_str);
-            postData.put("categoryId", categoryId);
+            postData.put("categoryId", selectedCategory.getId());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -377,11 +369,9 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void onPostResponsePost(JSONObject response){
-        Log.v(TAG, "ONResponse");
-        String str = String.valueOf(response); //http request
+        Log.v(TAG, "OnResponse");
         PostDto data = new PostDto();
-        Gson gson = new Gson();
-        data = gson.fromJson(str, PostDto.class);
+        data = postResponseHandler.handleResponse(response, PostDto.class);
     }
 
     private void onErrorResponsePost(VolleyError error){

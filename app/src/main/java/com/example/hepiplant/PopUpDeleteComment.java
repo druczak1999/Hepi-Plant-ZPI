@@ -1,6 +1,5 @@
 package com.example.hepiplant;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -17,22 +16,27 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.hepiplant.configuration.Configuration;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.RequestType;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PopUpDeleteComment extends AppCompatActivity {
+
+    private static final String TAG = "PopUpDeleteComment";
+
     private Button yes, no;
     private Configuration config;
-    private static final String TAG = "PopUpDeleteComment";
+    private JSONRequestProcessor requestProcessor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_up_comment);
+        config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
@@ -42,7 +46,6 @@ public class PopUpDeleteComment extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        config = (Configuration) getApplicationContext();
         yes = findViewById(R.id.buttonYes);
         no = findViewById(R.id.buttonNo);
 
@@ -74,7 +77,8 @@ public class PopUpDeleteComment extends AppCompatActivity {
 
     private void deleteComment(){
         String url = getRequestUrl(getIntent().getExtras().getString("type"),getIntent().getExtras().getLong("postId"), getIntent().getExtras().getLong("commentId"));
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -88,14 +92,7 @@ public class PopUpDeleteComment extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     private void onErrorResponseReceived(VolleyError error){
@@ -104,11 +101,5 @@ public class PopUpDeleteComment extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }

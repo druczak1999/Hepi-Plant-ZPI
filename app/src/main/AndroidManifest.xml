@@ -24,6 +24,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".EventViewActivity" />
         <activity android:name=".ArchiveActivity" />
+        <activity android:name=".SpeciesAddActivity"
+            android:exported="true" />
         <activity
             android:name=".PopUpArchive"
             android:theme="@style/AppTheme.CustomTheme" />

@@ -21,22 +21,24 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CategoryEditActivity extends AppCompatActivity {
 
     private static final String TAG = "CategoryEditActivity";
 
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private CategoryDto category;
     private EditText nameEditText;
 
@@ -46,6 +48,8 @@ public class CategoryEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category_edit);
 
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
         makeGetDataRequest();
         setupToolbar();
     }
@@ -106,8 +110,8 @@ public class CategoryEditActivity extends AppCompatActivity {
 
     private void makeGetDataRequest() {
         String url = getRequestUrl();
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
@@ -119,20 +123,13 @@ public class CategoryEditActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonObjectRequest);
+        });
     }
 
     private void makePatchDataRequest(JSONObject postData) {
         String url = getRequestUrl();
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
@@ -145,14 +142,7 @@ public class CategoryEditActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonObjectRequest);
+        });
     }
 
     @NonNull
@@ -167,7 +157,7 @@ public class CategoryEditActivity extends AppCompatActivity {
 
     private void onGetResponseReceived(JSONObject response) {
         Log.v(TAG, "onGetResponseReceived()");
-        category = config.getGson().fromJson(String.valueOf(response), CategoryDto.class);
+        category = categoryResponseHandler.handleResponse(response, CategoryDto.class);
         setupViewsData();
     }
 
@@ -177,12 +167,6 @@ public class CategoryEditActivity extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 
     private void makeInfoToast(String info) {
