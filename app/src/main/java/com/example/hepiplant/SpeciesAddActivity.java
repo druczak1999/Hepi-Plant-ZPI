@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,9 +41,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class SpeciesEditActivity extends AppCompatActivity {
+public class SpeciesAddActivity extends AppCompatActivity {
 
-    private static final String TAG = "SpeciesEditActivity";
+    private static final String TAG = "SpeciesAddActivity";
     private static final List<Placement> placementList = Arrays.asList(
             Placement.BARDZO_JASNE,
             Placement.JASNE,
@@ -55,10 +54,9 @@ public class SpeciesEditActivity extends AppCompatActivity {
     private JSONRequestProcessor requestProcessor;
     private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
-    private SpeciesDto species;
     private CategoryDto[] categories;
-    private EditText nameEditText, wateringEditText, fertilizingEditText,
-            mistingEditText, soilEditText;
+    private EditText nameAddText, wateringAddText, fertilizingAddText,
+            mistingAddText, soilAddText;
     private Spinner categorySpinner, placementSpinner;
     private Placement selectedPlacement;
     private CategoryDto selectedCategory;
@@ -67,13 +65,12 @@ public class SpeciesEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_species_edit);
+        setContentView(R.layout.activity_species_add);
 
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
         speciesResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
-        makeGetDataRequest(getRequestUrl() + "species/" + getIntent().getExtras().get("speciesId"), false);
         makeGetDataRequest(getRequestUrl() + "categories", true);
         setupToolbar();
     }
@@ -107,99 +104,81 @@ public class SpeciesEditActivity extends AppCompatActivity {
     public void onSaveButtonClick(View view){
         Log.v(TAG, "onSaveButtonClick");
         JSONObject postData = new JSONObject();
-        String editedName = nameEditText.getText().toString().trim();
-        if(!species.getName().equals(editedName) && !editedName.isEmpty()){
+        String addedName = nameAddText.getText().toString().trim();
+        if(!addedName.isEmpty()){
             try {
-                postData.put("name", editedName);
+                postData.put("name", addedName);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        int editedWatering = Integer.parseInt(wateringEditText.getText().toString().trim());
-        int editedFertilizing = Integer.parseInt(fertilizingEditText.getText().toString().trim());
-        int editedMisting = Integer.parseInt(mistingEditText.getText().toString().trim());
+        int addedWatering = Integer.parseInt(wateringAddText.getText().toString().trim());
+        int addedFertilizing = Integer.parseInt(fertilizingAddText.getText().toString().trim());
+        int addedMisting = Integer.parseInt(mistingAddText.getText().toString().trim());
         try {
-            postData.put("wateringFrequency", editedWatering);
-            postData.put("fertilizingFrequency", editedFertilizing);
-            postData.put("mistingFrequency", editedMisting);
+            postData.put("wateringFrequency", addedWatering);
+            postData.put("fertilizingFrequency", addedFertilizing);
+            postData.put("mistingFrequency", addedMisting);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String editedSoil = soilEditText.getText().toString().trim();
-        if(!species.getSoil().equals(editedSoil) && !editedSoil.isEmpty()){
+        String addedSoil = soilAddText.getText().toString().trim();
+        if(!addedSoil.isEmpty()){
             try {
-                postData.put("soil", editedSoil);
+                postData.put("soil", addedSoil);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        if(selectedCategory != null && !selectedCategory.getId().equals(species.getCategoryId())){
+        if(selectedCategory != null){
             try {
                 postData.put("categoryId", selectedCategory.getId());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        if(selectedPlacement != null && selectedPlacement!=species.getPlacement()){
+        if(selectedPlacement != null){
             try {
                 postData.put("placement", selectedPlacement);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        makePatchDataRequest(postData);
+        makePostDataRequest(postData);
     }
 
     private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.includeToolbarSpeciesEdit);
+        Toolbar toolbar = findViewById(R.id.includeToolbarSpeciesAdd);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
     }
 
     private void setupViewsData() {
         Log.v(TAG, "setupViewsData");
-        TextView editTitleView = findViewById(R.id.speciesEditTitleTextView);
-        nameEditText = findViewById(R.id.speciesNameEditEditText);
-        wateringEditText = findViewById(R.id.speciesWateringFrequencyEditEditText);
-        fertilizingEditText = findViewById(R.id.speciesFertilizingFrequencyEditEditText);
-        mistingEditText = findViewById(R.id.speciesMistingFrequencyEditEditText);
-        placementSpinner = findViewById(R.id.speciesPlacementEditSpinner);
-        soilEditText = findViewById(R.id.speciesSoilEditEditText);
-        categorySpinner = findViewById(R.id.speciesCategoryEditSpinner);
-
-        if(species!=null){
-            Log.v(TAG, "species is not null");
-            String editTitle = getResources().getString(R.string.edit_species_title) +
-                    " " + species.getId();
-            editTitleView.setText(editTitle);
-            nameEditText.setText(species.getName());
-            wateringEditText.setText(String.valueOf(species.getWateringFrequency()));
-            fertilizingEditText.setText(String.valueOf(species.getFertilizingFrequency()));
-            mistingEditText.setText(String.valueOf(species.getMistingFrequency()));
-            soilEditText.setText(species.getSoil());
-            setPlacementSpinnerValues();
-            if (categories != null){
-                Log.v(TAG, "categories is not null");
-                setCategoriesSpinnerValues();
-                createAndAttachSpinnerListeners();
-            }
+        nameAddText = findViewById(R.id.speciesNameAddEditText);
+        wateringAddText = findViewById(R.id.speciesWateringFrequencyAddEditText);
+        fertilizingAddText = findViewById(R.id.speciesFertilizingFrequencyAddEditText);
+        mistingAddText = findViewById(R.id.speciesMistingFrequencyAddEditText);
+        placementSpinner = findViewById(R.id.speciesPlacementAddSpinner);
+        soilAddText = findViewById(R.id.speciesSoilAddEditText);
+        categorySpinner = findViewById(R.id.speciesCategoryAddSpinner);
+        setPlacementSpinnerValues();
+        if (categories != null){
+            Log.v(TAG, "categories is not null");
+            setCategoriesSpinnerValues();
+            createAndAttachSpinnerListeners();
         }
     }
 
     private void setCategoriesSpinnerValues() {
         Log.v(TAG, "setCategoriesSpinnerValues");
-        int selectedPosition = 0;
         List<String> categoryNameList = newArrayList();
         for(CategoryDto c:categories){
             categoryNameList.add(c.getName());
-            if(c.getId().equals(species.getCategoryId())){
-                selectedPosition = categoryNameList.indexOf(c.getName());
-            }
         }
         ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categoryNameList);
         categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoriesAdapter);
-        categorySpinner.setSelection(selectedPosition);
     }
 
     private void setPlacementSpinnerValues() {
@@ -212,9 +191,6 @@ public class SpeciesEditActivity extends AppCompatActivity {
         ArrayAdapter<String> placementAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, placementNameList);
         placementAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         placementSpinner.setAdapter(placementAdapter);
-        if(species.getPlacement() != null){
-            placementSpinner.setSelection(placementAdapter.getPosition(species.getPlacement().getName()));
-        }
     }
 
     private void createAndAttachSpinnerListeners(){
@@ -251,43 +227,35 @@ public class SpeciesEditActivity extends AppCompatActivity {
 
     private void makeGetDataRequest(String url, boolean isArrayRequest) {
         requestProcessor.makeRequest(Request.Method.GET, url, null, isArrayRequest ? RequestType.ARRAY : RequestType.OBJECT,
-            isArrayRequest ? new Response.Listener<JSONArray>() {
+                new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         onGetResponseReceived(response);
                     }
-                } :  new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
+                }, new Response.ErrorListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponseReceived(response);
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
                     }
-                }
-                , new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                });
     }
 
-    private void makePatchDataRequest(JSONObject postData) {
-        String url = getRequestUrl() + "species/" + getIntent().getExtras().get("speciesId");
+    private void makePostDataRequest(JSONObject postData) {
+        String url = getRequestUrl() + "species";
         Log.v(TAG, "Invoking categoryRequestProcessor");
-        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    makeInfoToast("Edytowano gatunek o id " + species.getId());
-                    finish();
-                }
-            }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+        requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onPostResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
+                    }
+                });
     }
 
     @NonNull
@@ -306,10 +274,10 @@ public class SpeciesEditActivity extends AppCompatActivity {
         setupViewsData();
     }
 
-    private void onGetResponseReceived(JSONObject response) {
-        Log.v(TAG, "onGetResponseReceived() for JSONObject");
-        species = speciesResponseHandler.handleResponse(response, SpeciesDto.class);
-        setupViewsData();
+    private void onPostResponseReceived(JSONObject response) {
+        SpeciesDto species = speciesResponseHandler.handleResponse(response, SpeciesDto.class);
+        makeInfoToast("Dodano gatunek o id " + species.getId());
+        finish();
     }
 
     private void onErrorResponseReceived(VolleyError error) {
@@ -323,4 +291,5 @@ public class SpeciesEditActivity extends AppCompatActivity {
     private void makeInfoToast(String info) {
         Toast.makeText(getApplicationContext(),info,Toast.LENGTH_LONG).show();
     }
+
 }

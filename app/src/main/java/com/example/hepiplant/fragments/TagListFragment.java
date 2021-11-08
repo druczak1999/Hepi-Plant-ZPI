@@ -1,13 +1,11 @@
 package com.example.hepiplant.fragments;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,11 +18,10 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.hepiplant.CategoryAddActivity;
 import com.example.hepiplant.R;
-import com.example.hepiplant.adapter.recyclerview.CategoriesRecyclerViewAdapter;
+import com.example.hepiplant.adapter.recyclerview.TagsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
-import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.TagDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
@@ -33,23 +30,23 @@ import org.json.JSONArray;
 
 import java.io.IOException;
 
-public class CategoryListFragment extends Fragment implements CategoriesRecyclerViewAdapter.ItemClickListener {
+public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter.ItemClickListener {
 
-    private static final String TAG = "CategoryListFragment";
+    private static final String TAG = "TagListFragment";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
-    private View categoriesFragmentView;
-    private RecyclerView categoriesRecyclerView;
-    private CategoriesRecyclerViewAdapter adapter;
-    private CategoryDto[] categories = new CategoryDto[]{};
+    private JSONResponseHandler<TagDto> tagResponseHandler;
+    private View tagFragmentView;
+    private RecyclerView tagsRecyclerView;
+    private TagsRecyclerViewAdapter adapter;
+    private TagDto[] tags = new TagDto[]{};
 
-    public CategoryListFragment() {
+    public TagListFragment() {
     }
 
-    public static CategoryListFragment newInstance() {
-        CategoryListFragment fragment = new CategoryListFragment();
+    public static TagListFragment newInstance() {
+        TagListFragment fragment = new TagListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -61,21 +58,20 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
         super.onCreate(savedInstanceState);
         config = (Configuration) getActivity().getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
-        categoryResponseHandler = new JSONResponseHandler<>(config);
+        tagResponseHandler = new JSONResponseHandler<>(config);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreateView()");
-        categoriesFragmentView = inflater.inflate(R.layout.fragment_category_list, container, false);
+        tagFragmentView = inflater.inflate(R.layout.fragment_tag_list, container, false);
 
         initView();
         setLayoutManager();
         makeGetDataRequest();
-        setButtonOnClickListener();
 
-        return categoriesFragmentView;
+        return tagFragmentView;
     }
 
     @Override
@@ -113,12 +109,12 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "categories";
+        return config.getUrl() + "tags";
     }
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        categories = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
+        tags = tagResponseHandler.handleArrayResponse(response, TagDto[].class);
         setAdapter();
     }
 
@@ -131,29 +127,21 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
     }
 
     private void initView() {
-        categoriesRecyclerView = categoriesFragmentView.findViewById(R.id.categoryRecyclerView);
+        Log.v(TAG, "initView()");
+        tagsRecyclerView = tagFragmentView.findViewById(R.id.tagRecyclerView);
     }
 
     private void setLayoutManager() {
+        Log.v(TAG, "setLayoutManager()");
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        categoriesRecyclerView.setLayoutManager(layoutManager);
+        tagsRecyclerView.setLayoutManager(layoutManager);
     }
 
     private void setAdapter() {
-        adapter = new CategoriesRecyclerViewAdapter(getActivity(), categories);
+        Log.v(TAG, "setAdapter()");
+        adapter = new TagsRecyclerViewAdapter(getActivity(), tags);
         adapter.setClickListener(this);
-        categoriesRecyclerView.setAdapter(adapter);
-    }
-
-    private void setButtonOnClickListener() {
-        Button addButton = categoriesFragmentView.findViewById(R.id.categoryAddButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), CategoryAddActivity.class);
-                startActivity(intent);
-            }
-        });
+        tagsRecyclerView.setAdapter(adapter);
     }
 
 }

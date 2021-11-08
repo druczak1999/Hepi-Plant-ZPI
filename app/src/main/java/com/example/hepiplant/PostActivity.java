@@ -315,12 +315,6 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         });
     }
 
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Configuration config = (Configuration) getApplicationContext();

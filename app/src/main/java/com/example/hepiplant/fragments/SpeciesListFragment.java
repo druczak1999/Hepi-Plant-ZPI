@@ -1,5 +1,6 @@
 package com.example.hepiplant.fragments;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.R;
+import com.example.hepiplant.SpeciesAddActivity;
 import com.example.hepiplant.adapter.recyclerview.SpeciesRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.SpeciesDto;
@@ -85,9 +87,6 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-//        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class); //todo change activity to view?
-//        intent.putExtra("postId", species[position].getId());
-//        startActivity(intent);
     }
 
     private void makeGetDataRequest(){
@@ -149,14 +148,13 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
 
     private void setButtonOnClickListener() {
         Button addButton = speciesFragmentView.findViewById(R.id.speciesAddButton);
-        // todo implement
-//        addButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getActivity().getApplicationContext(), SpeciesAddActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), SpeciesAddActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
