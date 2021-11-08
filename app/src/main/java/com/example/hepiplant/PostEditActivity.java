@@ -66,6 +66,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private EditText postName, postBody, postTags;
     private String img_str;
     private Button editPost;
+    private CategoryDto[] categoryDtos;
+    private CategoryDto selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postName.setText(getIntent().getExtras().getString("name"));
         postBody.setText(getIntent().getExtras().getString("body"));
         postTags.setText(getIntent().getExtras().getString("tags"));
-        getPhotoFromFirebase(postImage, getIntent().getExtras().getString("photo"));
+        if(!getIntent().getExtras().getString("photo", "").isEmpty())
+            getPhotoFromFirebase(postImage, getIntent().getExtras().getString("photo"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             postImage.setClipToOutline(true);
         }
@@ -125,8 +128,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                         CategoryDto[] data = new CategoryDto[]{};
                         data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
+                        categoryDtos = new CategoryDto[data.length];
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
+                            categoryDtos[i] = data[i];
                         }
                         getCategories(categories);
 
@@ -147,17 +152,28 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
         if(getIntent().getExtras().getString("categoryId") != null) {
-            Log.v(TAG, "Category id value: "+getIntent().getExtras().getString("categoryId"));
-            spinnerCat.setSelection(Integer.parseInt(getIntent().getExtras().getString("categoryId"))-1);
+            for(CategoryDto c : categoryDtos){
+                if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
+                    for(String categoryName : categories) {
+                        if (categoryName.equals(c.getName())) {
+                            selectedCategory = c;
+                            spinnerCat.setSelection(categories.indexOf(categoryName));
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner cspin = (Spinner) parent;
-        if(cspin.getId() == R.id.editCategory)
-        {
-            categoryId = position+1;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(CategoryDto c : categoryDtos){
+            if(c.getName().equals(selectedItem)){
+                selectedCategory = c;
+                break;
+            }
         }
     }
 
@@ -301,7 +317,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             if(postTags.getText().toString().equals("..."))  postData.put("tags", "");
             else postData.put("tags", hashReading());
             postData.put("photo", img_str);
-            postData.put("categoryId", categoryId);
+            postData.put("categoryId", selectedCategory.getId());
 
         } catch (JSONException e) {
             e.printStackTrace();

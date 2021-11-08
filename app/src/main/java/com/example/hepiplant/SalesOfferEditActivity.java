@@ -67,6 +67,8 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     private EditText salesOfferName, salesOfferBody, salesOfferTags, salesOfferPrice, salesOfferLocation;
     private String img_str;
     private Button editSalesOffer;
+    private CategoryDto[] categoryDtos;
+    private CategoryDto selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +105,8 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         salesOfferTags.setText(getIntent().getExtras().getString("tags"));
         salesOfferLocation.setText(getIntent().getExtras().getString("location"));
         salesOfferPrice.setText(getIntent().getExtras().getString("price"));
-        getPhotoFromFirebase(salesOfferImage, getIntent().getExtras().getString("photo"));
+        if(!getIntent().getExtras().getString("photo", "").isEmpty())
+            getPhotoFromFirebase(salesOfferImage, getIntent().getExtras().getString("photo"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             salesOfferImage.setClipToOutline(true);
         }
@@ -131,8 +134,10 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                         CategoryDto[] data = new CategoryDto[]{};
                         data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
                         List<String> categories = new ArrayList<>();
+                        categoryDtos = new CategoryDto[data.length];
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
+                            categoryDtos[i] = data[i];
                         }
                         getCategories(categories);
 
@@ -209,17 +214,28 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
         if(getIntent().getExtras().getString("categoryId") != null) {
-            Log.v(TAG, "Species id value: "+getIntent().getExtras().getString("categoryId"));
-            spinnerCat.setSelection(Integer.parseInt(getIntent().getExtras().getString("categoryId") )-1);
+            for(CategoryDto c : categoryDtos){
+                if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
+                    for(String categoryName : categories){
+                        if(categoryName.equals(c.getName())) {
+                            selectedCategory = c;
+                            spinnerCat.setSelection(categories.indexOf(categoryName));
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner cspin = (Spinner) parent;
-        if(cspin.getId() == R.id.editCategory)
-        {
-            categoryId = position+1;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(CategoryDto c : categoryDtos){
+            if(c.getName().equals(selectedItem)){
+                selectedCategory = c;
+                break;
+            }
         }
     }
 
@@ -310,7 +326,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             if(salesOfferLocation.getText().toString().equals("..."))  postData.put("location", "");
             else postData.put("location", salesOfferLocation.getText().toString());
             postData.put("photo", img_str);
-            postData.put("categoryId", categoryId);
+            postData.put("categoryId", selectedCategory.getId());
 
         } catch (JSONException e) {
             e.printStackTrace();

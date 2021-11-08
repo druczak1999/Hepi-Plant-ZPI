@@ -368,7 +368,10 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
             case R.id.deleteSalesOffer:
                 Intent intent3 = new Intent(this, PopUpDeleteSalesOffer.class);
                 intent3.putExtra("salesOfferId",getIntent().getExtras().getLong("salesOfferId"));
-                intent3.putExtra("photo", salesOffer.getPhoto());
+                if(salesOffer.getPhoto()!=null)
+                    intent3.putExtra("photo", salesOffer.getPhoto());
+                else intent3.putExtra("photo", "");
+                startActivity(intent3);
                 startActivity(intent3);
                 return true;
             case R.id.editSalesOffer:

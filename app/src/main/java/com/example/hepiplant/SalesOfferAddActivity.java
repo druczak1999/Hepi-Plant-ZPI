@@ -60,11 +60,12 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
     private JSONResponseHandler<SalesOfferDto> salesOfferResponseHandler;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private Spinner spinnerCat;
-    private int categoryId;
     private String img_str = null;
     private ImageView addImageButton;
     private TextView tags, title, body, price, location;
     private Button add;
+    private CategoryDto[] categoryDtos;
+    private CategoryDto selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +105,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         JSONObject postData = new JSONObject();
         try {
             postData.put("title", title.getText().toString());
-            postData.put("categoryId", categoryId);
+            postData.put("categoryId", selectedCategory.getId());
             postData.put("tags", hashReading());
             postData.put("photo", img_str);
             postData.put("userId", config.getUserId());
@@ -240,8 +241,10 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                         CategoryDto[] data = new CategoryDto[]{};
                         data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
                         List<String> categories = new ArrayList<>();
+                        categoryDtos = new CategoryDto[data.length];
                         for (int i = 0; i < data.length; i++) {
                             categories.add(data[i].getName());
+                            categoryDtos[i] = data[i];
                         }
                         getCategories(categories);
 
@@ -274,10 +277,12 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner cspin = (Spinner) parent;
-        if(cspin.getId() == R.id.editCategory)
-        {
-            categoryId = position+1;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(CategoryDto c : categoryDtos){
+            if(c.getName().equals(selectedItem)){
+                selectedCategory = c;
+                break;
+            }
         }
     }
 
