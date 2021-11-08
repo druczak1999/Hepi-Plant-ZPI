@@ -99,7 +99,8 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
 
     private void setValuesToEdit(){
         plantName.setText(getIntent().getExtras().getString("name"));
-        getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo"));
+        if(!getIntent().getExtras().getString("photo", "").isEmpty())
+            getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo"));
         watering.setText(getIntent().getExtras().getString("watering"));
         fertilizing.setText(getIntent().getExtras().getString("fertilizing"));
         misting.setText(getIntent().getExtras().getString("misting"));
