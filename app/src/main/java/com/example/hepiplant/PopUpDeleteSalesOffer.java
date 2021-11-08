@@ -1,7 +1,6 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.NetworkResponse;
@@ -30,6 +28,7 @@ import java.io.IOException;
 public class PopUpDeleteSalesOffer extends AppCompatActivity {
 
     private static final String TAG = "PopUpDeleteSalesOffer";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Button yes, no;
     private Configuration config;
@@ -83,22 +82,39 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         String url = getRequestUrl(getIntent().getExtras().getLong("salesOfferId"));
         Log.v(TAG, "Invoking categoryRequestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
-                new Response.Listener<String>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(String response) {
-                        Log.v(TAG, response);
-                        if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
-                        Toast.makeText(getApplicationContext(),"Usunięto ofertę",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                        startActivity(intent);
-                    }
-                }, new Response.ErrorListener() {
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    onDeleteResponseReceived(response);
+                }
+            }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
         });
+    }
+
+    private void onDeleteResponseReceived(String response) {
+        Log.v(TAG, response);
+        if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
+        Toast.makeText(getApplicationContext(),"Usunięto ofertę",Toast.LENGTH_LONG).show();
+        Intent intent;
+        if (config.getUserRoles().contains(ROLE_ADMIN)){
+            intent = new Intent(getApplicationContext(), MainAdminActivity.class);
+        } else {
+            intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    private void onErrorResponseReceived(VolleyError error){
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
     }
 
     private void deletePhotoFromFirebase(){
@@ -116,14 +132,5 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Unsuccessful delete photo from Firebase storage",Toast.LENGTH_LONG).show();
             }
         });
-
-    }
-
-    private void onErrorResponseReceived(VolleyError error){
-        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-        NetworkResponse networkResponse = error.networkResponse;
-        if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
-        }
     }
 }

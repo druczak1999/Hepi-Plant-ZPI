@@ -51,6 +51,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private static final String TAG = "SalesOfferActivity";
     private static final String CURRENCY = "zł";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
@@ -90,7 +91,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     @Override
     public void onItemLongCLick(View view, int position) {
-        if (salesOffer.getComments().get(position).getUserId().equals(config.getUserId())){
+        if (salesOffer.getComments().get(position).getUserId().equals(config.getUserId()) || config.getUserRoles().contains(ROLE_ADMIN)){
             Log.v(TAG, "onItemLongClick()");
             Intent intent3 = new Intent(this, PopUpDeleteComment.class);
             intent3.putExtra("type", "salesoffers");
@@ -343,13 +344,12 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Configuration config = (Configuration) getApplicationContext();
+        MenuInflater menuInflater = getMenuInflater();
         if(getIntent().getExtras().get("userId") == config.getUserId()) {
-            MenuInflater menuInflater = getMenuInflater();
             menuInflater.inflate(R.menu.menu_sales_offer, menu);
-        }
-        else{
-            MenuInflater menuInflater = getMenuInflater();
+        } else if (config.getUserRoles().contains(ROLE_ADMIN)){
+            menuInflater.inflate(R.menu.menu_sales_offer_admin, menu);
+        } else {
             menuInflater.inflate(R.menu.menu_main, menu);
         }
         return true;
