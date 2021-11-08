@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/more"
+        android:icon="@drawable/kropki"
+        app:showAsAction="ifRoom|withText"
+        android:title="Wyloguj się"
+        >
+        <menu>
+            <item
+                android:id="@+id/informationAboutApp"
+                android:title="Informacje"
+                app:showAsAction="never"
+
+                />
+            <item
+                android:id="@+id/logoff"
+                android:title="Wyloguj się"
+                app:showAsAction="never"
+
+                />
+            <item
+                android:id="@+id/deleteSalesOffer"
+                android:title="Usuń ofertę"
+                app:showAsAction="never"
+                />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/miProfile"
+        android:icon="@drawable/ludzik"
+        android:title="Profil użytkownika"
+        app:showAsAction="ifRoom" />
+
+</menu>

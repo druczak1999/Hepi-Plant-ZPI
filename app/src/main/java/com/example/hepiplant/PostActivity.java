@@ -45,12 +45,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PostActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
 
     private static final String TAG = "PostActivity";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
@@ -91,7 +90,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     @Override
     public void onItemLongCLick(View view, int position) {
-        if (post.getComments().get(position).getUserId().equals(config.getUserId())){
+        if (post.getComments().get(position).getUserId().equals(config.getUserId()) || config.getUserRoles().contains(ROLE_ADMIN)){
             Log.v(TAG, "onItemLongClick()");
             Intent intent3 = new Intent(this, PopUpDeleteComment.class);
             intent3.putExtra("type", "posts");
@@ -317,13 +316,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Configuration config = (Configuration) getApplicationContext();
+        MenuInflater menuInflater = getMenuInflater();
         if(getIntent().getExtras().get("userId") == config.getUserId()) {
-            MenuInflater menuInflater = getMenuInflater();
             menuInflater.inflate(R.menu.menu_post, menu);
-        }
-        else{
-            MenuInflater menuInflater = getMenuInflater();
+        } else if (config.getUserRoles().contains(ROLE_ADMIN)){
+            menuInflater.inflate(R.menu.menu_post_admin, menu);
+        } else {
             menuInflater.inflate(R.menu.menu_main, menu);
         }
         return true;
