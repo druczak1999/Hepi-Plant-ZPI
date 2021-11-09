@@ -229,7 +229,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             else postData.put("location", location.getText().toString());
             postData.put("photo", img_str);
             Log.v(TAG, selectedCategory.getId().toString());
-            postData.put("categoryId", selectedCategory.getId().intValue());
             if(speciesDto == null ) postData.put("species", null);
             else postData.put("species", speciesJson);
             postData.put("userId", config.getUserId());

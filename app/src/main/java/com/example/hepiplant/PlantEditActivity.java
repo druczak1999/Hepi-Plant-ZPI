@@ -176,12 +176,8 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         if(getIntent().getExtras().getString("speciesId") != null) {
             for(SpeciesDto s : speciesDtos) {
                 if(s.getId() == Integer.parseInt(getIntent().getExtras().getString("speciesId"))) {
-                    for(String speciesName : species) {
-                        if (speciesName.equals(s.getName())) {
-                            speciesDto = s;
-                            spinnerGat.setSelection(species.indexOf(speciesName));
-                        }
-                    }
+                    speciesDto = s;
+                    spinnerGat.setSelection(species.indexOf(s.getName()));
                 }
             }
         }
