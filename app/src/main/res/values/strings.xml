@@ -29,6 +29,7 @@
     <string name="save">Zapisz</string>
     <string name="category_delete_question">Czy na pewno chcesz usunąć kategorię o id </string>
     <string name="species_delete_question">Czy na pewno chcesz usunąć gatunek o id </string>
+    <string name="tag_delete_question">"Czy chcesz usunąć tag o id "</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="edit_category_title">Edytuj kategorię o id </string>

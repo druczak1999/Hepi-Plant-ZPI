@@ -29,11 +29,13 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.adapter.recyclerview.CommentsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CommentDto;
 import com.example.hepiplant.dto.PostDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -51,6 +53,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     private static final String TAG = "PostActivity";
 
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<PostDto> postResponseHandler;
     private CommentsRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private PostDto post;
@@ -65,6 +69,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         setContentView(R.layout.activity_post);
 
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        postResponseHandler = new JSONResponseHandler<>(config);
         initView();
         setLayoutManager();
         makeGetDataRequest();
@@ -85,7 +91,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     @Override
     public void onItemLongCLick(View view, int position) {
-        if (post.getComments().get(position).getUserId() == config.getUserId()){
+        if (post.getComments().get(position).getUserId().equals(config.getUserId())){
             Log.v(TAG, "onItemLongClick()");
             Intent intent3 = new Intent(this, PopUpDeleteComment.class);
             intent3.putExtra("type", "posts");
@@ -122,8 +128,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void makeGetDataRequest() {
         String url = getRequestUrl();
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
@@ -135,20 +141,13 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonObjectRequest);
+        });
     }
 
     private void makePostDataRequest(JSONObject postData) {
         String url = getRequestUrl() + "/comments";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -160,14 +159,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonObjectRequest);
+        });
     }
 
     @NonNull
@@ -182,7 +174,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void onGetResponseReceived(JSONObject response) {
         Log.v(TAG, "onGetResponseReceived()");
-        post = config.getGson().fromJson(String.valueOf(response), PostDto.class);
+        post = postResponseHandler.handleResponse(response, PostDto.class);
         comments = post.getComments().toArray(comments);
         int tempSize = 0;
         for (int i = 0; i < comments.length; i++) {
@@ -224,7 +216,6 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             public void onClick(View v) {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 layoutManager.scrollToPositionWithOffset(0, 0);
-                ;
             }
         });
 
@@ -324,12 +315,6 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         });
     }
 
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Configuration config = (Configuration) getApplicationContext();
@@ -372,7 +357,9 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             case R.id.deletePost:
                     Intent intent3 = new Intent(this, PopUpDeletePost.class);
                     intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
-                    intent3.putExtra("photo",  post.getPhoto());
+                if(post.getPhoto()!=null)
+                    intent3.putExtra("photo", post.getPhoto());
+                else intent3.putExtra("photo", "");
                     startActivity(intent3);
                 return true;
             case R.id.editPost:

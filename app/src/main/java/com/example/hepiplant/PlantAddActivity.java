@@ -1,16 +1,11 @@
 package com.example.hepiplant;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,27 +16,33 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,9 +51,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.time.LocalDateTime.now;
 
@@ -69,6 +68,10 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private SpeciesDto speciesDto;
     private SpeciesDto[] speciesDtos;
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<PlantDto> plantResponseHandler;
+    private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private static final int PICK_IMAGE = 2;
 
     @Override
@@ -76,6 +79,10 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_plant);
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        plantResponseHandler = new JSONResponseHandler<>(config);
+        speciesResponseHandler = new JSONResponseHandler<>(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
         img_str=null;
         setupViewsData();
     }
@@ -147,8 +154,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         JSONObject speciesJson = makeSpeciesJSON();
         JSONObject scheduleJ = makeScheduleJSON();
         JSONObject postData = makePostDataJson(speciesJson,scheduleJ);
-        Log.v(TAG, String.valueOf(postData));
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
+        Log.v(TAG, String.valueOf(postData));Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -163,14 +170,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private JSONObject makeSpeciesJSON(){
@@ -241,9 +241,10 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPostResponsePlant(JSONObject response){
         Log.v(TAG, "ONResponse");
-        String str = String.valueOf(response); //http request
         PlantDto data = new PlantDto();
-        data = config.getGson().fromJson(str, PlantDto.class);
+        data = plantResponseHandler.handleResponse(response, PlantDto.class);
+        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        startActivity(intent);
     }
 
     private void onErrorResponsePlant(VolleyError error){
@@ -326,10 +327,9 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, img_str);
     }
 
-    private void onGetResponseSpecies(String response){
-        String str=onResponseStr(response);
+    private void onGetResponseSpecies(JSONArray response){
         SpeciesDto[] data = new SpeciesDto[]{};
-        data = config.getGson().fromJson(String.valueOf(str), SpeciesDto[].class);
+        data = speciesResponseHandler.handleArrayResponse(response, SpeciesDto[].class);
         speciesDtos = data;
         List<String> sp = new ArrayList<String>();
         for (int i = 0; i < data.length; i++) {
@@ -339,13 +339,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void getSpeciesFromDB() {
-        RequestQueue queue = Volley.newRequestQueue(this);
         String url = getRequestUrl() + "species";
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONArray response) {
                         onGetResponseSpecies(response);
                     }
                 }, new Response.ErrorListener() {
@@ -353,29 +352,21 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private void getSpecies(List<String> species) {
         Log.v(TAG, "Species size" + species.size());
         spinnerGat = (Spinner) findViewById(R.id.editSpecies);
         spinnerGat.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGat.setAdapter(dtoArrayAdapter);
     }
 
-    private void onGetResponseCategories(String response){
-        String str = onResponseStr(response);
+    private void onGetResponseCategories(JSONArray response){
         CategoryDto[] data = new CategoryDto[]{};
-        data = config.getGson().fromJson(String.valueOf(str), CategoryDto[].class);
+        data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
         List<String> categories = new ArrayList<String>();
         for (int i = 0; i < data.length; i++) {
             categories.add(data[i].getName());
@@ -384,44 +375,27 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void getCategoriesFromDB() {
-        RequestQueue queue = Volley.newRequestQueue(this);
         String url = getRequestUrl() + "categories";
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONArray response) {
                         onGetResponseCategories(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) { onErrorResponsePlant(error);}
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
-        spinnerCat = (Spinner) findViewById(R.id.editCategory);
+        spinnerCat = findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
-    }
-
-    private String onResponseStr(String response){
-        String str = null;
-        try {
-            str = new String(response.getBytes("ISO-8859-1"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return str;
     }
 
     //Methods for spinners
@@ -439,11 +413,5 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }

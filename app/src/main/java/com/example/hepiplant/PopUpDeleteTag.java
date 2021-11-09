@@ -1,12 +1,12 @@
 package com.example.hepiplant;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,16 +20,13 @@ import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.RequestType;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.util.Locale;
 
-public class PopUpDeleteSalesOffer extends AppCompatActivity {
+public class PopUpDeleteTag extends AppCompatActivity {
 
-    private static final String TAG = "PopUpDeleteSalesOffer";
+    private static final String TAG = "PopUpDeleteTag";
 
     private Button yes, no;
     private Configuration config;
@@ -38,7 +35,7 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pop_up_sales_offer_delete);
+        setContentView(R.layout.activity_pop_up_delete_admin);
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
 
@@ -46,13 +43,19 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int)(width *0.9), (int)(height*0.3));
+        getWindow().setLayout((int)(width * 0.9), (int)(height * 0.3));
         setupViewsData();
     }
 
     private void setupViewsData(){
-        yes = findViewById(R.id.buttonYes);
-        no = findViewById(R.id.buttonNo);
+        TextView questionView = findViewById(R.id.adminDeleteQuestionTextView);
+        yes = findViewById(R.id.adminButtonYes);
+        no = findViewById(R.id.adminButtonNo);
+
+        String deleteQuestion = getResources().getString(R.string.tag_delete_question) +
+                " " + getIntent().getExtras().getLong("tagId") +
+                "?";
+        questionView.setText(deleteQuestion);
 
         no.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +67,7 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteSalesOffer();
+                deleteCategory();
             }
         });
     }
@@ -76,24 +79,20 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "salesoffers/"+id;
+        return config.getUrl() + "tags/" + id;
     }
 
-    private void deleteSalesOffer(){
-        String url = getRequestUrl(getIntent().getExtras().getLong("salesOfferId"));
+    private void deleteCategory(){
+        String url = getRequestUrl(getIntent().getExtras().getLong("tagId"));
         Log.v(TAG, "Invoking categoryRequestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
-                new Response.Listener<String>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(String response) {
-                        Log.v(TAG, response);
-                        if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
-                        Toast.makeText(getApplicationContext(),"Usunięto ofertę",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                        startActivity(intent);
-                    }
-                }, new Response.ErrorListener() {
+            new Response.Listener<String>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(String response) {
+                    onResponseReceived(response);
+                }
+            }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
@@ -101,22 +100,14 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         });
     }
 
-    private void deletePhotoFromFirebase(){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-        StorageReference imageRef = storageRef.child(getIntent().getExtras().getString("photo"));
-        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Delete photo from Firebase storage",Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Unsuccessful delete photo from Firebase storage",Toast.LENGTH_LONG).show();
-            }
-        });
-
+    private void onResponseReceived(String response) {
+        Log.v(TAG, response);
+        if(response.toLowerCase(Locale.ROOT).contains("successfully deleted")){
+            Toast.makeText(getApplicationContext(),"Usunięto tag",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(),"Usuwanie tagu nie powiodło się",Toast.LENGTH_LONG).show();
+        }
+        finish();
     }
 
     private void onErrorResponseReceived(VolleyError error){

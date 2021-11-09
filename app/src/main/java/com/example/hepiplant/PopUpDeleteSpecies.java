@@ -17,13 +17,12 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.hepiplant.configuration.Configuration;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.RequestType;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class PopUpDeleteSpecies extends AppCompatActivity {
 
@@ -31,12 +30,14 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
 
     private Button yes, no;
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_up_delete_admin);
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -83,7 +84,8 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
 
     private void deleteSpecies(){
         String url = getRequestUrl(getIntent().getExtras().getLong("speciesId"));
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -95,14 +97,7 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     private void onResponseReceived(String response) {
@@ -121,11 +116,5 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }

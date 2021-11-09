@@ -1,9 +1,5 @@
 package com.example.hepiplant;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,36 +17,39 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
+import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PlantEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -59,6 +58,10 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     private ImageView plantImage;
     private Button date, editPlant;
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<PlantDto> plantResponseHandler;
+    private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private static final String TAG = "PlantEditActivity";
     private SpeciesDto speciesDto;
     private SpeciesDto[] speciesDtos;
@@ -70,6 +73,10 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_plant);
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        plantResponseHandler = new JSONResponseHandler<>(config);
+        speciesResponseHandler = new JSONResponseHandler<>(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
         setupViewsData();
         setValuesToEdit();
     }
@@ -92,7 +99,8 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
 
     private void setValuesToEdit(){
         plantName.setText(getIntent().getExtras().getString("name"));
-        getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo"));
+        if(!getIntent().getExtras().getString("photo", "").isEmpty())
+            getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo"));
         watering.setText(getIntent().getExtras().getString("watering"));
         fertilizing.setText(getIntent().getExtras().getString("fertilizing"));
         misting.setText(getIntent().getExtras().getString("misting"));
@@ -129,11 +137,9 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         });
     }
 
-    private void onGetResponseSpecies(String response){
-        String str=onResponseStr(response);
+    private void onGetResponseSpecies(JSONArray response){
         SpeciesDto[] data = new SpeciesDto[]{};
-        Gson gson = new Gson();
-        data = gson.fromJson(String.valueOf(str), SpeciesDto[].class);
+        data = speciesResponseHandler.handleArrayResponse(response, SpeciesDto[].class);
         speciesDtos = data;
         List<String> sp = new ArrayList<String>();
         for (int i = 0; i < data.length; i++) {
@@ -145,11 +151,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     private void getSpeciesFromDB() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = getRequestUrl() + "species";
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONArray response) {
                         onGetResponseSpecies(response);
                     }
                 }, new Response.ErrorListener() {
@@ -157,19 +163,12 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private void getSpecies(List<String> species) {
         Log.v(TAG, "Species size" + species.size());
-        spinnerGat = (Spinner) findViewById(R.id.speciesEdit);
+        spinnerGat = findViewById(R.id.speciesEdit);
         spinnerGat.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -178,16 +177,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
             Log.v(TAG, "Species id value: "+getIntent().getExtras().getString("speciesId"));
             spinnerGat.setSelection(Integer.parseInt(getIntent().getExtras().getString("speciesId") )-1);
         }
-    }
-
-    private String onResponseStr(String response){
-        String str = null;
-        try {
-            str = new String(response.getBytes("ISO-8859-1"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return str;
     }
 
     private void onErrorResponsePlant(VolleyError error){
@@ -333,10 +322,9 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void patchRequestSchedule(){
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"schedules/"+getIntent().getExtras().getLong("scheduleId");
         JSONObject scheduleJ = makeScheduleJSON();
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.PATCH, url, scheduleJ,
+        requestProcessor.makeRequest(Request.Method.PATCH, url, scheduleJ, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -347,25 +335,17 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private void patchRequestPlant(){
         patchRequestSchedule();
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"plants/"+getIntent().getExtras().getLong("plantId");
         JSONObject speciesJson = makeSpeciesJSON();
         JSONObject scheduleJ = makeScheduleJSON();
         JSONObject postData = makePostDataJson(speciesJson,scheduleJ);
         Log.v(TAG, String.valueOf(postData));
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -377,14 +357,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-        queue.add(jsonArrayRequest);
+        });
     }
 
     private JSONObject makeSpeciesJSON(){
@@ -459,19 +432,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
 
     private void onPostResponsePlant(JSONObject response){
         Log.v(TAG, "ONResponse");
-        String str = String.valueOf(response); //http request
         PlantDto data = new PlantDto();
-        Gson gson = new Gson();
-        data = gson.fromJson(str, PlantDto.class);
-        Intent intent = new Intent(this,MainTabsActivity.class);
+        data = plantResponseHandler.handleResponse(response, PlantDto.class);
+        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 
 }

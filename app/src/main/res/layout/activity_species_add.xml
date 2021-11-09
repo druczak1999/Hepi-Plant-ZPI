@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SpeciesAddActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/includeToolbarSpeciesAdd"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/spaceForToolbar"
+        android:layout_marginBottom="@dimen/spaceForBottomButton">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/speciesAddTitleTextView"
+                style="@style/ListItemTitleFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/add_species_title" />
+
+            <TextView
+                android:id="@+id/speciesAddNameHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/name_placeholder" />
+
+            <EditText
+                android:id="@+id/speciesNameAddEditText"
+                style="@style/DetailsFontValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" />
+
+            <TextView
+                android:id="@+id/speciesAddCategoryHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/category_placeholder" />
+
+            <Spinner
+                android:id="@+id/speciesCategoryAddSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spinner_height"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium"
+                style="@style/DetailsFontValue"/>
+
+            <TextView
+                android:id="@+id/speciesAddWateringFrequencyHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/watering_frequency_placeholder" />
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" >
+
+                <EditText
+                    android:id="@+id/speciesWateringFrequencyAddEditText"
+                    style="@style/DetailsFontValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/days_hint"
+                    android:layout_marginRight="10dp"
+                    style="@style/DetailsFontValue" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/speciesAddFertilizingFrequencyHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/fertilizing_frequency_placeholder" />
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" >
+
+                <EditText
+                    android:id="@+id/speciesFertilizingFrequencyAddEditText"
+                    style="@style/DetailsFontValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/days_hint"
+                    android:layout_marginRight="10dp"
+                    style="@style/DetailsFontValue" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/speciesAddMistingFrequencyHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/misting_frequency_placeholder" />
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" >
+
+                <EditText
+                    android:id="@+id/speciesMistingFrequencyAddEditText"
+                    style="@style/DetailsFontValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/days_hint"
+                    android:layout_marginRight="10dp"
+                    style="@style/DetailsFontValue" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/speciesAddPlacementHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/placement_placeholder" />
+
+            <Spinner
+                android:id="@+id/speciesPlacementAddSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spinner_height"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium"
+                style="@style/DetailsFontValue"/>
+
+            <TextView
+                android:id="@+id/speciesAddSoilHeaderTextView"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/soil_placeholder" />
+
+            <EditText
+                android:id="@+id/speciesSoilAddEditText"
+                style="@style/DetailsFontValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/speciesAddSaveButton"
+        style="@style/ButtonSmallAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/save"
+        android:onClick="onSaveButtonClick"
+        android:layout_marginVertical="@dimen/margin_big"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

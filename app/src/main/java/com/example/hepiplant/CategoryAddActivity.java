@@ -20,22 +20,24 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CategoryAddActivity extends AppCompatActivity {
 
     private static final String TAG = "CategoryAddActivity";
 
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private EditText nameEditText;
 
     @Override
@@ -45,6 +47,8 @@ public class CategoryAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category_add);
 
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
         setupToolbar();
     }
 
@@ -96,9 +100,9 @@ public class CategoryAddActivity extends AppCompatActivity {
 
     private void makePostDataRequest(JSONObject postData) {
         String url = getRequestUrl();
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
-            new Response.Listener<JSONObject>() {
+        Log.v(TAG, "Invoking categoryRequestProcessor");
+        requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
@@ -109,14 +113,7 @@ public class CategoryAddActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonObjectRequest);
+        });
     }
 
     @NonNull
@@ -131,7 +128,7 @@ public class CategoryAddActivity extends AppCompatActivity {
 
     private void onPostResponseReceived(JSONObject response) {
         Log.v(TAG, "onPostResponseReceived()");
-        CategoryDto category = config.getGson().fromJson(String.valueOf(response), CategoryDto.class);
+        CategoryDto category = categoryResponseHandler.handleResponse(response, CategoryDto.class);
         makeInfoToast("Dodano kategorię o id " + category.getId());
         finish();
     }
@@ -142,12 +139,6 @@ public class CategoryAddActivity extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 
     private void makeInfoToast(String info) {
