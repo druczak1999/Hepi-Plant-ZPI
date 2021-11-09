@@ -91,7 +91,10 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         if(plants[position].getSpecies()!=null){
             intent.putExtra("species",plants[position].getSpecies().getName());
             intent.putExtra("soil",plants[position].getSpecies().getSoil());
-            intent.putExtra("placement",plants[position].getSpecies().getPlacement().toString());
+            if(plants[position].getSpecies().getPlacement()!=null)
+                intent.putExtra("placement",plants[position].getSpecies().getPlacement().toString());
+            else
+                intent.putExtra("placement","");
         }else{
             intent.putExtra("species","");
             intent.putExtra("soil","");

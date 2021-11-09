@@ -77,11 +77,11 @@ public class PlantViewActivity extends AppCompatActivity {
 
     private void setTextsToRealValues(){
         plantName.setText(getIntent().getExtras().getString("plantName"));
-        if(!Objects.requireNonNull(getIntent().getExtras().getString("species")).isEmpty())
+        if(getIntent().getExtras().getString("species")!=null && !getIntent().getExtras().getString("species").equals("Brak") && !getIntent().getExtras().getString("species").isEmpty())
             species.setText(getIntent().getExtras().getString("species"));
         else
             species.setText("Brak przypisanego gatunku");
-        if(getIntent().getExtras().getString("category")!=null && !getIntent().getExtras().getString("category").isEmpty()){
+        if(getIntent().getExtras().getString("category")!=null && !getIntent().getExtras().getString("category").isEmpty()  && !getIntent().getExtras().getString("category").equals("Brak")){
             getCategoryName(Integer.parseInt(Objects.requireNonNull(getIntent().getExtras().getString("category"))));
 
         }
@@ -94,15 +94,15 @@ public class PlantViewActivity extends AppCompatActivity {
         soil.setText(getIntent().getExtras().getString("soil"));
         placement.setText(getIntent().getExtras().getString("location"));
         location.setText(getIntent().getExtras().getString("placement"));
-        if(!Objects.requireNonNull(getIntent().getExtras().getString("soil")).isEmpty())
+        if(getIntent().getExtras().getString("soil")!=null && !getIntent().getExtras().getString("soil").isEmpty())
             soil.setText(getIntent().getExtras().getString("soil"));
         else
             soil.setText("Brak zalecanej gleby");
-        if(!Objects.requireNonNull(getIntent().getExtras().getString("location")).isEmpty())
+        if(getIntent().getExtras().getString("location")!=null && !getIntent().getExtras().getString("location").isEmpty())
             placement.setText(getIntent().getExtras().getString("location"));
         else
             placement.setText("Brak przypisanego pomieszczenia");
-        if(!Objects.requireNonNull(getIntent().getExtras().getString("placement")).isEmpty())
+        if(getIntent().getExtras().getString("placement")!=null && !getIntent().getExtras().getString("placement").isEmpty())
             location.setText(getIntent().getExtras().getString("placement").toLowerCase());
         else
             location.setText("Brak zalecanego stanowiska");
