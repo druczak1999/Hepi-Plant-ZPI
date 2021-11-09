@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventViewActivity">
+
+    <include
+        android:id="@+id/includeToolbarPlantView"
+        layout="@layout/toolbar"></include>
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/bottom_bar"></include>\
+
+    <include
+        android:id="@+id/floatingActionButtonPlantView"
+        layout="@layout/floatingbutton"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="283dp"></include>
+
+    <TextView
+        android:id="@+id/EventName"
+        style="@style/PageTitleFont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Nazwa eventu"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeToolbarPlantView" />
+
+    <ImageView
+        android:id="@+id/eventImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/rounded_square"
+        android:elevation="@dimen/elevation_3sp"
+        android:padding="10dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EventName"
+        app:srcCompat="@drawable/podelwanie" />
+
+    <TextView
+        android:id="@+id/EventPlantNameView"
+        style="@style/DetailsFontTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginLeft="20dp"
+        android:text="Roślina"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventImage" />
+
+    <TextView
+        android:id="@+id/EventPlantNameValueView"
+        style="@style/DetailsFontValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        android:text="Nazwa roślina"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EventPlantNameView" />
+
+    <TextView
+        android:id="@+id/EventDescriptionView"
+        style="@style/DetailsFontTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Opis wydarzenia"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EventDateValueView" />
+
+    <TextView
+        android:id="@+id/EventDescriptionValue"
+        style="@style/DetailsFontValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        android:text="Opis"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EventDescriptionView" />
+
+    <TextView
+        android:id="@+id/EventDateView"
+        style="@style/DetailsFontTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginLeft="20dp"
+        android:text="Data wydarzenia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EventPlantNameValueView" />
+
+    <TextView
+        android:id="@+id/EventDateValueView"
+        style="@style/DetailsFontValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"
+        android:text="Data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EventDateView" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

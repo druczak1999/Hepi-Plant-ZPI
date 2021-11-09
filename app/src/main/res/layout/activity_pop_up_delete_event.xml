@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/cantata_one"
-        android:text="Czy na pewno chcesz usunąć tę roślinę?"
+        android:text="Czy na pewno chcesz usunąć to wydarzenie?"
         android:textColor="@color/colorPrimaryLight"
         android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,8 +21,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonYes"
-        style="@style/ButtonSmallGreen"
+        android:id="@+id/buttonYesEvent"
+        style="@style/ButtonSmallWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -34,8 +34,8 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/buttonNo"
-        style="@style/ButtonSmallGreen"
+        android:id="@+id/buttonNoEvent"
+        style="@style/ButtonSmallWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="40sp"

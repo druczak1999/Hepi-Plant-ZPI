@@ -6,30 +6,24 @@
         android:id="@+id/more"
         android:icon="@drawable/kropki"
         app:showAsAction="ifRoom|withText"
-        android:title="@string/sign_out"
+        android:title="Wyloguj się"
         >
         <menu>
             <item
                 android:id="@+id/informationAboutApp"
-                android:title="@string/informations"
+                android:title="Informacje"
                 app:showAsAction="never"
 
                 />
             <item
                 android:id="@+id/logoff"
-                android:title="@string/sign_out"
+                android:title="Wyloguj się"
                 app:showAsAction="never"
 
                 />
             <item
-            android:id="@+id/editPost"
-            android:title="@string/edit_post"
-            app:showAsAction="never"
-
-            />
-            <item
-                android:id="@+id/deletePost"
-                android:title="@string/delete_post"
+                android:id="@+id/deleteEvent"
+                android:title="Usuń wydarzenie"
                 app:showAsAction="never"
                 />
         </menu>
@@ -37,7 +31,7 @@
     <item
         android:id="@+id/miProfile"
         android:icon="@drawable/ludzik"
-        android:title="@string/user_profile"
+        android:title="Profil użytkownika"
         app:showAsAction="ifRoom" />
 
 </menu>
