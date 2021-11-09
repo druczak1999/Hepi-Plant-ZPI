@@ -19,21 +19,17 @@
                 android:id="@+id/logoff"
                 android:title="Wyloguj się"
                 app:showAsAction="never"
-                />
-            <item
-                android:id="@+id/editPlant"
-                android:title="Edytuj roślinę"
-                app:showAsAction="never"
 
                 />
             <item
-                android:id="@+id/deletePlant"
-                android:title="Usuń roślinę"
-                app:showAsAction="never"
-                />
+            android:id="@+id/editEvent"
+            android:title="Edytuj wydarzenie"
+            app:showAsAction="never"
+
+            />
             <item
-                android:id="@+id/archivePlant"
-                android:title="Archiwum rośliny"
+                android:id="@+id/deleteEvent"
+                android:title="Usuń wydarzenie"
                 app:showAsAction="never"
                 />
         </menu>
@@ -43,7 +39,5 @@
         android:icon="@drawable/ludzik"
         android:title="Profil użytkownika"
         app:showAsAction="ifRoom" />
-
-
 
 </menu>

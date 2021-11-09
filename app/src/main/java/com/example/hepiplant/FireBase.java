@@ -207,7 +207,7 @@ public class FireBase extends AppCompatActivity {
         if (config.getUserRoles().contains(ROLE_ADMIN)){
             intent = new Intent(getApplicationContext(), MainAdminActivity.class);
         } else {
-            intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+            intent = new Intent(getApplicationContext(), MainTabsActivity.class);
         }
         startActivity(intent);
     }

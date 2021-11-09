@@ -196,7 +196,7 @@
         android:background="@drawable/rounded_button"
         android:elevation="18dp"
         android:fontFamily="@font/cantata_one"
-        android:text="Edytuj"
+        android:text="Zapisz"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="24sp"

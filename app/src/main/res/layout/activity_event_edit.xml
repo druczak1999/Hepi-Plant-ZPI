@@ -4,28 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostEditActivity">
+    tools:context=".EventEditActivity">
+
 
     <include
         android:id="@+id/include"
-        layout="@layout/toolbar"></include>
+        layout="@layout/toolbar" />
 
     <include
         android:id="@+id/include2"
-        layout="@layout/bottom_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></include>
+        layout="@layout/bottom_bar" />
 
     <TextView
         android:id="@+id/Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Edytuj post"
+        android:text="Edytuj wydarzenie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        style="@style/PageTitleFont"/>
+        style="@style/PageTitleFont"
+        android:textSize="30dp"/>
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -55,10 +55,11 @@
                 android:background="@drawable/rounded_square"
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/addimagebutton" />
+                android:padding="15dp"
+                app:srcCompat="@drawable/podelwanie" />
 
             <TextView
-                android:id="@+id/Title"
+                android:id="@+id/eventTitle"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,10 +68,10 @@
                 android:text="Tytuł" />
 
             <EditText
-                android:id="@+id/editTitle"
+                android:id="@+id/eventEditTitle"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spinner_height"
+                android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
@@ -78,28 +79,9 @@
                 android:ems="10"
                 android:hint="..." />
 
-            <TextView
-                android:id="@+id/Category"
-                style="@style/DetailsFontTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:text="Kategoria" />
-
-            <Spinner
-                android:id="@+id/editCategory"
-                style="@style/DetailsFontValue"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/rounded_spinner"
-                android:ems="10" />
 
             <TextView
-                android:id="@+id/Body"
+                android:id="@+id/eventDescription"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,50 +94,48 @@
                 app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
             <EditText
-                android:id="@+id/editBody"
+                android:id="@+id/eventDescriptionEdit"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:gravity="top|start"
                 android:hint="..." />
 
             <TextView
-                android:id="@+id/Tags"
-                style="@style/DetailsFontTitle"
+                android:id="@+id/eventDateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="#Hasztagi"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.084"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
+                android:text="Data zakupu"
+                style = "@style/DetailsFontTitle"
+                />
 
-            <EditText
-                android:id="@+id/editTags"
-                style="@style/DetailsFontValue"
+            <Button
+                android:id="@+id/eventDateEdit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="46dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
+                android:drawableRight="@drawable/calendar"
                 android:ems="10"
-                android:gravity="top|start"
-                android:inputType="textMultiLine"
-                android:hint="..." />
+                android:gravity="start|center_vertical"
+                android:hint="..."
+                style="@style/DetailsFontValue"
+                android:textAlignment="viewStart"
+                />
 
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/editPost"
+        android:id="@+id/editEventButton"
         android:layout_width="115dp"
         android:layout_height="45dp"
         android:background="@drawable/rounded_button"
@@ -172,4 +152,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.935" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

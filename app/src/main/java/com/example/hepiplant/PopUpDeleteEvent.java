@@ -1,5 +1,9 @@
 package com.example.hepiplant;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,36 +13,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.hepiplant.configuration.Configuration;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-public class PopUpDelete extends AppCompatActivity {
+public class PopUpDeleteEvent extends AppCompatActivity {
 
     private Button yes, no;
     private Configuration config;
-    private static final String TAG = "PopUpDelete";
+    private static final String TAG = "PopUpDeleteEvent";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pop_up_delete);
+        setContentView(R.layout.activity_pop_up_delete_event);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
@@ -49,8 +44,8 @@ public class PopUpDelete extends AppCompatActivity {
 
     private void setupViewsData(){
         config = (Configuration) getApplicationContext();
-        yes = findViewById(R.id.buttonYes);
-        no = findViewById(R.id.buttonNo);
+        yes = findViewById(R.id.buttonYesEvent);
+        no = findViewById(R.id.buttonNoEvent);
 
         no.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +57,7 @@ public class PopUpDelete extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deletePlant();
+                deleteEvent();
             }
         });
     }
@@ -74,21 +69,19 @@ public class PopUpDelete extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "plants/"+id;
+        return config.getUrl() + "events/"+id;
     }
 
-    private void deletePlant(){
-        Log.v(TAG,String.valueOf(getIntent().getExtras().getLong("plantId")));
-        String url = getRequestUrl(Objects.requireNonNull(getIntent().getExtras()).getLong("plantId"));
+    private void deleteEvent(){
+        String url = getRequestUrl(getIntent().getExtras().getLong("eventId"));
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
-                        if(!getIntent().getExtras().getString("photo").isEmpty()) deletePhotoFromFirebase();
                         Log.v(TAG, response);
-                        Toast.makeText(getApplicationContext(),"Usunięto roślinę",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
+                        Toast.makeText(getApplicationContext(),"Usunięto wydarzenie",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -105,24 +98,6 @@ public class PopUpDelete extends AppCompatActivity {
         };
         Log.v(TAG, "Sending the request to " + url);
         config.getQueue().add(jsonArrayRequest);
-    }
-
-    private void deletePhotoFromFirebase(){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-        StorageReference imageRef = storageRef.child(getIntent().getExtras().getString("photo"));
-        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-               Toast.makeText(getApplicationContext(),"Delete photo from Firebase storage",Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Unsuccessful delete photo from Firebase storage",Toast.LENGTH_LONG).show();
-            }
-        });
-
     }
 
     private void onErrorResponseReceived(VolleyError error){

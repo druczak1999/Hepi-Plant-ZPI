@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
@@ -47,8 +48,12 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.time.LocalDateTime.now;
 
 
 public class PlantAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -101,6 +106,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+                intent.putExtra("event","plant");
                 startActivityForResult(intent, 1);
             }
         });
@@ -154,7 +160,9 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
-                        onPostResponsePlant(response);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            onPostResponsePlant(response);
+                        }
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -230,6 +238,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         return postData;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPostResponsePlant(JSONObject response){
         Log.v(TAG, "ONResponse");
         PlantDto data = new PlantDto();

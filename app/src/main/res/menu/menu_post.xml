@@ -40,6 +40,4 @@
         android:title="Profil użytkownika"
         app:showAsAction="ifRoom" />
 
-
-
 </menu>
