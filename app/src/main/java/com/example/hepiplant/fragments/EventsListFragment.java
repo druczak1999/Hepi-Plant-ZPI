@@ -96,7 +96,6 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
     }
 
     private void makeGetDataRequest() {
-
         String url = getRequestUrl()+ "events/user/"+config.getUserId();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {

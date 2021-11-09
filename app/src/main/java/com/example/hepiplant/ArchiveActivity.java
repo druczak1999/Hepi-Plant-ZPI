@@ -20,7 +20,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.hepiplant.adapter.recyclerview.EventsArchiveRecyclerViewAdapter;
-import com.example.hepiplant.adapter.recyclerview.EventsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
 import com.google.gson.Gson;

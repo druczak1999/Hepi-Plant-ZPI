@@ -23,6 +23,7 @@ public class Configuration extends Application {
     private RequestQueue queue;
     private Gson gson;
     private Uri photo;
+    private boolean notifications =false;
 
     public Uri getPhoto() { return photo; }
 
@@ -52,6 +53,13 @@ public class Configuration extends Application {
         this.userRoles = userRoles;
     }
 
+    public boolean isNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(boolean notifications) {
+        this.notifications = notifications;
+    }
 
     public String getToken() {
         return token;
