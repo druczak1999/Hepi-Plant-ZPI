@@ -350,7 +350,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(), "Informacje", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getApplicationContext(), R.string.informations, Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.deletePost:
                     Intent intent3 = new Intent(this, PopUpDeletePost.class);
