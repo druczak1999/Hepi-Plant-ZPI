@@ -12,13 +12,11 @@
                 android:id="@+id/informationAboutApp"
                 android:title="Informacje"
                 app:showAsAction="never"
-
                 />
             <item
                 android:id="@+id/logoff"
                 android:title="Wyloguj się"
                 app:showAsAction="never"
-
                 />
             <item
                 android:id="@+id/deleteSalesOffer"
@@ -32,5 +30,4 @@
         android:icon="@drawable/ludzik"
         android:title="Profil użytkownika"
         app:showAsAction="ifRoom" />
-
 </menu>
