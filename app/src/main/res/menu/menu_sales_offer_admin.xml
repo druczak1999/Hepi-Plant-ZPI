@@ -12,19 +12,11 @@
                 android:id="@+id/informationAboutApp"
                 android:title="@string/informations"
                 app:showAsAction="never"
-
                 />
             <item
                 android:id="@+id/logoff"
                 android:title="@string/sign_out"
                 app:showAsAction="never"
-
-                />
-            <item
-                android:id="@+id/editSalesOffer"
-                android:title="@string/edit_sales_offer"
-                app:showAsAction="never"
-
                 />
             <item
                 android:id="@+id/deleteSalesOffer"
@@ -38,5 +30,4 @@
         android:icon="@drawable/ludzik"
         android:title="@string/user_profile"
         app:showAsAction="ifRoom" />
-
 </menu>

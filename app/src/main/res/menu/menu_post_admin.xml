@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <item
         android:id="@+id/more"
         android:icon="@drawable/kropki"
@@ -12,23 +13,15 @@
                 android:id="@+id/informationAboutApp"
                 android:title="@string/informations"
                 app:showAsAction="never"
-
                 />
             <item
                 android:id="@+id/logoff"
                 android:title="@string/sign_out"
                 app:showAsAction="never"
-
                 />
             <item
-                android:id="@+id/editSalesOffer"
-                android:title="@string/edit_sales_offer"
-                app:showAsAction="never"
-
-                />
-            <item
-                android:id="@+id/deleteSalesOffer"
-                android:title="@string/delete_sales_offer"
+                android:id="@+id/deletePost"
+                android:title="@string/delete_post"
                 app:showAsAction="never"
                 />
         </menu>
@@ -38,5 +31,4 @@
         android:icon="@drawable/ludzik"
         android:title="@string/user_profile"
         app:showAsAction="ifRoom" />
-
 </menu>

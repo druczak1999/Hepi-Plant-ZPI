@@ -266,7 +266,7 @@ public class PlantViewActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.deletePlant:
                 Intent intent3 = new Intent(this, PopUpDelete.class);

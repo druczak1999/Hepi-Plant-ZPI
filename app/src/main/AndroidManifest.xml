@@ -22,8 +22,6 @@
             android:name=".SpeciesAddActivity"
             android:exported="true" />
         <activity
-            android:name=".SpeciesEditActivity"
-            android:exported="true" />
             android:name=".PopUpDeleteEvent"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
@@ -62,10 +60,9 @@
             android:name=".PopUpDeleteCategory"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
-            android:name=".PopUpDeleteSalesOffer"
+            android:name=".PopUpDeleteTag"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
-            android:name=".PopUpDeleteTag"
             android:name=".PopUpDeleteSpecies"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity android:name=".PlantViewActivity" />

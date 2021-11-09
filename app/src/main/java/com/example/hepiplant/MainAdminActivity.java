@@ -53,7 +53,7 @@ public class MainAdminActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.miProfile:
                 Intent intent = new Intent(this, UserActivity.class);
@@ -65,15 +65,12 @@ public class MainAdminActivity extends AppCompatActivity {
     }
 
     private void setupViewPager() {
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        viewPager = (ViewPager) findViewById(R.id.adminViewPager);
-        adminFragmentStateAdapter = new AdminFragmentPagerAdapter(getSupportFragmentManager(),
-                this);
+        viewPager = findViewById(R.id.adminViewPager);
+        adminFragmentStateAdapter = new AdminFragmentPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(adminFragmentStateAdapter);
 
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.adminTabsLayout);
+        TabLayout tabLayout = findViewById(R.id.adminTabsLayout);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
     }
-
 }

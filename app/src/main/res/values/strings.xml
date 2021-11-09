@@ -38,5 +38,14 @@
     <string name="add_species_title">Dodaj gatunek</string>
     <string name="days_hint">dni</string>
     <string name="zero">0</string>
+    <string name="sign_out">Wyloguj się</string>
+    <string name="informations">Informacje</string>
+    <string name="edit_post">Edytuj post</string>
+    <string name="delete_post">Usuń post</string>
+    <string name="user_profile">Profil użytkownika</string>
+    <string name="edit_sales_offer">Edytuj ofertę</string>
+    <string name="delete_sales_offer">Usuń ofertę</string>
+    <string name="edit_plant">Edytuj roślinę</string>
+    <string name="delete_plant">Usuń roślinę</string>
 
 </resources>
