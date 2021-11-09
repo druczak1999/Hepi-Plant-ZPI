@@ -1,5 +1,7 @@
 package com.example.hepiplant;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.dto.SpeciesDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
@@ -48,7 +51,10 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class PlantEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -350,7 +356,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
-                        onPostResponsePlant(response);
+                        onPatchResponsePlant(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -430,13 +436,46 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         return postData;
     }
 
-    private void onPostResponsePlant(JSONObject response){
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void onPatchResponsePlant(JSONObject response){
         Log.v(TAG, "ONResponse");
         PlantDto data = new PlantDto();
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
+        Log.v(TAG,"Events: "+data.getEvents());
+        setupNotifications(data);
         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void setupNotifications(PlantDto data) {
+        if(data.getEvents()!=null && !data.getEvents().isEmpty()) {
+            Log.v(TAG, "petla");
+            int i = 0;
+            for (EventDto event : data.getEvents()) {
+                if (!event.isDone()) {
+                    Log.v(TAG, event.getEventName());
+                    Intent intent = new Intent(this, AlarmBroadcast.class);
+                    intent.putExtra("eventName", event.getEventName());
+                    intent.putExtra("eventDescription", event.getEventDescription());
+                    intent.putExtra("eventId", event.getId());
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, i, intent, 0);
+                    i++;
+
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    try {
+                        Log.v(TAG, simpleDateFormat.parse(event.getEventDate()).toString());
+                        calendar.setTime(simpleDateFormat.parse(event.getEventDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Log.v(TAG, String.valueOf(calendar.getTime()));
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                }
+            }
+        }
     }
 
 }

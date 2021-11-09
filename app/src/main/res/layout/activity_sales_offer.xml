@@ -93,7 +93,8 @@
                         android:background="@drawable/rounded_square"
                         android:scaleType="fitXY"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@drawable/kwiatek" />
+                        app:srcCompat="@drawable/kwiatek"
+                        android:padding="20dp"/>
 
                     <TextView
                         android:id="@+id/salesOfferCommentsCountTextViewSingle"

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,12 +25,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
+import com.example.hepiplant.dto.PlantDto;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -177,10 +183,40 @@ public class EventEditActivity extends AppCompatActivity {
         EventDto data = new EventDto();
         Gson gson = new Gson();
         data = gson.fromJson(str,EventDto.class);
+        setupNotifications(data);
         Intent intent = new Intent(this, MainTabsActivity.class);
         startActivity(intent);
         finish();
     }
+
+    private void setupNotifications(EventDto data) {
+        if(data!=null){
+            Log.v(TAG,"petla");
+            int i=0;
+                if(!data.isDone()){
+                    Log.v(TAG,data.getEventName());
+                    Intent intent = new Intent(this, AlarmBroadcast.class);
+                    intent.putExtra("eventName",data.getEventName());
+                    intent.putExtra("eventDescription",data.getEventDescription());
+                    intent.putExtra("eventId",data.getId());
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,i, intent, 0);
+                    i++;
+
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    try {
+                        Log.v(TAG,simpleDateFormat.parse(data.getEventDate()).toString());
+                        calendar.setTime(simpleDateFormat.parse(data.getEventDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Log.v(TAG, String.valueOf(calendar.getTime()));
+                    alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                }
+            }
+        }
 
     private void onErrorResponse(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());

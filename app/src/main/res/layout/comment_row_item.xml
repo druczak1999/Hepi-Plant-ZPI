@@ -23,9 +23,10 @@
                 android:id="@+id/commentUsernameTextView"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="4sp"
                 android:gravity="left"
+                android:inputType="textMultiLine"
                 android:text="@string/username_holder"
-                android:inputType = "textMultiLine"
                 android:textAppearance="@style/ForumUsernameFont" />
 
             <Space
@@ -35,8 +36,10 @@
 
             <TextView
                 android:id="@+id/commentDateTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:layout_marginRight="4sp"
                 android:gravity="right"
                 android:text="@string/forum_date_holder"
                 android:textAppearance="@style/ForumDateFont" />
