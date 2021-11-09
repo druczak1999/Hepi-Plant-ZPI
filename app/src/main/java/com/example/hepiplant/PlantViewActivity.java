@@ -77,13 +77,16 @@ public class PlantViewActivity extends AppCompatActivity {
 
     private void setTextsToRealValues(){
         plantName.setText(getIntent().getExtras().getString("plantName"));
-        species.setText(getIntent().getExtras().getString("species"));
-        if(getIntent().getExtras().getString("category")!=null && !getIntent().getExtras().getString("category").isEmpty()){
+        if(getIntent().getExtras().getString("species")!=null && !getIntent().getExtras().getString("species").equals("Brak") && !getIntent().getExtras().getString("species").isEmpty())
+            species.setText(getIntent().getExtras().getString("species"));
+        else
+            species.setText("Brak przypisanego gatunku");
+        if(getIntent().getExtras().getString("category")!=null && !getIntent().getExtras().getString("category").isEmpty()  && !getIntent().getExtras().getString("category").equals("Brak")){
             getCategoryName(Integer.parseInt(Objects.requireNonNull(getIntent().getExtras().getString("category"))));
 
         }
         else{
-            category.setText("");
+            category.setText("Brak przypisanej kategorii");
         }
         watering.setText(getFrequency("watering", getIntent()));
         fertilizing.setText(getFrequency("fertilizing", getIntent()));
@@ -91,6 +94,18 @@ public class PlantViewActivity extends AppCompatActivity {
         soil.setText(getIntent().getExtras().getString("soil"));
         placement.setText(getIntent().getExtras().getString("location"));
         location.setText(getIntent().getExtras().getString("placement"));
+        if(getIntent().getExtras().getString("soil")!=null && !getIntent().getExtras().getString("soil").isEmpty())
+            soil.setText(getIntent().getExtras().getString("soil"));
+        else
+            soil.setText("Brak zalecanej gleby");
+        if(getIntent().getExtras().getString("location")!=null && !getIntent().getExtras().getString("location").isEmpty())
+            placement.setText(getIntent().getExtras().getString("location"));
+        else
+            placement.setText("Brak przypisanego pomieszczenia");
+        if(getIntent().getExtras().getString("placement")!=null && !getIntent().getExtras().getString("placement").isEmpty())
+            location.setText(getIntent().getExtras().getString("placement").toLowerCase());
+        else
+            location.setText("Brak zalecanego stanowiska");
         date.setText(getIntent().getExtras().getString("date").replaceFirst("00:00:00",""));
         if(!getIntent().getExtras().getString("photo").isEmpty()){
             getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo") );
@@ -204,7 +219,7 @@ public class PlantViewActivity extends AppCompatActivity {
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                 startActivity(intent);
             }
         });
@@ -251,7 +266,7 @@ public class PlantViewActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.deletePlant:
                 Intent intent3 = new Intent(this, PopUpDelete.class);
@@ -266,6 +281,11 @@ public class PlantViewActivity extends AppCompatActivity {
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);
                 startActivity(intent2);
+                return true;
+            case R.id.archivePlant:
+                Intent intent1 = new Intent(this,ArchiveActivity.class);
+                intent1.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
+                startActivity(intent1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

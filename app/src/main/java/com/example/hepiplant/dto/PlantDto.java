@@ -1,6 +1,9 @@
 package com.example.hepiplant.dto;
 
+import com.google.firebase.events.Event;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class PlantDto implements Serializable {
 
@@ -13,6 +16,7 @@ public class PlantDto implements Serializable {
     private SpeciesDto species;
     private Long userId;
     private ScheduleDto schedule;
+    private List<EventDto> events;
 
     public PlantDto() {
     }
@@ -89,4 +93,11 @@ public class PlantDto implements Serializable {
         this.schedule = schedule;
     }
 
+    public List<EventDto> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<EventDto> events) {
+        this.events = events;
+    }
 }

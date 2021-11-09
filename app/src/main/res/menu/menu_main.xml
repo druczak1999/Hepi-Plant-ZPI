@@ -6,18 +6,18 @@
         android:id="@+id/more"
         android:icon="@drawable/kropki"
         app:showAsAction="ifRoom|withText"
-        android:title="Wyloguj się"
+        android:title="@string/sign_out"
         >
         <menu>
             <item
                 android:id="@+id/informationAboutApp"
-                android:title="Informacje"
+                android:title="@string/informations"
                 app:showAsAction="never"
 
                 />
             <item
                 android:id="@+id/logoff"
-                android:title="Wyloguj się"
+                android:title="@string/sign_out"
                 app:showAsAction="never"
 
                 />
@@ -26,7 +26,7 @@
     <item
         android:id="@+id/miProfile"
         android:icon="@drawable/ludzik"
-        android:title="Profil użytkownika"
+        android:title="@string/user_profile"
         app:showAsAction="ifRoom" />
 
 

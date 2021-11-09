@@ -17,17 +17,22 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
+        <activity android:name=".NotificationActivity"></activity>
         <activity
             android:name=".SpeciesAddActivity"
             android:exported="true" />
         <activity
-            android:name=".SpeciesEditActivity"
-            android:exported="true" />
+            android:name=".PopUpDeleteEvent"
+            android:theme="@style/AppTheme.CustomTheme" />
         <activity
-            android:name=".CategoryAddActivity"
-            android:exported="true" />
-        <activity android:name=".MainAdminActivity" />
-        <activity android:name=".CategoryEditActivity" />
+            android:name=".EventEditActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".EventViewActivity" />
+        <activity android:name=".ArchiveActivity" />
+        <activity
+            android:name=".PopUpArchive"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".MainTabsActivity" />
         <activity
             android:name=".PopUpDelete"
             android:theme="@style/AppTheme.CustomTheme" />
@@ -38,18 +43,28 @@
             android:name=".PopUpDeleteComment"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
-            android:name=".PopUpDeleteCategory"
-            android:theme="@style/AppTheme.CustomTheme" />
-        <activity
-            android:name=".PopUpDeleteSpecies"
-            android:theme="@style/AppTheme.CustomTheme" />
-        <activity
             android:name=".PopUpDeleteSalesOffer"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".PlantEditActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".SpeciesEditActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CategoryAddActivity"
+            android:exported="true" />
+        <activity android:name=".MainAdminActivity" />
+        <activity android:name=".CategoryEditActivity" />
+        <activity
+            android:name=".PopUpDeleteCategory"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
             android:name=".PopUpDeleteTag"
             android:theme="@style/AppTheme.CustomTheme" />
-        <activity android:name=".PlantEditActivity" />
+        <activity
+            android:name=".PopUpDeleteSpecies"
+            android:theme="@style/AppTheme.CustomTheme" />
         <activity android:name=".PlantViewActivity" />
         <activity android:name=".CalendarActivity" />
         <activity

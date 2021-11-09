@@ -88,8 +88,9 @@ public class PopUpDelete extends AppCompatActivity {
                         if(!getIntent().getExtras().getString("photo").isEmpty()) deletePhotoFromFirebase();
                         Log.v(TAG, response);
                         Toast.makeText(getApplicationContext(),"Usunięto roślinę",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override

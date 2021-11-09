@@ -20,7 +20,7 @@ public class ForumTabsActivity extends AppCompatActivity {
     private static final String TAG = "ForumTabsActivity";
     private ViewPager viewPager;
     private ForumFragmentPagerAdapter forumFragmentStateAdapter;
-    private int tab = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreate()");
@@ -31,17 +31,15 @@ public class ForumTabsActivity extends AppCompatActivity {
     }
 
     private void setupViewPager() {
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        viewPager = (ViewPager) findViewById(R.id.forumViewPager);
+        viewPager = findViewById(R.id.forumViewPager);
         forumFragmentStateAdapter = new ForumFragmentPagerAdapter(getSupportFragmentManager(),
                 this);
         viewPager.setAdapter(forumFragmentStateAdapter);
 
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.forumTabsLayout);
+        TabLayout tabLayout = findViewById(R.id.forumTabsLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        FloatingActionButton buttonAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        FloatingActionButton buttonAdd = findViewById(R.id.floatingActionButton);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent2 = new Intent(getApplicationContext(), QuestionActivity.class);
@@ -51,15 +49,16 @@ public class ForumTabsActivity extends AppCompatActivity {
     }
 
     private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = (Button) findViewById(R.id.buttonDom);
+        Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
 
-        Button buttonForum = (Button) findViewById(R.id.buttonForum);
+        Button buttonForum = findViewById(R.id.buttonForum);
         buttonForum.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 RecyclerView recyclerView = null;
@@ -67,10 +66,10 @@ public class ForumTabsActivity extends AppCompatActivity {
                 Log.v(TAG, "Current item: "+currentItem);
                 switch (currentItem){
                     case 0:
-                        recyclerView = (RecyclerView) findViewById(R.id.postsRecyclerView);
+                        recyclerView = findViewById(R.id.postsRecyclerView);
                         break;
                     case 1:
-                        recyclerView = (RecyclerView) findViewById(R.id.offersRecyclerView);
+                        recyclerView = findViewById(R.id.offersRecyclerView);
                         break;
                 }
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();

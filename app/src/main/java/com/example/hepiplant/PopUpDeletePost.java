@@ -30,6 +30,7 @@ import java.io.IOException;
 public class PopUpDeletePost extends AppCompatActivity {
 
     private static final String TAG = "PopUpDeletePost";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Button yes, no;
     private Configuration config;
@@ -69,24 +70,6 @@ public class PopUpDeletePost extends AppCompatActivity {
         });
     }
 
-    private void deletePhotoFromFirebase(){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-        StorageReference imageRef = storageRef.child(getIntent().getExtras().getString("photo"));
-        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Delete photo from Firebase storage",Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Unsuccessful delete photo from Firebase storage",Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
     @NonNull
     private String getRequestUrl(Long id) {
         try {
@@ -105,11 +88,7 @@ public class PopUpDeletePost extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
-                        Log.v(TAG, response);
-                        if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
-                        Toast.makeText(getApplicationContext(),"Usunięto post",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                        startActivity(intent);
+                        onDeleteResponseReceived(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -119,11 +98,42 @@ public class PopUpDeletePost extends AppCompatActivity {
         });
     }
 
+    private void onDeleteResponseReceived(String response) {
+        Log.v(TAG, response);
+        if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
+        Toast.makeText(getApplicationContext(),"Usunięto post",Toast.LENGTH_LONG).show();
+        Intent intent;
+        if (config.getUserRoles().contains(ROLE_ADMIN)){
+            intent = new Intent(getApplicationContext(), MainAdminActivity.class);
+        } else {
+            intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
     private void onErrorResponseReceived(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
+    }
+
+    private void deletePhotoFromFirebase(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference imageRef = storageRef.child(getIntent().getExtras().getString("photo"));
+        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(),"Delete photo from Firebase storage",Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"Unsuccessful delete photo from Firebase storage",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

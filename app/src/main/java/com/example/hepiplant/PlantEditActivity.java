@@ -222,7 +222,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                 startActivity(intent);
             }
         });
@@ -237,12 +237,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void setOnClickListeners(){
-        setBottomBarOnItemClickListeners();
-
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+                intent.putExtra("event","plant");
                 startActivityForResult(intent, 1);
             }
         });
@@ -340,7 +339,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -446,8 +444,9 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         Log.v(TAG, "ONResponse");
         PlantDto data = new PlantDto();
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
-        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }
