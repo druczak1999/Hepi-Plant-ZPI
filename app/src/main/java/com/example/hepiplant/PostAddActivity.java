@@ -244,10 +244,9 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                         CategoryDto[] data = new CategoryDto[]{};
                         data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
-                        categoryDtos = new CategoryDto[data.length];
+                        categoryDtos = data;
                         for (int i=0;i<data.length;i++){
                             categories.add(data[i].getName());
-                            categoryDtos[i] = data[i];
                         }
                         getCategories(categories);
                     }

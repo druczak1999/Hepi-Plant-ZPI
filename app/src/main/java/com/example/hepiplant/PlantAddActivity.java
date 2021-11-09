@@ -59,7 +59,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private Spinner spinnerGat, spinnerCat;
     private EditText plantName, location, wateringText;
     private String img_str;
-    private int categoryId, watering;
+    private int watering;
     private SpeciesDto speciesDto;
     private SpeciesDto[] speciesDtos;
     private Configuration config;
@@ -68,6 +68,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private static final int PICK_IMAGE = 2;
+    private CategoryDto[] categoryDtos;
+    private CategoryDto selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,7 +220,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             }
             else postData.put("location", location.getText().toString());
             postData.put("photo", img_str);
-            postData.put("categoryId", categoryId);
+            Log.v(TAG, selectedCategory.getId().toString());
+            postData.put("categoryId", selectedCategory.getId().intValue());
             if(speciesDto == null ) postData.put("species", null);
             else postData.put("species", speciesJson);
             postData.put("userId", config.getUserId());
@@ -356,12 +359,12 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void onGetResponseCategories(JSONArray response){
-        CategoryDto[] data = new CategoryDto[]{};
-        data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
+        categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
         List<String> categories = new ArrayList<String>();
-        for (int i = 0; i < data.length; i++) {
-            categories.add(data[i].getName());
+        for (int i = 0; i < categoryDtos.length; i++) {
+            categories.add(categoryDtos[i].getName());
         }
+        Log.v(TAG,"DL: "+categoryDtos.length);
         getCategories(categories);
     }
 
@@ -394,11 +397,20 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner speciesSpinner = (Spinner) parent;
         Spinner categorySpinner = (Spinner) parent;
+        String selectedItem = (String) parent.getItemAtPosition(position);
         if (speciesSpinner.getId() == R.id.editSpecies) {
-            speciesDto = speciesDtos[position];
+            for(SpeciesDto s : speciesDtos){
+                if(s.getName().equals(selectedItem)){
+                    speciesDto = s;
+                }
+            }
         }
-        if (categorySpinner.getId() == R.id.editCategory) {
-            categoryId = position+1;
+        if(categorySpinner.getId()==R.id.editCategory){
+            for(CategoryDto c : categoryDtos){
+                if(c.getName().equals(selectedItem)){
+                    selectedCategory = c;
+                }
+            }
         }
     }
 

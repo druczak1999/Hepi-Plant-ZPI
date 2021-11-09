@@ -174,8 +174,16 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGat.setAdapter(dtoArrayAdapter);
         if(getIntent().getExtras().getString("speciesId") != null) {
-            Log.v(TAG, "Species id value: "+getIntent().getExtras().getString("speciesId"));
-            spinnerGat.setSelection(Integer.parseInt(getIntent().getExtras().getString("speciesId") )-1);
+            for(SpeciesDto s : speciesDtos) {
+                if(s.getId() == Integer.parseInt(getIntent().getExtras().getString("speciesId"))) {
+                    for(String speciesName : species) {
+                        if (speciesName.equals(s.getName())) {
+                            speciesDto = s;
+                            spinnerGat.setSelection(species.indexOf(speciesName));
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -189,9 +197,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner speciesSpinner = (Spinner) parent;
-        if (speciesSpinner.getId() == R.id.speciesEdit) {
-            speciesDto = speciesDtos[position];
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(SpeciesDto s : speciesDtos){
+            if(s.getName().equals(selectedItem)){
+                speciesDto = s;
+            }
         }
     }
 
