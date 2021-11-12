@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,11 @@ import com.example.hepiplant.helper.RequestType;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostsListFragment extends Fragment implements PostsRecyclerViewAdapter.ItemClickListener {
 
@@ -43,6 +49,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private RecyclerView postsRecyclerView;
     private PostsRecyclerViewAdapter adapter;
     private PostDto[] posts = new PostDto[]{};
+    private Button postSort;
+    private static int click=0;
 
     public PostsListFragment() {
     }
@@ -68,11 +76,38 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreateView()");
         postsFragmentView = inflater.inflate(R.layout.fragment_posts_list, container, false);
-
         initView();
         setLayoutManager();
         makeGetDataRequest();
+        postSort = postsFragmentView.findViewById(R.id.sortPosts);
+        postSort.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG,"On click");
+                List<PostDto> postDtoList = new ArrayList<>(Arrays.asList(posts));
+                List<PostDto> postDtos= new ArrayList<>();
+                if(click%2==0){
+                    postDtos = postDtoList.stream()
+                            .sorted(Comparator.comparing(PostDto::getCreatedDate).reversed())
+                            .collect(Collectors.toList());
+                }
+                else{
+                    postDtos = postDtoList.stream()
+                            .sorted(Comparator.comparing(PostDto::getCreatedDate))
+                            .collect(Collectors.toList());
+                }
+                click++;
+                PostDto [] newPosts = new PostDto[postDtos.size()];
+                for (int i=0;i<postDtos.size();i++){
+                    newPosts[i] = postDtos.get(i);
+                }
 
+                Log.v(TAG,"Dł: "+newPosts.length);
+                posts = newPosts;
+                setAdapter();
+            }
+        });
         return postsFragmentView;
     }
 
