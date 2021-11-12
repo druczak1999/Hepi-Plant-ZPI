@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.example.hepiplant.R;
 import com.example.hepiplant.SalesOfferActivity;
 import com.example.hepiplant.adapter.recyclerview.SalesOffersRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
+import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -31,6 +33,11 @@ import com.example.hepiplant.helper.RequestType;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SalesOffersListFragment extends Fragment implements
         SalesOffersRecyclerViewAdapter.ItemClickListener {
@@ -44,6 +51,8 @@ public class SalesOffersListFragment extends Fragment implements
     private RecyclerView offersRecyclerView;
     private SalesOffersRecyclerViewAdapter adapter;
     private SalesOfferDto[] salesOffers = new SalesOfferDto[]{};
+    private Button offersSort;
+    private static int click=0;
 
     public SalesOffersListFragment() {
     }
@@ -73,8 +82,41 @@ public class SalesOffersListFragment extends Fragment implements
         initView();
         setLayoutManager();
         makeGetDataRequest();
+        offersSort = offersFragmentView.findViewById(R.id.sortSalesOffers);
+        setSortOffers();
 
         return offersFragmentView;
+    }
+
+    private void setSortOffers() {
+        offersSort.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG,"On click");
+                List<SalesOfferDto> salesOfferDtos = new ArrayList<>(Arrays.asList(salesOffers));
+                List<SalesOfferDto> offerDtos= new ArrayList<>();
+                if(click%2==0){
+                    offerDtos = salesOfferDtos.stream()
+                            .sorted(Comparator.comparing(SalesOfferDto::getCreatedDate).reversed())
+                            .collect(Collectors.toList());
+                }
+                else{
+                    offerDtos = salesOfferDtos.stream()
+                            .sorted(Comparator.comparing(SalesOfferDto::getCreatedDate))
+                            .collect(Collectors.toList());
+                }
+                click++;
+                SalesOfferDto [] newOffers = new SalesOfferDto[offerDtos.size()];
+                for (int i=0;i<offerDtos.size();i++){
+                    newOffers[i] = offerDtos.get(i);
+                }
+
+                Log.v(TAG,"Dł: "+newOffers.length);
+                salesOffers = newOffers;
+                setAdapter();
+            }
+        });
     }
 
     @Override

@@ -80,6 +80,11 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         setLayoutManager();
         makeGetDataRequest();
         postSort = postsFragmentView.findViewById(R.id.sortPosts);
+        setSortPosts();
+        return postsFragmentView;
+    }
+
+    private void setSortPosts() {
         postSort.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -108,7 +113,6 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                 setAdapter();
             }
         });
-        return postsFragmentView;
     }
 
     @Override
