@@ -238,13 +238,10 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
-                        CategoryDto[] data = new CategoryDto[]{};
-                        data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
-                        List<String> categories = new ArrayList<>();
-                        categoryDtos = new CategoryDto[data.length];
-                        for (int i = 0; i < data.length; i++) {
-                            categories.add(data[i].getName());
-                            categoryDtos[i] = data[i];
+                        categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
+                        List<String> categories = new ArrayList<String>();
+                        for (int i=0;i<categoryDtos.length;i++){
+                            categories.add(categoryDtos[i].getName());
                         }
                         getCategories(categories);
 

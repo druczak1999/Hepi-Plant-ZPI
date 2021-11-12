@@ -125,13 +125,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
-                        CategoryDto[] data = new CategoryDto[]{};
-                        data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
+                        categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
-                        categoryDtos = new CategoryDto[data.length];
-                        for (int i=0;i<data.length;i++){
-                            categories.add(data[i].getName());
-                            categoryDtos[i] = data[i];
+                        for (int i=0;i<categoryDtos.length;i++){
+                            categories.add(categoryDtos[i].getName());
                         }
                         getCategories(categories);
 
@@ -154,13 +151,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         if(getIntent().getExtras().getString("categoryId") != null) {
             for(CategoryDto c : categoryDtos){
                 if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
-                    for(String categoryName : categories) {
-                        if (categoryName.equals(c.getName())) {
-                            selectedCategory = c;
-                            spinnerCat.setSelection(categories.indexOf(categoryName));
-                        }
-                    }
-                    break;
+                    selectedCategory = c;
+                    spinnerCat.setSelection(categories.indexOf(c.getName()));
                 }
             }
         }

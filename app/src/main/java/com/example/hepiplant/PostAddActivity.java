@@ -241,13 +241,10 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
-                        CategoryDto[] data = new CategoryDto[]{};
-                        data = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
+                        categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
                         List<String> categories = new ArrayList<String>();
-                        categoryDtos = new CategoryDto[data.length];
-                        for (int i=0;i<data.length;i++){
-                            categories.add(data[i].getName());
-                            categoryDtos[i] = data[i];
+                        for (int i=0;i<categoryDtos.length;i++){
+                            categories.add(categoryDtos[i].getName());
                         }
                         getCategories(categories);
                     }
