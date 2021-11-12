@@ -173,6 +173,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGat.setAdapter(dtoArrayAdapter);
+        Log.v(TAG, "Species id:" +getIntent().getExtras().getString("speciesId"));
         if(getIntent().getExtras().getString("speciesId") != null) {
             for(SpeciesDto s : speciesDtos) {
                 if(s.getId() == Integer.parseInt(getIntent().getExtras().getString("speciesId"))) {

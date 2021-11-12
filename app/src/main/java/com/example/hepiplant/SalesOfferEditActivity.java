@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -45,10 +46,12 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class SalesOfferEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -69,6 +72,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     private Button editSalesOffer;
     private CategoryDto[] categoryDtos;
     private CategoryDto selectedCategory;
+    private SalesOfferDto salesOffer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +82,11 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         requestProcessor = new JSONRequestProcessor(config);
         salesOfferResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
-        salesOfferId = getIntent().getExtras().getLong("id");
-        categoryId = getIntent().getExtras().getLong("category");
+
+        setBottomBarOnItemClickListeners();
         setupViewsData();
-        setValuesToEdit();
+        makeGetDataRequest();
+        salesOfferId = getIntent().getExtras().getLong("id");
     }
 
     private void setupViewsData(){
@@ -93,20 +98,52 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         salesOfferPrice = findViewById(R.id.editPrice);
         salesOfferLocation = findViewById(R.id.editLocation);
         editSalesOffer = findViewById(R.id.editSalesOffer);
-        getCategoriesFromDB();
-        setBottomBarOnItemClickListeners();
-        setOnClickListeners();
     }
 
-    private void setValuesToEdit()
-    {
-        salesOfferName.setText(getIntent().getExtras().getString("name"));
-        salesOfferBody.setText(getIntent().getExtras().getString("body"));
+    private void makeGetDataRequest() {
+        String url = getRequestUrl()+"salesoffers/" + getIntent().getExtras().get("id");
+        Log.v(TAG, "Invoking postRequestProcessor"+ url);
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.v(TAG, "onResponse");
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
+                    }
+                });
+    }
+
+    private void onGetResponseReceived(JSONObject response) {
+        Log.v(TAG, "onGetResponseReceived()");
+        salesOffer = salesOfferResponseHandler.handleResponse(response, SalesOfferDto.class);
+        categoryId = salesOffer.getCategoryId();
+        getCategoriesFromDB();
+        setOnClickListeners();
+        setValuesToEdit();
+        Log.v(TAG, "co jest w sales offer:" + salesOffer.getTitle());
+    }
+
+    private void onErrorResponseReceived(VolleyError error) {
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
+    }
+
+    private void setValuesToEdit() {
+        salesOfferName.setText(salesOffer.getTitle());
+        salesOfferBody.setText(salesOffer.getBody());
         salesOfferTags.setText(getIntent().getExtras().getString("tags"));
-        salesOfferLocation.setText(getIntent().getExtras().getString("location"));
-        salesOfferPrice.setText(getIntent().getExtras().getString("price"));
-        if(!getIntent().getExtras().getString("photo", "").isEmpty())
-            getPhotoFromFirebase(salesOfferImage, getIntent().getExtras().getString("photo"));
+        salesOfferLocation.setText(salesOffer.getLocation());
+        salesOfferPrice.setText(salesOffer.getPrice().toString());
+        if(salesOffer.getPhoto()!=null)
+            getPhotoFromFirebase(salesOfferImage, salesOffer.getPhoto());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             salesOfferImage.setClipToOutline(true);
         }
@@ -210,12 +247,10 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
-        if(getIntent().getExtras().getString("categoryId") != null) {
-            for(CategoryDto c : categoryDtos){
-                if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
-                    selectedCategory = c;
-                    spinnerCat.setSelection(categories.indexOf(c.getName()));
-                }
+        for(CategoryDto c : categoryDtos){
+            if(c.getId() == categoryId){
+                selectedCategory = c;
+                spinnerCat.setSelection(categories.indexOf(c.getName()));
             }
         }
     }
@@ -299,9 +334,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                     }
                 }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseSalesOffer(error);
-            }
+            public void onErrorResponse(VolleyError error) { onErrorResponseSalesOffer(error); }
         });
     }
 

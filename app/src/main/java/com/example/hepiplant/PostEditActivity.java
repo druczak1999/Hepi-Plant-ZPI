@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.CommentDto;
 import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -68,6 +69,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private Button editPost;
     private CategoryDto[] categoryDtos;
     private CategoryDto selectedCategory;
+    private PostDto post;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +80,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
 
-        postId = getIntent().getExtras().getLong("id");
-        categoryId = getIntent().getExtras().getLong("category");
+        setBottomBarOnItemClickListeners();
         setupViewsData();
-        setValuesToEdit();
+        makeGetDataRequest();
+        postId = getIntent().getExtras().getLong("id");
     }
 
     private void setupViewsData(){
@@ -91,17 +93,50 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postTags = findViewById(R.id.editTags);
         postImage = findViewById(R.id.editImageBut);
         editPost = findViewById(R.id.editPost);
+    }
+
+    private void makeGetDataRequest() {
+        String url = getRequestUrl()+"posts/" + getIntent().getExtras().get("id");
+        Log.v(TAG, "Invoking postRequestProcessor"+ url);
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.v(TAG, "onResponse");
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
+                    }
+                });
+    }
+
+    private void onGetResponseReceived(JSONObject response) {
+        Log.v(TAG, "onGetResponseReceived()");
+        post = postResponseHandler.handleResponse(response, PostDto.class);
+        categoryId = post.getCategoryId();
         getCategoriesFromDB();
-        setBottomBarOnItemClickListeners();
         setOnClickListeners();
+        setValuesToEdit();
+        Log.v(TAG, "co jest w post:" + post.getTitle());
+    }
+
+    private void onErrorResponseReceived(VolleyError error) {
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
     }
 
     private void setValuesToEdit() {
-        postName.setText(getIntent().getExtras().getString("name"));
-        postBody.setText(getIntent().getExtras().getString("body"));
+        postName.setText(post.getTitle());
+        postBody.setText(post.getBody());
         postTags.setText(getIntent().getExtras().getString("tags"));
-        if(!getIntent().getExtras().getString("photo", "").isEmpty())
-            getPhotoFromFirebase(postImage, getIntent().getExtras().getString("photo"));
+        if(post.getPhoto()!= null)
+            getPhotoFromFirebase(postImage, post.getPhoto());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             postImage.setClipToOutline(true);
         }
@@ -148,12 +183,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
-        if(getIntent().getExtras().getString("categoryId") != null) {
-            for(CategoryDto c : categoryDtos){
-                if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
-                    selectedCategory = c;
-                    spinnerCat.setSelection(categories.indexOf(c.getName()));
-                }
+        for(CategoryDto c : categoryDtos){
+            if(c.getId() == categoryId){
+                selectedCategory = c;
+                spinnerCat.setSelection(categories.indexOf(c.getName()));
             }
         }
     }

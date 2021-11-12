@@ -364,6 +364,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGat.setAdapter(dtoArrayAdapter);
+        spinnerGat.setSelection(species.indexOf("Brak"));
     }
 
     private void onGetResponseCategories(JSONArray response){
