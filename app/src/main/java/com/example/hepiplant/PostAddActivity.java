@@ -235,7 +235,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
 
     public void getCategoriesFromDB(){
         String url = getRequestUrl() + "categories";
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)

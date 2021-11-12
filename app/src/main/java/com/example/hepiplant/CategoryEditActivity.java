@@ -110,7 +110,7 @@ public class CategoryEditActivity extends AppCompatActivity {
 
     private void makeGetDataRequest() {
         String url = getRequestUrl();
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -128,7 +128,7 @@ public class CategoryEditActivity extends AppCompatActivity {
 
     private void makePatchDataRequest(JSONObject postData) {
         String url = getRequestUrl();
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)

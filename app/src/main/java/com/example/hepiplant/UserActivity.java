@@ -63,7 +63,7 @@ public class UserActivity extends AppCompatActivity {
     private void getRequestUser(){
         String url = getRequestUrl() +"users/"+config.getUserId();
         profilePhoto.setImageURI(config.getPhoto());
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @Override

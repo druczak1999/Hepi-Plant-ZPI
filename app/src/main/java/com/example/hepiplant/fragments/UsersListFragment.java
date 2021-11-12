@@ -19,9 +19,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.R;
-import com.example.hepiplant.adapter.recyclerview.TagsRecyclerViewAdapter;
+import com.example.hepiplant.adapter.recyclerview.UsersRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
-import com.example.hepiplant.dto.TagDto;
+import com.example.hepiplant.dto.UserDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
@@ -30,23 +30,23 @@ import org.json.JSONArray;
 
 import java.io.IOException;
 
-public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter.ItemClickListener {
+public class UsersListFragment extends Fragment implements UsersRecyclerViewAdapter.ItemClickListener {
 
-    private static final String TAG = "TagListFragment";
+    private static final String TAG = "UsersListFragment";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<TagDto> tagResponseHandler;
-    private View tagFragmentView;
-    private RecyclerView tagsRecyclerView;
-    private TagsRecyclerViewAdapter adapter;
-    private TagDto[] tags = new TagDto[]{};
+    private JSONResponseHandler<UserDto> userResponseHandler;
+    private View usersFragmentView;
+    private RecyclerView usersRecyclerView;
+    private UsersRecyclerViewAdapter adapter;
+    private UserDto[] users = new UserDto[]{};
 
-    public TagListFragment() {
+    public UsersListFragment() {
     }
 
-    public static TagListFragment newInstance() {
-        TagListFragment fragment = new TagListFragment();
+    public static UsersListFragment newInstance() {
+        UsersListFragment fragment = new UsersListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -58,20 +58,20 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
         super.onCreate(savedInstanceState);
         config = (Configuration) getActivity().getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
-        tagResponseHandler = new JSONResponseHandler<>(config);
+        userResponseHandler = new JSONResponseHandler<>(config);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreateView()");
-        tagFragmentView = inflater.inflate(R.layout.fragment_tag_list, container, false);
+        usersFragmentView = inflater.inflate(R.layout.fragment_users_list, container, false);
 
         initView();
         setLayoutManager();
         makeGetDataRequest();
 
-        return tagFragmentView;
+        return usersFragmentView;
     }
 
     @Override
@@ -109,12 +109,12 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "tags";
+        return config.getUrl() + "users";
     }
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        tags = tagResponseHandler.handleArrayResponse(response, TagDto[].class);
+        users = userResponseHandler.handleArrayResponse(response, UserDto[].class);
         setAdapter();
     }
 
@@ -127,21 +127,18 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
     }
 
     private void initView() {
-        Log.v(TAG, "initView()");
-        tagsRecyclerView = tagFragmentView.findViewById(R.id.tagRecyclerView);
+        usersRecyclerView = usersFragmentView.findViewById(R.id.usersRecyclerView);
     }
 
     private void setLayoutManager() {
-        Log.v(TAG, "setLayoutManager()");
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        tagsRecyclerView.setLayoutManager(layoutManager);
+        usersRecyclerView.setLayoutManager(layoutManager);
     }
 
     private void setAdapter() {
-        Log.v(TAG, "setAdapter()");
-        adapter = new TagsRecyclerViewAdapter(getActivity(), tags);
+        adapter = new UsersRecyclerViewAdapter(getActivity(), users);
         adapter.setClickListener(this);
-        tagsRecyclerView.setAdapter(adapter);
+        usersRecyclerView.setAdapter(adapter);
     }
 
 }

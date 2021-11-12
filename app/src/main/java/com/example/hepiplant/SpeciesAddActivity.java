@@ -243,7 +243,7 @@ public class SpeciesAddActivity extends AppCompatActivity {
 
     private void makePostDataRequest(JSONObject postData) {
         String url = getRequestUrl() + "species";
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @Override

@@ -30,6 +30,7 @@
     <string name="category_delete_question">Czy na pewno chcesz usunąć kategorię o id </string>
     <string name="species_delete_question">Czy na pewno chcesz usunąć gatunek o id </string>
     <string name="tag_delete_question">"Czy chcesz usunąć tag o id "</string>
+    <string name="grant_role_question">"Czy chcesz nadać rolę administratora użytkownikowi o id "</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="edit_category_title">Edytuj kategorię o id </string>
@@ -47,5 +48,16 @@
     <string name="delete_sales_offer">Usuń ofertę</string>
     <string name="edit_plant">Edytuj roślinę</string>
     <string name="delete_plant">Usuń roślinę</string>
+    <string name="details">Szczegóły</string>
+    <string name="view_user_title">Szczegóły użytkownika o id</string>
+    <string name="email_placeholder">Adres email</string>
+    <string name="roles_placeholder">Role użytkownika</string>
+    <string name="plants_count_placeholder">Liczba roślin</string>
+    <string name="posts_count_placeholder">Liczba postów</string>
+    <string name="sales_offers_count_placeholder">Liczba ofert sprzedaży</string>
+    <string name="comments_count_placeholder">Liczba komentarzy</string>
+    <string name="stats_user_title">Statystyki</string>
+    <string name="none">Brak</string>
+    <string name="grant_admin_role">Nadaj prawa adminstratora</string>
 
 </resources>

@@ -17,7 +17,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
-        <activity android:name=".NotificationActivity"></activity>
+        <activity
+            android:name=".PopUpGrantAdminRole"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".UserAdminActivity"
+            android:exported="true" />
+        <activity android:name=".NotificationActivity" />
         <activity
             android:name=".SpeciesAddActivity"
             android:exported="true" />
