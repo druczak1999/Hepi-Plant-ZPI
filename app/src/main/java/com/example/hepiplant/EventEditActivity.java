@@ -192,7 +192,6 @@ public class EventEditActivity extends AppCompatActivity {
 
     private void setupNotifications(EventDto data) {
         if(data!=null){
-            Log.v(TAG,"petla");
                 if(!data.isDone()){
                     Log.v(TAG,data.getEventName());
                     Intent intent = new Intent(this, AlarmBroadcast.class);

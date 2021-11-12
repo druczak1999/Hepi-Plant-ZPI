@@ -457,7 +457,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
 
     private void setupNotifications(PlantDto data) {
         if(data.getEvents()!=null && !data.getEvents().isEmpty()) {
-            Log.v(TAG, "petla");
             int i = 0;
             for (EventDto event : data.getEvents()) {
                 if (!event.isDone()) {
@@ -484,5 +483,4 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
             }
         }
     }
-
 }

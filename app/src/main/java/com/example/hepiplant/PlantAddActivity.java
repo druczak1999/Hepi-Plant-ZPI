@@ -278,7 +278,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     private void setupNotifications(PlantDto data) {
         if(data.getEvents()!=null && !data.getEvents().isEmpty()){
-            Log.v(TAG,"petla");
             for (EventDto event: data.getEvents()) {
                 if(!event.isDone()){
                     Log.v(TAG,event.getEventName());

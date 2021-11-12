@@ -79,7 +79,6 @@ public class UserActivity extends AppCompatActivity {
         notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v(TAG,"Czy: "+notifications.isChecked());
                 config.setNotifications(notifications.isChecked());
                 editRequestUser();
                 makeGetDataRequest();
@@ -107,7 +106,7 @@ public class UserActivity extends AppCompatActivity {
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        events = config.getGson().fromJson(String.valueOf(response), EventDto[].class);
+        events = eventResponseHandler.handleArrayResponse(response, EventDto[].class);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
         for (EventDto event:events) {
             if(!notifications.isChecked())
@@ -154,7 +153,7 @@ public class UserActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.v(TAG, "On Click. Attempting patch request"+usernameValue.getText().toString());
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -173,7 +172,7 @@ public class UserActivity extends AppCompatActivity {
     private void getRequestUser(){
         String url = getRequestUrl() +"users/"+config.getUserId();
         profilePhoto.setImageURI(config.getPhoto());
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @Override
