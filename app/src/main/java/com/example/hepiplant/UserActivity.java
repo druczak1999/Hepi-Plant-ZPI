@@ -56,6 +56,7 @@ public class UserActivity extends AppCompatActivity {
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
         userResponseHandler = new JSONResponseHandler<>(config);
+        eventResponseHandler = new JSONResponseHandler<>(config);
         setBottomBarOnItemClickListeners();
         setupViewsData();
         getRequestUser();
