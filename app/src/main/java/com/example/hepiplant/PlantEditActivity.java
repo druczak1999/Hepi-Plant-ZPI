@@ -444,7 +444,8 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         Log.v(TAG,"Events: "+data.getEvents());
         setupNotifications(data);
         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
-        startActivity(intent);
+        if(config.isNotifications())
+            startActivity(intent);
         finish();
     }
 
@@ -459,7 +460,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                     intent.putExtra("eventName", event.getEventName());
                     intent.putExtra("eventDescription", event.getEventDescription());
                     intent.putExtra("eventId", event.getId());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, i, intent, 0);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, event.getId().intValue(), intent, 0);
                     i++;
 
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

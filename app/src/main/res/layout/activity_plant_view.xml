@@ -57,7 +57,6 @@
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/kwiatek"
-                android:padding="10dp"
                 />
 
             <TextView

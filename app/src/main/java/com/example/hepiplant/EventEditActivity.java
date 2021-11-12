@@ -140,7 +140,7 @@ public class EventEditActivity extends AppCompatActivity {
             if(eventDate.getText().toString().contains(":"))
                 postData.put("eventDate",eventDate.getText().toString());
             else
-                postData.put("eventDate",eventDate.getText().toString().trim()+" 00:00:00");
+                postData.put("eventDate",eventDate.getText().toString().trim()+" 12:00:00");
             postData.put("eventDescription",eventDescription.getText().toString());
             postData.put("done",false);
         } catch (JSONException e) {
@@ -182,8 +182,9 @@ public class EventEditActivity extends AppCompatActivity {
         String str = String.valueOf(response); //http request
         EventDto data = new EventDto();
         Gson gson = new Gson();
-        data = gson.fromJson(str,EventDto.class);
-        setupNotifications(data);
+        data = gson.fromJson(str, EventDto.class);
+        if(config.isNotifications())
+            setupNotifications(data);
         Intent intent = new Intent(this, MainTabsActivity.class);
         startActivity(intent);
         finish();
@@ -192,15 +193,13 @@ public class EventEditActivity extends AppCompatActivity {
     private void setupNotifications(EventDto data) {
         if(data!=null){
             Log.v(TAG,"petla");
-            int i=0;
                 if(!data.isDone()){
                     Log.v(TAG,data.getEventName());
                     Intent intent = new Intent(this, AlarmBroadcast.class);
                     intent.putExtra("eventName",data.getEventName());
                     intent.putExtra("eventDescription",data.getEventDescription());
                     intent.putExtra("eventId",data.getId());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,i, intent, 0);
-                    i++;
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,data.getId().intValue(), intent, 0);
 
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                     Calendar calendar = Calendar.getInstance();
@@ -213,7 +212,6 @@ public class EventEditActivity extends AppCompatActivity {
                     }
                     Log.v(TAG, String.valueOf(calendar.getTime()));
                     alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-
                 }
             }
         }

@@ -268,8 +268,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         PlantDto data = new PlantDto();
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
         Log.v(TAG,"Events: "+data.getEvents());
-        setupNotifications(data);
-
+        if(config.isNotifications())
+            setupNotifications(data);
         Intent intent1 = new Intent(getApplicationContext(),MainTabsActivity.class);
         startActivity(intent1);
     }
@@ -277,7 +277,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private void setupNotifications(PlantDto data) {
         if(data.getEvents()!=null && !data.getEvents().isEmpty()){
             Log.v(TAG,"petla");
-            int i=0;
             for (EventDto event: data.getEvents()) {
                 if(!event.isDone()){
                     Log.v(TAG,event.getEventName());
@@ -285,8 +284,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     intent.putExtra("eventName",event.getEventName());
                     intent.putExtra("eventDescription",event.getEventDescription());
                     intent.putExtra("eventId",event.getId());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,i, intent, 0);
-                    i++;
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,event.getId().intValue(), intent, 0);
 
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                     Calendar calendar = Calendar.getInstance();

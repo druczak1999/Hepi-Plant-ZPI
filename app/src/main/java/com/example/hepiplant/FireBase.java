@@ -194,6 +194,7 @@ public class FireBase extends AppCompatActivity {
         data = userResponseHandler.handleResponse(response, UserDto.class);
         config.setUserId(data.getId());
         config.setUserRoles(data.getRoles());
+        config.setNotifications(data.isNotifications());
         Log.v(TAG, "POST user id " + config.getUserId());
     }
 

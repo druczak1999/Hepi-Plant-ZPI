@@ -22,7 +22,7 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/kwiatek"
-            android:padding="10dp"/>
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
