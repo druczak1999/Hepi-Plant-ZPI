@@ -156,7 +156,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         JSONObject speciesJson = makeSpeciesJSON();
         JSONObject scheduleJ = makeScheduleJSON();
         JSONObject postData = makePostDataJson(speciesJson,scheduleJ);
-        Log.v(TAG, String.valueOf(postData));Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, String.valueOf(postData));
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -229,6 +230,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             else postData.put("location", location.getText().toString());
             postData.put("photo", img_str);
             Log.v(TAG, selectedCategory.getId().toString());
+            postData.put("categoryId", selectedCategory.getId());
             if(speciesDto == null ) postData.put("species", null);
             else postData.put("species", speciesJson);
             postData.put("userId", config.getUserId());
