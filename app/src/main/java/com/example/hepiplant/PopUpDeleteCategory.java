@@ -84,7 +84,7 @@ public class PopUpDeleteCategory extends AppCompatActivity {
 
     private void deleteCategory(){
         String url = getRequestUrl(getIntent().getExtras().getLong("categoryId"));
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
             new Response.Listener<String>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)

@@ -67,7 +67,7 @@ public class PopUpDeleteTag extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteCategory();
+                deleteTag();
             }
         });
     }
@@ -82,9 +82,9 @@ public class PopUpDeleteTag extends AppCompatActivity {
         return config.getUrl() + "tags/" + id;
     }
 
-    private void deleteCategory(){
+    private void deleteTag(){
         String url = getRequestUrl(getIntent().getExtras().getLong("tagId"));
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
             new Response.Listener<String>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)

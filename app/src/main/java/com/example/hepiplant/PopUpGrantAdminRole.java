@@ -24,9 +24,10 @@ import com.example.hepiplant.helper.RequestType;
 import java.io.IOException;
 import java.util.Locale;
 
-public class PopUpDeleteSpecies extends AppCompatActivity {
+public class PopUpGrantAdminRole extends AppCompatActivity {
 
-    private static final String TAG = "PopUpDeleteSpecies";
+    private static final String TAG = "PopUpGrantAdminRole";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Button yes, no;
     private Configuration config;
@@ -52,8 +53,8 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
         yes = findViewById(R.id.adminButtonYes);
         no = findViewById(R.id.adminButtonNo);
 
-        String deleteQuestion = getResources().getString(R.string.species_delete_question) +
-                " " + getIntent().getExtras().getLong("speciesId") +
+        String deleteQuestion = getResources().getString(R.string.grant_role_question) +
+                " " + getIntent().getExtras().getLong("userId") +
                 "?";
         questionView.setText(deleteQuestion);
 
@@ -67,7 +68,7 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteSpecies();
+                grantRole();
             }
         });
     }
@@ -79,33 +80,33 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "species/" + id;
+        return config.getUrl() + "users/" + id + "/grant-role?role=";
     }
 
-    private void deleteSpecies(){
-        String url = getRequestUrl(getIntent().getExtras().getLong("speciesId"));
+    private void grantRole(){
+        String url = getRequestUrl(getIntent().getExtras().getLong("userId")) + ROLE_ADMIN;
         Log.v(TAG, "Invoking requestProcessor");
-        requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
-                new Response.Listener<String>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(String response) {
-                        onResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+        requestProcessor.makeRequest(Request.Method.POST, url, null, RequestType.STRING,
+            new Response.Listener<String>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(String response) {
+                    onResponseReceived(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    onErrorResponseReceived(error);
+                }
+            });
     }
 
     private void onResponseReceived(String response) {
         Log.v(TAG, response);
-        if(response.toLowerCase(Locale.ROOT).contains("successfully deleted")){
-            Toast.makeText(getApplicationContext(),"Usunięto gatunek",Toast.LENGTH_LONG).show();
+        if(response.toLowerCase(Locale.ROOT).contains("successfully granted")){
+            Toast.makeText(getApplicationContext(),"Użytkownikowi nadano rolę administratora",Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),"Usuwanie gatunku nie powiodło się",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Nie udało się nadać użytkownikowi roli administratora",Toast.LENGTH_LONG).show();
         }
         finish();
     }

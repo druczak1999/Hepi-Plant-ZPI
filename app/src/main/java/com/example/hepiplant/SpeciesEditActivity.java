@@ -274,7 +274,7 @@ public class SpeciesEditActivity extends AppCompatActivity {
 
     private void makePatchDataRequest(JSONObject postData) {
         String url = getRequestUrl() + "species/" + getIntent().getExtras().get("speciesId");
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @Override

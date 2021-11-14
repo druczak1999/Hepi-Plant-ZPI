@@ -11,11 +11,12 @@ import com.example.hepiplant.fragments.PostsListFragment;
 import com.example.hepiplant.fragments.SalesOffersListFragment;
 import com.example.hepiplant.fragments.SpeciesListFragment;
 import com.example.hepiplant.fragments.TagListFragment;
+import com.example.hepiplant.fragments.UsersListFragment;
 
 public class AdminFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private final int PAGE_COUNT = 5;
-    private final String[] tabTitles = new String[] { "Kategorie", "Gatunki", "Tagi", "Forum", "Bazarek" };
+    private final int PAGE_COUNT = 6;
+    private final String[] tabTitles = new String[] { "Kategorie", "Gatunki", "Tagi", "Forum", "Bazarek", "Użytkownicy" };
     private Context context;
 
     public AdminFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -41,6 +42,8 @@ public class AdminFragmentPagerAdapter extends FragmentPagerAdapter {
                 return new PostsListFragment();
             case 4:
                 return new SalesOffersListFragment();
+            case 5:
+                return new UsersListFragment();
             default:
                 return null;
         }

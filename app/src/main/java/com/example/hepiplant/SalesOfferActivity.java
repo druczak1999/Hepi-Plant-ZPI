@@ -128,7 +128,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private void makeGetDataRequest(){
         String url = getRequestUrl();
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -146,7 +146,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
 
     private void makePostDataRequest(JSONObject postData){
         String url = getRequestUrl() + "/comments";
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
