@@ -12,17 +12,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.hepiplant.configuration.Configuration;
+import com.example.hepiplant.dto.EventDto;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,6 +39,7 @@ public class PopUpDelete extends AppCompatActivity {
     private Button yes, no;
     private Configuration config;
     private static final String TAG = "PopUpDelete";
+    private EventDto [] events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,18 +74,52 @@ public class PopUpDelete extends AppCompatActivity {
     }
 
     @NonNull
-    private String getRequestUrl(Long id) {
+    private String getRequestUrl() {
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "plants/"+id;
+        return config.getUrl();
+    }
+
+    private void makeGetDataRequest(){
+        String url = getRequestUrl()+"events/plant/"+Objects.requireNonNull(getIntent().getExtras()).getLong("plantId");
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onErrorResponseReceived(error);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return prepareRequestHeaders();
+            }
+        };
+        Log.v(TAG, "Sending the request to " + url);
+        config.getQueue().add(jsonArrayRequest);
+    }
+
+    private void onGetResponseReceived(JSONArray response){
+        Log.v(TAG, "onGetResponseReceived()");
+        events = config.getGson().fromJson(String.valueOf(response), EventDto[].class);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+        for (EventDto event:events) {
+            notificationManagerCompat.cancel(event.getId().intValue());
+        }
     }
 
     private void deletePlant(){
         Log.v(TAG,String.valueOf(getIntent().getExtras().getLong("plantId")));
-        String url = getRequestUrl(Objects.requireNonNull(getIntent().getExtras()).getLong("plantId"));
+        String url = getRequestUrl()+"plants/"+Objects.requireNonNull(getIntent().getExtras()).getLong("plantId");
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -88,6 +128,7 @@ public class PopUpDelete extends AppCompatActivity {
                         if(!getIntent().getExtras().getString("photo").isEmpty()) deletePhotoFromFirebase();
                         Log.v(TAG, response);
                         Toast.makeText(getApplicationContext(),"Usunięto roślinę",Toast.LENGTH_LONG).show();
+                        makeGetDataRequest();
                         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
                         startActivity(intent);
                         finish();
