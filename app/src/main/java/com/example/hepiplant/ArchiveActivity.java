@@ -37,7 +37,7 @@ public class ArchiveActivity extends AppCompatActivity implements EventsArchiveR
     private static final String TAG = "ArchiveActivity";
     private RecyclerView rv;
     private EventsArchiveRecyclerViewAdapter adapter;
-    //TODO change view on item in archive
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

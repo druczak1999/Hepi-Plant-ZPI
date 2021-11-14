@@ -1,5 +1,9 @@
 package com.example.hepiplant;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -36,6 +40,7 @@ import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.events.Event;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -49,9 +54,14 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 import static java.time.LocalDateTime.now;
 
@@ -99,6 +109,20 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         getSpeciesFromDB();
         getCategoriesFromDB();
         setOnClickListeners();
+        createNotificationChannel();
+    }
+
+    private void createNotificationChannel(){
+        CharSequence charSequence = "Hepi Plant reminder channel";
+        String description = "Channel for Hepi Plant";
+        int importance  = NotificationManager.IMPORTANCE_DEFAULT;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("notifyHepiPlant",charSequence,importance);
+            notificationChannel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
     private void setOnClickListeners(){
@@ -242,11 +266,42 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPostResponsePlant(JSONObject response){
-        Log.v(TAG, "ONResponse");
+        Log.v(TAG, "ONResponse plant");
         PlantDto data = new PlantDto();
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
-        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
-        startActivity(intent);
+        Log.v(TAG,"Events: "+data.getEvents());
+        if(config.isNotifications())
+            setupNotifications(data);
+        Intent intent1 = new Intent(getApplicationContext(),MainTabsActivity.class);
+        startActivity(intent1);
+    }
+
+    private void setupNotifications(PlantDto data) {
+        if(data.getEvents()!=null && !data.getEvents().isEmpty()){
+            for (EventDto event: data.getEvents()) {
+                if(!event.isDone()){
+                    Log.v(TAG,event.getEventName());
+                    Intent intent = new Intent(this, AlarmBroadcast.class);
+                    intent.putExtra("eventName",event.getEventName());
+                    intent.putExtra("eventDescription",event.getEventDescription());
+                    intent.putExtra("eventId",event.getId());
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,event.getId().intValue(), intent, 0);
+
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    try {
+                        Log.v(TAG,simpleDateFormat.parse(event.getEventDate()).toString());
+                        calendar.setTime(simpleDateFormat.parse(event.getEventDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Log.v(TAG, String.valueOf(calendar.getTime()));
+                    alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                }
+            }
+        }
     }
 
     private void onErrorResponsePlant(VolleyError error){

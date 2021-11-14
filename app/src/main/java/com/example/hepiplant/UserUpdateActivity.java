@@ -96,6 +96,7 @@ public class UserUpdateActivity extends AppCompatActivity {
                 JSONObject postData = new JSONObject();
                 try {
                     postData.put("username", usernameValue.getText().toString());
+                    postData.put("notifications", config.isNotifications());
                 }
                 catch (JSONException e) {
                     e.printStackTrace();

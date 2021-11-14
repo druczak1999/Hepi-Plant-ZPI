@@ -23,7 +23,7 @@ public class Configuration extends Application {
     private RequestQueue queue;
     private Gson gson;
     private Uri photo;
-    private boolean notifications =false;
+    private boolean notifications;
 
     public Uri getPhoto() { return photo; }
 
