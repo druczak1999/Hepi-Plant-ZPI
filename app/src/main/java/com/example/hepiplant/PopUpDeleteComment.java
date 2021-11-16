@@ -77,7 +77,7 @@ public class PopUpDeleteComment extends AppCompatActivity {
 
     private void deleteComment(){
         String url = getRequestUrl(getIntent().getExtras().getString("type"),getIntent().getExtras().getLong("postId"), getIntent().getExtras().getLong("commentId"));
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)

@@ -119,7 +119,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
 
     public void getCategoriesFromDB(){
         String url = getRequestUrl() + "categories";
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -275,7 +275,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         String url = getRequestUrl()+"posts/"+getIntent().getExtras().getLong("id");
         JSONObject postData = makePostDataJson();
         Log.v(TAG, String.valueOf(postData));
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)

@@ -175,12 +175,11 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void postRequestPlant(){
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"plants";
         JSONObject speciesJson = makeSpeciesJSON();
         JSONObject scheduleJ = makeScheduleJSON();
         JSONObject postData = makePostDataJson(speciesJson,scheduleJ);
-        Log.v(TAG, String.valueOf(postData));Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, String.valueOf(postData));Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -279,7 +278,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     private void setupNotifications(PlantDto data) {
         if(data.getEvents()!=null && !data.getEvents().isEmpty()){
-            Log.v(TAG,"petla");
             for (EventDto event: data.getEvents()) {
                 if(!event.isDone()){
                     Log.v(TAG,event.getEventName());

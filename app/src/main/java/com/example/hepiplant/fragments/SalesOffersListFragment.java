@@ -230,7 +230,7 @@ public class SalesOffersListFragment extends Fragment implements
 
     private void makeGetDataRequest(){
         String url = getRequestUrl() + "salesoffers";
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)

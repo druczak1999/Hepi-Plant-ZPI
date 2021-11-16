@@ -80,7 +80,7 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
 
     private void deleteSalesOffer(){
         String url = getRequestUrl(getIntent().getExtras().getLong("salesOfferId"));
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
             new Response.Listener<String>() {
                 @Override
