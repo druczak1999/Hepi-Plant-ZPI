@@ -11,6 +11,7 @@ public class UserDto extends JSONObject implements Serializable {
     private String username;
     private String uid;
     private String email;
+    private boolean notifications;
     private Set<String> roles;
 
     public UserDto() {
@@ -46,6 +47,14 @@ public class UserDto extends JSONObject implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(boolean notifications) {
+        this.notifications = notifications;
     }
 
     public Set<String> getRoles() {

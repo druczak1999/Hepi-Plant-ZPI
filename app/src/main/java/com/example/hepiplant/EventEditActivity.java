@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,12 +25,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
+import com.example.hepiplant.dto.PlantDto;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -133,7 +139,7 @@ public class EventEditActivity extends AppCompatActivity {
             if(eventDate.getText().toString().contains(":"))
                 postData.put("eventDate",eventDate.getText().toString());
             else
-                postData.put("eventDate",eventDate.getText().toString().trim()+" 00:00:00");
+                postData.put("eventDate",eventDate.getText().toString().trim()+" 12:00:00");
             postData.put("eventDescription",eventDescription.getText().toString());
             postData.put("done",false);
         } catch (JSONException e) {
@@ -175,7 +181,9 @@ public class EventEditActivity extends AppCompatActivity {
         String str = String.valueOf(response); //http request
         EventDto data = new EventDto();
         Gson gson = new Gson();
-        data = gson.fromJson(str,EventDto.class);
+        data = gson.fromJson(str, EventDto.class);
+        if(config.isNotifications())
+            setupNotifications(data);
         Intent intent = new Intent(this, MainTabsActivity.class);
         Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
         startActivity(intent);
@@ -188,6 +196,31 @@ public class EventEditActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),R.string.edit_saved_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
+    }
+
+    private void setupNotifications(EventDto data) {
+        if(data!=null){
+            if(!data.isDone()){
+                Log.v(TAG,data.getEventName());
+                Intent intent = new Intent(this, AlarmBroadcast.class);
+                intent.putExtra("eventName",data.getEventName());
+                intent.putExtra("eventDescription",data.getEventDescription());
+                intent.putExtra("eventId",data.getId());
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this,data.getId().intValue(), intent, 0);
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    Log.v(TAG,simpleDateFormat.parse(data.getEventDate()).toString());
+                    calendar.setTime(simpleDateFormat.parse(data.getEventDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.v(TAG, String.valueOf(calendar.getTime()));
+                alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+            }
         }
     }
 

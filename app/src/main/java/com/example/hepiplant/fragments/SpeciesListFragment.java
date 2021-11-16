@@ -91,7 +91,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
 
     private void makeGetDataRequest(){
         String url = getRequestUrl();
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)

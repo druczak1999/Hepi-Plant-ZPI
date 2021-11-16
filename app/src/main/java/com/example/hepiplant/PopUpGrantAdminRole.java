@@ -24,9 +24,10 @@ import com.example.hepiplant.helper.RequestType;
 import java.io.IOException;
 import java.util.Locale;
 
-public class PopUpDeleteCategory extends AppCompatActivity {
+public class PopUpGrantAdminRole extends AppCompatActivity {
 
-    private static final String TAG = "PopUpDeleteCategory";
+    private static final String TAG = "PopUpGrantAdminRole";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Button yes, no;
     private Configuration config;
@@ -52,8 +53,8 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         yes = findViewById(R.id.adminButtonYes);
         no = findViewById(R.id.adminButtonNo);
 
-        String deleteQuestion = getResources().getString(R.string.category_delete_question) +
-                " " + getIntent().getExtras().getLong("categoryId") +
+        String deleteQuestion = getResources().getString(R.string.grant_role_question) +
+                " " + getIntent().getExtras().getLong("userId") +
                 "?";
         questionView.setText(deleteQuestion);
 
@@ -67,7 +68,7 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteCategory();
+                grantRole();
             }
         });
     }
@@ -79,13 +80,13 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "categories/" + id;
+        return config.getUrl() + "users/" + id + "/grant-role?role=";
     }
 
-    private void deleteCategory(){
-        String url = getRequestUrl(getIntent().getExtras().getLong("categoryId"));
+    private void grantRole(){
+        String url = getRequestUrl(getIntent().getExtras().getLong("userId")) + ROLE_ADMIN;
         Log.v(TAG, "Invoking requestProcessor");
-        requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
+        requestProcessor.makeRequest(Request.Method.POST, url, null, RequestType.STRING,
             new Response.Listener<String>() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
@@ -93,19 +94,19 @@ public class PopUpDeleteCategory extends AppCompatActivity {
                     onResponseReceived(response);
                 }
             }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    onErrorResponseReceived(error);
+                }
+            });
     }
 
     private void onResponseReceived(String response) {
         Log.v(TAG, response);
-        if(response.toLowerCase(Locale.ROOT).contains("successfully deleted")){
-            Toast.makeText(getApplicationContext(),R.string.delete_category,Toast.LENGTH_LONG).show();
+        if(response.toLowerCase(Locale.ROOT).contains("successfully granted")){
+            Toast.makeText(getApplicationContext(),"Użytkownikowi nadano rolę administratora",Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),R.string.delete_category_failed,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Nie udało się nadać użytkownikowi roli administratora",Toast.LENGTH_LONG).show();
         }
         finish();
     }

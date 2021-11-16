@@ -17,7 +17,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
-        <activity android:name=".NotificationActivity"></activity>
+        <activity
+            android:name=".PopUpGrantAdminRole"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".UserAdminActivity"
+            android:exported="true" />
+        <activity android:name=".NotificationActivity" />
         <activity
             android:name=".SpeciesAddActivity"
             android:exported="true" />
@@ -109,6 +115,8 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+
+        <receiver android:name=".AlarmBroadcast" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,7 +1,10 @@
 package com.example.hepiplant.adapter.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +13,19 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hepiplant.PopUpArchive;
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.EventDto;
 
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecyclerViewAdapter.ViewHolder>{
@@ -86,13 +94,27 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @SuppressLint("ResourceAsColor")
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(EventsRecyclerViewAdapter.ViewHolder viewHolder, final int position) {
-
         Log.v(TAG,"photo for: "+dataSet.get(position).getEventName());
         viewHolder.getEvent().setText(dataSet.get(position).getEventName());
         if(dataSet.get(position).getEventDate() != null){
-            viewHolder.getDate().setText(dataSet.get(position).getEventDate());
+            //TODO check format
+            String str = dataSet.get(position).getEventDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
+            Log.v(TAG,dateTime.toString());
+            Log.v(TAG,LocalDateTime.now().toString());
+            if(dateTime.isBefore((ChronoLocalDateTime)LocalDateTime.now())){
+                viewHolder.getDate().setText(dataSet.get(position).getEventDate());
+                viewHolder.getDate().setTextColor(Color.RED);
+            }
+            else{
+                viewHolder.getDate().setText(dataSet.get(position).getEventDate());
+            }
+
         } else {
             viewHolder.getDate().setText("");
         }

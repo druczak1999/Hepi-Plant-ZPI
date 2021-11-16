@@ -84,7 +84,7 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
 
     private void deleteSpecies(){
         String url = getRequestUrl(getIntent().getExtras().getLong("speciesId"));
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)

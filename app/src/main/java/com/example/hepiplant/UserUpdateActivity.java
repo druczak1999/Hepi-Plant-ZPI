@@ -52,13 +52,12 @@ public class UserUpdateActivity extends AppCompatActivity {
 
     private void getRequestUser(){
         String url = getRequestUrl() +"users/"+config.getUserId();
-        Log.v(TAG, "Invoking categoryRequestProcessor");
+        Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
-                        // Display the response string.
                         onGetResponse(response);
                     }
                 }, new Response.ErrorListener() {
@@ -97,12 +96,13 @@ public class UserUpdateActivity extends AppCompatActivity {
                 JSONObject postData = new JSONObject();
                 try {
                     postData.put("username", usernameValue.getText().toString());
+                    postData.put("notifications", config.isNotifications());
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
                 }
                 Log.v(TAG, "On Click. Attempting patch request"+usernameValue.getText().toString());
-                Log.v(TAG, "Invoking categoryRequestProcessor");
+                Log.v(TAG, "Invoking requestProcessor");
                 requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                         new Response.Listener<JSONObject>() {
                             @RequiresApi(api = Build.VERSION_CODES.N)

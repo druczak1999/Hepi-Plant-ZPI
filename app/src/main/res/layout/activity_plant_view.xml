@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
                 style="@style/PageTitleFont"
                 android:textSize="30dp"
                 android:text="Nazwa rośliny"

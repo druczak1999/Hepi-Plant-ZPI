@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -80,6 +82,8 @@ public class PopUpDeleteEvent extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.v(TAG, response);
+                        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel((int) getIntent().getExtras().getLong("eventId"));
                         Toast.makeText(getApplicationContext(),R.string.delete_event,Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                         startActivity(intent);
