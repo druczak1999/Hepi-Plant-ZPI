@@ -33,9 +33,15 @@ import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 public class EventsListFragment extends Fragment implements EventsRecyclerViewAdapter.ItemClickListener {
 
@@ -133,6 +139,16 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
         Log.v(TAG, "onGetResponseReceived()");
         Gson gson = new Gson();
         events = gson.fromJson(String.valueOf(response), EventDto[].class);
+        List<EventDto> eventDtoList = Arrays.asList(events);
+        List<EventDto> sortedEvents = eventDtoList.stream()
+                .sorted(Comparator.comparing(EventDto::getEventName))
+                .sorted(Comparator.comparing(EventDto::getEventDate))
+                .collect(Collectors.toList());
+        EventDto[] newEvents= new EventDto[events.length];
+        for (int i=0; i<events.length;i++){
+            newEvents[i] = sortedEvents.get(i);
+        }
+        events = newEvents;
         Log.v(TAG, "DL: "+events.length);
         setAdapter();
     }

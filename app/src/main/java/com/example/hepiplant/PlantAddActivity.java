@@ -257,6 +257,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             else postData.put("species", speciesJson);
             postData.put("userId", config.getUserId());
             postData.put("schedule", scheduleJ);
+            postData.put("categoryId",selectedCategory.getId());
 
         } catch (JSONException e) {
             e.printStackTrace();

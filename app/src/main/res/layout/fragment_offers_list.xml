@@ -10,33 +10,130 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/sortSalesOffers"
-            android:textSize="13dp"
-            android:background="@drawable/rounded_edittext"
-            android:fontFamily="@font/roboto"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Sortuj "
-            android:drawableRight="@drawable/sortuj"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <Button
+                    android:id="@+id/sortOffers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:drawableRight="@drawable/sortuj"
+                    android:fontFamily="@font/roboto"
+                    android:text="Sortuj "
+                    android:textSize="13dp" />
+
+                <Spinner
+                    android:id="@+id/filterOffers"
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:background="@drawable/rounded_spinner"
+                    android:drawableRight="@drawable/filter"
+                    android:fontFamily="@font/roboto"
+                    android:text="Filtruj "
+                    android:textSize="13dp"
+                    />
+
+                <Button
+                    android:id="@+id/filterButtonOffers"
+                    style="@style/ButtonSmallGreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Filtruj"
+                    android:visibility="gone">
+
+                </Button>
+
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/tagEditOffer"
+                android:layout_width="150dp"
+                android:layout_height="35dp"
+                android:background="@drawable/rounded_edittext"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:hint="Tag"
+                style="@style/DetailsFontValue"
+                android:visibility="gone"/>
+
+            <Spinner
+                android:id="@+id/chooseCategoryOffer"
+                style="@style/DetailsFontValue"
+                android:layout_width="300dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_spinner"
+                android:ems="10"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+                <Button
+                    android:id="@+id/startDateOffer"
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:drawableRight="@drawable/calendar"
+                    android:ems="10"
+                    android:gravity="start|center_vertical"
+                    android:hint="..."
+                    style="@style/DetailsFontValue"
+                    android:textAlignment="viewStart"
+                    android:visibility="gone"
+                    />
+                <Button
+                    android:id="@+id/endDateOffer"
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:drawableRight="@drawable/calendar"
+                    android:ems="10"
+                    android:gravity="start|center_vertical"
+                    android:hint="..."
+                    style="@style/DetailsFontValue"
+                    android:textAlignment="viewStart"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/offersRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
+            android:layout_height="500dp"
+            android:layout_marginTop="10dp"
             android:paddingBottom="@dimen/padding_bottom"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

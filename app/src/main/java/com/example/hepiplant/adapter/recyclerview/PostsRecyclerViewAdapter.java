@@ -97,7 +97,6 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.post_row_item, viewGroup, false);
-
         return new ViewHolder(view);
     }
 

@@ -75,7 +75,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ForumTabsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".PlantsListActivity"
             android:exported="true" />
