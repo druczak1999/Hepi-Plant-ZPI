@@ -103,9 +103,9 @@ public class PopUpDeleteSpecies extends AppCompatActivity {
     private void onResponseReceived(String response) {
         Log.v(TAG, response);
         if(response.toLowerCase(Locale.ROOT).contains("successfully deleted")){
-            Toast.makeText(getApplicationContext(),"Usunięto gatunek",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.delete_species,Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),"Usuwanie gatunku nie powiodło się",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.delete_species_failed,Toast.LENGTH_LONG).show();
         }
         finish();
     }

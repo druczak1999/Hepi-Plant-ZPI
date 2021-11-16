@@ -122,6 +122,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                         PostDto data = new PostDto();
                         data = postResponseHandler.handleResponse(response, PostDto.class);
                         StringBuilder sb = new StringBuilder("Response is: \n" + data.getTitle());
+                        Toast.makeText(getApplicationContext(), R.string.add_post, Toast.LENGTH_LONG).show();
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -130,6 +131,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
                 Log.v(TAG, String.valueOf(postData));
                 NetworkResponse networkResponse = error.networkResponse;
+                Toast.makeText(getApplicationContext(), R.string.add_post_failed, Toast.LENGTH_LONG).show();
                 if (networkResponse != null) {
                     Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
                 }
@@ -221,12 +223,11 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;

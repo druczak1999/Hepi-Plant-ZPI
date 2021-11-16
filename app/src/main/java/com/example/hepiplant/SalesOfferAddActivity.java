@@ -133,6 +133,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                         SalesOfferDto data = new SalesOfferDto();
                         data = salesOfferResponseHandler.handleResponse(response, SalesOfferDto.class);
                         StringBuilder sb = new StringBuilder("Response is: \n" + data.getTitle());
+                        Toast.makeText(getApplicationContext(), R.string.add_sales_offer, Toast.LENGTH_LONG).show();
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -141,6 +142,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                 Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
                 Log.v(TAG, String.valueOf(postData));
                 NetworkResponse networkResponse = error.networkResponse;
+                Toast.makeText(getApplicationContext(), R.string.add_sales_offer_failed, Toast.LENGTH_LONG).show();
                 if (networkResponse != null) {
                     Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
                 }
@@ -218,12 +220,11 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;

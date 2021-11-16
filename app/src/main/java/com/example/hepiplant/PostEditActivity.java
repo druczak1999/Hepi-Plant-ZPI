@@ -246,12 +246,11 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;
@@ -299,7 +298,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
                 if(postName.getText()!=null && !postName.getText().toString().equals("...")) patchRequestPost();
-                else Toast.makeText(getApplicationContext(),"Podaj nazwę postu",Toast.LENGTH_LONG).show();
+                else Toast.makeText(getApplicationContext(),R.string.post_title,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -315,8 +314,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePost(response);
+                        Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -396,6 +397,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private void onErrorResponsePost(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

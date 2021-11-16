@@ -228,12 +228,11 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;
@@ -313,7 +312,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
             @Override
             public void onClick(View v) {
                 if(salesOfferName.getText()!=null && !salesOfferName.getText().toString().equals("...")) patchRequestSalesOffer();
-                else Toast.makeText(getApplicationContext(),"Podaj nazwę oferty",Toast.LENGTH_LONG).show();
+                else Toast.makeText(getApplicationContext(),R.string.sales_offer_title,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -329,8 +328,10 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponseSalesOffer(response);
+                        Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -411,6 +412,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     private void onErrorResponseSalesOffer(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

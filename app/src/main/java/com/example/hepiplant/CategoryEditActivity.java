@@ -134,7 +134,7 @@ public class CategoryEditActivity extends AppCompatActivity {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
-                    makeInfoToast("Edytowano kategorię o id " + category.getId());
+                    makeInfoToast(R.string.edit_category + category.getId().toString());
                     finish();
                 }
             }, new Response.ErrorListener() {
@@ -164,6 +164,7 @@ public class CategoryEditActivity extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error) {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        makeInfoToast(String.valueOf(R.string.edit_saved_failed));
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

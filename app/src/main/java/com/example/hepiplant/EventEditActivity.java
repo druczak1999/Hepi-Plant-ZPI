@@ -70,7 +70,6 @@ public class EventEditActivity extends AppCompatActivity {
             eventImage.setImageResource(R.drawable.zraszanie);
         else if(name.toLowerCase().equals("nawożenie"))
             eventImage.setImageResource(R.drawable.nawozenie);
-
     }
 
     private void setBottomBarOnItemClickListeners(){
@@ -109,7 +108,7 @@ public class EventEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(eventName.getText()!=null && !eventName.getText().toString().equals(" ")) patchEventResponse();
-                else Toast.makeText(getApplicationContext(),"Podaj tytuł wydarzenia",Toast.LENGTH_LONG).show();
+                else Toast.makeText(getApplicationContext(),R.string.event_title,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -158,7 +157,7 @@ public class EventEditActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                onErrorResponse(error);
+                onErrorResponseEvent(error);
             }
         }){
             @Override
@@ -178,13 +177,15 @@ public class EventEditActivity extends AppCompatActivity {
         Gson gson = new Gson();
         data = gson.fromJson(str,EventDto.class);
         Intent intent = new Intent(this, MainTabsActivity.class);
+        Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
         startActivity(intent);
         finish();
     }
 
-    private void onErrorResponse(VolleyError error){
+    private void onErrorResponseEvent(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(),R.string.edit_saved_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

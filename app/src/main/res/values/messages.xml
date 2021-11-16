@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_category">Dodano kategorię o id </string>
+    <string name="add_category_failed">Wystąpił błąd - nie dodano kategorii</string>
+    <string name="edit_category">Edytowano kategorię o id </string>
+    <string name="edit_saved_failed">Wystąpił błąd - nie zapisano zmian</string>
+    <string name="edit_saved">Zapisano zmiany</string>
+    <string name="event_title">Podaj tytuł wydarzenia</string>
+    <string name="add_plant">Dodano roślinę</string>
+    <string name="add_plant_failed">Wystąpił błąd - nie dodano rośliny</string>
+    <string name="plant_name">Podaj nazwę rośliny</string>
+    <string name="upload_photo_failed">Niepoprawne załadowanie zdjęcia</string>
+    <string name="delete_event">Usunięto wydarzenie</string>
+    <string name="delete_event_failed">Usuwanie wydarzenia nie powiodło się</string>
+    <string name="delete_plant_popup">Usunięto roślinę</string>
+    <string name="delete_plant_failed">Usuwanie rośliny nie powiodło się</string>
+    <string name="delete_category">Usunięto kategorię</string>
+    <string name="delete_category_failed">Usuwanie kategorii nie powiodło się</string>
+    <string name="delete_comment">Usunięto komentarz</string>
+    <string name="delete_comment_failed">Usuwanie komentarza nie powiodło się</string>
+    <string name="delete_post_popup">Usunięto post</string>
+    <string name="delete_post_failed">Usuwanie postu nie powiodło się.</string>
+    <string name="delete_sales_offer_popup">Usunięto ofertę</string>
+    <string name="delete_sales_offer_failed">Usuwanie oferty sprzedaży nie powiodło się</string>
+    <string name="delete_species">Usunięto gatunek</string>
+    <string name="delete_species_failed">Usuwanie gatunku nie powiodło się</string>
+    <string name="delete_tag">Usunięto tag</string>
+    <string name="delete_tag_failed">Usuwanie tagu nie powiodło się</string>
+    <string name="post_title">Podaj tytuł postu</string>
+    <string name="add_post">Dodano post</string>
+    <string name="add_post_failed">Wystąpił błąd - nie dodano postu</string>
+    <string name="add_sales_offer">Dodano ofertę</string>
+    <string name="add_sales_offer_failed">Wystąpił błąd - nie dodano oferty</string>
+    <string name="sales_offer_title">Podaj tytuł oferty sprzedaży</string>
+    <string name="add_species">Dodano gatunek o id </string>
+    <string name="add_species_failed">Wystąpił błąd - nie dodano gatunku</string>
+    <string name="edit_species">Edytowano gatunek o id </string>
+    <string name="archive_event">Zarchiwizowano wydarzenie</string>
+    <string name="archive_event_fail">Wystąpił błąd - nie zarchiwizowano wydarzenia.</string>
+</resources>

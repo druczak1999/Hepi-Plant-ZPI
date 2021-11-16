@@ -80,7 +80,7 @@ public class PopUpDeleteEvent extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.v(TAG, response);
-                        Toast.makeText(getApplicationContext(),"Usunięto wydarzenie",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),R.string.delete_event,Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                         startActivity(intent);
                         finish();
@@ -103,6 +103,7 @@ public class PopUpDeleteEvent extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(),R.string.delete_event_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

@@ -222,6 +222,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     private void onErrorResponsePlant(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
@@ -293,7 +294,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View v) {
                 if(plantName.getText()!=null && !plantName.getText().toString().equals("...")) patchRequestPlant();
-                else Toast.makeText(getApplicationContext(),"Podaj nazwę rośliny",Toast.LENGTH_LONG).show();
+                else Toast.makeText(getApplicationContext(),R.string.plant_name,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -351,12 +352,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;
@@ -477,6 +477,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         PlantDto data = new PlantDto();
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
+        Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
         startActivity(intent);
         finish();
     }

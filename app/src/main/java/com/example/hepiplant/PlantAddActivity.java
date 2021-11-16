@@ -127,7 +127,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
                 if(plantName.getText()!=null && !plantName.getText().toString().equals("...")) postRequestPlant();
-                else Toast.makeText(getApplicationContext(),"Podaj nazwę rośliny",Toast.LENGTH_LONG).show();
+                else Toast.makeText(getApplicationContext(),R.string.plant_name,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -166,6 +166,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             onPostResponsePlant(response);
                         }
+                        Toast.makeText(getApplicationContext(), R.string.add_plant, Toast.LENGTH_LONG).show();
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -247,13 +248,14 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, "ONResponse");
         PlantDto data = new PlantDto();
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
-        Intent intent = new Intent(getApplicationContext(),PlantsListActivity.class);
+        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         startActivity(intent);
     }
 
     private void onErrorResponsePlant(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.add_plant_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
@@ -319,12 +321,11 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;

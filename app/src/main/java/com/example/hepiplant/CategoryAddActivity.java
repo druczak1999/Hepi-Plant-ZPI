@@ -129,13 +129,14 @@ public class CategoryAddActivity extends AppCompatActivity {
     private void onPostResponseReceived(JSONObject response) {
         Log.v(TAG, "onPostResponseReceived()");
         CategoryDto category = categoryResponseHandler.handleResponse(response, CategoryDto.class);
-        makeInfoToast("Dodano kategorię o id " + category.getId());
+        makeInfoToast(R.string.add_category + category.getId().toString());
         finish();
     }
 
     private void onErrorResponseReceived(VolleyError error) {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        makeInfoToast(String.valueOf(R.string.add_category_failed));
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
