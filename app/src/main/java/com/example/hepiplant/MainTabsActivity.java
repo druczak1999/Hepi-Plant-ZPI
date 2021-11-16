@@ -56,38 +56,6 @@ public class MainTabsActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.logoff:
-                FireBase fireBase = new FireBase();
-                fireBase.signOut();
-                return true;
-            case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.miProfile:
-                Intent intent = new Intent(this, UserActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.mainToolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-    }
-
     private void setupViewPager() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) findViewById(R.id.mainViewPager);
@@ -138,6 +106,7 @@ public class MainTabsActivity extends AppCompatActivity {
             }
         });
     }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
