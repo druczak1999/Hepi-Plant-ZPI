@@ -12,7 +12,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
         android:elevation="8dp"
-        android:src="@drawable/post"
+        android:src="@drawable/post_icon"
 
         app:fabCustomSize="70dp"
         app:flow_horizontalAlign="center"

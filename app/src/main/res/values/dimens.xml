@@ -21,4 +21,10 @@
     <dimen name="rv_item_name_max_width">220sp</dimen>
     <dimen name="scroll_view_height">570dp</dimen>
     <dimen name="spinner_height">46dp</dimen>
+    <dimen name="filerSortButtonsHeight">35dp</dimen>
+    <dimen name="marginSorting">10dp</dimen>
+    <dimen name="marginSortingSmall">5dp</dimen>
+    <dimen name="SortLienarLayout">48dp</dimen>
+    <dimen name="categorySpinnerFilter">300dp</dimen>
+    <dimen name="filerSpinnerHeight">11dp</dimen>
 </resources>

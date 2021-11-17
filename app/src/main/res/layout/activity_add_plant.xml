@@ -137,7 +137,7 @@
                 android:text="@string/zero"
                 style="@style/DetailsFontValue"
                 android:inputType="numberSigned"
-                android:drawableRight="@drawable/dni"/>
+                android:drawableRight="@drawable/days"/>
 
 
             <TextView
@@ -182,7 +182,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
-                android:drawableRight="@drawable/calendar"
+                android:drawableRight="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
                 android:hint="..."

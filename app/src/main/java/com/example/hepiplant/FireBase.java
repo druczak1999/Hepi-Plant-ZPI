@@ -72,7 +72,7 @@ public class FireBase extends AppCompatActivity {
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setLogo(R.drawable.plant)      // Set logo drawable
+                .setLogo(R.drawable.plant_color_icon)      // Set logo drawable
                 .setTheme(R.style.Theme_AppCompat_Light)
                 .build();
         signInLauncher.launch(signInIntent);
@@ -114,7 +114,7 @@ public class FireBase extends AppCompatActivity {
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setLogo(R.drawable.plant)      // Set logo drawable
+                .setLogo(R.drawable.plant_color_icon)      // Set logo drawable
                 .setTheme(R.style.Theme_AppCompat)      // Set theme
                 .build();
         signInLauncher.launch(signInIntent);

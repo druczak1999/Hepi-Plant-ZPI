@@ -25,7 +25,6 @@ import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecyclerViewAdapter.ViewHolder>{
@@ -121,13 +120,13 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         viewHolder.getPlant().setText(dataSet.get(position).getPlantName());
         ImageView photoImageView = viewHolder.getImage();
         if(dataSet.get(position).getEventName().toLowerCase().trim().equals("podlewanie"))
-            photoImageView.setImageResource(R.drawable.podelwanie);
+            photoImageView.setImageResource(R.drawable.watering_icon);
         else if(dataSet.get(position).getEventName().toLowerCase().trim().equals("zraszanie"))
-            photoImageView.setImageResource(R.drawable.zraszanie);
+            photoImageView.setImageResource(R.drawable.misting_icon);
         else if(dataSet.get(position).getEventName().toLowerCase().trim().equals("nawożenie"))
-            photoImageView.setImageResource(R.drawable.nawozenie);
+            photoImageView.setImageResource(R.drawable.fertilization_icon);
         else
-            photoImageView.setImageResource(R.drawable.kwiatek);
+            photoImageView.setImageResource(R.drawable.plant_icon);
 
         viewHolder.getCheckBox().setOnClickListener(new View.OnClickListener() {
             @Override

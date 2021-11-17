@@ -76,7 +76,7 @@
                 android:background="@drawable/rounded_square"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                app:srcCompat="@drawable/kwiatek" />
+                app:srcCompat="@drawable/plant_icon" />
 
             <TextView
                 android:id="@+id/offerCommentsCountTextView"

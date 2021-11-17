@@ -30,7 +30,6 @@ import com.example.hepiplant.SalesOfferActivity;
 import com.example.hepiplant.adapter.recyclerview.SalesOffersRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -57,13 +56,13 @@ public class SalesOffersListFragment extends Fragment implements
     private RecyclerView offersRecyclerView;
     private SalesOffersRecyclerViewAdapter adapter;
     private SalesOfferDto[] salesOffers = new SalesOfferDto[]{};
-    private Button offersSort, offersFilter, startDate, endDate;
-    private Spinner filterSpinner, spinnerCat;
-    private EditText tags;
+    private Button offersSortButton, offersFilterButton, offersStartDateButton, offersEndDateButton;
+    private Spinner offersFilterSpinner, categorySpinner;
+    private EditText offersTagsEditText;
     private CategoryDto[] categoryDtos;
     private CategoryDto selectedCategory;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
-    private static int clickSort = 0;
+    private static int sortClick = 0;
     private static int tagClick = 0;
     private static int dataClick = 0;
     private static int categoryClick = 0;
@@ -95,24 +94,24 @@ public class SalesOffersListFragment extends Fragment implements
         Log.v(TAG, "Entering onCreateView()");
         offersFragmentView = inflater.inflate(R.layout.fragment_offers_list, container, false);
 
-        offersSort = offersFragmentView.findViewById(R.id.sortOffers);
-        offersFilter = offersFragmentView.findViewById(R.id.filterButtonOffers);
-        filterSpinner = offersFragmentView.findViewById(R.id.filterOffers);
-        startDate = offersFragmentView.findViewById(R.id.startDateOffer);
-        endDate = offersFragmentView.findViewById(R.id.endDateOffer);
-        tags = offersFragmentView.findViewById(R.id.tagEditOffer);
+        offersSortButton = offersFragmentView.findViewById(R.id.sortOffersButton);
+        offersFilterButton = offersFragmentView.findViewById(R.id.filterOffersButton);
+        offersFilterSpinner = offersFragmentView.findViewById(R.id.filterOffersSpinner);
+        offersStartDateButton = offersFragmentView.findViewById(R.id.startDateButtonInOfferFilter);
+        offersEndDateButton = offersFragmentView.findViewById(R.id.endDateButtonInOfferFilter);
+        offersTagsEditText = offersFragmentView.findViewById(R.id.tagEditTextInOfferFilter);
         initView();
         setLayoutManager();
         makeGetDataRequest();
-        setSortOffers();
-        setDate();
-        setFilterOffers();
-        setFilterSpinner();
+        setOffersSortButtonOnClickListener();
+        setDateButtonsOnClickListener();
+        setOffersFilterButtonOnClickListener();
+        setOffersFilterSpinnerAdapter();
         return offersFragmentView;
     }
 
-    private void setDate(){
-        startDate.setOnClickListener(new View.OnClickListener() {
+    private void setDateButtonsOnClickListener(){
+        offersStartDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CalendarActivity.class);
@@ -121,7 +120,7 @@ public class SalesOffersListFragment extends Fragment implements
             }
         });
 
-        endDate.setOnClickListener(new View.OnClickListener() {
+        offersEndDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CalendarActivity.class);
@@ -137,32 +136,32 @@ public class SalesOffersListFragment extends Fragment implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == -1) {
-                startDate.setText(data.getExtras().getString("data"));
+                offersStartDateButton.setText(data.getExtras().getString("data"));
             }
         }
         if(requestCode==2){
             if(resultCode==-1){
-                endDate.setText(data.getExtras().getString("data"));
+                offersEndDateButton.setText(data.getExtras().getString("data"));
             }
         }
     }
 
-    private void setFilterSpinner(){
-        filterSpinner.setOnItemSelectedListener(this);
+    private void setOffersFilterSpinnerAdapter(){
+        offersFilterSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filterSpinner.setAdapter(dtoArrayAdapter);
+        offersFilterSpinner.setAdapter(dtoArrayAdapter);
     }
 
-    private void setSortOffers() {
-        offersSort.setOnClickListener(new View.OnClickListener() {
+    private void setOffersSortButtonOnClickListener() {
+        offersSortButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 Log.v(TAG,"On click");
                 List<SalesOfferDto> salesOfferDtos = new ArrayList<>(Arrays.asList(salesOffers));
                 List<SalesOfferDto> offerDtos= new ArrayList<>();
-                if(clickSort%2==0){
+                if(sortClick %2==0){
                     offerDtos = salesOfferDtos.stream()
                             .sorted(Comparator.comparing(SalesOfferDto::getCreatedDate).reversed())
                             .collect(Collectors.toList());
@@ -172,7 +171,7 @@ public class SalesOffersListFragment extends Fragment implements
                             .sorted(Comparator.comparing(SalesOfferDto::getCreatedDate))
                             .collect(Collectors.toList());
                 }
-                clickSort++;
+                sortClick++;
                 SalesOfferDto [] newOffers = new SalesOfferDto[offerDtos.size()];
                 for (int i=0;i<offerDtos.size();i++){
                     newOffers[i] = offerDtos.get(i);
@@ -184,31 +183,31 @@ public class SalesOffersListFragment extends Fragment implements
         });
     }
 
-    private void setFilterOffers() {
-        offersFilter.setOnClickListener(new View.OnClickListener() {
+    private void setOffersFilterButtonOnClickListener() {
+        offersFilterButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 makeGetDataRequestWithParam();
                 if(filterClick%2==0){
-                    offersFilter.setText("Wyczyść");
+                    offersFilterButton.setText("Wyczyść");
                     makeGetDataRequestWithParam();
                     selectedCategory=null;
                 }
                 else {
-                    offersFilter.setText("Filtruj");
+                    offersFilterButton.setText("Filtruj");
                     makeGetDataRequest();
                 }
-                filterSpinner.setSelection(0);
+                offersFilterSpinner.setSelection(0);
                 filterClick++;
-                if(tags.getVisibility()==View.VISIBLE)tagClick++;
-                if(spinnerCat!=null && spinnerCat.getVisibility()==View.VISIBLE)categoryClick++;
-                if(startDate.getVisibility()==View.VISIBLE)dataClick++;
-                tags.setVisibility(View.GONE);
-                if(spinnerCat!=null)
-                    spinnerCat.setVisibility(View.GONE);
-                startDate.setVisibility(View.GONE);
-                endDate.setVisibility(View.GONE);
+                if(offersTagsEditText.getVisibility()==View.VISIBLE)tagClick++;
+                if(categorySpinner !=null && categorySpinner.getVisibility()==View.VISIBLE)categoryClick++;
+                if(offersStartDateButton.getVisibility()==View.VISIBLE)dataClick++;
+                offersTagsEditText.setVisibility(View.GONE);
+                if(categorySpinner !=null)
+                    categorySpinner.setVisibility(View.GONE);
+                offersStartDateButton.setVisibility(View.GONE);
+                offersEndDateButton.setVisibility(View.GONE);
             }
         });
     }
@@ -248,7 +247,7 @@ public class SalesOffersListFragment extends Fragment implements
 
     private void makeGetDataRequestWithParam(){
         String url = getRequestUrl()+"salesoffers?";
-        url = prepareUrl(url);
+        url = prepareUrlForGetDataRequest(url);
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
@@ -265,22 +264,22 @@ public class SalesOffersListFragment extends Fragment implements
                 });
     }
 
-    private String prepareUrl(String url) {
-        if(startDate.getVisibility()== View.VISIBLE
-                && startDate.getText()!=null && !startDate.getText().toString().isEmpty()) {
+    private String prepareUrlForGetDataRequest(String url) {
+        if(offersStartDateButton.getVisibility()== View.VISIBLE
+                && offersStartDateButton.getText()!=null && !offersStartDateButton.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
-            url += "startDate=" + startDate.getText().toString().substring(0, 10);
+            url += "startDate=" + offersStartDateButton.getText().toString().substring(0, 10);
         }
-        if(endDate.getVisibility()==View.VISIBLE
-                && endDate.getText()!=null && !endDate.getText().toString().isEmpty()) {
+        if(offersEndDateButton.getVisibility()==View.VISIBLE
+                && offersEndDateButton.getText()!=null && !offersEndDateButton.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
-            url += "endDate=" + endDate.getText().toString().substring(0, 10);
+            url += "endDate=" + offersEndDateButton.getText().toString().substring(0, 10);
         }
-        if(tags.getVisibility()==View.VISIBLE && tags.getText()!=null && !tags.getText().toString().isEmpty()) {
+        if(offersTagsEditText.getVisibility()==View.VISIBLE && offersTagsEditText.getText()!=null && !offersTagsEditText.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
-            if(tags.getText().toString().charAt(0)=='#')
-                url += "tag=" + tags.getText().toString().substring(1,tags.getText().toString().length());
-            else  url += "tag=" + tags.getText().toString();
+            if(offersTagsEditText.getText().toString().charAt(0)=='#')
+                url += "tag=" + offersTagsEditText.getText().toString().substring(1, offersTagsEditText.getText().toString().length());
+            else  url += "tag=" + offersTagsEditText.getText().toString();
         }
         if(selectedCategory!=null) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
@@ -342,7 +341,6 @@ public class SalesOffersListFragment extends Fragment implements
         String url = getRequestUrl() + "categories";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         onGetResponseCategories(response);
@@ -355,12 +353,12 @@ public class SalesOffersListFragment extends Fragment implements
 
     private void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
-        spinnerCat = offersFragmentView.findViewById(R.id.chooseCategoryOffer);
-        spinnerCat.setOnItemSelectedListener(this);
+        categorySpinner = offersFragmentView.findViewById(R.id.categorySpinnerInOfferFilter);
+        categorySpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCat.setAdapter(dtoArrayAdapter);
-        spinnerCat.setVisibility(View.VISIBLE);
+        categorySpinner.setAdapter(dtoArrayAdapter);
+        categorySpinner.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -368,39 +366,39 @@ public class SalesOffersListFragment extends Fragment implements
         Spinner categorySpinner = (Spinner) parent;
         Spinner filterSpinner = (Spinner) parent;
         String selectedItem = (String) parent.getItemAtPosition(position);
-        if(categorySpinner.getId()==R.id.chooseCategoryOffer){
+        if(categorySpinner.getId()==R.id.categorySpinnerInOfferFilter){
             for(CategoryDto c : categoryDtos){
                 if(c.getName().equals(selectedItem)) selectedCategory = c;
             }
         }
-        if(filterSpinner.getId()==R.id.filterOffers){
+        if(filterSpinner.getId()==R.id.filterOffersSpinner){
             switch (position){
                 case 1:
                     if(tagClick%2==0){
-                        tags.setVisibility(View.VISIBLE);
-                        offersFilter.setVisibility(View.VISIBLE);
+                        offersTagsEditText.setVisibility(View.VISIBLE);
+                        offersFilterButton.setVisibility(View.VISIBLE);
                     }
-                    else tags.setVisibility(View.GONE);
+                    else offersTagsEditText.setVisibility(View.GONE);
                     tagClick++;
                     break;
                 case 2:
                     if(categoryClick%2==0){
                         getCategoriesFromDB();
-                        offersFilter.setVisibility(View.VISIBLE);
+                        offersFilterButton.setVisibility(View.VISIBLE);
                     }
                     else {
-                        if(spinnerCat!=null) spinnerCat.setVisibility(View.GONE);
+                        if(this.categorySpinner !=null) this.categorySpinner.setVisibility(View.GONE);
                     }
                     categoryClick++;
                     break;
                 case 3:
                     if(dataClick%2==0){
-                        startDate.setVisibility(View.VISIBLE);
-                        endDate.setVisibility(View.VISIBLE);
-                        offersFilter.setVisibility(View.VISIBLE);
+                        offersStartDateButton.setVisibility(View.VISIBLE);
+                        offersEndDateButton.setVisibility(View.VISIBLE);
+                        offersFilterButton.setVisibility(View.VISIBLE);
                     }else{
-                        startDate.setVisibility(View.GONE);
-                        endDate.setVisibility(View.GONE);
+                        offersStartDateButton.setVisibility(View.GONE);
+                        offersEndDateButton.setVisibility(View.GONE);
                     }
                     dataClick++;
                     break;

@@ -56,7 +56,7 @@
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
                 android:padding="15dp"
-                app:srcCompat="@drawable/podelwanie" />
+                app:srcCompat="@drawable/watering_icon" />
 
             <TextView
                 android:id="@+id/eventTitle"
@@ -123,7 +123,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
-                android:drawableRight="@drawable/calendar"
+                android:drawableRight="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
                 android:hint="..."

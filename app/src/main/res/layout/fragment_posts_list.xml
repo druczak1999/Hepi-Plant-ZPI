@@ -21,43 +21,39 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp">
+                android:layout_height="@dimen/SortLienarLayout">
 
                 <Button
-                    android:id="@+id/sortPosts"
+                    android:id="@+id/sortPostsButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/rounded_edittext"
-                    android:drawableRight="@drawable/sortuj"
-                    android:fontFamily="@font/roboto"
-                    android:text="Sortuj "
-                    android:textSize="13dp" />
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginStart="@dimen/marginSorting"
+                    android:layout_marginLeft="@dimen/marginSorting"
+                    android:layout_marginTop="@dimen/marginSorting"
+                    style="@style/ButtonSmallSortWhite" />
 
                 <Spinner
-                    android:id="@+id/filterPosts"
-                    android:layout_width="150dp"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="11dp"
+                    android:id="@+id/filterPostsSpinner"
+                    android:layout_width="@dimen/list_item_height"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginStart="@dimen/marginSortingSmall"
+                    android:layout_marginLeft="@dimen/marginSortingSmall"
+                    android:layout_marginTop="@dimen/filerSpinnerHeight"
                     android:background="@drawable/rounded_spinner"
-                    android:drawableRight="@drawable/filter"
+                    android:drawableRight="@drawable/filter_icon"
                     android:fontFamily="@font/roboto"
                     android:text="Filtruj "
                     android:textSize="13dp"
                     />
 
                 <Button
-                    android:id="@+id/filterButtonPost"
+                    android:id="@+id/filterPostsButton"
                     style="@style/ButtonSmallGreen"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginStart="@dimen/marginSortingSmall"
+                    android:layout_marginLeft="@dimen/marginSortingSmall"
+                    android:layout_marginTop="@dimen/marginSorting"
                     android:text="Filtruj"
                     android:visibility="gone">
 
@@ -67,23 +63,23 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/tagEditPost"
-                android:layout_width="150dp"
-                android:layout_height="35dp"
+                android:id="@+id/tagEditTextInPostFilter"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/filerSortButtonsHeight"
                 android:background="@drawable/rounded_edittext"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:layout_marginTop="@dimen/marginSorting"
                 android:hint="Tag"
                 style="@style/DetailsFontValue"
                 android:visibility="gone"/>
 
             <Spinner
-                android:id="@+id/chooseCategoryPost"
+                android:id="@+id/categorySpinnerInPostFilter"
                 style="@style/DetailsFontValue"
-                android:layout_width="300dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="@dimen/categorySpinnerFilter"
+                android:layout_height="@dimen/filerSortButtonsHeight"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:layout_marginTop="@dimen/marginSorting"
                 android:background="@drawable/rounded_spinner"
                 android:ems="10"
                 android:visibility="gone"/>
@@ -91,14 +87,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="@dimen/marginSorting">
             <Button
-                android:id="@+id/startDatePost"
-                android:layout_width="150dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="10dp"
+                android:id="@+id/startDateButtonInPostFilter"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/filerSortButtonsHeight"
+                android:layout_marginLeft="@dimen/marginSorting"
                 android:background="@drawable/rounded_edittext"
-                android:drawableRight="@drawable/calendar"
+                android:drawableRight="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
                 android:hint="..."
@@ -107,12 +103,12 @@
                 android:visibility="gone"
                 />
                 <Button
-                    android:id="@+id/endDatePost"
-                    android:layout_width="150dp"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="10dp"
+                    android:id="@+id/endDateButtonInPostFilter"
+                    android:layout_width="@dimen/list_item_height"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginLeft="@dimen/marginSorting"
                     android:background="@drawable/rounded_edittext"
-                    android:drawableRight="@drawable/calendar"
+                    android:drawableRight="@drawable/calendar_image"
                     android:ems="10"
                     android:gravity="start|center_vertical"
                     android:hint="..."
@@ -126,8 +122,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_height="@dimen/scroll_view_height"
+            android:layout_marginTop="@dimen/marginSorting"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

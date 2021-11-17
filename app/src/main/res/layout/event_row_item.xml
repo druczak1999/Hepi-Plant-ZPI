@@ -25,7 +25,7 @@
                 android:adjustViewBounds="true"
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/zraszanie"
+                app:srcCompat="@drawable/misting_icon"
                 android:padding="10dp"
                 />
 

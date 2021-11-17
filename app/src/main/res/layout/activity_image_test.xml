@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.336"
-        app:srcCompat="@drawable/dom" />
+        app:srcCompat="@drawable/forum_icon" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.551"
-        app:srcCompat="@drawable/dom" />
+        app:srcCompat="@drawable/forum_icon" />
 
     <Button
         android:id="@+id/getImgButt"
