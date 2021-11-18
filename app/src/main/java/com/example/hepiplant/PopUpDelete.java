@@ -85,7 +85,7 @@ public class PopUpDelete extends AppCompatActivity {
 
     private void makeGetDataRequest(){
         String url = getRequestUrl()+"events/plant/"+Objects.requireNonNull(getIntent().getExtras()).getLong("plantId");
-
+        Log.v(TAG, url);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -118,6 +118,7 @@ public class PopUpDelete extends AppCompatActivity {
     }
 
     private void deletePlant(){
+        makeGetDataRequest();
         Log.v(TAG,String.valueOf(getIntent().getExtras().getLong("plantId")));
         String url = getRequestUrl()+"plants/"+Objects.requireNonNull(getIntent().getExtras()).getLong("plantId");
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
@@ -128,7 +129,6 @@ public class PopUpDelete extends AppCompatActivity {
                         if(!getIntent().getExtras().getString("photo").isEmpty()) deletePhotoFromFirebase();
                         Log.v(TAG, response);
                         Toast.makeText(getApplicationContext(),"Usunięto roślinę",Toast.LENGTH_LONG).show();
-                        makeGetDataRequest();
                         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
                         startActivity(intent);
                         finish();
