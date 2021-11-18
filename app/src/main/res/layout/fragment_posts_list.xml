@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,12 +10,125 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/SortLienarLayout">
+
+                <Button
+                    android:id="@+id/sortPostsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginStart="@dimen/marginSorting"
+                    android:layout_marginLeft="@dimen/marginSorting"
+                    android:layout_marginTop="@dimen/marginSorting"
+                    style="@style/ButtonSmallSortWhite" />
+
+                <Spinner
+                    android:id="@+id/filterPostsSpinner"
+                    android:layout_width="@dimen/list_item_height"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginStart="@dimen/marginSortingSmall"
+                    android:layout_marginLeft="@dimen/marginSortingSmall"
+                    android:layout_marginTop="@dimen/filerSpinnerHeight"
+                    android:background="@drawable/rounded_spinner"
+                    android:drawableRight="@drawable/filter_icon"
+                    android:fontFamily="@font/roboto"
+                    android:text="Filtruj "
+                    android:textSize="13dp"
+                    />
+
+                <Button
+                    android:id="@+id/filterPostsButton"
+                    style="@style/ButtonSmallGreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginStart="@dimen/marginSortingSmall"
+                    android:layout_marginLeft="@dimen/marginSortingSmall"
+                    android:layout_marginTop="@dimen/marginSorting"
+                    android:text="Filtruj"
+                    android:visibility="gone">
+
+                </Button>
+
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/tagEditTextInPostFilter"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/filerSortButtonsHeight"
+                android:background="@drawable/rounded_edittext"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:layout_marginTop="@dimen/marginSorting"
+                android:hint="Tag"
+                style="@style/DetailsFontValue"
+                android:visibility="gone"/>
+
+            <Spinner
+                android:id="@+id/categorySpinnerInPostFilter"
+                style="@style/DetailsFontValue"
+                android:layout_width="@dimen/categorySpinnerFilter"
+                android:layout_height="@dimen/filerSortButtonsHeight"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:layout_marginTop="@dimen/marginSorting"
+                android:background="@drawable/rounded_spinner"
+                android:ems="10"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginSorting">
+            <Button
+                android:id="@+id/startDateButtonInPostFilter"
+                android:layout_width="@dimen/list_item_height"
+                android:layout_height="@dimen/filerSortButtonsHeight"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:background="@drawable/rounded_edittext"
+                android:drawableRight="@drawable/calendar_image"
+                android:ems="10"
+                android:gravity="start|center_vertical"
+                android:hint="..."
+                style="@style/DetailsFontValue"
+                android:textAlignment="viewStart"
+                android:visibility="gone"
+                />
+                <Button
+                    android:id="@+id/endDateButtonInPostFilter"
+                    android:layout_width="@dimen/list_item_height"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginLeft="@dimen/marginSorting"
+                    android:background="@drawable/rounded_edittext"
+                    android:drawableRight="@drawable/calendar_image"
+                    android:ems="10"
+                    android:gravity="start|center_vertical"
+                    android:hint="..."
+                    style="@style/DetailsFontValue"
+                    android:textAlignment="viewStart"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/scroll_view_height"
+            android:layout_marginTop="@dimen/marginSorting"
             android:visibility="visible"
-            android:paddingBottom="@dimen/padding_bottom"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

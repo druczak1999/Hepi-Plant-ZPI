@@ -25,7 +25,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
-import com.example.hepiplant.dto.PlantDto;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -71,11 +70,12 @@ public class EventEditActivity extends AppCompatActivity {
         eventDate.setText(getIntent().getExtras().getString("eventDate"));
         eventDescription.setText(getIntent().getExtras().getString("eventDescription"));
         if(name.toLowerCase().equals("podlewanie"))
-            eventImage.setImageResource(R.drawable.podelwanie);
+            eventImage.setImageResource(R.drawable.watering_icon);
         else if(name.toLowerCase().equals("zraszanie"))
-            eventImage.setImageResource(R.drawable.zraszanie);
+            eventImage.setImageResource(R.drawable.misting_icon);
         else if(name.toLowerCase().equals("nawożenie"))
-            eventImage.setImageResource(R.drawable.nawozenie);
+            eventImage.setImageResource(R.drawable.fertilization_icon);
+
     }
 
     private void setBottomBarOnItemClickListeners(){

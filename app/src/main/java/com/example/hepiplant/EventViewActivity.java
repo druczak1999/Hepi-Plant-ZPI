@@ -48,11 +48,11 @@ public class EventViewActivity extends AppCompatActivity {
         String name = getIntent().getExtras().getString("eventName");
         eventName.setText(name);
         if(name.toLowerCase().equals("podlewanie"))
-            eventImage.setImageResource(R.drawable.podelwanie);
+            eventImage.setImageResource(R.drawable.watering_icon);
         else if(name.toLowerCase().equals("zraszanie"))
-            eventImage.setImageResource(R.drawable.zraszanie);
+            eventImage.setImageResource(R.drawable.misting_icon);
         else if(name.toLowerCase().equals("nawożenie"))
-            eventImage.setImageResource(R.drawable.nawozenie);
+            eventImage.setImageResource(R.drawable.fertilization_icon);
         eventDate.setText(getIntent().getExtras().getString("eventDate"));
         eventDescription.setText(getIntent().getExtras().getString("eventDescription"));
     }

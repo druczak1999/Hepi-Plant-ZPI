@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/more"
-        android:icon="@drawable/kropki"
+        android:icon="@drawable/menu_icon"
         app:showAsAction="ifRoom|withText"
         android:title="@string/sign_out"
         >
@@ -35,7 +35,7 @@
     </item>
     <item
         android:id="@+id/miProfile"
-        android:icon="@drawable/ludzik"
+        android:icon="@drawable/user_icon"
         android:title="@string/user_profile"
         app:showAsAction="ifRoom" />
 

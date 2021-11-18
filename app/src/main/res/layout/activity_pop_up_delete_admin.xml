@@ -51,7 +51,7 @@
         app:layout_constraintBottom_toTopOf="@+id/adminDeleteQuestionTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/delete"
+        android:src="@drawable/bin_icon"
         app:tint="#FFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

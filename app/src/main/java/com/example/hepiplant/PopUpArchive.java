@@ -155,7 +155,6 @@ public class PopUpArchive extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.v(TAG,"post");
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"events";
         Log.v(TAG,url);

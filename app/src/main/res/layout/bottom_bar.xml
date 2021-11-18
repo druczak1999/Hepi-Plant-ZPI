@@ -19,7 +19,7 @@
             android:layout_height="40dp"
             android:layout_gravity="left|center_vertical"
             android:layout_marginLeft="40dp"
-            android:background="@drawable/forum"
+            android:background="@drawable/home_icon"
             android:elevation="8dp" />
 
         <Button
@@ -28,7 +28,7 @@
             android:layout_height="40dp"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="40dp"
-            android:background="@drawable/dom"
+            android:background="@drawable/forum_icon"
             android:elevation="8dp" />
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
