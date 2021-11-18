@@ -27,7 +27,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.example.hepiplant.dto.CommentDto;
 import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -48,9 +47,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PostEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -97,7 +94,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
 
     private void makeGetDataRequest() {
         String url = getRequestUrl()+"posts/" + getIntent().getExtras().get("postId");
-        Log.v(TAG, "Invoking postRequestProcessor"+ url);
+        Log.v(TAG, "Invoking requestProcessor"+ url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @Override
