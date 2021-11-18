@@ -150,7 +150,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         addPlantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(plantName.getText()!=null && !plantName.getText().toString().equals("...")) postRequestPlant();
+                if(plantName.getText()!=null) postRequestPlant();
                 else Toast.makeText(getApplicationContext(),R.string.plant_name,Toast.LENGTH_LONG).show();
             }
         });
@@ -242,14 +242,14 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         JSONObject postData = new JSONObject();
         try {
             Log.v(TAG,dateEditText.getText().toString());
-            if(plantName.getText().toString().equals("..."))  postData.put("name", "");
+            if(plantName.getText()==null)  postData.put("name", "");
             else postData.put("name", plantName.getText().toString());
             Log.v(TAG,dateEditText.getText().toString());
-            if (dateEditText.getText().toString().equals("...") || dateEditText.getText().toString().equals("Wybierz datę"))
+            if (dateEditText.getText()==null || dateEditText.getText().toString().equals("Wybierz datę"))
                 postData.put("purchaseDate", null);
             else postData.put("purchaseDate", dateEditText.getText().toString() + " 00:00:00");
             Log.v(TAG,location.getText().toString());
-            if (location.getText().toString().equals("...")){
+            if (location.getText()==null){
                 postData.put("location", null);
             }
             else postData.put("location", location.getText().toString());

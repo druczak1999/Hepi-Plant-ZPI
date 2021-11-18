@@ -347,7 +347,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
                 return true;
             case R.id.editPost:
                 Intent intent = new Intent(getApplicationContext(),PostEditActivity.class);
-                intent.putExtra("id", post.getId());
+                intent.putExtra("postId", post.getId());
                 intent.putExtra("tags", tagsTextView.getText().toString());
                 startActivity(intent);
                 return true;

@@ -146,12 +146,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
 
     private void makeGetDataRequest() {
         String url = getRequestUrl()+"plants/" + getIntent().getExtras().get("plantId");
-        Log.v(TAG, "Invoking plantRequestProcessor"+ url);
+        Log.v(TAG, "Invoking RequestProcessor"+ url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.v(TAG, "onResponse");
                         onGetResponseReceived(response);
                     }
                 }, new Response.ErrorListener() {
@@ -168,7 +167,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         setOnClickListeners();
         getSpeciesFromDB();
         setValuesToEdit();
-        Log.v(TAG, "co jest w plant name:" + plant.getName());
     }
 
     private void onErrorResponseReceived(VolleyError error) {
@@ -299,7 +297,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         editPlant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(plantName.getText()!=null && !plantName.getText().toString().equals("...")) patchRequestPlant();
+                if(plantName.getText()!=null) patchRequestPlant();
                 else Toast.makeText(getApplicationContext(),R.string.plant_name,Toast.LENGTH_LONG).show();
             }
         });
@@ -447,18 +445,18 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         JSONObject postData = new JSONObject();
 
         try {
-            if(plantName.getText().toString().equals("..."))  postData.put("name", "");
+            if(plantName.getText()==null)  postData.put("name", "");
             else postData.put("name", plantName.getText().toString());
             Log.v(TAG,date.getText().toString());
             Log.v(TAG, date.getText().toString());
-            if (date.getText().toString().equals("...") || date.getText().toString().equals("Wybierz datę"))
+            if (date.getText()==null || date.getText().toString().equals("Wybierz datę"))
                 postData.put("purchaseDate", null);
             else {
                 Log.v(TAG, "put: "+date.getText().toString());
                 postData.put("purchaseDate", date.getText().toString().trim() + " 00:00:00");
             }
             Log.v(TAG,placement.getText().toString());
-            if (placement.getText().toString().equals("...")){
+            if (placement.getText()==null){
                 postData.put("location", null);
             }
             else postData.put("location", placement.getText().toString());

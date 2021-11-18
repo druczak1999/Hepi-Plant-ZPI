@@ -83,7 +83,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         setBottomBarOnItemClickListeners();
         setupViewsData();
         makeGetDataRequest();
-        postId = getIntent().getExtras().getLong("id");
+        postId = getIntent().getExtras().getLong("postId");
     }
 
     private void setupViewsData(){
@@ -96,13 +96,12 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void makeGetDataRequest() {
-        String url = getRequestUrl()+"posts/" + getIntent().getExtras().get("id");
+        String url = getRequestUrl()+"posts/" + getIntent().getExtras().get("postId");
         Log.v(TAG, "Invoking postRequestProcessor"+ url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.v(TAG, "onResponse");
                         onGetResponseReceived(response);
                     }
                 }, new Response.ErrorListener() {
@@ -120,7 +119,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         getCategoriesFromDB();
         setOnClickListeners();
         setValuesToEdit();
-        Log.v(TAG, "co jest w post:" + post.getTitle());
     }
 
     private void onErrorResponseReceived(VolleyError error) {
@@ -246,11 +244,11 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;
@@ -297,14 +295,14 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         editPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(postName.getText()!=null && !postName.getText().toString().equals("...")) patchRequestPost();
+                if(postName.getText()!=null) patchRequestPost();
                 else Toast.makeText(getApplicationContext(),R.string.post_title,Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void patchRequestPost(){
-        String url = getRequestUrl()+"posts/"+getIntent().getExtras().getLong("id");
+        String url = getRequestUrl()+"posts/"+getIntent().getExtras().getLong("postId");
         JSONObject postData = makePostDataJson();
         Log.v(TAG, String.valueOf(postData));
         Log.v(TAG, "Invoking requestProcessor");
@@ -330,11 +328,11 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private JSONObject makePostDataJson(){
         JSONObject postData = new JSONObject();
         try {
-            if(postName.getText().toString().equals("..."))  postData.put("title", "");
+            if(postName.getText()==null)  postData.put("title", "");
             else postData.put("title", postName.getText().toString());
-            if(postBody.getText().toString().equals("..."))  postData.put("body", "");
+            if(postBody.getText()==null)  postData.put("body", "");
             else postData.put("body", postBody.getText().toString());
-            if(postTags.getText().toString().equals("..."))  postData.put("tags", "");
+            if(postTags.getText()==null)  postData.put("tags", "");
             else postData.put("tags", hashReading());
             postData.put("photo", img_str);
             postData.put("categoryId", selectedCategory.getId());

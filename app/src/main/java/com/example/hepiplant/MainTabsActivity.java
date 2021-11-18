@@ -106,7 +106,7 @@ public class MainTabsActivity extends AppCompatActivity {
             }
         });
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -132,4 +132,5 @@ public class MainTabsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

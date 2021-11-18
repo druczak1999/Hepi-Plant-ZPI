@@ -359,7 +359,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 return true;
             case R.id.editSalesOffer:
                 Intent intent = new Intent(getApplicationContext(), SalesOfferEditActivity.class);
-                intent.putExtra("id", salesOffer.getId());
+                intent.putExtra("salesOfferId", salesOffer.getId());
                 intent.putExtra("tags", tagsTextView.getText().toString());
                 startActivity(intent);
                 return true;

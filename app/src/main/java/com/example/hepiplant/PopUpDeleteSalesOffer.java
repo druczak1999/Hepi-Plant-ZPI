@@ -98,7 +98,7 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
     private void onDeleteResponseReceived(String response) {
         Log.v(TAG, response);
         if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
-        Toast.makeText(getApplicationContext(),R.string.delete_sales_offer_popup,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),R.string.delete_sales_offer_message,Toast.LENGTH_LONG).show();
         Intent intent;
         if (config.getUserRoles().contains(ROLE_ADMIN)){
             intent = new Intent(getApplicationContext(), MainAdminActivity.class);
@@ -129,7 +129,6 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         });
     }

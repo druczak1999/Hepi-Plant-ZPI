@@ -240,7 +240,7 @@ public class PlantViewActivity extends AppCompatActivity {
     }
 
     private String onGetResponseReceivedCategory(JSONObject response){
-        Log.v(TAG, "onGetResponseReceived()");
+        Log.v(TAG, "onGetResponseReceivedCategory()");
         CategoryDto categoryDto = config.getGson().fromJson(String.valueOf(response), CategoryDto.class);
         Log.v(TAG,categoryDto.getName());
         return categoryDto.getName();

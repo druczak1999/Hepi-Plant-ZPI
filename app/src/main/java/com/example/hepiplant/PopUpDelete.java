@@ -127,7 +127,7 @@ public class PopUpDelete extends AppCompatActivity {
                     public void onResponse(String response) {
                         if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
                         Log.v(TAG, response);
-                        Toast.makeText(getApplicationContext(),R.string.delete_plant_popup,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),R.string.delete_plant_message,Toast.LENGTH_LONG).show();
                         makeGetDataRequest();
                         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
                         startActivity(intent);
@@ -136,6 +136,7 @@ public class PopUpDelete extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),R.string.delete_plant_failed,Toast.LENGTH_LONG).show();
                 onErrorResponseReceived(error);
             }
         }){
@@ -167,7 +168,6 @@ public class PopUpDelete extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(),R.string.delete_plant_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
