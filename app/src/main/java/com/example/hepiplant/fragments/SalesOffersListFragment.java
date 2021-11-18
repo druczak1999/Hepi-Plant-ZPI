@@ -190,12 +190,12 @@ public class SalesOffersListFragment extends Fragment implements
             public void onClick(View v) {
                 makeGetDataRequestWithParam();
                 if(filterClick%2==0){
-                    offersFilterButton.setText("Wyczyść");
+                    offersFilterButton.setText(R.string.cleanButton);
                     makeGetDataRequestWithParam();
                     selectedCategory=null;
                 }
                 else {
-                    offersFilterButton.setText("Filtruj");
+                    offersFilterButton.setText(R.string.filterButton);
                     makeGetDataRequest();
                 }
                 offersFilterSpinner.setSelection(0);

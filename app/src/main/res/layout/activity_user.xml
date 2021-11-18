@@ -10,7 +10,6 @@
         android:id="@+id/toolbarTest"
         layout="@layout/toolbar"></include>
 
-
     <TextView
         android:id="@+id/userName"
         style="@style/PageTitleFont"

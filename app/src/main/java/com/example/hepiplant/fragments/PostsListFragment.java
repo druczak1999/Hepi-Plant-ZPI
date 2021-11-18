@@ -189,12 +189,12 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             public void onClick(View v) {
                 makeGetDataRequestWithParam();
                 if(filterClick%2==0){
-                    postFilterButton.setText("Wyczyść");
+                    postFilterButton.setText(R.string.cleanButton);
                     makeGetDataRequestWithParam();
                     selectedCategory=null;
                 }
                 else {
-                    postFilterButton.setText("Filtruj");
+                    postFilterButton.setText(R.string.filterButton);
                     makeGetDataRequest();
                 }
                 postFilterSpinner.setSelection(0);
