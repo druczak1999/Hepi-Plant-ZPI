@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -45,10 +46,12 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class SalesOfferEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -69,6 +72,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     private Button editSalesOffer;
     private CategoryDto[] categoryDtos;
     private CategoryDto selectedCategory;
+    private SalesOfferDto salesOffer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +82,11 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         requestProcessor = new JSONRequestProcessor(config);
         salesOfferResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
-        salesOfferId = getIntent().getExtras().getLong("id");
-        categoryId = getIntent().getExtras().getLong("category");
+
+        setBottomBarOnItemClickListeners();
         setupViewsData();
-        setValuesToEdit();
+        makeGetDataRequest();
+        salesOfferId = getIntent().getExtras().getLong("salesOfferId");
     }
 
     private void setupViewsData(){
@@ -93,20 +98,50 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         salesOfferPrice = findViewById(R.id.editPrice);
         salesOfferLocation = findViewById(R.id.editLocation);
         editSalesOffer = findViewById(R.id.editSalesOffer);
-        getCategoriesFromDB();
-        setBottomBarOnItemClickListeners();
-        setOnClickListeners();
     }
 
-    private void setValuesToEdit()
-    {
-        salesOfferName.setText(getIntent().getExtras().getString("name"));
-        salesOfferBody.setText(getIntent().getExtras().getString("body"));
+    private void makeGetDataRequest() {
+        String url = getRequestUrl()+"salesoffers/" + getIntent().getExtras().get("salesOfferId");
+        Log.v(TAG, "Invoking postRequestProcessor"+ url);
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
+                    }
+                });
+    }
+
+    private void onGetResponseReceived(JSONObject response) {
+        Log.v(TAG, "onGetResponseReceived()");
+        salesOffer = salesOfferResponseHandler.handleResponse(response, SalesOfferDto.class);
+        categoryId = salesOffer.getCategoryId();
+        getCategoriesFromDB();
+        setOnClickListeners();
+        setValuesToEdit();
+    }
+
+    private void onErrorResponseReceived(VolleyError error) {
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
+    }
+
+    private void setValuesToEdit() {
+        salesOfferName.setText(salesOffer.getTitle());
+        salesOfferBody.setText(salesOffer.getBody());
         salesOfferTags.setText(getIntent().getExtras().getString("tags"));
-        salesOfferLocation.setText(getIntent().getExtras().getString("location"));
-        salesOfferPrice.setText(getIntent().getExtras().getString("price"));
-        if(!getIntent().getExtras().getString("photo", "").isEmpty())
-            getPhotoFromFirebase(salesOfferImage, getIntent().getExtras().getString("photo"));
+        salesOfferLocation.setText(salesOffer.getLocation());
+        salesOfferPrice.setText(salesOffer.getPrice().toString());
+        if(salesOffer.getPhoto()!=null)
+            getPhotoFromFirebase(salesOfferImage, salesOffer.getPhoto());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             salesOfferImage.setClipToOutline(true);
         }
@@ -191,12 +226,11 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;
@@ -210,12 +244,10 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
-        if(getIntent().getExtras().getString("categoryId") != null) {
-            for(CategoryDto c : categoryDtos){
-                if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
-                    selectedCategory = c;
-                    spinnerCat.setSelection(categories.indexOf(c.getName()));
-                }
+        for(CategoryDto c : categoryDtos){
+            if(c.getId() == categoryId){
+                selectedCategory = c;
+                spinnerCat.setSelection(categories.indexOf(c.getName()));
             }
         }
     }
@@ -277,14 +309,14 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         editSalesOffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(salesOfferName.getText()!=null && !salesOfferName.getText().toString().equals("...")) patchRequestSalesOffer();
-                else Toast.makeText(getApplicationContext(),"Podaj nazwę oferty",Toast.LENGTH_LONG).show();
+                if(salesOfferName.getText()!=null) patchRequestSalesOffer();
+                else Toast.makeText(getApplicationContext(),R.string.sales_offer_title,Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void patchRequestSalesOffer(){
-        String url = getRequestUrl()+"salesoffers/"+getIntent().getExtras().getLong("id");
+        String url = getRequestUrl()+"salesoffers/"+getIntent().getExtras().getLong("salesOfferId");
         JSONObject postData = makeSalesOfferDataJson();
         Log.v(TAG, String.valueOf(postData));
         Log.v(TAG, "Invoking requestProcessor");
@@ -294,28 +326,28 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponseSalesOffer(response);
+                        Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseSalesOffer(error);
-            }
+            public void onErrorResponse(VolleyError error) { onErrorResponseSalesOffer(error); }
         });
     }
 
     private JSONObject makeSalesOfferDataJson(){
         JSONObject postData = new JSONObject();
         try {
-            if(salesOfferName.getText().toString().equals("..."))  postData.put("title", "");
+            if(salesOfferName.getText()==null)  postData.put("title", "");
             else postData.put("title", salesOfferName.getText().toString());
-            if(salesOfferBody.getText().toString().equals("..."))  postData.put("body", "");
+            if(salesOfferBody.getText()==null)  postData.put("body", "");
             else postData.put("body", salesOfferBody.getText().toString());
-            if(salesOfferTags.getText().toString().equals("..."))  postData.put("tags", "");
+            if(salesOfferTags.getText()==null)  postData.put("tags", "");
             else postData.put("tags", hashReading());
             postData.put("price", salesOfferPrice.getText().toString());
-            if(salesOfferLocation.getText().toString().equals("..."))  postData.put("location", "");
+            if(salesOfferLocation.getText()==null)  postData.put("location", "");
             else postData.put("location", salesOfferLocation.getText().toString());
             postData.put("photo", img_str);
             postData.put("categoryId", selectedCategory.getId());
@@ -378,6 +410,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     private void onErrorResponseSalesOffer(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

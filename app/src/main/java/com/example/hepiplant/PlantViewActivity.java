@@ -29,6 +29,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
+import com.example.hepiplant.dto.PlantDto;
+import com.example.hepiplant.dto.SpeciesDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,13 +53,21 @@ public class PlantViewActivity extends AppCompatActivity {
     private ImageView plantImage;
     private String categoryName = null;
     private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<PlantDto> plantResponseHandler;
+    private PlantDto plant;
     private static final String TAG = "PlantViewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_view);
+        config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        plantResponseHandler = new JSONResponseHandler<>(config);
+
         setupViewsData();
+        makeGetDataRequest();
         setupToolbar();
     }
 
@@ -71,49 +84,89 @@ public class PlantViewActivity extends AppCompatActivity {
         placement = findViewById(R.id.PlacementValueView);
         date = findViewById(R.id.DateValueView);
         plantImage = findViewById(R.id.plantImage);
-        setBottomBarOnItemClickListeners();
-        setTextsToRealValues();
     }
 
     private void setTextsToRealValues(){
-        plantName.setText(getIntent().getExtras().getString("plantName"));
-        if(getIntent().getExtras().getString("species")!=null && !getIntent().getExtras().getString("species").equals("Brak") && !getIntent().getExtras().getString("species").isEmpty())
-            species.setText(getIntent().getExtras().getString("species"));
+        plantName.setText(plant.getName());
+        if(plant.getSpecies().getId()!=null && !plant.getSpecies().getName().equals("Brak") && !plant.getSpecies().getName().isEmpty())
+            species.setText(plant.getSpecies().getName());
         else
             species.setText("Brak przypisanego gatunku");
-        if(getIntent().getExtras().getString("category")!=null && !getIntent().getExtras().getString("category").isEmpty()  && !getIntent().getExtras().getString("category").equals("Brak")){
-            getCategoryName(Integer.parseInt(Objects.requireNonNull(getIntent().getExtras().getString("category"))));
-
+        if(plant.getCategoryId()!=null){
+            getCategoryName(Integer.parseInt(Objects.requireNonNull(plant.getCategoryId()).toString()));
         }
         else{
             category.setText("Brak przypisanej kategorii");
         }
-        watering.setText(getFrequency("watering", getIntent()));
-        fertilizing.setText(getFrequency("fertilizing", getIntent()));
-        misting.setText(getFrequency("misting", getIntent()));
-        soil.setText(getIntent().getExtras().getString("soil"));
-        placement.setText(getIntent().getExtras().getString("location"));
-        location.setText(getIntent().getExtras().getString("placement"));
-        if(getIntent().getExtras().getString("soil")!=null && !getIntent().getExtras().getString("soil").isEmpty())
-            soil.setText(getIntent().getExtras().getString("soil"));
+        watering.setText(String.valueOf(plant.getSchedule().getWateringFrequency()));
+        fertilizing.setText(String.valueOf(plant.getSchedule().getFertilizingFrequency()));
+        misting.setText(String.valueOf(plant.getSchedule().getMistingFrequency()));
+        placement.setText(plant.getSpecies().getPlacement().getName());
+        if(plant.getSpecies().getSoil()!=null && !plant.getSpecies().getSoil().isEmpty())
+            soil.setText(plant.getSpecies().getSoil());
         else
             soil.setText("Brak zalecanej gleby");
-        if(getIntent().getExtras().getString("location")!=null && !getIntent().getExtras().getString("location").isEmpty())
-            placement.setText(getIntent().getExtras().getString("location"));
+        if(plant.getLocation()!=null && !plant.getLocation().isEmpty())
+            placement.setText(plant.getLocation());
         else
             placement.setText("Brak przypisanego pomieszczenia");
-        if(getIntent().getExtras().getString("placement")!=null && !getIntent().getExtras().getString("placement").isEmpty())
-            location.setText(getIntent().getExtras().getString("placement").toLowerCase());
+        if(plant.getSpecies().getPlacement()!=null && !plant.getSpecies().getPlacement().getName().isEmpty())
+            location.setText(plant.getSpecies().getPlacement().getName());
         else
             location.setText("Brak zalecanego stanowiska");
-        date.setText(getIntent().getExtras().getString("date").replaceFirst("00:00:00",""));
-        if(!getIntent().getExtras().getString("photo").isEmpty()){
-            getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo") );
+        date.setText(plant.getPurchaseDate().replaceFirst("00:00:00",""));
+        if(plant.getPhoto()!=null){
+            getPhotoFromFirebase(plantImage, plant.getPhoto());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 plantImage.setClipToOutline(true);
             }
         }
     }
+
+    private void makeGetDataRequest() {
+        String url = getRequestUrl()+"plants/" + getIntent().getExtras().get("plantId");
+        Log.v(TAG, "Invoking plantRequestProcessor"+ url);
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.v(TAG, "onResponse");
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
+                    }
+                });
+    }
+
+    private void onGetResponseReceived(JSONObject response) {
+        Log.v(TAG, "onGetResponseReceived()");
+        plant = plantResponseHandler.handleResponse(response, PlantDto.class);
+        setBottomBarOnItemClickListeners();
+        setTextsToRealValues();
+        Log.v(TAG, "co jest w plant name:" + plant.getName());
+    }
+
+    private void onErrorResponseReceived(VolleyError error) {
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
+    }
+
+    @NonNull
+    private String getRequestUrl() {
+        try {
+            config.setUrl(config.readProperties());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return config.getUrl();
+    }
+
 
     private static void getPhotoFromFirebase(ImageView photoImageView, String post) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -149,21 +202,22 @@ public class PlantViewActivity extends AppCompatActivity {
     }
 
     private void makeGetDataRequest(int id){
-        String url = getRequestUrl(id);
+        String url = getRequestUrlById(id);
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
-                        categoryName = onGetResponseReceived(response);
+                        categoryName = onGetResponseReceivedCategory(response);
                         Log.v(TAG,"In set category "+categoryName);
-                        if(categoryName!=null)
+                        if(categoryName!=null && !categoryName.equals("Brak"))
                         category.setText(categoryName);
+                        else category.setText("Brak przypisanej kategorii");
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
+                onErrorResponseReceivedCategory(error);
             }
         }){
             @Override
@@ -176,7 +230,7 @@ public class PlantViewActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private String getRequestUrl(int id) {
+    private String getRequestUrlById(int id) {
         try {
             config.setUrl(config.readProperties());
         } catch (IOException e) {
@@ -185,14 +239,14 @@ public class PlantViewActivity extends AppCompatActivity {
         return config.getUrl() + "categories/"+id;
     }
 
-    private String onGetResponseReceived(JSONObject response){
-        Log.v(TAG, "onGetResponseReceived()");
+    private String onGetResponseReceivedCategory(JSONObject response){
+        Log.v(TAG, "onGetResponseReceivedCategory()");
         CategoryDto categoryDto = config.getGson().fromJson(String.valueOf(response), CategoryDto.class);
         Log.v(TAG,categoryDto.getName());
         return categoryDto.getName();
     }
 
-    private void onErrorResponseReceived(VolleyError error){
+    private void onErrorResponseReceivedCategory(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
@@ -233,24 +287,6 @@ public class PlantViewActivity extends AppCompatActivity {
         });
     }
 
-    private Intent prepareIntent(){
-        Intent intent = new Intent(getApplicationContext(), PlantEditActivity.class);
-        intent.putExtra("name",plantName.getText().toString());
-        intent.putExtra("photo",getIntent().getExtras().getString("photo"));
-        intent.putExtra("species",species.getText());
-        Log.v(TAG,"Value of species id: "+getIntent().getExtras().getString("speciesId"));
-        intent.putExtra("speciesId", getIntent().getExtras().getString("speciesId"));
-        intent.putExtra("watering",getIntent().getExtras().getString("watering"));
-        intent.putExtra("fertilizing",getIntent().getExtras().getString("fertilizing"));
-        intent.putExtra("misting",getIntent().getExtras().getString("misting"));
-        intent.putExtra("placement",placement.getText());
-        intent.putExtra("date",date.getText());
-        Log.v(TAG, "Id: "+getIntent().getExtras().getLong("plantId"));
-        intent.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
-        intent.putExtra("scheduleId",getIntent().getExtras().getLong("scheduleId"));
-        return intent;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -270,12 +306,13 @@ public class PlantViewActivity extends AppCompatActivity {
                 return true;
             case R.id.deletePlant:
                 Intent intent3 = new Intent(this, PopUpDelete.class);
-                intent3.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
-                intent3.putExtra("photo", getIntent().getExtras().getString("photo"));
+                intent3.putExtra("plantId", plant.getId());
+                intent3.putExtra("photo", plant.getPhoto());
                 startActivity(intent3);
                 return true;
             case R.id.editPlant:
-                Intent intent = prepareIntent();
+                Intent intent = new Intent(getApplicationContext(), PlantEditActivity.class);
+                intent.putExtra("plantId", plant.getId());
                 startActivity(intent);
                 return true;
             case R.id.miProfile:
@@ -284,7 +321,7 @@ public class PlantViewActivity extends AppCompatActivity {
                 return true;
             case R.id.archivePlant:
                 Intent intent1 = new Intent(this,ArchiveActivity.class);
-                intent1.putExtra("plantId",getIntent().getExtras().getLong("plantId"));
+                intent1.putExtra("plantId", plant.getId());
                 startActivity(intent1);
                 return true;
             default:

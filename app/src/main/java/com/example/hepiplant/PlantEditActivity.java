@@ -33,6 +33,7 @@ import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.PlantDto;
+import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SpeciesDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -73,6 +74,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     private SpeciesDto[] speciesDtos;
     private String img_str;
     private Long plantId;
+    private PlantDto plant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +85,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         plantResponseHandler = new JSONResponseHandler<>(config);
         speciesResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
+
+        setBottomBarOnItemClickListeners();
         setupViewsData();
-        setValuesToEdit();
+        makeGetDataRequest();
+
     }
 
     private void setupViewsData(){
@@ -97,22 +102,18 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         placement = findViewById(R.id.placementEdit);
         date = findViewById(R.id.dateEdit);
         plantImage = findViewById(R.id.plantImageEdit);
-        getSpeciesFromDB();
-        setBottomBarOnItemClickListeners();
-        setOnClickListeners();
-
     }
 
     private void setValuesToEdit(){
-        plantName.setText(getIntent().getExtras().getString("name"));
-        if(!getIntent().getExtras().getString("photo", "").isEmpty())
-            getPhotoFromFirebase(plantImage, getIntent().getExtras().getString("photo"));
-        watering.setText(getIntent().getExtras().getString("watering"));
-        fertilizing.setText(getIntent().getExtras().getString("fertilizing"));
-        misting.setText(getIntent().getExtras().getString("misting"));
-        placement.setText(getIntent().getExtras().getString("placement"));
-        date.setText(getIntent().getExtras().getString("date"));
         plantId = getIntent().getExtras().getLong("plantId");
+        plantName.setText(plant.getName());
+        if(plant.getPhoto()!=null)
+            getPhotoFromFirebase(plantImage, plant.getPhoto());
+        watering.setText(String.valueOf(plant.getSchedule().getWateringFrequency()));
+        fertilizing.setText(String.valueOf(plant.getSchedule().getFertilizingFrequency()));
+        misting.setText(String.valueOf(plant.getSchedule().getMistingFrequency()));
+        placement.setText(plant.getLocation());
+        date.setText(plant.getPurchaseDate().replaceFirst("00:00:00",""));
         Log.v(TAG,"plant Id: "+plantId);
     }
 
@@ -141,6 +142,39 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                 Log.v(TAG,exception.getCause().toString());
             }
         });
+    }
+
+    private void makeGetDataRequest() {
+        String url = getRequestUrl()+"plants/" + getIntent().getExtras().get("plantId");
+        Log.v(TAG, "Invoking RequestProcessor"+ url);
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
+                    }
+                });
+    }
+
+    private void onGetResponseReceived(JSONObject response) {
+        Log.v(TAG, "onGetResponseReceived()");
+        plant = plantResponseHandler.handleResponse(response, PlantDto.class);
+        setOnClickListeners();
+        getSpeciesFromDB();
+        setValuesToEdit();
+    }
+
+    private void onErrorResponseReceived(VolleyError error) {
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
     }
 
     private void onGetResponseSpecies(JSONArray response){
@@ -179,9 +213,9 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGat.setAdapter(dtoArrayAdapter);
-        if(getIntent().getExtras().getString("speciesId") != null) {
+        if(plant.getSpecies().getId() != null) {
             for(SpeciesDto s : speciesDtos) {
-                if(s.getId() == Integer.parseInt(getIntent().getExtras().getString("speciesId"))) {
+                if(s.getId() == plant.getSpecies().getId()) {
                     speciesDto = s;
                     spinnerGat.setSelection(species.indexOf(s.getName()));
                 }
@@ -192,6 +226,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     private void onErrorResponsePlant(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
@@ -262,8 +297,8 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         editPlant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(plantName.getText()!=null && !plantName.getText().toString().equals("...")) patchRequestPlant();
-                else Toast.makeText(getApplicationContext(),"Podaj nazwę rośliny",Toast.LENGTH_LONG).show();
+                if(plantName.getText()!=null) patchRequestPlant();
+                else Toast.makeText(getApplicationContext(),R.string.plant_name,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -280,9 +315,9 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                Log.v(TAG, data.getExtras().getString("data"));
-                date.setText(data.getExtras().getString("data"));
-                Log.v(TAG, date.getText().toString());
+                Log.v(TAG, plant.getPurchaseDate());
+                date.setText(plant.getPurchaseDate());
+                Log.v(TAG, plant.getPurchaseDate());
             }
         }
 
@@ -321,12 +356,11 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;
@@ -334,7 +368,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void patchRequestSchedule(){
-        String url = getRequestUrl()+"schedules/"+getIntent().getExtras().getLong("scheduleId");
+        String url = getRequestUrl()+"schedules/"+plant.getSchedule().getId();
         JSONObject scheduleJ = makeScheduleJSON();
         requestProcessor.makeRequest(Request.Method.PATCH, url, scheduleJ, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
@@ -396,7 +430,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         JSONObject scheduleJ = new JSONObject();
 
         try {
-            scheduleJ.put("id",getIntent().getExtras().getLong("scheduleId"));
+            scheduleJ.put("id", plant.getSchedule().getId());
             scheduleJ.put("wateringFrequency", watering.getText());
             scheduleJ.put("fertilizingFrequency", fertilizing.getText());
             scheduleJ.put("mistingFrequency", misting.getText());
@@ -411,18 +445,18 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         JSONObject postData = new JSONObject();
 
         try {
-            if(plantName.getText().toString().equals("..."))  postData.put("name", "");
+            if(plantName.getText()==null)  postData.put("name", "");
             else postData.put("name", plantName.getText().toString());
             Log.v(TAG,date.getText().toString());
             Log.v(TAG, date.getText().toString());
-            if (date.getText().toString().equals("...") || date.getText().toString().equals("Wybierz datę"))
+            if (date.getText()==null || date.getText().toString().equals("Wybierz datę"))
                 postData.put("purchaseDate", null);
             else {
                 Log.v(TAG, "put: "+date.getText().toString());
                 postData.put("purchaseDate", date.getText().toString().trim() + " 00:00:00");
             }
             Log.v(TAG,placement.getText().toString());
-            if (placement.getText().toString().equals("...")){
+            if (placement.getText()==null){
                 postData.put("location", null);
             }
             else postData.put("location", placement.getText().toString());
@@ -449,6 +483,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
         Log.v(TAG,"Events: "+data.getEvents());
         setupNotifications(data);
+        Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         if(config.isNotifications())
             startActivity(intent);

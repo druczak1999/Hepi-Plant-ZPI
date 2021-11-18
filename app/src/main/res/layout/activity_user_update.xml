@@ -98,7 +98,7 @@
         android:layout_height="39dp"
         android:background="@drawable/rounded_button"
         android:fontFamily="@font/cantata_one"
-        android:text="Zmień dane"
+        android:text="Zapisz dane"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

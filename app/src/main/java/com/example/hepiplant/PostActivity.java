@@ -327,21 +327,6 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         return true;
     }
 
-    private Intent prepareIntent(){
-        Intent intent = new Intent(getApplicationContext(),PostEditActivity.class);
-        intent.putExtra("id", post.getId());
-        intent.putExtra("name", titleTextView.getText().toString());
-        intent.putExtra("body", bodyTextView.getText().toString());
-        intent.putExtra("tags", tagsTextView.getText().toString());
-        Log.v(TAG,"Category id: "+post.getCategoryId());
-        intent.putExtra("categoryId", post.getCategoryId().toString());
-        if(post.getPhoto()!=null)
-            intent.putExtra("photo", post.getPhoto());
-        else intent.putExtra("photo", "");
-            intent.putExtra("category", post.getCategoryId());
-        return intent;
-    }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -361,8 +346,10 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
                     startActivity(intent3);
                 return true;
             case R.id.editPost:
-                    Intent intent = prepareIntent();
-                    startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(),PostEditActivity.class);
+                intent.putExtra("postId", post.getId());
+                intent.putExtra("tags", tagsTextView.getText().toString());
+                startActivity(intent);
                 return true;
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);

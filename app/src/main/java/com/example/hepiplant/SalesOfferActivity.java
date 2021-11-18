@@ -325,23 +325,6 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         });
     }
 
-    private Intent prepareIntent(){
-        Intent intent = new Intent(getApplicationContext(), SalesOfferEditActivity.class);
-        intent.putExtra("id", salesOffer.getId());
-        intent.putExtra("name", titleTextView.getText().toString());
-        intent.putExtra("body", bodyTextView.getText().toString());
-        intent.putExtra("tags", tagsTextView.getText().toString());
-        intent.putExtra("price", salesOffer.getPrice().toString());
-        Log.v(TAG,"Category id: "+salesOffer.getCategoryId());
-        intent.putExtra("categoryId", salesOffer.getCategoryId().toString());
-        intent.putExtra("location", dateTextView.getText().toString());
-        if(salesOffer.getPhoto()!=null)
-            intent.putExtra("photo", salesOffer.getPhoto());
-        else intent.putExtra("photo", "");
-        intent.putExtra("category", salesOffer.getCategoryId());
-        return intent;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -375,7 +358,9 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 startActivity(intent3);
                 return true;
             case R.id.editSalesOffer:
-                Intent intent = prepareIntent();
+                Intent intent = new Intent(getApplicationContext(), SalesOfferEditActivity.class);
+                intent.putExtra("salesOfferId", salesOffer.getId());
+                intent.putExtra("tags", tagsTextView.getText().toString());
                 startActivity(intent);
                 return true;
             case R.id.miProfile:
