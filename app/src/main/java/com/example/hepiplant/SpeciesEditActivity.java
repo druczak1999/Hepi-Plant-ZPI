@@ -279,7 +279,7 @@ public class SpeciesEditActivity extends AppCompatActivity {
             new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    makeInfoToast("Edytowano gatunek o id " + species.getId());
+                    makeInfoToast(R.string.edit_species + species.getId().toString());
                     finish();
                 }
             }, new Response.ErrorListener() {
@@ -315,6 +315,7 @@ public class SpeciesEditActivity extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error) {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        makeInfoToast(String.valueOf(R.string.edit_saved_failed));
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

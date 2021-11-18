@@ -103,9 +103,9 @@ public class PopUpDeleteTag extends AppCompatActivity {
     private void onResponseReceived(String response) {
         Log.v(TAG, response);
         if(response.toLowerCase(Locale.ROOT).contains("successfully deleted")){
-            Toast.makeText(getApplicationContext(),"Usunięto tag",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.delete_tag,Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),"Usuwanie tagu nie powiodło się",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.delete_tag_failed,Toast.LENGTH_LONG).show();
         }
         finish();
     }

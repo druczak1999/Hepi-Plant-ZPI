@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -107,11 +108,13 @@ public class UserUpdateActivity extends AppCompatActivity {
                             @RequiresApi(api = Build.VERSION_CODES.N)
                             @Override
                             public void onResponse(JSONObject response) {
+                                Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
                                 Log.v(TAG, "Request successful. Response is: " + response);
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
                         Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage());
                     }
                 });
