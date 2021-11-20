@@ -79,6 +79,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     @Override
     protected void onResume() {
+        Log.v(TAG, "onResume()");
         super.onResume();
         makeGetDataRequest();
     }

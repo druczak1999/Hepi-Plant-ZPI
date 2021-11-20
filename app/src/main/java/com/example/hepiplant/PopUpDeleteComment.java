@@ -60,7 +60,6 @@ public class PopUpDeleteComment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 deleteComment();
-                finish();
             }
         });
     }
