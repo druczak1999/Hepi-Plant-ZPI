@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -96,13 +95,13 @@ public class EventsArchiveRecyclerViewAdapter extends RecyclerView.Adapter<Event
         viewHolder.getPlant().setText(dataSet.get(position).getPlantName());
         ImageView photoImageView = viewHolder.getImage();
         if(dataSet.get(position).getEventName().toLowerCase().trim().equals("podlewanie"))
-            photoImageView.setImageResource(R.drawable.podelwanie);
+            photoImageView.setImageResource(R.drawable.watering_icon);
         else if(dataSet.get(position).getEventName().toLowerCase().trim().equals("zraszanie"))
-            photoImageView.setImageResource(R.drawable.zraszanie);
+            photoImageView.setImageResource(R.drawable.misting_icon);
         else if(dataSet.get(position).getEventName().toLowerCase().trim().equals("nawożenie"))
-            photoImageView.setImageResource(R.drawable.nawozenie);
+            photoImageView.setImageResource(R.drawable.fertilization_icon);
         else
-            photoImageView.setImageResource(R.drawable.kwiatek);
+            photoImageView.setImageResource(R.drawable.plant_icon);
 
     }
 

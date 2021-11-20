@@ -71,36 +71,6 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
         Intent intent = new Intent(this,PlantViewActivity.class);
         Log.v(TAG,String.valueOf(plants[position].getId()));
         intent.putExtra("plantId",plants[position].getId());
-        intent.putExtra("scheduleId",plants[position].getSchedule().getId());
-        intent.putExtra("plantName",plants[position].getName());
-        if(plants[position].getSpecies()!=null){
-            intent.putExtra("species",plants[position].getSpecies().getName());
-            Log.v(TAG,"Value of species id: "+String.valueOf(plants[position].getSpecies().getId()));
-            intent.putExtra("speciesId",plants[position].getSpecies().getId().toString());
-            intent.putExtra("soil",plants[position].getSpecies().getSoil());
-            if(plants[position].getSpecies().getPlacement() != null)
-                intent.putExtra("placement",plants[position].getSpecies().getPlacement().getName());
-        }
-        else{
-            intent.putExtra("species","");
-            intent.putExtra("soil","");
-            intent.putExtra("placement","");
-        }
-        intent.putExtra("watering",String.valueOf(plants[position].getSchedule().getWateringFrequency()));
-        intent.putExtra("fertilizing",String.valueOf(plants[position].getSchedule().getFertilizingFrequency()));
-        intent.putExtra("misting",String.valueOf(plants[position].getSchedule().getMistingFrequency()));
-        if(plants[position].getCategoryId()!=null)
-        intent.putExtra("category",plants[position].getCategoryId().toString());
-        else intent.putExtra("category","");
-        if(plants[position].getLocation()!=null)
-        intent.putExtra("location",plants[position].getLocation());
-        else intent.putExtra("location","");
-        if(plants[position].getPurchaseDate()!=null)
-        intent.putExtra("date",plants[position].getPurchaseDate());
-        else intent.putExtra("date","");
-        if(plants[position].getPhoto()!=null)
-        intent.putExtra("photo", plants[position].getPhoto());
-        else intent.putExtra("photo", "");
         startActivity(intent);
     }
 

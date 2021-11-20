@@ -47,9 +47,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PostEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -68,6 +66,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private Button editPost;
     private CategoryDto[] categoryDtos;
     private CategoryDto selectedCategory;
+    private PostDto post;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +77,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
 
-        postId = getIntent().getExtras().getLong("id");
-        categoryId = getIntent().getExtras().getLong("category");
+        setBottomBarOnItemClickListeners();
         setupViewsData();
-        setValuesToEdit();
+        makeGetDataRequest();
+        postId = getIntent().getExtras().getLong("postId");
     }
 
     private void setupViewsData(){
@@ -91,17 +90,48 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postTags = findViewById(R.id.editTags);
         postImage = findViewById(R.id.editImageBut);
         editPost = findViewById(R.id.editPost);
+    }
+
+    private void makeGetDataRequest() {
+        String url = getRequestUrl()+"posts/" + getIntent().getExtras().get("postId");
+        Log.v(TAG, "Invoking requestProcessor"+ url);
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
+                    }
+                });
+    }
+
+    private void onGetResponseReceived(JSONObject response) {
+        Log.v(TAG, "onGetResponseReceived()");
+        post = postResponseHandler.handleResponse(response, PostDto.class);
+        categoryId = post.getCategoryId();
         getCategoriesFromDB();
-        setBottomBarOnItemClickListeners();
         setOnClickListeners();
+        setValuesToEdit();
+    }
+
+    private void onErrorResponseReceived(VolleyError error) {
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
     }
 
     private void setValuesToEdit() {
-        postName.setText(getIntent().getExtras().getString("name"));
-        postBody.setText(getIntent().getExtras().getString("body"));
+        postName.setText(post.getTitle());
+        postBody.setText(post.getBody());
         postTags.setText(getIntent().getExtras().getString("tags"));
-        if(!getIntent().getExtras().getString("photo", "").isEmpty())
-            getPhotoFromFirebase(postImage, getIntent().getExtras().getString("photo"));
+        if(post.getPhoto()!= null)
+            getPhotoFromFirebase(postImage, post.getPhoto());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             postImage.setClipToOutline(true);
         }
@@ -148,12 +178,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
-        if(getIntent().getExtras().getString("categoryId") != null) {
-            for(CategoryDto c : categoryDtos){
-                if(c.getId() == Integer.parseInt(getIntent().getExtras().getString("categoryId"))){
-                    selectedCategory = c;
-                    spinnerCat.setSelection(categories.indexOf(c.getName()));
-                }
+        for(CategoryDto c : categoryDtos){
+            if(c.getId() == categoryId){
+                selectedCategory = c;
+                spinnerCat.setSelection(categories.indexOf(c.getName()));
             }
         }
     }
@@ -213,12 +241,11 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;
@@ -265,14 +292,14 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         editPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(postName.getText()!=null && !postName.getText().toString().equals("...")) patchRequestPost();
-                else Toast.makeText(getApplicationContext(),"Podaj nazwę postu",Toast.LENGTH_LONG).show();
+                if(postName.getText()!=null) patchRequestPost();
+                else Toast.makeText(getApplicationContext(),R.string.post_title,Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void patchRequestPost(){
-        String url = getRequestUrl()+"posts/"+getIntent().getExtras().getLong("id");
+        String url = getRequestUrl()+"posts/"+getIntent().getExtras().getLong("postId");
         JSONObject postData = makePostDataJson();
         Log.v(TAG, String.valueOf(postData));
         Log.v(TAG, "Invoking requestProcessor");
@@ -282,8 +309,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePost(response);
+                        Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -296,11 +325,11 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private JSONObject makePostDataJson(){
         JSONObject postData = new JSONObject();
         try {
-            if(postName.getText().toString().equals("..."))  postData.put("title", "");
+            if(postName.getText()==null)  postData.put("title", "");
             else postData.put("title", postName.getText().toString());
-            if(postBody.getText().toString().equals("..."))  postData.put("body", "");
+            if(postBody.getText()==null)  postData.put("body", "");
             else postData.put("body", postBody.getText().toString());
-            if(postTags.getText().toString().equals("..."))  postData.put("tags", "");
+            if(postTags.getText()==null)  postData.put("tags", "");
             else postData.put("tags", hashReading());
             postData.put("photo", img_str);
             postData.put("categoryId", selectedCategory.getId());
@@ -363,6 +392,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private void onErrorResponsePost(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

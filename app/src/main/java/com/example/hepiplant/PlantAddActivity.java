@@ -150,8 +150,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         addPlantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(plantName.getText()!=null && !plantName.getText().toString().equals("...")) postRequestPlant();
-                else Toast.makeText(getApplicationContext(),"Podaj nazwę rośliny",Toast.LENGTH_LONG).show();
+                if(plantName.getText()!=null) postRequestPlant();
+                else Toast.makeText(getApplicationContext(),R.string.plant_name,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -179,6 +179,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         JSONObject speciesJson = makeSpeciesJSON();
         JSONObject scheduleJ = makeScheduleJSON();
         JSONObject postData = makePostDataJson(speciesJson,scheduleJ);
+        Log.v(TAG, String.valueOf(postData));
+        Log.v(TAG, "Invoking requestProcessor");
         Log.v(TAG, String.valueOf(postData));Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
@@ -188,6 +190,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             onPostResponsePlant(response);
                         }
+                        Toast.makeText(getApplicationContext(), R.string.add_plant, Toast.LENGTH_LONG).show();
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -239,23 +242,25 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         JSONObject postData = new JSONObject();
         try {
             Log.v(TAG,dateEditText.getText().toString());
-            if(plantName.getText().toString().equals("..."))  postData.put("name", "");
+            if(plantName.getText()==null)  postData.put("name", "");
             else postData.put("name", plantName.getText().toString());
             Log.v(TAG,dateEditText.getText().toString());
-            if (dateEditText.getText().toString().equals("...") || dateEditText.getText().toString().equals("Wybierz datę"))
+            if (dateEditText.getText()==null || dateEditText.getText().toString().equals("Wybierz datę"))
                 postData.put("purchaseDate", null);
             else postData.put("purchaseDate", dateEditText.getText().toString() + " 00:00:00");
             Log.v(TAG,location.getText().toString());
-            if (location.getText().toString().equals("...")){
+            if (location.getText()==null){
                 postData.put("location", null);
             }
             else postData.put("location", location.getText().toString());
             postData.put("photo", img_str);
             Log.v(TAG, selectedCategory.getId().toString());
+            postData.put("categoryId", selectedCategory.getId());
             if(speciesDto == null ) postData.put("species", null);
             else postData.put("species", speciesJson);
             postData.put("userId", config.getUserId());
             postData.put("schedule", scheduleJ);
+            postData.put("categoryId",selectedCategory.getId());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -268,6 +273,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, "ONResponse plant");
         PlantDto data = new PlantDto();
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
+        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
+        startActivity(intent);
         Log.v(TAG,"Events: "+data.getEvents());
         if(config.isNotifications())
             setupNotifications(data);
@@ -306,6 +313,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private void onErrorResponsePlant(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.add_plant_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
@@ -371,12 +379,11 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Fail in upload image",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"Success in upload image",Toast.LENGTH_LONG).show();
             }
         });
         img_str = path;
@@ -418,6 +425,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGat.setAdapter(dtoArrayAdapter);
+        spinnerGat.setSelection(species.indexOf("Brak"));
     }
 
     private void onGetResponseCategories(JSONArray response){

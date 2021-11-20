@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -154,7 +155,6 @@ public class PopUpArchive extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.v(TAG,"post");
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getRequestUrl()+"events";
         Log.v(TAG,url);
@@ -188,6 +188,7 @@ public class PopUpArchive extends AppCompatActivity {
         EventDto data = new EventDto();
         Gson gson = new Gson();
         data = gson.fromJson(str,EventDto.class);
+        Toast.makeText(getApplicationContext(), R.string.archive_event, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         startActivity(intent);
         finish();
@@ -229,6 +230,7 @@ public class PopUpArchive extends AppCompatActivity {
     private void onErrorResponsePlant(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(), R.string.archive_event_fail, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }

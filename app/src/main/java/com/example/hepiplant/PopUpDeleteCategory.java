@@ -103,9 +103,9 @@ public class PopUpDeleteCategory extends AppCompatActivity {
     private void onResponseReceived(String response) {
         Log.v(TAG, response);
         if(response.toLowerCase(Locale.ROOT).contains("successfully deleted")){
-            Toast.makeText(getApplicationContext(),"Usunięto kategorię",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.delete_category,Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),"Usuwanie kategorii nie powiodło się",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.delete_category_failed,Toast.LENGTH_LONG).show();
         }
         finish();
     }

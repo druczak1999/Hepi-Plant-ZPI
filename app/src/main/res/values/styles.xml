@@ -80,6 +80,13 @@
     <style name="ButtonSmallAdmin" parent="ButtonSmallWhite">
         <item name="android:fontFamily">@font/roboto</item>
     </style>
+    <style name="ButtonSmallSortWhite">
+        <item name="android:drawableRight">@drawable/sort_icon</item>
+        <item name="android:text">"Sortuj"</item>
+        <item name="android:textSize">13dp</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:background">@drawable/rounded_edittext</item>
+    </style>
     <!-- Other -->
 
     <style name="AppTheme.CustomTheme">

@@ -101,7 +101,7 @@ public class PopUpDeletePost extends AppCompatActivity {
     private void onDeleteResponseReceived(String response) {
         Log.v(TAG, response);
         if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
-        Toast.makeText(getApplicationContext(),"Usunięto post",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),R.string.delete_post_message,Toast.LENGTH_LONG).show();
         Intent intent;
         if (config.getUserRoles().contains(ROLE_ADMIN)){
             intent = new Intent(getApplicationContext(), MainAdminActivity.class);
@@ -115,6 +115,7 @@ public class PopUpDeletePost extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(),R.string.delete_post_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
@@ -127,12 +128,10 @@ public class PopUpDeletePost extends AppCompatActivity {
         imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Delete photo from Firebase storage",Toast.LENGTH_LONG).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Unsuccessful delete photo from Firebase storage",Toast.LENGTH_LONG).show();
             }
         });
     }

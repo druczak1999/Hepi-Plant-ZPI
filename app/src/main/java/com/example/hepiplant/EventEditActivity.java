@@ -25,7 +25,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
-import com.example.hepiplant.dto.PlantDto;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -71,11 +70,11 @@ public class EventEditActivity extends AppCompatActivity {
         eventDate.setText(getIntent().getExtras().getString("eventDate"));
         eventDescription.setText(getIntent().getExtras().getString("eventDescription"));
         if(name.toLowerCase().equals("podlewanie"))
-            eventImage.setImageResource(R.drawable.podelwanie);
+            eventImage.setImageResource(R.drawable.watering_icon);
         else if(name.toLowerCase().equals("zraszanie"))
-            eventImage.setImageResource(R.drawable.zraszanie);
+            eventImage.setImageResource(R.drawable.misting_icon);
         else if(name.toLowerCase().equals("nawożenie"))
-            eventImage.setImageResource(R.drawable.nawozenie);
+            eventImage.setImageResource(R.drawable.fertilization_icon);
 
     }
 
@@ -115,7 +114,7 @@ public class EventEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(eventName.getText()!=null && !eventName.getText().toString().equals(" ")) patchEventResponse();
-                else Toast.makeText(getApplicationContext(),"Podaj tytuł wydarzenia",Toast.LENGTH_LONG).show();
+                else Toast.makeText(getApplicationContext(),R.string.event_title,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -164,7 +163,7 @@ public class EventEditActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                onErrorResponse(error);
+                onErrorResponseEvent(error);
             }
         }){
             @Override
@@ -186,40 +185,42 @@ public class EventEditActivity extends AppCompatActivity {
         if(config.isNotifications())
             setupNotifications(data);
         Intent intent = new Intent(this, MainTabsActivity.class);
+        Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
         startActivity(intent);
         finish();
     }
 
-    private void setupNotifications(EventDto data) {
-        if(data!=null){
-                if(!data.isDone()){
-                    Log.v(TAG,data.getEventName());
-                    Intent intent = new Intent(this, AlarmBroadcast.class);
-                    intent.putExtra("eventName",data.getEventName());
-                    intent.putExtra("eventDescription",data.getEventDescription());
-                    intent.putExtra("eventId",data.getId());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,data.getId().intValue(), intent, 0);
-
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    Calendar calendar = Calendar.getInstance();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    try {
-                        Log.v(TAG,simpleDateFormat.parse(data.getEventDate()).toString());
-                        calendar.setTime(simpleDateFormat.parse(data.getEventDate()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    Log.v(TAG, String.valueOf(calendar.getTime()));
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-                }
-            }
-        }
-
-    private void onErrorResponse(VolleyError error){
+    private void onErrorResponseEvent(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
+        Toast.makeText(getApplicationContext(),R.string.edit_saved_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
+    }
+
+    private void setupNotifications(EventDto data) {
+        if(data!=null){
+            if(!data.isDone()){
+                Log.v(TAG,data.getEventName());
+                Intent intent = new Intent(this, AlarmBroadcast.class);
+                intent.putExtra("eventName",data.getEventName());
+                intent.putExtra("eventDescription",data.getEventDescription());
+                intent.putExtra("eventId",data.getId());
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this,data.getId().intValue(), intent, 0);
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    Log.v(TAG,simpleDateFormat.parse(data.getEventDate()).toString());
+                    calendar.setTime(simpleDateFormat.parse(data.getEventDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.v(TAG, String.valueOf(calendar.getTime()));
+                alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+            }
         }
     }
 

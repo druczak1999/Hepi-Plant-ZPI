@@ -13,7 +13,7 @@ public class AlarmBroadcast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.v("AlarmTest","on receive");
         NotificationCompat.Builder builder= new NotificationCompat.Builder(context,"notifyHepiPlant")
-                .setSmallIcon(R.drawable.kwiatek)
+                .setSmallIcon(R.drawable.plant_icon)
                 .setContentTitle(intent.getExtras().getString("eventName"))
                 .setContentText(intent.getExtras().getString("eventDescription"))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);

@@ -49,7 +49,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EventName"
-        app:srcCompat="@drawable/podelwanie" />
+        app:srcCompat="@drawable/watering_icon" />
 
     <TextView
         android:id="@+id/EventPlantNameView"
