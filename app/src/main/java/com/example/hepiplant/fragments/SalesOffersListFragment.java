@@ -97,19 +97,7 @@ public class SalesOffersListFragment extends Fragment implements
         Log.v(TAG, "Entering onCreateView()");
         offersFragmentView = inflater.inflate(R.layout.fragment_offers_list, container, false);
 
-        offersSortButton = offersFragmentView.findViewById(R.id.sortOffersButton);
-        offersFilterButton = offersFragmentView.findViewById(R.id.filterOffersButton);
-        offersFilterSpinner = offersFragmentView.findViewById(R.id.filterOffersSpinner);
-        offersStartDateButton = offersFragmentView.findViewById(R.id.startDateButtonInOfferFilter);
-        offersEndDateButton = offersFragmentView.findViewById(R.id.endDateButtonInOfferFilter);
-        offersTagsEditText = offersFragmentView.findViewById(R.id.tagEditTextInOfferFilter);
-        closeTagFiler = offersFragmentView.findViewById(R.id.closeTagFilterOffer);
-        closeCategoryFilter = offersFragmentView.findViewById(R.id.closeCategoryFilterOffer);
-        closeDateFilters = offersFragmentView.findViewById(R.id.closeDateFiltersOffer);
-        tagLinearLayout = offersFragmentView.findViewById(R.id.tagFilterLinearLayoutOffer);
-        categoryLinearLayout = offersFragmentView.findViewById(R.id.categoryFilterLinearLayoutOffer);
-        datesLinearLayout = offersFragmentView.findViewById(R.id.datesFilterLinearLayoutOffer);
-
+        setUpViewsForFilters();
         initView();
         setLayoutManager();
         makeGetDataRequest();
@@ -167,33 +155,17 @@ public class SalesOffersListFragment extends Fragment implements
         if(filterSpinner.getId()==R.id.filterOffersSpinner){
             switch (position){
                 case 1:
-                    if(tagClick%2==0){
-                        offersTagsEditText.setVisibility(View.VISIBLE);
-                        offersFilterButton.setVisibility(View.VISIBLE);
-                    }
-                    else offersTagsEditText.setVisibility(View.GONE);
-                    tagClick++;
+                    offersTagsEditText.setVisibility(View.VISIBLE);
+                    tagLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 2:
-                    if(categoryClick%2==0){
-                        getCategoriesFromDB();
-                        offersFilterButton.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        if(this.categorySpinner !=null) this.categorySpinner.setVisibility(View.GONE);
-                    }
-                    categoryClick++;
+                    getCategoriesFromDB();
+                    categoryLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 3:
-                    if(dataClick%2==0){
-                        offersStartDateButton.setVisibility(View.VISIBLE);
-                        offersEndDateButton.setVisibility(View.VISIBLE);
-                        offersFilterButton.setVisibility(View.VISIBLE);
-                    }else{
-                        offersStartDateButton.setVisibility(View.GONE);
-                        offersEndDateButton.setVisibility(View.GONE);
-                    }
-                    dataClick++;
+                    offersStartDateButton.setVisibility(View.VISIBLE);
+                    offersEndDateButton.setVisibility(View.VISIBLE);
+                    datesLinearLayout.setVisibility(View.VISIBLE);
                     break;
             }
             filterSpinner.setSelection(0);
@@ -201,8 +173,21 @@ public class SalesOffersListFragment extends Fragment implements
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent) {}
 
+    private void setUpViewsForFilters() {
+        offersSortButton = offersFragmentView.findViewById(R.id.sortOffersButton);
+        offersFilterButton = offersFragmentView.findViewById(R.id.filterOffersButton);
+        offersFilterSpinner = offersFragmentView.findViewById(R.id.filterOffersSpinner);
+        offersStartDateButton = offersFragmentView.findViewById(R.id.startDateButtonInOfferFilter);
+        offersEndDateButton = offersFragmentView.findViewById(R.id.endDateButtonInOfferFilter);
+        offersTagsEditText = offersFragmentView.findViewById(R.id.tagEditTextInOfferFilter);
+        closeTagFiler = offersFragmentView.findViewById(R.id.closeTagFilterOffer);
+        closeCategoryFilter = offersFragmentView.findViewById(R.id.closeCategoryFilterOffer);
+        closeDateFilters = offersFragmentView.findViewById(R.id.closeDateFiltersOffer);
+        tagLinearLayout = offersFragmentView.findViewById(R.id.tagFilterLinearLayoutOffer);
+        categoryLinearLayout = offersFragmentView.findViewById(R.id.categoryFilterLinearLayoutOffer);
+        datesLinearLayout = offersFragmentView.findViewById(R.id.datesFilterLinearLayoutOffer);
     }
 
     private void setCloseViewsOnClickListeners(){
@@ -453,36 +438,4 @@ public class SalesOffersListFragment extends Fragment implements
         categorySpinner.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner categorySpinner = (Spinner) parent;
-        Spinner filterSpinner = (Spinner) parent;
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        if(categorySpinner.getId()==R.id.categorySpinnerInOfferFilter){
-            for(CategoryDto c : categoryDtos){
-                if(c.getName().equals(selectedItem)) selectedCategory = c;
-            }
-        }
-        if(filterSpinner.getId()==R.id.filterOffersSpinner){
-            switch (position){
-                case 1:
-                    offersTagsEditText.setVisibility(View.VISIBLE);
-                    tagLinearLayout.setVisibility(View.VISIBLE);
-                    break;
-                case 2:
-                    getCategoriesFromDB();
-                    categoryLinearLayout.setVisibility(View.VISIBLE);
-                    break;
-                case 3:
-                    offersStartDateButton.setVisibility(View.VISIBLE);
-                    offersEndDateButton.setVisibility(View.VISIBLE);
-                    datesLinearLayout.setVisibility(View.VISIBLE);
-                    break;
-            }
-            filterSpinner.setSelection(0);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) { }
 }

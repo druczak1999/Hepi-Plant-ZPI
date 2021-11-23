@@ -17,6 +17,7 @@ public class CalendarActivity extends AppCompatActivity {
     private CalendarView calendarView;
     private Button saveDateButton;
     private TextView dateTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +62,6 @@ public class CalendarActivity extends AppCompatActivity {
                 else date+=dayOfMonth;
 
                 dateTextView.setText(date);
-
             }
         });
     }

@@ -38,11 +38,40 @@ public class MainTabsActivity extends AppCompatActivity {
         setupToolbar();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Toast.makeText(this.getApplicationContext(), R.string.informations, Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.mainToolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        setUpFloatingButton();
+    }
 
+    private void setUpFloatingButton() {
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,31 +131,5 @@ public class MainTabsActivity extends AppCompatActivity {
                 startActivity(intent2);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logoff:
-                FireBase fireBase = new FireBase();
-                fireBase.signOut();
-                return true;
-            case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(), R.string.informations, Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.miProfile:
-                Intent intent2 = new Intent(this, UserActivity.class);
-                startActivity(intent2);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

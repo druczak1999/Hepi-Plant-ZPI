@@ -42,6 +42,8 @@ import java.util.Map;
 
 public class EventEditActivity extends AppCompatActivity {
 
+    private static final String TAG = "EventEditActivity";
+
     private EditText eventName, eventDescription;
     private Button eventDate, saveEvent;
     private ImageView eventImage;
@@ -49,7 +51,6 @@ public class EventEditActivity extends AppCompatActivity {
     private Configuration config;
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private JSONRequestProcessor requestProcessor;
-    private static final String TAG = "EventEditActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,17 @@ public class EventEditActivity extends AppCompatActivity {
         requestProcessor = new JSONRequestProcessor(config);
         eventResponseHandler = new JSONResponseHandler<>(config);
         setupViewsData();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                eventDate.setText(data.getExtras().getString("data"));
+            }
+        }
     }
 
     private void setupViewsData(){
@@ -157,17 +169,6 @@ public class EventEditActivity extends AppCompatActivity {
                 else Toast.makeText(getApplicationContext(),R.string.event_title,Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                eventDate.setText(data.getExtras().getString("data"));
-            }
-        }
     }
 
     private void patchEventResponse(){

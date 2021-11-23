@@ -19,7 +19,6 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.hepiplant.EventViewActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.EventsRecyclerViewAdapter;
@@ -28,28 +27,23 @@ import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class EventsListFragment extends Fragment implements EventsRecyclerViewAdapter.ItemClickListener {
 
     private static final String TAG = "EventsListFragment";
 
-    private Configuration config;
     private View eventsFragmentView;
     private RecyclerView eventsRecyclerView;
     private EventsRecyclerViewAdapter adapter;
     private EventDto[] events = new EventDto[]{};
+    private Configuration config;
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private JSONRequestProcessor requestProcessor;
 
-    public EventsListFragment() {
-    }
+    public EventsListFragment() {}
 
     public static EventsListFragment newInstance() {
         EventsListFragment fragment = new EventsListFragment();

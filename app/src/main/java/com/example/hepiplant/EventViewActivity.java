@@ -1,12 +1,12 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,17 +19,13 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.hepiplant.adapter.recyclerview.EventsArchiveRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.IOException;
 
 public class EventViewActivity extends AppCompatActivity {
@@ -38,10 +34,10 @@ public class EventViewActivity extends AppCompatActivity {
 
     private TextView plantName, eventName, eventDate, eventDescription;
     private ImageView eventImage;
+    private EventDto event;
     private Configuration config;
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private JSONRequestProcessor requestProcessor;
-    private EventDto event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +49,46 @@ public class EventViewActivity extends AppCompatActivity {
         setupViewsData();
         makeGetDataRequest();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        if(getIntent().getExtras().getString("place").equals("archive"))
+            menuInflater.inflate(R.menu.menu_archive_event, menu);
+        else
+            menuInflater.inflate(R.menu.menu_event, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            case R.id.editEvent:
+                Intent intent = new Intent(this,EventEditActivity.class);
+                intent.putExtra("eventId",getIntent().getExtras().getLong("eventId"));
+                startActivity(intent);
+                return true;
+            case R.id.deleteEvent:
+                Intent intent1 = new Intent(this, PopUpDeleteEvent.class);
+                intent1.putExtra("eventId",getIntent().getExtras().getLong("eventId"));
+                startActivity(intent1);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void setupViewsData(){
         plantName = findViewById(R.id.EventPlantNameValueView);
         eventName = findViewById(R.id.EventName);
@@ -135,44 +171,4 @@ public class EventViewActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        if(getIntent().getExtras().getString("place").equals("archive"))
-            menuInflater.inflate(R.menu.menu_archive_event, menu);
-        else
-            menuInflater.inflate(R.menu.menu_event, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.logoff:
-                FireBase fireBase = new FireBase();
-                fireBase.signOut();
-                return true;
-            case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),"Informacje",Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.miProfile:
-                Intent intent2 = new Intent(this, UserActivity.class);
-                startActivity(intent2);
-                return true;
-            case R.id.editEvent:
-                Intent intent = new Intent(this,EventEditActivity.class);
-                intent.putExtra("eventId",getIntent().getExtras().getLong("eventId"));
-                startActivity(intent);
-                return true;
-            case R.id.deleteEvent:
-                Intent intent1 = new Intent(this, PopUpDeleteEvent.class);
-                intent1.putExtra("eventId",getIntent().getExtras().getLong("eventId"));
-                startActivity(intent1);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 }

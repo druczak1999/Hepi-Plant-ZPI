@@ -65,16 +65,16 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     private Spinner spinnerGat;
     private ImageView plantImage;
     private Button date, editPlant;
-    private Configuration config;
-    private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<PlantDto> plantResponseHandler;
-    private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
-    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private SpeciesDto speciesDto;
     private SpeciesDto[] speciesDtos;
     private String img_str;
     private Long plantId;
     private PlantDto plant;
+    private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<PlantDto> plantResponseHandler;
+    private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,49 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         setBottomBarOnItemClickListeners();
         setupViewsData();
         makeGetDataRequest();
+    }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(SpeciesDto s : speciesDtos){
+            if(s.getName().equals(selectedItem)){
+                speciesDto = s;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Log.v(TAG, plant.getPurchaseDate());
+                date.setText(plant.getPurchaseDate());
+                Log.v(TAG, plant.getPurchaseDate());
+            }
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Log.v(TAG, "cropActivity");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                plantImage.setImageURI(resultUri);
+                img_str=resultUri.toString();
+                saveImageToFirebase();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    plantImage.setClipToOutline(true);
+                }
+                Log.v(TAG, img_str);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 
     private void setupViewsData(){
@@ -232,19 +274,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        for(SpeciesDto s : speciesDtos){
-            if(s.getName().equals(selectedItem)){
-                speciesDto = s;
-            }
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {}
-
     @NonNull
     private String getRequestUrl() {
         try {
@@ -307,36 +336,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                Log.v(TAG, plant.getPurchaseDate());
-                date.setText(plant.getPurchaseDate());
-                Log.v(TAG, plant.getPurchaseDate());
-            }
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Log.v(TAG, "cropActivity");
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                plantImage.setImageURI(resultUri);
-                img_str=resultUri.toString();
-                saveImageToFirebase();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    plantImage.setClipToOutline(true);
-                }
-                Log.v(TAG, img_str);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
     }
 
     private void saveImageToFirebase() {

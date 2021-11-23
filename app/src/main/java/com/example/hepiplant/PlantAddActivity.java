@@ -60,6 +60,7 @@ import java.util.List;
 public class PlantAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "AddPlant";
+
     private Button dateEditText, addPlantButton;
     private ImageView addImageButton;
     private Spinner spinnerGat, spinnerCat;
@@ -68,14 +69,14 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private int watering;
     private SpeciesDto speciesDto;
     private SpeciesDto[] speciesDtos;
+    private CategoryDto[] categoryDtos;
+    private CategoryDto selectedCategory;
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
     private JSONResponseHandler<PlantDto> plantResponseHandler;
     private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
-    private static final int PICK_IMAGE = 2;
-    private CategoryDto[] categoryDtos;
-    private CategoryDto selectedCategory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,57 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         img_str=null;
         setupViewsData();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                dateEditText.setText(data.getExtras().getString("data"));
+            }
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Log.v(TAG, "cropActivity");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                addImageButton.setImageURI(resultUri);
+                img_str=resultUri.toString();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addImageButton.setClipToOutline(true);
+                }
+                saveImageToFirebase();
+                Log.v(TAG, img_str);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Spinner speciesSpinner = (Spinner) parent;
+        Spinner categorySpinner = (Spinner) parent;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        if (speciesSpinner.getId() == R.id.editSpecies) {
+            for(SpeciesDto s : speciesDtos){
+                if(s.getName().equals(selectedItem)){
+                    speciesDto = s;
+                }
+            }
+        }
+        if(categorySpinner.getId()==R.id.editCategory){
+            for(CategoryDto c : categoryDtos){
+                if(c.getName().equals(selectedItem)){
+                    selectedCategory = c;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     private void setupViewsData() {
         plantName = findViewById(R.id.editPlantName);
@@ -326,33 +378,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 .start(this);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                dateEditText.setText(data.getExtras().getString("data"));
-            }
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Log.v(TAG, "cropActivity");
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                addImageButton.setImageURI(resultUri);
-                img_str=resultUri.toString();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    addImageButton.setClipToOutline(true);
-                }
-                saveImageToFirebase();
-                Log.v(TAG, img_str);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-    }
-
     private void saveImageToFirebase() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -451,31 +476,5 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
-    }
-
-    //Methods for spinners
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner speciesSpinner = (Spinner) parent;
-        Spinner categorySpinner = (Spinner) parent;
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        if (speciesSpinner.getId() == R.id.editSpecies) {
-            for(SpeciesDto s : speciesDtos){
-                if(s.getName().equals(selectedItem)){
-                    speciesDto = s;
-                }
-            }
-        }
-        if(categorySpinner.getId()==R.id.editCategory){
-            for(CategoryDto c : categoryDtos){
-                if(c.getName().equals(selectedItem)){
-                    selectedCategory = c;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
     }
 }

@@ -1,6 +1,5 @@
 package com.example.hepiplant;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,11 +27,12 @@ import java.io.IOException;
 
 public class ArchiveActivity extends AppCompatActivity implements EventsArchiveRecyclerViewAdapter.ItemClickListener{
 
-    private EventDto[] events;
-    private Configuration config;
     private static final String TAG = "ArchiveActivity";
+
+    private EventDto[] events;
     private RecyclerView rv;
     private EventsArchiveRecyclerViewAdapter adapter;
+    private Configuration config;
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private JSONRequestProcessor requestProcessor;
 

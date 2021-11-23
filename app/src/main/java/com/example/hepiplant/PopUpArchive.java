@@ -23,6 +23,9 @@ import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.PlantDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -36,10 +39,14 @@ import java.util.Map;
 
 public class PopUpArchive extends AppCompatActivity {
 
+    private static final String TAG = "PopUpArchive";
+
     private Button yes, no;
     private Configuration config;
-    private static final String TAG = "PopUpArchive";
     private PlantDto plant;
+    private JSONResponseHandler<EventDto> eventResponseHandler;
+    private JSONResponseHandler<PlantDto> plantResponseHandler;
+    private JSONRequestProcessor requestProcessor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +62,16 @@ public class PopUpArchive extends AppCompatActivity {
 
     private void setupViewsData(){
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        eventResponseHandler = new JSONResponseHandler<>(config);
+        plantResponseHandler= new JSONResponseHandler<>(config);
         yes = findViewById(R.id.buttonYesArchive);
         no = findViewById(R.id.buttonNoArchive);
 
+        setUpYesNoButtonsOnClickListeners();
+    }
+
+    private void setUpYesNoButtonsOnClickListeners() {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,21 +98,9 @@ public class PopUpArchive extends AppCompatActivity {
     }
 
     private void patchEventResponse(){
-        JSONObject postData = new JSONObject();
-        try {
-            postData.put("eventName",getIntent().getExtras().getString("eventName"));
-            postData.put("eventDate",getIntent().getExtras().getString("eventDate"));
-            postData.put("eventDescription",getIntent().getExtras().getString("eventDescription"));
-            postData.put("done",true);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.v(TAG,"patch");
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        JSONObject postData = preparePatchDataEvent();
         String url = getRequestUrl()+"events/"+getIntent().getExtras().getLong("eventId");
-        Log.v(TAG,url);
-        Log.v(TAG,postData.toString());
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+        requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -113,29 +115,52 @@ public class PopUpArchive extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
+        });
+    }
 
-        queue.add(jsonArrayRequest);
+    private JSONObject preparePatchDataEvent() {
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("eventName",getIntent().getExtras().getString("eventName"));
+            postData.put("eventDate",getIntent().getExtras().getString("eventDate"));
+            postData.put("eventDescription",getIntent().getExtras().getString("eventDescription"));
+            postData.put("done",true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return postData;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPatchResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
-        String str = String.valueOf(response); //http request
         EventDto data = new EventDto();
-        Gson gson = new Gson();
-        data = gson.fromJson(str,EventDto.class);
-        Log.v(TAG,"Czy sie zmieniło: "+data.isDone());
+        data = eventResponseHandler.handleResponse(response,EventDto.class);
         postEventResponse();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void postEventResponse(){
+        JSONObject postData = preparePostEventData();
+        String url = getRequestUrl()+"events";
+        requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.v(TAG,"onResponse");
+                        onPostResponseEvent(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onErrorResponsePlant(error);
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private JSONObject preparePostEventData() {
         JSONObject postData = new JSONObject();
         try {
             String name = getIntent().getExtras().getString("eventName");
@@ -153,39 +178,13 @@ public class PopUpArchive extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = getRequestUrl()+"events";
-        Log.v(TAG,url);
-        Log.v(TAG,postData.toString());
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
-                new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG,"onResponse");
-                        onPostResponseEvent(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponsePlant(error);
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-
-        queue.add(jsonArrayRequest);
+        return postData;
     }
 
     private void onPostResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
-        String str = String.valueOf(response); //http request
         EventDto data = new EventDto();
-        Gson gson = new Gson();
-        data = gson.fromJson(str,EventDto.class);
+        data =eventResponseHandler.handleResponse(response,EventDto.class);
         Toast.makeText(getApplicationContext(), R.string.archive_event, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         startActivity(intent);
@@ -195,7 +194,7 @@ public class PopUpArchive extends AppCompatActivity {
     private void makeGetDataRequest(){
         String url = getRequestUrl()+"plants/"+getIntent().getExtras().getLong("plantId");
         Log.v(TAG, url);
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -208,19 +207,12 @@ public class PopUpArchive extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponsePlant(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     private void onGetResponseReceived(JSONObject response){
         Log.v(TAG, "onGetResponseReceived()");
-        plant = config.getGson().fromJson(String.valueOf(response), PlantDto.class);
+        plant = plantResponseHandler.handleResponse(response, PlantDto.class);
         Log.v(TAG,plant.getName());
         patchEventResponse();
     }
@@ -232,11 +224,5 @@ public class PopUpArchive extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }

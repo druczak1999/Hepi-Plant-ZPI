@@ -64,7 +64,7 @@
     <string name="tag_tabs_title">Posty i oferty sprzedaży zawierające tag</string>
     <string name="no_posts_to_display">Brak postów do wyświetlenia</string>
     <string name="no_sales_offers_to_display">Brak ofert sprzedaży do wyświetlenia</string>
-    <string name="hou_of_notifications">Godzina:</string>
+    <string name="hour_of_notifications">Godzina:</string>
     <string name="change_hour">Zmień</string>
     <string name="hour_twelve">12:00</string>
     <string name="no_species">Brak przypisanego gatunku</string>
