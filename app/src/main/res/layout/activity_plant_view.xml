@@ -8,25 +8,18 @@
 
     <include
         android:id="@+id/includeToolbarPlantView"
-        layout="@layout/toolbar"></include>
-
-    <include
-        android:id="@+id/include2"
-        layout="@layout/bottom_bar"></include>\
-    <include
-        android:id="@+id/floatingActionButtonPlantView"
-        layout="@layout/floatingbutton"></include>
+        layout="@layout/toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="570dp"
-        app:layout_constraintBottom_toBottomOf="@+id/include2"
+        android:layout_height="670dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.427"
-        android:layout_marginBottom="@dimen/spaceForBottomBar"
+        android:layout_marginBottom="@dimen/margin_big"
         android:layout_marginTop="@dimen/spaceForToolbar">
 
         <LinearLayout

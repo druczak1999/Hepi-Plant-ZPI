@@ -1,22 +1,19 @@
 package com.example.hepiplant;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.hepiplant.configuration.Configuration;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class EventViewActivity extends AppCompatActivity {
 
@@ -38,7 +35,6 @@ public class EventViewActivity extends AppCompatActivity {
         eventImage = findViewById(R.id.eventImage);
         eventDate = findViewById(R.id.EventDateValueView);
         eventDescription = findViewById(R.id.EventDescriptionValue);
-        setBottomBarOnItemClickListeners();
         setupToolbar();
         setTextsToRealValues();
     }
@@ -57,37 +53,10 @@ public class EventViewActivity extends AppCompatActivity {
         eventDescription.setText(getIntent().getExtras().getString("eventDescription"));
     }
 
-    private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.includeToolbarPlantView);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantAddActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private Intent prepareIntent(){

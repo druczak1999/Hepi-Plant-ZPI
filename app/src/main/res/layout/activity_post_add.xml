@@ -8,13 +8,13 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/toolbar"></include>
+        layout="@layout/toolbar" />
 
     <include
-        android:id="@+id/include2"
+        android:id="@+id/postAddBottomBar"
         layout="@layout/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></include>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/Add"

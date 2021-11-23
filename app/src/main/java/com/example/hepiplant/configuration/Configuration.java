@@ -10,14 +10,12 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Set;
 
 public class Configuration extends Application {
     private String url;
     private Long userId;
-    //backend security
     private Set<String> userRoles;
     private String token;
     private RequestQueue queue;

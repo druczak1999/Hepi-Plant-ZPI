@@ -8,17 +8,7 @@
 
     <include
         android:id="@+id/includeToolbarPlantView"
-        layout="@layout/toolbar"></include>
-
-    <include
-        android:id="@+id/include2"
-        layout="@layout/bottom_bar"></include>\
-
-    <include
-        android:id="@+id/floatingActionButtonPlantView"
-        layout="@layout/floatingbutton"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="283dp"></include>
+        layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/EventName"

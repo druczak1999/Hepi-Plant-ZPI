@@ -59,7 +59,10 @@
     <string name="stats_user_title">Statystyki</string>
     <string name="none">Brak</string>
     <string name="grant_admin_role">Nadaj prawa adminstratora</string>
-    <string name="filterButton">Filtruj</string>
-    <string name="cleanButton">Wyczyść</string>
+    <string name="filter_button">Filtruj</string>
+    <string name="clean_button">Wyczyść</string>
+    <string name="tag_tabs_title">Posty i oferty sprzedaży zawierające tag</string>
+    <string name="no_posts_to_display">Brak postów do wyświetlenia</string>
+    <string name="no_sales_offers_to_display">Brak ofert sprzedaży do wyświetlenia</string>
 
 </resources>

@@ -13,7 +13,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/spaceForBottomBar">
+        android:layout_marginBottom="@dimen/margin_medium">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -158,7 +158,5 @@
 
     </ScrollView>
 
-    <include layout="@layout/bottom_bar" />
-    <include layout="@layout/floatingbuttonpost" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
