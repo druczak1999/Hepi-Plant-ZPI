@@ -1,10 +1,5 @@
 package com.example.hepiplant;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,11 +7,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -62,7 +59,6 @@ public class EventViewActivity extends AppCompatActivity {
         eventImage = findViewById(R.id.eventImage);
         eventDate = findViewById(R.id.EventDateValueView);
         eventDescription = findViewById(R.id.EventDescriptionValue);
-        setBottomBarOnItemClickListeners();
         setupToolbar();
     }
 
@@ -120,24 +116,6 @@ public class EventViewActivity extends AppCompatActivity {
             eventImage.setImageResource(R.drawable.fertilization_icon);
         eventDate.setText(event.getEventDate());
         eventDescription.setText(event.getEventDescription());
-    }
-
-    private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setupToolbar() {

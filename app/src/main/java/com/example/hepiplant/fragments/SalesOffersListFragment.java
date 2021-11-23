@@ -50,6 +50,7 @@ public class SalesOffersListFragment extends Fragment implements
         SalesOffersRecyclerViewAdapter.ItemClickListener, AdapterView.OnItemSelectedListener  {
 
     private static final String TAG = "SalesOffersListFragment";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private View offersFragmentView;
     private RecyclerView offersRecyclerView;
@@ -118,7 +119,90 @@ public class SalesOffersListFragment extends Fragment implements
         setOffersFilterButtonOnClickListener();
         setOffersFilterSpinnerAdapter();
         setCloseViewsOnClickListeners();
+        adjustLayoutForAdmin();
         return offersFragmentView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == -1) {
+                offersStartDateButton.setText(data.getExtras().getString("data"));
+            }
+        }
+        if(requestCode==2){
+            if(resultCode==-1){
+                offersEndDateButton.setText(data.getExtras().getString("data"));
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        makeGetDataRequest();
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.v(TAG, "onItemClick()");
+        Intent intent = new Intent(getActivity().getApplicationContext(), SalesOfferActivity.class);
+        intent.putExtra("salesOfferId", salesOffers[position].getId());
+        intent.putExtra("userId", salesOffers[position].getUserId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Spinner categorySpinner = (Spinner) parent;
+        Spinner filterSpinner = (Spinner) parent;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        if(categorySpinner.getId()==R.id.categorySpinnerInOfferFilter){
+            for(CategoryDto c : categoryDtos){
+                if(c.getName().equals(selectedItem)) selectedCategory = c;
+            }
+        }
+        if(filterSpinner.getId()==R.id.filterOffersSpinner){
+            switch (position){
+                case 1:
+                    if(tagClick%2==0){
+                        offersTagsEditText.setVisibility(View.VISIBLE);
+                        offersFilterButton.setVisibility(View.VISIBLE);
+                    }
+                    else offersTagsEditText.setVisibility(View.GONE);
+                    tagClick++;
+                    break;
+                case 2:
+                    if(categoryClick%2==0){
+                        getCategoriesFromDB();
+                        offersFilterButton.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        if(this.categorySpinner !=null) this.categorySpinner.setVisibility(View.GONE);
+                    }
+                    categoryClick++;
+                    break;
+                case 3:
+                    if(dataClick%2==0){
+                        offersStartDateButton.setVisibility(View.VISIBLE);
+                        offersEndDateButton.setVisibility(View.VISIBLE);
+                        offersFilterButton.setVisibility(View.VISIBLE);
+                    }else{
+                        offersStartDateButton.setVisibility(View.GONE);
+                        offersEndDateButton.setVisibility(View.GONE);
+                    }
+                    dataClick++;
+                    break;
+            }
+            filterSpinner.setSelection(0);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private void setCloseViewsOnClickListeners(){
@@ -169,19 +253,12 @@ public class SalesOffersListFragment extends Fragment implements
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == -1) {
-                offersStartDateButton.setText(data.getExtras().getString("data"));
-            }
-        }
-        if(requestCode==2){
-            if(resultCode==-1){
-                offersEndDateButton.setText(data.getExtras().getString("data"));
-            }
+    private void adjustLayoutForAdmin() {
+        if(config.getUserRoles().contains(ROLE_ADMIN)){
+            offersRecyclerView.setPadding(
+                    offersRecyclerView.getPaddingLeft(),
+                    offersRecyclerView.getPaddingTop(),
+                    offersRecyclerView.getPaddingRight(), 0);
         }
     }
 
@@ -228,33 +305,18 @@ public class SalesOffersListFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 if(filterClick%2==0){
-                    offersFilterButton.setText(R.string.cleanButton);
+                    offersFilterButton.setText(R.string.clean_button);
                     makeGetDataRequestWithParam();
                     selectedCategory=null;
                 }
                 else {
-                    offersFilterButton.setText(R.string.filterButton);
+                    offersFilterButton.setText(R.string.filter_button);
                     makeGetDataRequest();
                 }
                 offersFilterSpinner.setSelection(0);
                 filterClick++;
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        makeGetDataRequest();
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Log.v(TAG, "onItemClick()");
-        Intent intent = new Intent(getActivity().getApplicationContext(), SalesOfferActivity.class);
-        intent.putExtra("salesOfferId", salesOffers[position].getId());
-        intent.putExtra("userId", salesOffers[position].getUserId());
-        startActivity(intent);
     }
 
     private void makeGetDataRequest(){

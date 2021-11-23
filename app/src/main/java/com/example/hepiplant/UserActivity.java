@@ -59,7 +59,6 @@ public class UserActivity extends AppCompatActivity {
         requestProcessor = new JSONRequestProcessor(config);
         userResponseHandler = new JSONResponseHandler<>(config);
         eventResponseHandler = new JSONResponseHandler<>(config);
-        setBottomBarOnItemClickListeners();
         setupViewsData();
         getRequestUser();
     }
@@ -257,21 +256,4 @@ public class UserActivity extends AppCompatActivity {
         return config.getUrl();
     }
 
-    private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
 }

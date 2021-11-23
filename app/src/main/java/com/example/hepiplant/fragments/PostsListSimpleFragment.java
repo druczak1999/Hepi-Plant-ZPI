@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,11 +18,11 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.hepiplant.PostActivity;
 import com.example.hepiplant.R;
-import com.example.hepiplant.TagTabsAdminActivity;
-import com.example.hepiplant.adapter.recyclerview.TagsRecyclerViewAdapter;
+import com.example.hepiplant.adapter.recyclerview.PostsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
-import com.example.hepiplant.dto.TagDto;
+import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
@@ -31,26 +32,21 @@ import org.json.JSONArray;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter.ItemClickListener {
+public class PostsListSimpleFragment extends Fragment implements PostsRecyclerViewAdapter.ItemClickListener  {
 
-    private static final String TAG = "TagListFragment";
+    private static final String TAG = "PostsListSimpleFragment";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<TagDto> tagResponseHandler;
-    private View tagFragmentView;
-    private RecyclerView tagsRecyclerView;
-    private TagsRecyclerViewAdapter adapter;
-    private TagDto[] tags = new TagDto[]{};
+    private JSONResponseHandler<PostDto> postResponseHandler;
+    private View postsFragmentView;
+    private RecyclerView postsRecyclerView;
+    private PostsRecyclerViewAdapter postsRecyclerViewAdapter;
+    private PostDto[] posts = new PostDto[]{};
+    private final String tag;
 
-    public TagListFragment() {
-    }
-
-    public static TagListFragment newInstance() {
-        TagListFragment fragment = new TagListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+    public PostsListSimpleFragment(String tag) {
+        this.tag = tag;
     }
 
     @Override
@@ -59,20 +55,18 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
         super.onCreate(savedInstanceState);
         config = (Configuration) getActivity().getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
-        tagResponseHandler = new JSONResponseHandler<>(config);
+        postResponseHandler = new JSONResponseHandler<>(config);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreateView()");
-        tagFragmentView = inflater.inflate(R.layout.fragment_tag_list, container, false);
-
+        postsFragmentView = inflater.inflate(R.layout.fragment_simple_list, container, false);
         initView();
         setLayoutManager();
         makeGetDataRequest();
-
-        return tagFragmentView;
+        return postsFragmentView;
     }
 
     @Override
@@ -84,13 +78,14 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-        Intent intent = new Intent(config, TagTabsAdminActivity.class);
-        intent.putExtra("tag", tags[position].getName());
+        Intent intent = new Intent(config, PostActivity.class);
+        intent.putExtra("postId", posts[position].getId());
+        intent.putExtra("userId", posts[position].getUserId());
         startActivity(intent);
     }
 
     private void makeGetDataRequest(){
-        String url = getRequestUrl();
+        String url = getRequestUrl() + "posts/tag/" + tag;
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
@@ -103,12 +98,17 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "tags";
+        return config.getUrl();
     }
 
     private void onGetResponseReceived(JSONArray response){
-        Log.v(TAG, "onGetResponseReceived()");
-        tags = tagResponseHandler.handleArrayResponse(response, TagDto[].class);
+        Log.v(TAG, "onGetResponseReceived(). Data is " + response);
+        posts = postResponseHandler.handleArrayResponse(response, PostDto[].class);
+        if(posts.length == 0){
+            TextView noDataTextView = postsFragmentView.findViewById(R.id.noDataSimpleListTextView);
+            noDataTextView.setVisibility(View.VISIBLE);
+            noDataTextView.setText(getText(R.string.no_posts_to_display));
+        }
         setAdapter();
     }
 
@@ -122,21 +122,17 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
     }
 
     private void initView() {
-        Log.v(TAG, "initView()");
-        tagsRecyclerView = tagFragmentView.findViewById(R.id.tagRecyclerView);
+        postsRecyclerView = postsFragmentView.findViewById(R.id.postsRecyclerView);
     }
 
     private void setLayoutManager() {
-        Log.v(TAG, "setLayoutManager()");
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        tagsRecyclerView.setLayoutManager(layoutManager);
+        postsRecyclerView.setLayoutManager(layoutManager);
     }
 
     private void setAdapter() {
-        Log.v(TAG, "setAdapter()");
-        adapter = new TagsRecyclerViewAdapter(getActivity(), tags);
-        adapter.setClickListener(this);
-        tagsRecyclerView.setAdapter(adapter);
+        postsRecyclerViewAdapter = new PostsRecyclerViewAdapter(getActivity(), posts);
+        postsRecyclerViewAdapter.setClickListener(this);
+        postsRecyclerView.setAdapter(postsRecyclerViewAdapter);
     }
-
 }

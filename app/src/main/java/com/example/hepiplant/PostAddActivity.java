@@ -46,14 +46,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PostAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private static final String TAG = "AddPost";
-    private static final int PICK_IMAGE = 2;
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
@@ -82,6 +80,42 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         setOnClickListeners();
         onClickAddPost();
         setBottomBarOnItemClickListeners();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Log.v(TAG, "cropActivity");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                addImageButton.setImageURI(resultUri);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addImageButton.setClipToOutline(true);
+                }
+                img_str = resultUri.toString();
+                saveImageToFirebase();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(CategoryDto c : categoryDtos){
+            if(c.getName().equals(selectedItem)){
+                selectedCategory = c;
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private void onClickAddPost() {
@@ -186,26 +220,6 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                 .start(this);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Log.v(TAG, "cropActivity");
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                addImageButton.setImageURI(resultUri);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    addImageButton.setClipToOutline(true);
-                }
-                img_str = resultUri.toString();
-                saveImageToFirebase();
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-    }
-
     private void saveImageToFirebase() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -234,7 +248,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         Log.v(TAG, img_str);
     }
 
-    public void getCategoriesFromDB(){
+    private void getCategoriesFromDB(){
         String url = getRequestUrl() + "categories";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
@@ -257,7 +271,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
-    public void getCategories(List<String> categories){
+    private void getCategories(List<String> categories){
         Log.v(TAG,"Categories size"+categories.size());
         spinnerCat = findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener( this);
@@ -266,44 +280,26 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         spinnerCat.setAdapter(dtoArrayAdapter);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selectedItem = (String) parent.getItemAtPosition(position);
-            for(CategoryDto c : categoryDtos){
-                if(c.getName().equals(selectedItem)){
-                    selectedCategory = c;
-                    break;
-                }
-            }
-        }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
-    }
-
     private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
-        });
+        if(config.getUserRoles().contains(ROLE_ADMIN)){
+            findViewById(R.id.postAddBottomBar).setVisibility(View.GONE);
+        } else {
+            Button buttonHome = findViewById(R.id.buttonDom);
+            buttonHome.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+                    startActivity(intent);
+                }
+            });
 
-        Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
-        });
+            Button buttonForum = findViewById(R.id.buttonForum);
+            buttonForum.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 }
 

@@ -29,6 +29,7 @@ import java.io.IOException;
 public class UserUpdateActivity extends AppCompatActivity {
 
     private static final String TAG = "UserUpdateActivity";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
@@ -130,20 +131,25 @@ public class UserUpdateActivity extends AppCompatActivity {
     }
 
     private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
-        });
+        if(config.getUserRoles().contains(ROLE_ADMIN)){
+            findViewById(R.id.userUpdateBottomBar).setVisibility(View.GONE);
+            findViewById(R.id.userUpdateFloatingButton).setVisibility(View.GONE);
+        } else {
+            Button buttonHome = findViewById(R.id.buttonDom);
+            buttonHome.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+                    startActivity(intent);
+                }
+            });
+            Button buttonForum = findViewById(R.id.buttonForum);
+            buttonForum.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
-        Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }

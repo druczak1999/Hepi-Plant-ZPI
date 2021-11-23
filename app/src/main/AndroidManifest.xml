@@ -20,6 +20,9 @@
         <activity android:name=".TimePickerActivity"
             android:theme="@style/AppTheme.CustomTheme"/>
         <activity
+            android:name=".TagTabsAdminActivity"
+            android:exported="true" />
+        <activity
             android:name=".PopUpGrantAdminRole"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
@@ -85,7 +88,6 @@
             android:name=".ForumTabsActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
-
         <activity android:name=".FireBase" />
         <activity
             android:name=".PlantAddActivity"
