@@ -11,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,6 +58,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private PostsRecyclerViewAdapter postsRecyclerViewAdapter;
     private PostDto[] posts = new PostDto[]{};
     private Button postSortButton, postFilterButton, postStartDateButton, postEndDateButton;
+    private TextView closeTagFiler, closeCategoryFilter, closeDateFilters;
+    private LinearLayout tagLinearLayout, categoryLinearLayout,datesLinearLayout;
     private Spinner postFilterSpinner, categorySpinner;
     private EditText postTagsEditText;
     private CategoryDto[] categoryDtos;
@@ -63,13 +67,9 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
 
     private static int sortClick = 0;
-    private static int tagClick = 0;
-    private static int dataClick = 0;
-    private static int categoryClick = 0;
-    private static int filterClick = 0;
+    private static int filterClick=0;
 
-    public PostsListFragment() {
-    }
+    public PostsListFragment() {}
 
     public static PostsListFragment newInstance() {
         PostsListFragment fragment = new PostsListFragment();
@@ -102,11 +102,47 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         postStartDateButton = postsFragmentView.findViewById(R.id.startDateButtonInPostFilter);
         postEndDateButton = postsFragmentView.findViewById(R.id.endDateButtonInPostFilter);
         postTagsEditText = postsFragmentView.findViewById(R.id.tagEditTextInPostFilter);
+        closeTagFiler = postsFragmentView.findViewById(R.id.closeTagFilter);
+        closeCategoryFilter = postsFragmentView.findViewById(R.id.closeCategoryFilter);
+        closeDateFilters = postsFragmentView.findViewById(R.id.closeDateFilters);
+        tagLinearLayout = postsFragmentView.findViewById(R.id.tagFilterLinearLayout);
+        categoryLinearLayout = postsFragmentView.findViewById(R.id.categoryFilterLinearLayout);
+        datesLinearLayout = postsFragmentView.findViewById(R.id.datesFilterLinearLayout);
         setPostsSortButtonOnClickListener();
         setPostsFilterButtonOnClickListener();
         setPostsFilterSpinnerAdapter();
         setDateButtonsOnClickListener();
+        getCategoriesFromDB();
+        setCloseViewsOnClickListeners();
         return postsFragmentView;
+    }
+
+    private void setCloseViewsOnClickListeners(){
+        closeTagFiler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postTagsEditText.setVisibility(View.GONE);
+                tagLinearLayout.setVisibility(View.GONE);
+            }
+        });
+
+        closeCategoryFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categorySpinner.setVisibility(View.GONE);
+                selectedCategory=null;
+                categoryLinearLayout.setVisibility(View.GONE);
+            }
+        });
+
+        closeDateFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postStartDateButton.setVisibility(View.GONE);
+                postEndDateButton.setVisibility(View.GONE);
+                datesLinearLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void setDateButtonsOnClickListener(){
@@ -175,7 +211,6 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                 for (int i=0;i<postDtos.size();i++){
                     newPosts[i] = postDtos.get(i);
                 }
-
                 posts = newPosts;
                 setAdapter();
             }
@@ -187,26 +222,16 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                makeGetDataRequestWithParam();
                 if(filterClick%2==0){
-                    postFilterButton.setText(R.string.cleanButton);
                     makeGetDataRequestWithParam();
-                    selectedCategory=null;
+                    postFilterButton.setText(R.string.cleanButton);
                 }
-                else {
-                    postFilterButton.setText(R.string.filterButton);
+                else{
                     makeGetDataRequest();
+                    postFilterButton.setText(R.string.filterButton);
                 }
                 postFilterSpinner.setSelection(0);
                 filterClick++;
-                if(postTagsEditText.getVisibility()==View.VISIBLE)tagClick++;
-                if(categorySpinner !=null && categorySpinner.getVisibility()==View.VISIBLE)categoryClick++;
-                if(postStartDateButton.getVisibility()==View.VISIBLE)dataClick++;
-                postTagsEditText.setVisibility(View.GONE);
-                if(categorySpinner !=null)
-                    categorySpinner.setVisibility(View.GONE);
-                postStartDateButton.setVisibility(View.GONE);
-                postEndDateButton.setVisibility(View.GONE);
             }
         });
     }
@@ -277,8 +302,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         if(postTagsEditText.getVisibility()==View.VISIBLE && postTagsEditText.getText()!=null && !postTagsEditText.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
             if(postTagsEditText.getText().toString().charAt(0)=='#')
-                url += "tag=" + postTagsEditText.getText().toString().substring(1, postTagsEditText.getText().toString().length());
-            else  url += "tag=" + postTagsEditText.getText().toString();
+                url += "tag=" + postTagsEditText.getText().toString().substring(1, postTagsEditText.getText().toString().length()).trim();
+            else  url += "tag=" + postTagsEditText.getText().toString().trim();
         }
         if(selectedCategory!=null) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
@@ -373,33 +398,17 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         if(filterSpinner.getId()==R.id.filterPostsSpinner){
             switch (position){
                 case 1:
-                    if(tagClick%2==0){
-                        postTagsEditText.setVisibility(View.VISIBLE);
-                        postFilterButton.setVisibility(View.VISIBLE);
-                    }
-                    else postTagsEditText.setVisibility(View.GONE);
-                   tagClick++;
+                    postTagsEditText.setVisibility(View.VISIBLE);
+                    tagLinearLayout.setVisibility(View.VISIBLE);
                    break;
                 case 2:
-                    if(categoryClick%2==0){
-                        getCategoriesFromDB();
-                        postFilterButton.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        if(this.categorySpinner !=null) this.categorySpinner.setVisibility(View.GONE);
-                    }
-                    categoryClick++;
+                    getCategoriesFromDB();
+                    categoryLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 3:
-                    if(dataClick%2==0){
-                        postStartDateButton.setVisibility(View.VISIBLE);
-                        postEndDateButton.setVisibility(View.VISIBLE);
-                        postFilterButton.setVisibility(View.VISIBLE);
-                    }else{
-                        postStartDateButton.setVisibility(View.GONE);
-                        postEndDateButton.setVisibility(View.GONE);
-                    }
-                    dataClick++;
+                    postStartDateButton.setVisibility(View.VISIBLE);
+                    postEndDateButton.setVisibility(View.VISIBLE);
+                    datesLinearLayout.setVisibility(View.VISIBLE);
                     break;
             }
             filterSpinner.setSelection(0);

@@ -25,6 +25,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -42,7 +45,10 @@ public class EventEditActivity extends AppCompatActivity {
     private EditText eventName, eventDescription;
     private Button eventDate, saveEvent;
     private ImageView eventImage;
+    private EventDto event;
     private Configuration config;
+    private JSONResponseHandler<EventDto> eventResponseHandler;
+    private JSONRequestProcessor requestProcessor;
     private static final String TAG = "EventEditActivity";
 
     @Override
@@ -50,6 +56,8 @@ public class EventEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_edit);
         config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        eventResponseHandler = new JSONResponseHandler<>(config);
         setupViewsData();
     }
 
@@ -61,21 +69,53 @@ public class EventEditActivity extends AppCompatActivity {
         eventImage = findViewById(R.id.editImageBut);
         setBottomBarOnItemClickListeners();
         setOnClickListeners();
+        makeGetDataRequest();
+    }
+
+    private void makeGetDataRequest() {
+        String url = getRequestUrl()+ +getIntent().getExtras().getLong("eventId");
+        Log.v(TAG,url);
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.v(TAG,"onresponse");
+                        onGetResponseReceived(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceived(error);
+                    }
+                });
+    }
+
+    private void onGetResponseReceived(JSONObject response){
+        Log.v(TAG, "onGetResponseReceived()");
+        event = eventResponseHandler.handleResponse(response, EventDto.class);
+        Log.v(TAG,event.getEventDate());
         setValuesToEdit();
     }
 
+    private void onErrorResponseReceived(VolleyError error){
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
+    }
+
     private void setValuesToEdit(){
-        String name = getIntent().getExtras().getString("eventName");
+        String name = event.getEventName();
         eventName.setText(name);
-        eventDate.setText(getIntent().getExtras().getString("eventDate"));
-        eventDescription.setText(getIntent().getExtras().getString("eventDescription"));
+        eventDate.setText(event.getEventDate());
+        eventDescription.setText(event.getEventDescription());
         if(name.toLowerCase().equals("podlewanie"))
             eventImage.setImageResource(R.drawable.watering_icon);
         else if(name.toLowerCase().equals("zraszanie"))
             eventImage.setImageResource(R.drawable.misting_icon);
         else if(name.toLowerCase().equals("nawożenie"))
             eventImage.setImageResource(R.drawable.fertilization_icon);
-
     }
 
     private void setBottomBarOnItemClickListeners(){
@@ -125,32 +165,15 @@ public class EventEditActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                Log.v(TAG, data.getExtras().getString("data"));
                 eventDate.setText(data.getExtras().getString("data"));
-                Log.v(TAG, eventDate.getText().toString());
             }
         }
     }
 
     private void patchEventResponse(){
-        JSONObject postData = new JSONObject();
-        try {
-            postData.put("eventName",eventName.getText().toString());
-            if(eventDate.getText().toString().contains(":"))
-                postData.put("eventDate",eventDate.getText().toString());
-            else
-                postData.put("eventDate",eventDate.getText().toString().trim()+" 12:00:00");
-            postData.put("eventDescription",eventDescription.getText().toString());
-            postData.put("done",false);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.v(TAG,"patch");
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        JSONObject postData = prepareJSONEventObject();
         String url = getRequestUrl()+getIntent().getExtras().getLong("eventId");
-        Log.v(TAG,url);
-        Log.v(TAG,postData.toString());
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+        requestProcessor.makeRequest(Request.Method.PATCH, url, postData,RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -165,23 +188,30 @@ public class EventEditActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseEvent(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
+        });
+    }
 
-        queue.add(jsonArrayRequest);
+    private JSONObject prepareJSONEventObject() {
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("eventName",eventName.getText().toString());
+            if(eventDate.getText().toString().contains(":"))
+                postData.put("eventDate",eventDate.getText().toString());
+            else
+                postData.put("eventDate",eventDate.getText().toString().trim()+" "+config.getHourOfNotifications());
+            postData.put("eventDescription",eventDescription.getText().toString());
+            postData.put("done",false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return postData;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPatchResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
-        String str = String.valueOf(response); //http request
         EventDto data = new EventDto();
-        Gson gson = new Gson();
-        data = gson.fromJson(str, EventDto.class);
+        data = eventResponseHandler.handleResponse(response,EventDto.class);
         if(config.isNotifications())
             setupNotifications(data);
         Intent intent = new Intent(this, MainTabsActivity.class);
@@ -214,7 +244,7 @@ public class EventEditActivity extends AppCompatActivity {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 try {
                     Log.v(TAG,simpleDateFormat.parse(data.getEventDate()).toString());
-                    calendar.setTime(simpleDateFormat.parse(data.getEventDate()));
+                    calendar.setTime(simpleDateFormat.parse(data.getEventDate()+" "+config.getHourOfNotifications()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -234,9 +264,4 @@ public class EventEditActivity extends AppCompatActivity {
         return config.getUrl()+"events/";
     }
 
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
-    }
 }

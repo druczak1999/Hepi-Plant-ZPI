@@ -160,7 +160,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                 startActivity(intent);
             }
         });
@@ -244,10 +244,10 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             Log.v(TAG,dateEditText.getText().toString());
             if(plantName.getText()==null)  postData.put("name", "");
             else postData.put("name", plantName.getText().toString());
-            Log.v(TAG,dateEditText.getText().toString());
             if (dateEditText.getText()==null || dateEditText.getText().toString().equals("Wybierz datę"))
                 postData.put("purchaseDate", null);
             else postData.put("purchaseDate", dateEditText.getText().toString() + " 00:00:00");
+            Log.v(TAG,dateEditText.getText().toString());
             Log.v(TAG,location.getText().toString());
             if (location.getText()==null){
                 postData.put("location", null);
@@ -297,8 +297,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     try {
-                        Log.v(TAG,simpleDateFormat.parse(event.getEventDate()).toString());
-                        calendar.setTime(simpleDateFormat.parse(event.getEventDate()));
+                        Log.v(TAG,"Not:"+event.getEventDate().substring(0,9)+ " "+config.getHourOfNotifications());
+                        calendar.setTime(simpleDateFormat.parse(event.getEventDate().substring(0,9)+ " "+config.getHourOfNotifications()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

@@ -91,12 +91,12 @@ public class PlantViewActivity extends AppCompatActivity {
         if(plant.getSpecies().getId()!=null && !plant.getSpecies().getName().equals("Brak") && !plant.getSpecies().getName().isEmpty())
             species.setText(plant.getSpecies().getName());
         else
-            species.setText("Brak przypisanego gatunku");
+            species.setText(R.string.no_species);
         if(plant.getCategoryId()!=null){
             getCategoryName(Integer.parseInt(Objects.requireNonNull(plant.getCategoryId()).toString()));
         }
         else{
-            category.setText("Brak przypisanej kategorii");
+            category.setText(R.string.no_category);
         }
         watering.setText(String.valueOf(plant.getSchedule().getWateringFrequency()));
         fertilizing.setText(String.valueOf(plant.getSchedule().getFertilizingFrequency()));
@@ -105,16 +105,16 @@ public class PlantViewActivity extends AppCompatActivity {
         if(plant.getSpecies().getSoil()!=null && !plant.getSpecies().getSoil().isEmpty())
             soil.setText(plant.getSpecies().getSoil());
         else
-            soil.setText("Brak zalecanej gleby");
+            soil.setText(R.string.no_soil);
         if(plant.getLocation()!=null && !plant.getLocation().isEmpty())
             placement.setText(plant.getLocation());
         else
-            placement.setText("Brak przypisanego pomieszczenia");
+            placement.setText(R.string.no_location);
         if(plant.getSpecies().getPlacement()!=null && !plant.getSpecies().getPlacement().getName().isEmpty())
             location.setText(plant.getSpecies().getPlacement().getName());
         else
-            location.setText("Brak zalecanego stanowiska");
-        date.setText(plant.getPurchaseDate().replaceFirst("00:00:00",""));
+            location.setText(R.string.no_placement);
+        date.setText(plant.getPurchaseDate().replaceFirst(getString(R.string.no_time),""));
         if(plant.getPhoto()!=null){
             getPhotoFromFirebase(plantImage, plant.getPhoto());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -212,7 +212,7 @@ public class PlantViewActivity extends AppCompatActivity {
                         Log.v(TAG,"In set category "+categoryName);
                         if(categoryName!=null && !categoryName.equals("Brak"))
                         category.setText(categoryName);
-                        else category.setText("Brak przypisanej kategorii");
+                        else category.setText(R.string.no_category);
                     }
                 }, new Response.ErrorListener() {
             @Override

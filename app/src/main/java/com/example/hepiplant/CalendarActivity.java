@@ -14,9 +14,9 @@ import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    CalendarView calendarView;
-    Button button;
-    TextView textView;
+    private CalendarView calendarView;
+    private Button saveDateButton;
+    private TextView dateTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,9 +26,26 @@ public class CalendarActivity extends AppCompatActivity {
             calendarView.setMaxDate(new Date().getTime());
         else
             calendarView.setMinDate(new Date().getTime());
-        button = findViewById(R.id.buttonDate);
-        textView = findViewById(R.id.textViewDate);
+        saveDateButton = findViewById(R.id.buttonDate);
+        dateTextView = findViewById(R.id.textViewDate);
 
+        setCalendarViewOnDateChangeListener();
+        setSaveDateButtonOnClickListener();
+    }
+
+    private void setSaveDateButtonOnClickListener() {
+        saveDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("data", dateTextView.getText());
+                setResult(RESULT_OK,intent);
+               finish();
+            }
+        });
+    }
+
+    private void setCalendarViewOnDateChangeListener() {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -43,18 +60,8 @@ public class CalendarActivity extends AppCompatActivity {
                 }
                 else date+=dayOfMonth;
 
-                textView.setText(date);
+                dateTextView.setText(date);
 
-            }
-        });
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("data",textView.getText());
-                setResult(RESULT_OK,intent);
-               finish();
             }
         });
     }

@@ -60,6 +60,8 @@ import java.util.List;
 
 public class PlantEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
+    private static final String TAG = "PlantEditActivity";
+
     private EditText plantName, watering, fertilizing, misting, placement;
     private Spinner spinnerGat;
     private ImageView plantImage;
@@ -69,7 +71,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     private JSONResponseHandler<PlantDto> plantResponseHandler;
     private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
-    private static final String TAG = "PlantEditActivity";
     private SpeciesDto speciesDto;
     private SpeciesDto[] speciesDtos;
     private String img_str;
@@ -453,7 +454,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                 postData.put("purchaseDate", null);
             else {
                 Log.v(TAG, "put: "+date.getText().toString());
-                postData.put("purchaseDate", date.getText().toString().trim() + " 00:00:00");
+                postData.put("purchaseDate", date.getText().toString().trim() + " "+config.getHourOfNotifications());
             }
             Log.v(TAG,placement.getText().toString());
             if (placement.getText()==null){
@@ -508,7 +509,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     try {
                         Log.v(TAG, simpleDateFormat.parse(event.getEventDate()).toString());
-                        calendar.setTime(simpleDateFormat.parse(event.getEventDate()));
+                        calendar.setTime(simpleDateFormat.parse(event.getEventDate()+ " "+config.getHourOfNotifications()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

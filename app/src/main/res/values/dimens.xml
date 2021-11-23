@@ -25,6 +25,7 @@
     <dimen name="marginSorting">10dp</dimen>
     <dimen name="marginSortingSmall">5dp</dimen>
     <dimen name="SortLienarLayout">48dp</dimen>
-    <dimen name="categorySpinnerFilter">300dp</dimen>
+    <dimen name="categorySpinnerFilter">250dp</dimen>
     <dimen name="filerSpinnerHeight">11dp</dimen>
+    <dimen name="editTextButtonWidthSort">130dp</dimen>
 </resources>

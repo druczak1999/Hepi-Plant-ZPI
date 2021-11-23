@@ -24,6 +24,7 @@ public class Configuration extends Application {
     private Gson gson;
     private Uri photo;
     private boolean notifications;
+    private String hourOfNotifications;
 
     public Uri getPhoto() { return photo; }
 
@@ -59,6 +60,14 @@ public class Configuration extends Application {
 
     public void setNotifications(boolean notifications) {
         this.notifications = notifications;
+    }
+
+    public String getHourOfNotifications() {
+        return hourOfNotifications;
+    }
+
+    public void setHourOfNotifications(String hourOfNotifications) {
+        this.hourOfNotifications = hourOfNotifications;
     }
 
     public String getToken() {

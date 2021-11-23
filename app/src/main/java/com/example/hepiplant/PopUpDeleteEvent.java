@@ -21,6 +21,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.hepiplant.configuration.Configuration;
+import com.example.hepiplant.dto.EventDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -28,14 +32,21 @@ import java.util.Map;
 
 public class PopUpDeleteEvent extends AppCompatActivity {
 
+    private static final String TAG = "PopUpDeleteEvent";
+
     private Button yes, no;
     private Configuration config;
-    private static final String TAG = "PopUpDeleteEvent";
+    private JSONResponseHandler<EventDto> eventResponseHandler;
+    private JSONRequestProcessor requestProcessor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_up_delete_event);
+        config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        eventResponseHandler = new JSONResponseHandler<>(config);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
@@ -45,7 +56,6 @@ public class PopUpDeleteEvent extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        config = (Configuration) getApplicationContext();
         yes = findViewById(R.id.buttonYesEvent);
         no = findViewById(R.id.buttonNoEvent);
 
@@ -76,9 +86,8 @@ public class PopUpDeleteEvent extends AppCompatActivity {
 
     private void deleteEvent(){
         String url = getRequestUrl(getIntent().getExtras().getLong("eventId"));
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
+        requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
                 new Response.Listener<String>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
                         Log.v(TAG, response);
@@ -94,14 +103,7 @@ public class PopUpDeleteEvent extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     private void onErrorResponseReceived(VolleyError error){
@@ -111,11 +113,5 @@ public class PopUpDeleteEvent extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }
