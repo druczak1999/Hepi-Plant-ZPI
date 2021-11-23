@@ -1,14 +1,5 @@
 package com.example.hepiplant;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.hepiplant.adapter.pager.MainFragmentPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -28,7 +26,6 @@ public class MainTabsActivity extends AppCompatActivity {
     private static final String TAG = "MainTabsActivity";
     private ViewPager viewPager;
     private MainFragmentPagerAdapter mainFragmentStateAdapter;
-    private int tab = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +63,6 @@ public class MainTabsActivity extends AppCompatActivity {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.mainTabsLayout);
         tabLayout.setupWithViewPager(viewPager);
-
-        FloatingActionButton buttonAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent2 = new Intent(getApplicationContext(), PlantAddActivity.class);
-                startActivity(intent2);
-            }
-        });
     }
 
     private void setBottomBarOnItemClickListeners(){
@@ -103,6 +92,14 @@ public class MainTabsActivity extends AppCompatActivity {
                 }
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 layoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
+
+        FloatingActionButton buttonAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent2 = new Intent(getApplicationContext(), PlantAddActivity.class);
+                startActivity(intent2);
             }
         });
     }

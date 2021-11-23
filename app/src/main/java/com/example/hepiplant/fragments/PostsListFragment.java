@@ -26,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.CalendarActivity;
 import com.example.hepiplant.PostActivity;
+import com.example.hepiplant.PostAddActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.PostsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
@@ -47,6 +48,7 @@ import java.util.stream.Collectors;
 public class PostsListFragment extends Fragment implements PostsRecyclerViewAdapter.ItemClickListener, AdapterView.OnItemSelectedListener  {
 
     private static final String TAG = "PostsListFragment";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
@@ -106,6 +108,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         setPostsFilterButtonOnClickListener();
         setPostsFilterSpinnerAdapter();
         setDateButtonsOnClickListener();
+        adjustLayoutForAdmin();
         return postsFragmentView;
     }
 
@@ -127,6 +130,17 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                 startActivityForResult(intent, 2);
             }
         });
+    }
+
+    private void adjustLayoutForAdmin() {
+        if(config.getUserRoles().contains(ROLE_ADMIN)){
+            View postAddButton = postsFragmentView.findViewById(R.id.postAddButtonAdmin);
+            postAddButton.setVisibility(View.VISIBLE);
+            postAddButton.setOnClickListener((View v) -> {
+                Intent intent = new Intent(getContext(), PostAddActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     @Override
@@ -189,12 +203,12 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             public void onClick(View v) {
                 makeGetDataRequestWithParam();
                 if(filterClick%2==0){
-                    postFilterButton.setText(R.string.cleanButton);
+                    postFilterButton.setText(R.string.clean_button);
                     makeGetDataRequestWithParam();
                     selectedCategory=null;
                 }
                 else {
-                    postFilterButton.setText(R.string.filterButton);
+                    postFilterButton.setText(R.string.filter_button);
                     makeGetDataRequest();
                 }
                 postFilterSpinner.setSelection(0);

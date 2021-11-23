@@ -25,7 +25,6 @@ import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.PlantsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.PlantDto;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
