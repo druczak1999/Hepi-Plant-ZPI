@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/more"
+        android:icon="@drawable/menu_icon"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/sign_out"
+        >
+        <menu>
+            <item
+                android:id="@+id/logoff"
+                android:title="@string/sign_out"
+                app:showAsAction="never"
+
+                />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/miProfile"
+        android:icon="@drawable/user_icon"
+        android:title="@string/user_profile"
+        app:showAsAction="ifRoom" />
+
+</menu>

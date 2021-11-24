@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
         <activity
+            android:name=".InfoActivity"
+            android:exported="true" />
+        <activity
             android:name=".TagTabsAdminActivity"
             android:exported="true" />
         <activity

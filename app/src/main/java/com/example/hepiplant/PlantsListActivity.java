@@ -89,7 +89,8 @@ public class PlantsListActivity extends AppCompatActivity implements PlantsRecyc
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
                 return true;
             case R.id.miProfile:
                 Intent intent = new Intent(this, UserActivity.class);

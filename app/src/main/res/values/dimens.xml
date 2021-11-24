@@ -27,4 +27,5 @@
     <dimen name="SortLienarLayout">48dp</dimen>
     <dimen name="categorySpinnerFilter">300dp</dimen>
     <dimen name="filerSpinnerHeight">11dp</dimen>
+    <dimen name="simple_row_item_height">40sp</dimen>
 </resources>
