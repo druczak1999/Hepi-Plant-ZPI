@@ -20,7 +20,9 @@ import com.example.hepiplant.PopUpArchive;
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.EventDto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -102,12 +104,13 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         viewHolder.getEvent().setText(dataSet.get(position).getEventName());
         if(dataSet.get(position).getEventDate() != null){
             //TODO check format
-            String str = dataSet.get(position).getEventDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
+            String str = dataSet.get(position).getEventDate().substring(0,10);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate dateTime = LocalDate.parse(str, formatter);
+            LocalDate date = LocalDate.now();
             Log.v(TAG,dateTime.toString());
-            Log.v(TAG,LocalDateTime.now().toString());
-            if(dateTime.isBefore((ChronoLocalDateTime)LocalDateTime.now())){
+            Log.v(TAG,LocalDate.parse(date.format(formatter),formatter).toString());
+            if(dateTime.isBefore(LocalDate.parse(date.format(formatter),formatter))){
                 viewHolder.getDate().setText(dataSet.get(position).getEventDate());
                 viewHolder.getDate().setTextColor(Color.RED);
             }
