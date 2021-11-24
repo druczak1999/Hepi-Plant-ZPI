@@ -84,18 +84,18 @@ public class MainTabsActivity extends AppCompatActivity {
 
     private void setupViewPager() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        viewPager = (ViewPager) findViewById(R.id.mainViewPager);
+        viewPager = findViewById(R.id.mainViewPager);
         mainFragmentStateAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(),
                 this);
         viewPager.setAdapter(mainFragmentStateAdapter);
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.mainTabsLayout);
+        TabLayout tabLayout = findViewById(R.id.mainTabsLayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = (Button) findViewById(R.id.buttonForum);
+        Button buttonHome = findViewById(R.id.buttonForum);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
@@ -103,11 +103,10 @@ public class MainTabsActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonForum = (Button) findViewById(R.id.buttonDom);
+        Button buttonForum = findViewById(R.id.buttonDom);
         buttonForum.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 RecyclerView recyclerView = null;
-                RecyclerView recyclerView1 = null;
                 int currentItem = viewPager.getCurrentItem();
                 Log.v(TAG, "Current item: "+currentItem);
                 switch (currentItem){
@@ -116,7 +115,6 @@ public class MainTabsActivity extends AppCompatActivity {
                         break;
                     case 1:
                         recyclerView =  findViewById(R.id.eventsRecyclerView);
-                        recyclerView1 = findViewById(R.id.eventsArchRecyclerView);
                         break;
                 }
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -124,7 +122,7 @@ public class MainTabsActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton buttonAdd = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        FloatingActionButton buttonAdd = findViewById(R.id.floatingActionButton);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent2 = new Intent(getApplicationContext(), PlantAddActivity.class);

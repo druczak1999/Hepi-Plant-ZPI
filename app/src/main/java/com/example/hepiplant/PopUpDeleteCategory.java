@@ -1,6 +1,5 @@
 package com.example.hepiplant;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.NetworkResponse;
@@ -87,7 +85,6 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
             new Response.Listener<String>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(String response) {
                     onResponseReceived(response);

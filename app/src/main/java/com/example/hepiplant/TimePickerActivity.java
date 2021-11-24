@@ -74,11 +74,9 @@ public class TimePickerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String hour = "";
-                if(picker.getHour()<=9)
-                    hour+="0";
+                if(picker.getHour()<=9) hour+="0";
                 hour+=picker.getHour()+":";
-                if(picker.getMinute()<=9)
-                    hour+="0";
+                if(picker.getMinute()<=9) hour+="0";
                 hour+=picker.getMinute()+":00";
                 config.setHourOfNotifications(hour);
                 Log.v(TAG,config.getHourOfNotifications());
@@ -127,7 +125,6 @@ public class TimePickerActivity extends AppCompatActivity {
 
     private void getRequestEvents(){
         String url = getRequestUrl()+"events/user/"+ config.getUserId();
-
         requestProcessor.makeRequest(Request.Method.GET, url, null,RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -152,24 +149,10 @@ public class TimePickerActivity extends AppCompatActivity {
     }
 
     private void patchEventResponse(int eventId, String eventDate){
-        JSONObject postData = new JSONObject();
-        try {
-            Log.v(TAG, eventDate);
-            if (eventDate.contains(":")) {
-                postData.put("eventDate", eventDate.substring(0, 10) + " " + config.getHourOfNotifications());
-                Log.v(TAG,eventDate.substring(0, 10) + " " + config.getHourOfNotifications());
-            }
-            else {
-                postData.put("eventDate", eventDate.trim() + " " + config.getHourOfNotifications());
-                Log.v(TAG,eventDate.trim() + " " + config.getHourOfNotifications());
-            }
-        }catch(JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject postData = preparePatchEventData(eventDate);
         String url = getRequestUrl()+"events/"+eventId;
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData,RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.v(TAG,"onResponse");
@@ -185,6 +168,24 @@ public class TimePickerActivity extends AppCompatActivity {
                 });
     }
 
+    private JSONObject preparePatchEventData(String eventDate) {
+        JSONObject postData = new JSONObject();
+        try {
+            Log.v(TAG, eventDate);
+            if (eventDate.contains(":")) {
+                postData.put("eventDate", eventDate.substring(0, 10) + " " + config.getHourOfNotifications());
+                Log.v(TAG,eventDate.substring(0, 10) + " " + config.getHourOfNotifications());
+            }
+            else {
+                postData.put("eventDate", eventDate.trim() + " " + config.getHourOfNotifications());
+                Log.v(TAG,eventDate.trim() + " " + config.getHourOfNotifications());
+            }
+        }catch(JSONException e) {
+            e.printStackTrace();
+        }
+        return postData;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPatchResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
@@ -192,9 +193,7 @@ public class TimePickerActivity extends AppCompatActivity {
         data = eventResponseHandler.handleResponse(response,EventDto.class);
         if(config.isNotifications())
             setupNotifications(data);
-        Intent intent = new Intent(this, MainTabsActivity.class);
         Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
-        startActivity(intent);
         finish();
     }
 

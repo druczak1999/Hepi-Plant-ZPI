@@ -252,13 +252,11 @@ public class SpeciesEditActivity extends AppCompatActivity {
     private void makeGetDataRequest(String url, boolean isArrayRequest) {
         requestProcessor.makeRequest(Request.Method.GET, url, null, isArrayRequest ? RequestType.ARRAY : RequestType.OBJECT,
             isArrayRequest ? new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         onGetResponseReceived(response);
                     }
                 } :  new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         onGetResponseReceived(response);

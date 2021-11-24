@@ -127,7 +127,6 @@ public class UserActivity extends AppCompatActivity {
 
        requestProcessor.makeRequest(Request.Method.GET, url, null,RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         onGetResponseReceived(response);
@@ -198,7 +197,6 @@ public class UserActivity extends AppCompatActivity {
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.v(TAG, "Request successful. Response is: " + response);
@@ -255,5 +253,4 @@ public class UserActivity extends AppCompatActivity {
         }
         return config.getUrl();
     }
-
 }

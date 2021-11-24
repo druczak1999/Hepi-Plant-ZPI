@@ -19,7 +19,7 @@
     <dimen name="forum_photo_height">200sp</dimen>
     <dimen name="elevation_3sp">3sp</dimen>
     <dimen name="rv_item_name_max_width">220sp</dimen>
-    <dimen name="scroll_view_height">570dp</dimen>
+    <dimen name="scroll_view_height">530dp</dimen>
     <dimen name="spinner_height">46dp</dimen>
     <dimen name="filerSortButtonsHeight">35dp</dimen>
     <dimen name="marginSorting">10dp</dimen>

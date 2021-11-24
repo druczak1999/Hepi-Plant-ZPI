@@ -159,14 +159,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/scroll_view_height"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/marginSorting"
-            android:paddingBottom="@dimen/padding_bottom"
+            android:paddingBottom="@dimen/spaceForBottomBar"
             android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
 
         <Button
             android:id="@+id/postAddButtonAdmin"

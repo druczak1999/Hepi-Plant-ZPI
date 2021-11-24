@@ -176,7 +176,6 @@ public class EventEditActivity extends AppCompatActivity {
         String url = getRequestUrl()+getIntent().getExtras().getLong("eventId");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData,RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.v(TAG,"onResponse");
@@ -264,5 +263,4 @@ public class EventEditActivity extends AppCompatActivity {
         }
         return config.getUrl()+"events/";
     }
-
 }

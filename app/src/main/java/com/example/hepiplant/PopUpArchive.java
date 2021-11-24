@@ -15,18 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.PlantDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,8 +30,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PopUpArchive extends AppCompatActivity {
 
@@ -47,6 +41,7 @@ public class PopUpArchive extends AppCompatActivity {
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private JSONResponseHandler<PlantDto> plantResponseHandler;
     private JSONRequestProcessor requestProcessor;
+    private EventDto event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +52,16 @@ public class PopUpArchive extends AppCompatActivity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         getWindow().setLayout((int)(width *0.9), (int)(height*0.3));
-        setupViewsData();
-    }
 
-    private void setupViewsData(){
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
         eventResponseHandler = new JSONResponseHandler<>(config);
         plantResponseHandler= new JSONResponseHandler<>(config);
+
+        setupViewsData();
+    }
+
+    private void setupViewsData(){
         yes = findViewById(R.id.buttonYesArchive);
         no = findViewById(R.id.buttonNoArchive);
 
@@ -82,7 +79,7 @@ public class PopUpArchive extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makeGetDataRequest();
+                makeGetEventRequest();
             }
         });
     }
@@ -97,12 +94,44 @@ public class PopUpArchive extends AppCompatActivity {
         return config.getUrl();
     }
 
+    private void makeGetEventRequest() {
+        String url = getRequestUrl()+ "events/"+getIntent().getExtras().getLong("eventId");
+        Log.v(TAG,url);
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.v(TAG,"onresponse");
+                        onGetResponseReceivedEvent(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorResponseReceivedEvent(error);
+                    }
+                });
+    }
+
+    private void onGetResponseReceivedEvent(JSONObject response){
+        Log.v(TAG, "onGetResponseReceived()");
+        event = eventResponseHandler.handleResponse(response, EventDto.class);
+        Log.v(TAG,event.getEventDate());
+        makeGetDataRequest();
+    }
+
+    private void onErrorResponseReceivedEvent(VolleyError error){
+        Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+        NetworkResponse networkResponse = error.networkResponse;
+        if (networkResponse != null) {
+            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+        }
+    }
+
     private void patchEventResponse(){
         JSONObject postData = preparePatchDataEvent();
         String url = getRequestUrl()+"events/"+getIntent().getExtras().getLong("eventId");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.v(TAG,"onResponse");
@@ -121,9 +150,9 @@ public class PopUpArchive extends AppCompatActivity {
     private JSONObject preparePatchDataEvent() {
         JSONObject postData = new JSONObject();
         try {
-            postData.put("eventName",getIntent().getExtras().getString("eventName"));
-            postData.put("eventDate",getIntent().getExtras().getString("eventDate"));
-            postData.put("eventDescription",getIntent().getExtras().getString("eventDescription"));
+            postData.put("eventName", event.getEventName());
+            postData.put("eventDate",event.getEventDate());
+            postData.put("eventDescription",event.getEventDescription());
             postData.put("done",true);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -134,8 +163,7 @@ public class PopUpArchive extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPatchResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
-        EventDto data = new EventDto();
-        data = eventResponseHandler.handleResponse(response,EventDto.class);
+        event = eventResponseHandler.handleResponse(response,EventDto.class);
         postEventResponse();
     }
 
@@ -145,7 +173,6 @@ public class PopUpArchive extends AppCompatActivity {
         String url = getRequestUrl()+"events";
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.v(TAG,"onResponse");
@@ -163,7 +190,7 @@ public class PopUpArchive extends AppCompatActivity {
     private JSONObject preparePostEventData() {
         JSONObject postData = new JSONObject();
         try {
-            String name = getIntent().getExtras().getString("eventName");
+            String name = event.getEventName();
             postData.put("eventName", name);
             if(name.toLowerCase().equals("podlewanie"))
                 postData.put("eventDate", LocalDateTime.now().plusDays(plant.getSchedule().getWateringFrequency()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString());
@@ -171,9 +198,9 @@ public class PopUpArchive extends AppCompatActivity {
                 postData.put("eventDate", LocalDateTime.now().plusDays(plant.getSchedule().getMistingFrequency()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString());
             else if(name.toLowerCase().equals("nawożenie"))
                 postData.put("eventDate", LocalDateTime.now().plusDays(plant.getSchedule().getFertilizingFrequency()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString());
-            postData.put("eventDescription",getIntent().getExtras().getString("eventDescription"));
-            postData.put("plantId",getIntent().getExtras().getLong("plantId"));
-            postData.put("plantName",getIntent().getExtras().getString("plantName"));
+            postData.put("eventDescription",event.getEventDescription());
+            postData.put("plantId",event.getPlantId());
+            postData.put("plantName",event.getPlantName());
             postData.put("done",false);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -192,11 +219,10 @@ public class PopUpArchive extends AppCompatActivity {
     }
 
     private void makeGetDataRequest(){
-        String url = getRequestUrl()+"plants/"+getIntent().getExtras().getLong("plantId");
+        String url = getRequestUrl()+"plants/"+event.getPlantId();
         Log.v(TAG, url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.v(TAG,"plant onRespone");

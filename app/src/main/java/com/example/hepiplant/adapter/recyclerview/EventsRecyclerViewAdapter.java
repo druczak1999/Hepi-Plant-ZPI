@@ -29,9 +29,10 @@ import java.util.List;
 
 public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecyclerViewAdapter.ViewHolder>{
 
+    private static final String TAG = "EventsListAdapter";
+
     private List<EventDto> dataSet;
     private EventsRecyclerViewAdapter.ItemClickListener clickListener;
-    private static final String TAG = "EventsListAdapter";
     private Context contextAll;
     private Intent intent;
 
@@ -77,7 +78,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
 
     // Initialize the dataset of the Adapter.
     public EventsRecyclerViewAdapter(Context context, EventDto[] dataSet) {
-        intent = new Intent(context,PopUpArchive.class);
+        intent = new Intent(context, PopUpArchive.class);
         contextAll =context;
         this.dataSet = new ArrayList<EventDto>(Arrays.asList(dataSet));
     }
@@ -128,20 +129,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         else
             photoImageView.setImageResource(R.drawable.plant_icon);
 
-        viewHolder.getCheckBox().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(viewHolder.getCheckBox().isChecked()){
-                    intent.putExtra("eventName",dataSet.get(position).getEventName());
-                    intent.putExtra("eventDate",dataSet.get(position).getEventDate());
-                    intent.putExtra("eventId",dataSet.get(position).getId());
-                    intent.putExtra("eventDescription",dataSet.get(position).getEventDescription());
-                    intent.putExtra("plantId",dataSet.get(position).getPlantId());
-                    intent.putExtra("plantName",dataSet.get(position).getPlantName());
-                    contextAll.startActivity(intent);
-                }
-            }
-        });
+        setCheckBoxOnClickListener(viewHolder, position);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -165,4 +153,15 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         void onItemClick(View view, int position);
     }
 
+    private void setCheckBoxOnClickListener(ViewHolder viewHolder, int position) {
+        viewHolder.getCheckBox().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(viewHolder.getCheckBox().isChecked()){
+                    intent.putExtra("eventId",dataSet.get(position).getId());
+                    contextAll.startActivity(intent);
+                }
+            }
+        });
+    }
 }

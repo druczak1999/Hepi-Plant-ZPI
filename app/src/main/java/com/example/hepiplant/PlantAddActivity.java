@@ -125,16 +125,13 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         String selectedItem = (String) parent.getItemAtPosition(position);
         if (speciesSpinner.getId() == R.id.editSpecies) {
             for(SpeciesDto s : speciesDtos){
-                if(s.getName().equals(selectedItem)){
-                    speciesDto = s;
-                }
+                if(s.getName().equals(selectedItem)) speciesDto = s;
+
             }
         }
         if(categorySpinner.getId()==R.id.editCategory){
             for(CategoryDto c : categoryDtos){
-                if(c.getName().equals(selectedItem)){
-                    selectedCategory = c;
-                }
+                if(c.getName().equals(selectedItem)) selectedCategory = c;
             }
         }
     }
@@ -179,6 +176,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                 startActivityForResult(intent, 1);
             }
         });
+
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -403,7 +401,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
             }
         });
         img_str = path;
-        Log.v(TAG, img_str);
     }
 
     private void onGetResponseSpecies(JSONArray response){
@@ -421,7 +418,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         String url = getRequestUrl() + "species";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         onGetResponseSpecies(response);
@@ -458,7 +454,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         String url = getRequestUrl() + "categories";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         onGetResponseCategories(response);

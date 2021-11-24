@@ -144,7 +144,6 @@ public class UserAdminActivity extends AppCompatActivity {
         String url = getRequestUrl() + "/statistics";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
                     onGetResponseReceived(response);

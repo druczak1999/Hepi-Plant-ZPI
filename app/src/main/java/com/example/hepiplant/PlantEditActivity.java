@@ -235,7 +235,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         String url = getRequestUrl() + "species";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         onGetResponseSpecies(response);
