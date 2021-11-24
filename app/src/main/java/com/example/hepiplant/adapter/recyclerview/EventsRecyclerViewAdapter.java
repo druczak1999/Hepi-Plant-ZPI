@@ -103,7 +103,6 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         Log.v(TAG,"photo for: "+dataSet.get(position).getEventName());
         viewHolder.getEvent().setText(dataSet.get(position).getEventName());
         if(dataSet.get(position).getEventDate() != null){
-            //TODO check format
             String str = dataSet.get(position).getEventDate().substring(0,10);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate dateTime = LocalDate.parse(str, formatter);

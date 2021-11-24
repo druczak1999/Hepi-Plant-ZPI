@@ -155,14 +155,23 @@ public class SalesOffersListFragment extends Fragment implements
         if(filterSpinner.getId()==R.id.filterOffersSpinner){
             switch (position){
                 case 1:
+                    ViewGroup.LayoutParams params1 = offersRecyclerView.getLayoutParams();
+                    params1.height -=130;
+                    offersRecyclerView.setLayoutParams(params1);
                     offersTagsEditText.setVisibility(View.VISIBLE);
                     tagLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     getCategoriesFromDB();
+                    ViewGroup.LayoutParams params2 = offersRecyclerView.getLayoutParams();
+                    params2.height -=130;
+                    offersRecyclerView.setLayoutParams(params2);
                     categoryLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 3:
+                    ViewGroup.LayoutParams params3 = offersRecyclerView.getLayoutParams();
+                    params3.height -=130;
+                    offersRecyclerView.setLayoutParams(params3);
                     offersStartDateButton.setVisibility(View.VISIBLE);
                     offersEndDateButton.setVisibility(View.VISIBLE);
                     datesLinearLayout.setVisibility(View.VISIBLE);
@@ -194,6 +203,9 @@ public class SalesOffersListFragment extends Fragment implements
         closeTagFiler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ViewGroup.LayoutParams params1 = offersRecyclerView.getLayoutParams();
+                params1.height +=130;
+                offersRecyclerView.setLayoutParams(params1);
                 offersTagsEditText.setVisibility(View.GONE);
                 tagLinearLayout.setVisibility(View.GONE);
             }
@@ -202,6 +214,9 @@ public class SalesOffersListFragment extends Fragment implements
         closeCategoryFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ViewGroup.LayoutParams params1 = offersRecyclerView.getLayoutParams();
+                params1.height +=130;
+                offersRecyclerView.setLayoutParams(params1);
                 categorySpinner.setVisibility(View.GONE);
                 selectedCategory=null;
                 categoryLinearLayout.setVisibility(View.GONE);
@@ -211,6 +226,9 @@ public class SalesOffersListFragment extends Fragment implements
         closeDateFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ViewGroup.LayoutParams params1 = offersRecyclerView.getLayoutParams();
+                params1.height +=130;
+                offersRecyclerView.setLayoutParams(params1);
                 offersStartDateButton.setVisibility(View.GONE);
                 offersEndDateButton.setVisibility(View.GONE);
                 datesLinearLayout.setVisibility(View.GONE);
