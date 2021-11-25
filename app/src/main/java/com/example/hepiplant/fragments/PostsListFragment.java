@@ -144,9 +144,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         closeTagFiler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewGroup.LayoutParams params = postsRecyclerView.getLayoutParams();
-                params.height +=130;
-                postsRecyclerView.setLayoutParams(params);
+                setRecyclerViewLayoutParams(1);
                 postTagsEditText.setVisibility(View.GONE);
                 tagLinearLayout.setVisibility(View.GONE);
             }
@@ -155,9 +153,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         closeCategoryFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewGroup.LayoutParams params = postsRecyclerView.getLayoutParams();
-                params.height +=130;
-                postsRecyclerView.setLayoutParams(params);
+                setRecyclerViewLayoutParams(1);
                 categorySpinner.setVisibility(View.GONE);
                 selectedCategory=null;
                 categoryLinearLayout.setVisibility(View.GONE);
@@ -167,14 +163,18 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         closeDateFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewGroup.LayoutParams params = postsRecyclerView.getLayoutParams();
-                params.height +=130;
-                postsRecyclerView.setLayoutParams(params);
+                setRecyclerViewLayoutParams(1);
                 postStartDateButton.setVisibility(View.GONE);
                 postEndDateButton.setVisibility(View.GONE);
                 datesLinearLayout.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void setRecyclerViewLayoutParams(int plusOrMinus) {
+        ViewGroup.LayoutParams params = postsRecyclerView.getLayoutParams();
+        params.height =params.height + (plusOrMinus * 130);
+        postsRecyclerView.setLayoutParams(params);
     }
 
     private void setDateButtonsOnClickListener(){
@@ -237,23 +237,17 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         if(filterSpinner.getId()==R.id.filterPostsSpinner){
             switch (position){
                 case 1:
-                    ViewGroup.LayoutParams params = postsRecyclerView.getLayoutParams();
-                    params.height -=130;
-                    postsRecyclerView.setLayoutParams(params);
+                    setRecyclerViewLayoutParams(-1);
                     postTagsEditText.setVisibility(View.VISIBLE);
                     tagLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     getCategoriesFromDB();
-                    ViewGroup.LayoutParams params1 = postsRecyclerView.getLayoutParams();
-                    params1.height -=130;
-                    postsRecyclerView.setLayoutParams(params1);
+                    setRecyclerViewLayoutParams(-1);
                     categoryLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 3:
-                    ViewGroup.LayoutParams params2 = postsRecyclerView.getLayoutParams();
-                    params2.height -=130;
-                    postsRecyclerView.setLayoutParams(params2);
+                    setRecyclerViewLayoutParams(-1);
                     postStartDateButton.setVisibility(View.VISIBLE);
                     postEndDateButton.setVisibility(View.VISIBLE);
                     datesLinearLayout.setVisibility(View.VISIBLE);

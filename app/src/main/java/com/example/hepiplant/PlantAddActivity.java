@@ -125,7 +125,9 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         String selectedItem = (String) parent.getItemAtPosition(position);
         if (speciesSpinner.getId() == R.id.editSpecies) {
             for(SpeciesDto s : speciesDtos){
-                if(s.getName().equals(selectedItem)) speciesDto = s;
+                if(s.getName().equals(selectedItem)) {
+                    speciesDto = s;
+                }
 
             }
         }
@@ -225,7 +227,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, String.valueOf(postData));Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
