@@ -55,67 +55,104 @@
                     android:layout_marginLeft="@dimen/marginSortingSmall"
                     android:layout_marginTop="@dimen/marginSorting"
                     android:text="Filtruj"
-                    android:visibility="gone">
+                    >
 
                 </Button>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tagFilterLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/SortLienarLayout"
+                >
+                <EditText
+                    android:id="@+id/tagEditTextInPostFilter"
+                    android:layout_width="@dimen/editTextButtonWidthSort"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:background="@drawable/rounded_edittext"
+                    android:layout_marginLeft="@dimen/marginSorting"
+                    android:layout_marginTop="@dimen/marginSorting"
+                    android:hint="Tag"
+                    style="@style/DetailsFontValue"
+                    />
 
-
+                <TextView
+                    android:id="@+id/closeTagFilter"
+                    style="@style/DetailsFontTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/marginSorting"
+                    android:layout_marginLeft="@dimen/marginSorting"
+                    android:alpha="0.4"
+                    android:text="x"
+                    />
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/tagEditTextInPostFilter"
-                android:layout_width="@dimen/list_item_height"
-                android:layout_height="@dimen/filerSortButtonsHeight"
-                android:background="@drawable/rounded_edittext"
-                android:layout_marginLeft="@dimen/marginSorting"
-                android:layout_marginTop="@dimen/marginSorting"
-                android:hint="Tag"
-                style="@style/DetailsFontValue"
-                android:visibility="gone"/>
-
-            <Spinner
-                android:id="@+id/categorySpinnerInPostFilter"
-                style="@style/DetailsFontValue"
-                android:layout_width="@dimen/categorySpinnerFilter"
-                android:layout_height="@dimen/filerSortButtonsHeight"
-                android:layout_marginLeft="@dimen/marginSorting"
-                android:layout_marginTop="@dimen/marginSorting"
-                android:background="@drawable/rounded_spinner"
-                android:ems="10"
-                android:visibility="gone"/>
-
             <LinearLayout
+                android:id="@+id/categoryFilterLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/marginSorting">
+                android:layout_height="@dimen/SortLienarLayout"
+                >
+                <Spinner
+                    android:id="@+id/categorySpinnerInPostFilter"
+                    style="@style/DetailsFontValue"
+                    android:layout_width="@dimen/categorySpinnerFilter"
+                    android:layout_height="@dimen/filerSortButtonsHeight"
+                    android:layout_marginLeft="@dimen/marginSorting"
+                    android:layout_marginTop="@dimen/marginSorting"
+                    android:background="@drawable/rounded_spinner"
+                    android:ems="10"
+                    />
+                <TextView
+                    android:id="@+id/closeCategoryFilter"
+                    style="@style/DetailsFontTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/marginSorting"
+                    android:layout_marginLeft="@dimen/marginSorting"
+                    android:alpha="0.4"
+                    android:text="x"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/datesFilterLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/SortLienarLayout">
             <Button
                 android:id="@+id/startDateButtonInPostFilter"
-                android:layout_width="@dimen/list_item_height"
+                android:layout_width="@dimen/editTextButtonWidthSort"
                 android:layout_height="@dimen/filerSortButtonsHeight"
                 android:layout_marginLeft="@dimen/marginSorting"
+                android:layout_marginTop="@dimen/marginSorting"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
                 android:hint="..."
                 style="@style/DetailsFontValue"
-                android:textAlignment="viewStart"
-                android:visibility="gone"
+                android:textAlignment="viewStart" />
+            <Button
+                android:id="@+id/endDateButtonInPostFilter"
+                android:layout_width="@dimen/editTextButtonWidthSort"
+                android:layout_height="@dimen/filerSortButtonsHeight"
+                android:layout_marginLeft="@dimen/marginSortingSmall"
+                android:background="@drawable/rounded_edittext"
+                android:layout_marginTop="@dimen/marginSorting"
+                android:drawableRight="@drawable/calendar_image"
+                android:ems="10"
+                android:gravity="start|center_vertical"
+                android:hint="..."
+                style="@style/DetailsFontValue"
+                android:textAlignment="viewStart" />
+            <TextView
+                android:id="@+id/closeDateFilters"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginSorting"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:alpha="0.4"
+                android:text="x"
                 />
-                <Button
-                    android:id="@+id/endDateButtonInPostFilter"
-                    android:layout_width="@dimen/list_item_height"
-                    android:layout_height="@dimen/filerSortButtonsHeight"
-                    android:layout_marginLeft="@dimen/marginSorting"
-                    android:background="@drawable/rounded_edittext"
-                    android:drawableRight="@drawable/calendar_image"
-                    android:ems="10"
-                    android:gravity="start|center_vertical"
-                    android:hint="..."
-                    style="@style/DetailsFontValue"
-                    android:textAlignment="viewStart"
-                    android:visibility="gone"
-                    />
             </LinearLayout>
         </LinearLayout>
 

@@ -195,6 +195,7 @@ public class FireBase extends AppCompatActivity {
         config.setUserId(data.getId());
         config.setUserRoles(data.getRoles());
         config.setNotifications(data.isNotifications());
+        config.setHourOfNotifications(data.getHourOfNotifications());
         Log.v(TAG, "POST user id " + config.getUserId());
     }
 

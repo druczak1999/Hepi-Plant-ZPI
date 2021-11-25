@@ -22,7 +22,6 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.PlantDto;
@@ -37,20 +36,20 @@ import com.google.firebase.storage.StorageReference;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class PlantViewActivity extends AppCompatActivity {
 
+    private static final String TAG = "PlantViewActivity";
+
     private TextView plantName, species, category, watering, fertilizing, misting, soil, location, placement, date;
     private ImageView plantImage;
     private String categoryName = null;
+    private PlantDto plant;
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
     private JSONResponseHandler<PlantDto> plantResponseHandler;
-    private PlantDto plant;
-    private static final String TAG = "PlantViewActivity";
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +58,53 @@ public class PlantViewActivity extends AppCompatActivity {
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
         plantResponseHandler = new JSONResponseHandler<>(config);
+        categoryResponseHandler = new JSONResponseHandler<>(config);
 
         setupViewsData();
         makeGetDataRequest();
         setupToolbar();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_plant, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.deletePlant:
+                Intent intent3 = new Intent(this, PopUpDelete.class);
+                intent3.putExtra("plantId", plant.getId());
+                intent3.putExtra("photo", plant.getPhoto());
+                startActivity(intent3);
+                return true;
+            case R.id.editPlant:
+                Intent intent = new Intent(getApplicationContext(), PlantEditActivity.class);
+                intent.putExtra("plantId", plant.getId());
+                startActivity(intent);
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            case R.id.archivePlant:
+                Intent intent1 = new Intent(this,ArchiveActivity.class);
+                intent1.putExtra("plantId", plant.getId());
+                startActivity(intent1);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setupViewsData(){
@@ -85,12 +127,12 @@ public class PlantViewActivity extends AppCompatActivity {
         if(plant.getSpecies().getId()!=null && !plant.getSpecies().getName().equals("Brak") && !plant.getSpecies().getName().isEmpty())
             species.setText(plant.getSpecies().getName());
         else
-            species.setText("Brak przypisanego gatunku");
+            species.setText(R.string.no_species);
         if(plant.getCategoryId()!=null){
             getCategoryName(Integer.parseInt(Objects.requireNonNull(plant.getCategoryId()).toString()));
         }
         else{
-            category.setText("Brak przypisanej kategorii");
+            category.setText(R.string.no_category);
         }
         watering.setText(String.valueOf(plant.getSchedule().getWateringFrequency()));
         fertilizing.setText(String.valueOf(plant.getSchedule().getFertilizingFrequency()));
@@ -99,16 +141,16 @@ public class PlantViewActivity extends AppCompatActivity {
         if(plant.getSpecies().getSoil()!=null && !plant.getSpecies().getSoil().isEmpty())
             soil.setText(plant.getSpecies().getSoil());
         else
-            soil.setText("Brak zalecanej gleby");
+            soil.setText(R.string.no_soil);
         if(plant.getLocation()!=null && !plant.getLocation().isEmpty())
             placement.setText(plant.getLocation());
         else
-            placement.setText("Brak przypisanego pomieszczenia");
+            placement.setText(R.string.no_location);
         if(plant.getSpecies().getPlacement()!=null && !plant.getSpecies().getPlacement().getName().isEmpty())
             location.setText(plant.getSpecies().getPlacement().getName());
         else
-            location.setText("Brak zalecanego stanowiska");
-        date.setText(plant.getPurchaseDate().replaceFirst("00:00:00",""));
+            location.setText(R.string.no_placement);
+        date.setText(plant.getPurchaseDate().replaceFirst(getString(R.string.no_time),""));
         if(plant.getPhoto()!=null){
             getPhotoFromFirebase(plantImage, plant.getPhoto());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -160,7 +202,6 @@ public class PlantViewActivity extends AppCompatActivity {
         return config.getUrl();
     }
 
-
     private static void getPhotoFromFirebase(ImageView photoImageView, String post) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -196,7 +237,7 @@ public class PlantViewActivity extends AppCompatActivity {
 
     private void makeGetDataRequest(int id){
         String url = getRequestUrlById(id);
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -205,21 +246,14 @@ public class PlantViewActivity extends AppCompatActivity {
                         Log.v(TAG,"In set category "+categoryName);
                         if(categoryName!=null && !categoryName.equals("Brak"))
                         category.setText(categoryName);
-                        else category.setText("Brak przypisanej kategorii");
+                        else category.setText(R.string.no_category);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceivedCategory(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     @NonNull
@@ -234,7 +268,7 @@ public class PlantViewActivity extends AppCompatActivity {
 
     private String onGetResponseReceivedCategory(JSONObject response){
         Log.v(TAG, "onGetResponseReceivedCategory()");
-        CategoryDto categoryDto = config.getGson().fromJson(String.valueOf(response), CategoryDto.class);
+        CategoryDto categoryDto = categoryResponseHandler.handleResponse(response, CategoryDto.class);
         Log.v(TAG,categoryDto.getName());
         return categoryDto.getName();
     }
@@ -252,53 +286,4 @@ public class PlantViewActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_plant, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.logoff:
-                FireBase fireBase = new FireBase();
-                fireBase.signOut();
-                return true;
-            case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.deletePlant:
-                Intent intent3 = new Intent(this, PopUpDelete.class);
-                intent3.putExtra("plantId", plant.getId());
-                intent3.putExtra("photo", plant.getPhoto());
-                startActivity(intent3);
-                return true;
-            case R.id.editPlant:
-                Intent intent = new Intent(getApplicationContext(), PlantEditActivity.class);
-                intent.putExtra("plantId", plant.getId());
-                startActivity(intent);
-                return true;
-            case R.id.miProfile:
-                Intent intent2 = new Intent(this, UserActivity.class);
-                startActivity(intent2);
-                return true;
-            case R.id.archivePlant:
-                Intent intent1 = new Intent(this,ArchiveActivity.class);
-                intent1.putExtra("plantId", plant.getId());
-                startActivity(intent1);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
-    }
-
 }

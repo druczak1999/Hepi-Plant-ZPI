@@ -19,32 +19,31 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.hepiplant.EventViewActivity;
 import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.EventsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
-import com.google.gson.Gson;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 
 import org.json.JSONArray;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class EventsListFragment extends Fragment implements EventsRecyclerViewAdapter.ItemClickListener {
 
     private static final String TAG = "EventsListFragment";
 
-    private Configuration config;
     private View eventsFragmentView;
     private RecyclerView eventsRecyclerView;
     private EventsRecyclerViewAdapter adapter;
     private EventDto[] events = new EventDto[]{};
+    private Configuration config;
+    private JSONResponseHandler<EventDto> eventResponseHandler;
+    private JSONRequestProcessor requestProcessor;
 
-    public EventsListFragment() {
-    }
+    public EventsListFragment() {}
 
     public static EventsListFragment newInstance() {
         EventsListFragment fragment = new EventsListFragment();
@@ -58,6 +57,8 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
         Log.v(TAG, "Entering onCreate()");
         super.onCreate(savedInstanceState);
         config = (Configuration) getActivity().getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        eventResponseHandler = new JSONResponseHandler<>(config);
     }
 
     @Nullable
@@ -82,17 +83,13 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
         Log.v(TAG, "onItemClick()");
         Intent intent = new Intent(getActivity().getApplicationContext(), EventViewActivity.class);
         intent.putExtra("eventId", events[position].getId());
-        intent.putExtra("eventName", events[position].getEventName());
-        intent.putExtra("plantName", events[position].getPlantName());
-        intent.putExtra("eventDate",events[position].getEventDate());
-        intent.putExtra("eventDescription",events[position].getEventDescription());
         intent.putExtra("place","list");
         startActivity(intent);
     }
 
     private void makeGetDataRequest() {
         String url = getRequestUrl()+ "events/user/"+config.getUserId();
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -104,13 +101,7 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }};
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     @NonNull
@@ -126,8 +117,7 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        Gson gson = new Gson();
-        events = gson.fromJson(String.valueOf(response), EventDto[].class);
+        events = eventResponseHandler.handleArrayResponse(response,EventDto[].class);
         Log.v(TAG, "DL: "+events.length);
         setAdapter();
     }
@@ -153,11 +143,5 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
         adapter = new EventsRecyclerViewAdapter(getActivity(), events);
         adapter.setClickListener(this);
         eventsRecyclerView.setAdapter(adapter);
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }

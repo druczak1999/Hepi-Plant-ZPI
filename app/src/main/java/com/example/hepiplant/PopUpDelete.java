@@ -18,10 +18,11 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
+import com.example.hepiplant.helper.JSONRequestProcessor;
+import com.example.hepiplant.helper.JSONResponseHandler;
+import com.example.hepiplant.helper.RequestType;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -30,21 +31,25 @@ import com.google.firebase.storage.StorageReference;
 import org.json.JSONArray;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class PopUpDelete extends AppCompatActivity {
 
+    private static final String TAG = "PopUpDelete";
+
     private Button yes, no;
     private Configuration config;
-    private static final String TAG = "PopUpDelete";
     private EventDto [] events;
+    private JSONResponseHandler<EventDto> eventResponseHandler;
+    private JSONRequestProcessor requestProcessor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_up_delete);
+        config = (Configuration) getApplicationContext();
+        requestProcessor = new JSONRequestProcessor(config);
+        eventResponseHandler = new JSONResponseHandler<>(config);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
@@ -54,7 +59,6 @@ public class PopUpDelete extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        config = (Configuration) getApplicationContext();
         yes = findViewById(R.id.buttonYes);
         no = findViewById(R.id.buttonNo);
 
@@ -85,8 +89,7 @@ public class PopUpDelete extends AppCompatActivity {
 
     private void makeGetDataRequest(){
         String url = getRequestUrl()+"events/plant/"+Objects.requireNonNull(getIntent().getExtras()).getLong("plantId");
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONArray>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -98,19 +101,12 @@ public class PopUpDelete extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 onErrorResponseReceived(error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        events = config.getGson().fromJson(String.valueOf(response), EventDto[].class);
+        events = eventResponseHandler.handleArrayResponse(response, EventDto[].class);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
         for (EventDto event:events) {
             notificationManagerCompat.cancel(event.getId().intValue());
@@ -121,7 +117,7 @@ public class PopUpDelete extends AppCompatActivity {
         makeGetDataRequest();
         Log.v(TAG,String.valueOf(getIntent().getExtras().getLong("plantId")));
         String url = getRequestUrl()+"plants/"+Objects.requireNonNull(getIntent().getExtras()).getLong("plantId");
-        StringRequest jsonArrayRequest = new StringRequest(Request.Method.DELETE, url,
+        requestProcessor.makeRequest(Request.Method.DELETE, url,null,RequestType.STRING,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -139,14 +135,7 @@ public class PopUpDelete extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),R.string.delete_plant_failed,Toast.LENGTH_LONG).show();
                 onErrorResponseReceived(error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                return prepareRequestHeaders();
-            }
-        };
-        Log.v(TAG, "Sending the request to " + url);
-        config.getQueue().add(jsonArrayRequest);
+        });
     }
 
     private void deletePhotoFromFirebase(){
@@ -171,11 +160,5 @@ public class PopUpDelete extends AppCompatActivity {
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 }

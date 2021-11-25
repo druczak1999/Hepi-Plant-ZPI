@@ -287,7 +287,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             Button buttonHome = findViewById(R.id.buttonDom);
             buttonHome.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                     startActivity(intent);
                 }
             });
