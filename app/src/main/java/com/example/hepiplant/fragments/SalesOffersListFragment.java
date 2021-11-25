@@ -155,14 +155,17 @@ public class SalesOffersListFragment extends Fragment implements
         if(filterSpinner.getId()==R.id.filterOffersSpinner){
             switch (position){
                 case 1:
+                    setRecyclerViewLayoutParams(-1);
                     offersTagsEditText.setVisibility(View.VISIBLE);
                     tagLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     getCategoriesFromDB();
+                    setRecyclerViewLayoutParams(-1);
                     categoryLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 3:
+                    setRecyclerViewLayoutParams(-1);
                     offersStartDateButton.setVisibility(View.VISIBLE);
                     offersEndDateButton.setVisibility(View.VISIBLE);
                     datesLinearLayout.setVisibility(View.VISIBLE);
@@ -194,6 +197,7 @@ public class SalesOffersListFragment extends Fragment implements
         closeTagFiler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setRecyclerViewLayoutParams(1);
                 offersTagsEditText.setVisibility(View.GONE);
                 tagLinearLayout.setVisibility(View.GONE);
             }
@@ -202,6 +206,7 @@ public class SalesOffersListFragment extends Fragment implements
         closeCategoryFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setRecyclerViewLayoutParams(1);
                 categorySpinner.setVisibility(View.GONE);
                 selectedCategory=null;
                 categoryLinearLayout.setVisibility(View.GONE);
@@ -211,11 +216,18 @@ public class SalesOffersListFragment extends Fragment implements
         closeDateFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setRecyclerViewLayoutParams(1);
                 offersStartDateButton.setVisibility(View.GONE);
                 offersEndDateButton.setVisibility(View.GONE);
                 datesLinearLayout.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void setRecyclerViewLayoutParams(int pluOrMinus) {
+        ViewGroup.LayoutParams params = offersRecyclerView.getLayoutParams();
+        params.height = params.height + (pluOrMinus*130);
+        offersRecyclerView.setLayoutParams(params);
     }
 
     private void setDateButtonsOnClickListener(){

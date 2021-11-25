@@ -38,6 +38,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.example.hepiplant.helper.LangUtils.getFrequency;
+
 public class PlantViewActivity extends AppCompatActivity {
 
     private static final String TAG = "PlantViewActivity";
@@ -134,9 +136,9 @@ public class PlantViewActivity extends AppCompatActivity {
         else{
             category.setText(R.string.no_category);
         }
-        watering.setText(String.valueOf(plant.getSchedule().getWateringFrequency()));
-        fertilizing.setText(String.valueOf(plant.getSchedule().getFertilizingFrequency()));
-        misting.setText(String.valueOf(plant.getSchedule().getMistingFrequency()));
+        watering.setText(getFrequency(String.valueOf(plant.getSchedule().getWateringFrequency())));
+        fertilizing.setText(getFrequency(String.valueOf(plant.getSchedule().getFertilizingFrequency())));
+        misting.setText(getFrequency(String.valueOf(plant.getSchedule().getMistingFrequency())));
         placement.setText(plant.getSpecies().getPlacement().getName());
         if(plant.getSpecies().getSoil()!=null && !plant.getSpecies().getSoil().isEmpty())
             soil.setText(plant.getSpecies().getSoil());

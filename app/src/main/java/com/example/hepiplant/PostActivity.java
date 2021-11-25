@@ -147,7 +147,6 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         makeGetDataRequest();
@@ -176,10 +175,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         comments = post.getComments().toArray(comments);
         int tempSize = 0;
         for (int i = 0; i < comments.length; i++) {
-            if (comments[i]!= null)
-            {
-                tempSize+=1;
-            }
+            if (comments[i]!= null) tempSize+=1;
         }
         CommentDto[] tempComments = new CommentDto[tempSize];
         int a = 0;
@@ -235,7 +231,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
     private void setupViewsData() {
         dateTextView = findViewById(R.id.postDateTextViewSingle);
-        dateTextView.setText(post.getCreatedDate());
+        dateTextView.setText(post.getCreatedDate().substring(0,16));
         titleTextView = findViewById(R.id.postTitleTextViewSingle);
         titleTextView.setText(post.getTitle());
         tagsTextView = findViewById(R.id.postTagsTextViewSingle);

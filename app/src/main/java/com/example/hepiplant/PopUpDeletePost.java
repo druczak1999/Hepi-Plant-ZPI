@@ -85,7 +85,6 @@ public class PopUpDeletePost extends AppCompatActivity {
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
                 new Response.Listener<String>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(String response) {
                         onDeleteResponseReceived(response);
