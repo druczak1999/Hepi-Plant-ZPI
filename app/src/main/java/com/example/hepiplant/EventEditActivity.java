@@ -18,17 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,9 +33,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
 public class EventEditActivity extends AppCompatActivity {
 
     private static final String TAG = "EventEditActivity";
@@ -91,7 +84,6 @@ public class EventEditActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.v(TAG,"onresponse");
                         onGetResponseReceived(response);
                     }
                 }, new Response.ErrorListener() {
