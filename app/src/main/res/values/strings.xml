@@ -73,5 +73,10 @@
     <string name="no_location">Brak przypisanego pomieszczenia</string>
     <string name="no_placement">Brak zalecanego stanowiska</string>
     <string name="no_time">00:00:00</string>
+    <string name="popup_message_archive">Czy na pewno wykonano to zadanie?</string>
+    <string name="popu_message_event">Czy na pewno chcesz usunąć to wydarzenie?</string>
+    <string name="popup_message_comment">Czy na pewno chcesz usunąć ten komentarz?</string>
+    <string name="popup_message_post">Czy na pewno chcesz usunąć ten post?</string>
+    <string name="popup_message_offer">Czy na pewno chcesz usunąć tą ofertę?</string>
 
 </resources>
