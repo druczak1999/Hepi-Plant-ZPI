@@ -35,8 +35,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
-
 public class UserActivity extends AppCompatActivity {
 
     private static final String TAG = "UserActivity";

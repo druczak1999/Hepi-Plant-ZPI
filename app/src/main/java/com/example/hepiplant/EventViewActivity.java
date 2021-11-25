@@ -32,6 +32,10 @@ public class EventViewActivity extends AppCompatActivity {
 
     private static final String TAG = "EventViewActivity";
 
+    private final static String WATERING = "podlewanie";
+    private final static String FERTILIZING = "nawożenie";
+    private final static String MISTING = "zraszanie";
+
     private TextView plantName, eventName, eventDate, eventDescription;
     private ImageView eventImage;
     private EventDto event;
@@ -108,7 +112,7 @@ public class EventViewActivity extends AppCompatActivity {
     }
 
     private void makeGetDataRequest() {
-        String url = getRequestUrl()+ +getIntent().getExtras().getLong("eventId");
+        String url = getRequestUrl()+getIntent().getExtras().getLong("eventId");
         Log.v(TAG,url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
@@ -144,11 +148,11 @@ public class EventViewActivity extends AppCompatActivity {
         plantName.setText(event.getPlantName());
         String name = event.getEventName();
         eventName.setText(name);
-        if(name.toLowerCase().equals("podlewanie"))
+        if(name.toLowerCase().equals(WATERING))
             eventImage.setImageResource(R.drawable.watering_icon);
-        else if(name.toLowerCase().equals("zraszanie"))
+        else if(name.toLowerCase().equals(MISTING))
             eventImage.setImageResource(R.drawable.misting_icon);
-        else if(name.toLowerCase().equals("nawożenie"))
+        else if(name.toLowerCase().equals(FERTILIZING))
             eventImage.setImageResource(R.drawable.fertilization_icon);
         eventDate.setText(event.getEventDate());
         eventDescription.setText(event.getEventDescription());
