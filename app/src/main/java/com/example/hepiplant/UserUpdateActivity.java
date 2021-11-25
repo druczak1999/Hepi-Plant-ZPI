@@ -56,7 +56,6 @@ public class UserUpdateActivity extends AppCompatActivity {
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         onGetResponse(response);
@@ -106,7 +105,6 @@ public class UserUpdateActivity extends AppCompatActivity {
                 Log.v(TAG, "Invoking requestProcessor");
                 requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                         new Response.Listener<JSONObject>() {
-                            @RequiresApi(api = Build.VERSION_CODES.N)
                             @Override
                             public void onResponse(JSONObject response) {
                                 Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
@@ -150,6 +148,5 @@ public class UserUpdateActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 }

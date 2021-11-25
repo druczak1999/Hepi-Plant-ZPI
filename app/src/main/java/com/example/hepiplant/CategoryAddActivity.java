@@ -104,7 +104,6 @@ public class CategoryAddActivity extends AppCompatActivity {
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
                     onPostResponseReceived(response);
@@ -146,5 +145,4 @@ public class CategoryAddActivity extends AppCompatActivity {
     private void makeInfoToast(String info) {
         Toast.makeText(getApplicationContext(),info,Toast.LENGTH_LONG).show();
     }
-
 }

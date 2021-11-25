@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +23,6 @@ import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONObject;
 import java.io.IOException;
 
@@ -163,17 +161,5 @@ public class EventViewActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.includeToolbarPlantView);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        setUpFloatingButton();
-    }
-
-    private void setUpFloatingButton() {
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantAddActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }

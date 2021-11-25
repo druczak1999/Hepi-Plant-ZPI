@@ -83,6 +83,43 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postId = getIntent().getExtras().getLong("postId");
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Log.v(TAG, "cropActivity");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                postImage.setImageURI(resultUri);
+                img_str=resultUri.toString();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    postImage.setClipToOutline(true);
+                }
+                saveImageToFirebase();
+                Log.v(TAG, img_str);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(CategoryDto c : categoryDtos){
+            if(c.getName().equals(selectedItem)){
+                selectedCategory = c;
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
     private void setupViewsData(){
         postName = findViewById(R.id.editTitle);
         spinnerCat = findViewById(R.id.editCategory);
@@ -152,7 +189,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
@@ -161,7 +197,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                             categories.add(categoryDtos[i].getName());
                         }
                         getCategories(categories);
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -182,17 +217,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             if(c.getId() == categoryId){
                 selectedCategory = c;
                 spinnerCat.setSelection(categories.indexOf(c.getName()));
-            }
-        }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        for(CategoryDto c : categoryDtos){
-            if(c.getName().equals(selectedItem)){
-                selectedCategory = c;
-                break;
             }
         }
     }
@@ -249,12 +273,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             }
         });
         img_str = path;
-        Log.v(TAG, img_str);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     private void setBottomBarOnItemClickListeners(){
@@ -305,7 +323,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         onPostResponsePost(response);
@@ -344,28 +361,6 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Log.v(TAG, "cropActivity");
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                postImage.setImageURI(resultUri);
-                img_str=resultUri.toString();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    postImage.setClipToOutline(true);
-                }
-                saveImageToFirebase();
-                Log.v(TAG, img_str);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
     }
 
     private JSONArray hashReading()

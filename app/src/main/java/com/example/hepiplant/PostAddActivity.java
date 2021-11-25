@@ -114,9 +114,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     private void onClickAddPost() {
         add.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +147,6 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         Log.v(TAG, String.valueOf(postData));
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.v(TAG, "OnResponse");
@@ -245,7 +242,6 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             }
         });
         img_str = path;
-        Log.v(TAG, img_str);
     }
 
     private void getCategoriesFromDB(){
@@ -253,7 +249,6 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
@@ -302,4 +297,3 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         }
     }
 }
-

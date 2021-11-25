@@ -99,12 +99,6 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         }
     }
 
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.includeToolbarSalesOfferView);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-    }
-
     public void onAddButtonClick(View v){
         EditText editText = findViewById(R.id.addSalesOfferCommentEditText);
         String commentBody = editText.getText().toString();
@@ -124,12 +118,65 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        if(getIntent().getExtras().get("userId") == config.getUserId()) {
+            menuInflater.inflate(R.menu.menu_sales_offer, menu);
+        } else if (config.getUserRoles().contains(ROLE_ADMIN)){
+            menuInflater.inflate(R.menu.menu_sales_offer_admin, menu);
+        } else {
+            menuInflater.inflate(R.menu.menu_main, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
+                return true;
+            case R.id.deleteSalesOffer:
+                Intent intent3 = new Intent(this, PopUpDeleteSalesOffer.class);
+                intent3.putExtra("salesOfferId",getIntent().getExtras().getLong("salesOfferId"));
+                if(salesOffer.getPhoto()!=null)
+                    intent3.putExtra("photo", salesOffer.getPhoto());
+                else intent3.putExtra("photo", "");
+                startActivity(intent3);
+                startActivity(intent3);
+                return true;
+            case R.id.editSalesOffer:
+                Intent intent = new Intent(getApplicationContext(), SalesOfferEditActivity.class);
+                intent.putExtra("salesOfferId", salesOffer.getId());
+                intent.putExtra("tags", tagsTextView.getText().toString());
+                startActivity(intent);
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.includeToolbarSalesOfferView);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
+
     private void makeGetDataRequest(){
         String url = getRequestUrl();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
                     onGetResponseReceived(response);
@@ -147,7 +194,6 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
                     makeGetDataRequest();
@@ -176,10 +222,8 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         comments = salesOffer.getComments().toArray(comments);
         int tempSize = 0;
         for (int i = 0; i < comments.length; i++) {
-            if (comments[i]!= null)
-            {
-                tempSize+=1;
-            }
+            if (comments[i]!= null) tempSize+=1;
+
         }
         CommentDto[] tempComments = new CommentDto[tempSize];
         int a = 0;
@@ -303,53 +347,5 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 Log.v(TAG,exception.getCause().toString());
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        if(getIntent().getExtras().get("userId") == config.getUserId()) {
-            menuInflater.inflate(R.menu.menu_sales_offer, menu);
-        } else if (config.getUserRoles().contains(ROLE_ADMIN)){
-            menuInflater.inflate(R.menu.menu_sales_offer_admin, menu);
-        } else {
-            menuInflater.inflate(R.menu.menu_main, menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logoff:
-                FireBase fireBase = new FireBase();
-                fireBase.signOut();
-                return true;
-            case R.id.informationAboutApp:
-                Intent intentInfo = new Intent(this, InfoActivity.class);
-                startActivity(intentInfo);
-                return true;
-            case R.id.deleteSalesOffer:
-                Intent intent3 = new Intent(this, PopUpDeleteSalesOffer.class);
-                intent3.putExtra("salesOfferId",getIntent().getExtras().getLong("salesOfferId"));
-                if(salesOffer.getPhoto()!=null)
-                    intent3.putExtra("photo", salesOffer.getPhoto());
-                else intent3.putExtra("photo", "");
-                startActivity(intent3);
-                startActivity(intent3);
-                return true;
-            case R.id.editSalesOffer:
-                Intent intent = new Intent(getApplicationContext(), SalesOfferEditActivity.class);
-                intent.putExtra("salesOfferId", salesOffer.getId());
-                intent.putExtra("tags", tagsTextView.getText().toString());
-                startActivity(intent);
-                return true;
-            case R.id.miProfile:
-                Intent intent2 = new Intent(this, UserActivity.class);
-                startActivity(intent2);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }
