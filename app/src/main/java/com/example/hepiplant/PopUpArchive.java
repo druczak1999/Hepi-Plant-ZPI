@@ -7,6 +7,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,11 +44,13 @@ public class PopUpArchive extends AppCompatActivity {
     private JSONResponseHandler<PlantDto> plantResponseHandler;
     private JSONRequestProcessor requestProcessor;
     private EventDto event;
+    private TextView announcement;
+    private ImageView imageOfPopUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pop_up_archive);
+        setContentView(R.layout.activity_pop_up_delete);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
@@ -58,12 +62,16 @@ public class PopUpArchive extends AppCompatActivity {
         eventResponseHandler = new JSONResponseHandler<>(config);
         plantResponseHandler= new JSONResponseHandler<>(config);
 
+        announcement = findViewById(R.id.textView);
+        announcement.setText(R.string.popup_message_archive);
+        imageOfPopUp = findViewById(R.id.imageViewPopUp);
+        imageOfPopUp.setImageResource(R.drawable.check_box);
         setupViewsData();
     }
 
     private void setupViewsData(){
-        yes = findViewById(R.id.buttonYesArchive);
-        no = findViewById(R.id.buttonNoArchive);
+        yes = findViewById(R.id.buttonYes);
+        no = findViewById(R.id.buttonNo);
 
         setUpYesNoButtonsOnClickListeners();
     }
