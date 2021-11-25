@@ -38,14 +38,6 @@ public class ForumTabsActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.forumTabsLayout);
         tabLayout.setupWithViewPager(viewPager);
-
-        FloatingActionButton buttonAdd = findViewById(R.id.floatingActionButton);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent2 = new Intent(getApplicationContext(), QuestionActivity.class);
-                startActivity(intent2);
-            }
-        });
     }
 
     private void setBottomBarOnItemClickListeners(){
@@ -55,6 +47,14 @@ public class ForumTabsActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+            }
+        });
+
+        FloatingActionButton buttonAdd = findViewById(R.id.floatingActionButton);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent2 = new Intent(getApplicationContext(), QuestionActivity.class);
+                startActivity(intent2);
             }
         });
 

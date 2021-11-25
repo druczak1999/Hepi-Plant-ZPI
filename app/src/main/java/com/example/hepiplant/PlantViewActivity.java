@@ -101,7 +101,6 @@ public class PlantViewActivity extends AppCompatActivity {
         watering.setText(String.valueOf(plant.getSchedule().getWateringFrequency()));
         fertilizing.setText(String.valueOf(plant.getSchedule().getFertilizingFrequency()));
         misting.setText(String.valueOf(plant.getSchedule().getMistingFrequency()));
-        placement.setText(plant.getSpecies().getPlacement().getName());
         if(plant.getSpecies().getSoil()!=null && !plant.getSpecies().getSoil().isEmpty())
             soil.setText(plant.getSpecies().getSoil());
         else
@@ -146,7 +145,6 @@ public class PlantViewActivity extends AppCompatActivity {
         plant = plantResponseHandler.handleResponse(response, PlantDto.class);
         setBottomBarOnItemClickListeners();
         setTextsToRealValues();
-        Log.v(TAG, "co jest w plant name:" + plant.getName());
     }
 
     private void onErrorResponseReceived(VolleyError error) {
@@ -166,7 +164,6 @@ public class PlantViewActivity extends AppCompatActivity {
         }
         return config.getUrl();
     }
-
 
     private static void getPhotoFromFirebase(ImageView photoImageView, String post) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
