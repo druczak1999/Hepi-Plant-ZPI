@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,12 +30,13 @@ public class PopUpDeleteEvent extends AppCompatActivity {
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
+    private TextView announcement;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pop_up_delete_event);
+        setContentView(R.layout.activity_pop_up_delete);
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
         DisplayMetrics dm = new DisplayMetrics();
@@ -46,8 +48,10 @@ public class PopUpDeleteEvent extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        Button yes = findViewById(R.id.buttonYesEvent);
-        Button no = findViewById(R.id.buttonNoEvent);
+        announcement = findViewById(R.id.textView);
+        announcement.setText(R.string.popu_message_event);
+        Button yes = findViewById(R.id.buttonYes);
+        Button no = findViewById(R.id.buttonNo);
 
         no.setOnClickListener(v -> finish());
 

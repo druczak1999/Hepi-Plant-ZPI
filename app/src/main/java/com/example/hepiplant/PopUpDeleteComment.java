@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,11 +27,12 @@ public class PopUpDeleteComment extends AppCompatActivity {
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
+    private TextView announcement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pop_up_comment);
+        setContentView(R.layout.activity_pop_up_delete);
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
 
@@ -43,6 +45,8 @@ public class PopUpDeleteComment extends AppCompatActivity {
     }
 
     private void setupViewsData(){
+        announcement = findViewById(R.id.textView);
+        announcement.setText(R.string.popup_message_comment);
         Button yes = findViewById(R.id.buttonYes);
         Button no = findViewById(R.id.buttonNo);
 
