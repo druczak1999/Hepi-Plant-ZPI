@@ -138,7 +138,7 @@ public class UserUpdateActivity extends AppCompatActivity {
             Button buttonHome = findViewById(R.id.buttonDom);
             buttonHome.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                     startActivity(intent);
                 }
             });

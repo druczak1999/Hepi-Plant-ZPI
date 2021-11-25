@@ -11,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +60,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private PostsRecyclerViewAdapter postsRecyclerViewAdapter;
     private PostDto[] posts = new PostDto[]{};
     private Button postSortButton, postFilterButton, postStartDateButton, postEndDateButton;
+    private TextView closeTagFiler, closeCategoryFilter, closeDateFilters;
+    private LinearLayout tagLinearLayout, categoryLinearLayout,datesLinearLayout;
     private Spinner postFilterSpinner, categorySpinner;
     private EditText postTagsEditText;
     private CategoryDto[] categoryDtos;
@@ -65,13 +69,9 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
 
     private static int sortClick = 0;
-    private static int tagClick = 0;
-    private static int dataClick = 0;
-    private static int categoryClick = 0;
-    private static int filterClick = 0;
+    private static int filterClick=0;
 
-    public PostsListFragment() {
-    }
+    public PostsListFragment() {}
 
     public static PostsListFragment newInstance() {
         PostsListFragment fragment = new PostsListFragment();
@@ -98,18 +98,73 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         initView();
         setLayoutManager();
         makeGetDataRequest();
+        setUpViewsForFilters();
+        setPostsSortButtonOnClickListener();
+        setPostsFilterButtonOnClickListener();
+        setPostsFilterSpinnerAdapter();
+        setDateButtonsOnClickListener();
+        getCategoriesFromDB();
+        setCloseViewsOnClickListeners();
+        adjustLayoutForAdmin();
+        return postsFragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        makeGetDataRequest();
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.v(TAG, "onItemClick()");
+        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
+        intent.putExtra("postId", posts[position].getId());
+        intent.putExtra("userId", posts[position].getUserId());
+        startActivity(intent);
+    }
+
+    private void setUpViewsForFilters() {
         postSortButton = postsFragmentView.findViewById(R.id.sortPostsButton);
         postFilterButton = postsFragmentView.findViewById(R.id.filterPostsButton);
         postFilterSpinner = postsFragmentView.findViewById(R.id.filterPostsSpinner);
         postStartDateButton = postsFragmentView.findViewById(R.id.startDateButtonInPostFilter);
         postEndDateButton = postsFragmentView.findViewById(R.id.endDateButtonInPostFilter);
         postTagsEditText = postsFragmentView.findViewById(R.id.tagEditTextInPostFilter);
-        setPostsSortButtonOnClickListener();
-        setPostsFilterButtonOnClickListener();
-        setPostsFilterSpinnerAdapter();
-        setDateButtonsOnClickListener();
-        adjustLayoutForAdmin();
-        return postsFragmentView;
+        closeTagFiler = postsFragmentView.findViewById(R.id.closeTagFilter);
+        closeCategoryFilter = postsFragmentView.findViewById(R.id.closeCategoryFilter);
+        closeDateFilters = postsFragmentView.findViewById(R.id.closeDateFilters);
+        tagLinearLayout = postsFragmentView.findViewById(R.id.tagFilterLinearLayout);
+        categoryLinearLayout = postsFragmentView.findViewById(R.id.categoryFilterLinearLayout);
+        datesLinearLayout = postsFragmentView.findViewById(R.id.datesFilterLinearLayout);
+    }
+
+    private void setCloseViewsOnClickListeners(){
+        closeTagFiler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postTagsEditText.setVisibility(View.GONE);
+                tagLinearLayout.setVisibility(View.GONE);
+            }
+        });
+
+        closeCategoryFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categorySpinner.setVisibility(View.GONE);
+                selectedCategory=null;
+                categoryLinearLayout.setVisibility(View.GONE);
+            }
+        });
+
+        closeDateFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postStartDateButton.setVisibility(View.GONE);
+                postEndDateButton.setVisibility(View.GONE);
+                datesLinearLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void setDateButtonsOnClickListener(){
@@ -159,6 +214,39 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Spinner categorySpinner = (Spinner) parent;
+        Spinner filterSpinner = (Spinner) parent;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        if(categorySpinner.getId()==R.id.categorySpinnerInPostFilter){
+            for(CategoryDto c : categoryDtos){
+                if(c.getName().equals(selectedItem)) selectedCategory = c;
+            }
+        }
+        if(filterSpinner.getId()==R.id.filterPostsSpinner){
+            switch (position){
+                case 1:
+                    postTagsEditText.setVisibility(View.VISIBLE);
+                    tagLinearLayout.setVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    getCategoriesFromDB();
+                    categoryLinearLayout.setVisibility(View.VISIBLE);
+                    break;
+                case 3:
+                    postStartDateButton.setVisibility(View.VISIBLE);
+                    postEndDateButton.setVisibility(View.VISIBLE);
+                    datesLinearLayout.setVisibility(View.VISIBLE);
+                    break;
+            }
+            filterSpinner.setSelection(0);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
+
     private void setPostsFilterSpinnerAdapter(){
         postFilterSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
@@ -189,7 +277,6 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                 for (int i=0;i<postDtos.size();i++){
                     newPosts[i] = postDtos.get(i);
                 }
-
                 posts = newPosts;
                 setAdapter();
             }
@@ -201,43 +288,18 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                makeGetDataRequestWithParam();
                 if(filterClick%2==0){
-                    postFilterButton.setText(R.string.clean_button);
                     makeGetDataRequestWithParam();
-                    selectedCategory=null;
+                    postFilterButton.setText(R.string.clean_button);
                 }
-                else {
-                    postFilterButton.setText(R.string.filter_button);
+                else{
                     makeGetDataRequest();
+                    postFilterButton.setText(R.string.filter_button);
                 }
                 postFilterSpinner.setSelection(0);
                 filterClick++;
-                if(postTagsEditText.getVisibility()==View.VISIBLE)tagClick++;
-                if(categorySpinner !=null && categorySpinner.getVisibility()==View.VISIBLE)categoryClick++;
-                if(postStartDateButton.getVisibility()==View.VISIBLE)dataClick++;
-                postTagsEditText.setVisibility(View.GONE);
-                if(categorySpinner !=null)
-                    categorySpinner.setVisibility(View.GONE);
-                postStartDateButton.setVisibility(View.GONE);
-                postEndDateButton.setVisibility(View.GONE);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        makeGetDataRequest();
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Log.v(TAG, "onItemClick()");
-        Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
-        intent.putExtra("postId", posts[position].getId());
-        intent.putExtra("userId", posts[position].getUserId());
-        startActivity(intent);
     }
 
     private void makeGetDataRequest(){
@@ -291,8 +353,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         if(postTagsEditText.getVisibility()==View.VISIBLE && postTagsEditText.getText()!=null && !postTagsEditText.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
             if(postTagsEditText.getText().toString().charAt(0)=='#')
-                url += "tag=" + postTagsEditText.getText().toString().substring(1, postTagsEditText.getText().toString().length());
-            else  url += "tag=" + postTagsEditText.getText().toString();
+                url += "tag=" + postTagsEditText.getText().toString().substring(1, postTagsEditText.getText().toString().length()).trim();
+            else  url += "tag=" + postTagsEditText.getText().toString().trim();
         }
         if(selectedCategory!=null) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
@@ -372,56 +434,5 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(dtoArrayAdapter);
         categorySpinner.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner categorySpinner = (Spinner) parent;
-        Spinner filterSpinner = (Spinner) parent;
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        if(categorySpinner.getId()==R.id.categorySpinnerInPostFilter){
-            for(CategoryDto c : categoryDtos){
-                if(c.getName().equals(selectedItem)) selectedCategory = c;
-            }
-        }
-        if(filterSpinner.getId()==R.id.filterPostsSpinner){
-            switch (position){
-                case 1:
-                    if(tagClick%2==0){
-                        postTagsEditText.setVisibility(View.VISIBLE);
-                        postFilterButton.setVisibility(View.VISIBLE);
-                    }
-                    else postTagsEditText.setVisibility(View.GONE);
-                   tagClick++;
-                   break;
-                case 2:
-                    if(categoryClick%2==0){
-                        getCategoriesFromDB();
-                        postFilterButton.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        if(this.categorySpinner !=null) this.categorySpinner.setVisibility(View.GONE);
-                    }
-                    categoryClick++;
-                    break;
-                case 3:
-                    if(dataClick%2==0){
-                        postStartDateButton.setVisibility(View.VISIBLE);
-                        postEndDateButton.setVisibility(View.VISIBLE);
-                        postFilterButton.setVisibility(View.VISIBLE);
-                    }else{
-                        postStartDateButton.setVisibility(View.GONE);
-                        postEndDateButton.setVisibility(View.GONE);
-                    }
-                    dataClick++;
-                    break;
-            }
-            filterSpinner.setSelection(0);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }

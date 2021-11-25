@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +18,6 @@ import com.google.android.material.tabs.TabLayout;
 public class MainAdminActivity extends AppCompatActivity {
     
     private static final String TAG = "MainAdminActivity";
-    private ViewPager viewPager;
-    private AdminFragmentPagerAdapter adminFragmentStateAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +27,6 @@ public class MainAdminActivity extends AppCompatActivity {
 
         setupToolbar();
         setupViewPager();
-    }
-
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.adminToolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -65,9 +56,15 @@ public class MainAdminActivity extends AppCompatActivity {
         }
     }
 
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.adminToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
+
     private void setupViewPager() {
-        viewPager = findViewById(R.id.adminViewPager);
-        adminFragmentStateAdapter = new AdminFragmentPagerAdapter(getSupportFragmentManager(), this);
+        ViewPager viewPager = findViewById(R.id.adminViewPager);
+        AdminFragmentPagerAdapter adminFragmentStateAdapter = new AdminFragmentPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(adminFragmentStateAdapter);
 
         TabLayout tabLayout = findViewById(R.id.adminTabsLayout);

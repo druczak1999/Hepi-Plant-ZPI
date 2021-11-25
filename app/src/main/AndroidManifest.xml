@@ -17,6 +17,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="Instantiatable">
+        <activity android:name=".TimePickerActivity"
+            android:theme="@style/AppTheme.CustomTheme"/>
         <activity
             android:name=".InfoActivity"
             android:exported="true" />
@@ -89,9 +91,6 @@
             android:name=".ForumTabsActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".PlantsListActivity"
-            android:exported="true" />
         <activity android:name=".FireBase" />
         <activity
             android:name=".PlantAddActivity"

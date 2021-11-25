@@ -43,8 +43,8 @@ public class UserActivity extends AppCompatActivity {
     private JSONRequestProcessor requestProcessor;
     private JSONResponseHandler<UserDto> userResponseHandler;
     private JSONResponseHandler<EventDto> eventResponseHandler;
-    private TextView usernameValue, username, userEmail;
-    private Button change;
+    private TextView usernameValue, username, userEmail, notificationsTimeText, notificationsTimeValue;
+    private Button changeUserData, changeNotificationsTime;
     private ImageView profilePhoto;
     private Switch notifications;
     private EventDto[] events;
@@ -65,23 +65,57 @@ public class UserActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getRequestUser();
+        refreshDisplayedData();
     }
 
     private void setupViewsData(){
         usernameValue = findViewById(R.id.usernameValueUserView);
         username = findViewById(R.id.userName);
         userEmail = findViewById(R.id.emailValueUserView);
-        change = findViewById(R.id.change);
+        changeUserData = findViewById(R.id.change);
         profilePhoto = findViewById(R.id.profilePhoto);
+        changeNotificationsTime = findViewById(R.id.changeNotificationsTimeButton);
+        notificationsTimeText = findViewById(R.id.notificationTimeUserView);
+        notificationsTimeValue = findViewById(R.id.notificationTimeUserValue);
+        notificationsTimeValue.setText(config.getHourOfNotifications());
         notifications = findViewById(R.id.noticeSwitch);
-        if(config.isNotifications()) notifications.setChecked(true);
-        else notifications.setChecked(false);
+        setUpNotifications();
+    }
+
+    private void setUpNotifications() {
+        if(config.isNotifications()) {
+            notifications.setChecked(true);
+        }
+        else{
+            notifications.setChecked(false);
+            notificationsTimeValue.setVisibility(View.GONE);
+            notificationsTimeText.setVisibility(View.GONE);
+            changeNotificationsTime.setVisibility(View.GONE);
+        }
         notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 config.setNotifications(notifications.isChecked());
+                if(notifications.isChecked()){
+                    notificationsTimeValue.setVisibility(View.VISIBLE);
+                    notificationsTimeText.setVisibility(View.VISIBLE);
+                    changeNotificationsTime.setVisibility(View.VISIBLE);
+                }
+                else{
+                    notificationsTimeValue.setVisibility(View.GONE);
+                    notificationsTimeText.setVisibility(View.GONE);
+                    changeNotificationsTime.setVisibility(View.GONE);
+                }
                 editRequestUser();
                 makeGetDataRequest();
+            }
+        });
+
+        changeNotificationsTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TimePickerActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -117,6 +151,12 @@ public class UserActivity extends AppCompatActivity {
         }
     }
 
+    private void refreshDisplayedData() {
+        Log.v(TAG, "Refreshing displayed data()");
+        notificationsTimeValue = findViewById(R.id.notificationTimeUserValue);
+        notificationsTimeValue.setText(config.getHourOfNotifications());
+    }
+
     private void setupNotifications(EventDto event) {
         if (!event.isDone()) {
             Log.v(TAG, event.getEventName());
@@ -131,7 +171,7 @@ public class UserActivity extends AppCompatActivity {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 Log.v(TAG, simpleDateFormat.parse(event.getEventDate()).toString());
-                calendar.setTime(simpleDateFormat.parse(event.getEventDate()));
+                calendar.setTime(simpleDateFormat.parse(event.getEventDate()+" "+config.getHourOfNotifications()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -196,7 +236,7 @@ public class UserActivity extends AppCompatActivity {
         usernameValue.setText(data.getUsername());
         userEmail.setText(data.getEmail());
         username.setText("Witaj "+data.getUsername()+"!");
-        change.setOnClickListener(new View.OnClickListener(){
+        changeUserData.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), UserUpdateActivity.class);
