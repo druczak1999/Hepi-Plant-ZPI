@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -74,7 +73,6 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         initView();
         setLayoutManager();
         makeGetDataRequest();
-        setBottomBarOnItemClickListeners();
         setupToolbar();
     }
 
@@ -208,24 +206,6 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
         }
-    }
-
-    private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                layoutManager.scrollToPositionWithOffset(0, 0);;
-            }
-        });
-
-        Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void initView() {

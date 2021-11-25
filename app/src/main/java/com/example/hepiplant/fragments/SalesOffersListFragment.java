@@ -11,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,28 +50,29 @@ public class SalesOffersListFragment extends Fragment implements
         SalesOffersRecyclerViewAdapter.ItemClickListener, AdapterView.OnItemSelectedListener  {
 
     private static final String TAG = "SalesOffersListFragment";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
-    private Configuration config;
-    private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<SalesOfferDto> salesOfferResponseHandler;
     private View offersFragmentView;
     private RecyclerView offersRecyclerView;
     private SalesOffersRecyclerViewAdapter adapter;
     private SalesOfferDto[] salesOffers = new SalesOfferDto[]{};
     private Button offersSortButton, offersFilterButton, offersStartDateButton, offersEndDateButton;
     private Spinner offersFilterSpinner, categorySpinner;
+    private TextView closeTagFiler, closeCategoryFilter, closeDateFilters;
+    private LinearLayout tagLinearLayout, categoryLinearLayout,datesLinearLayout;
     private EditText offersTagsEditText;
     private CategoryDto[] categoryDtos;
     private CategoryDto selectedCategory;
+
+    private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<SalesOfferDto> salesOfferResponseHandler;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
+
     private static int sortClick = 0;
-    private static int tagClick = 0;
-    private static int dataClick = 0;
-    private static int categoryClick = 0;
     private static int filterClick = 0;
 
-    public SalesOffersListFragment() {
-    }
+    public SalesOffersListFragment() {}
 
     public static SalesOffersListFragment newInstance() {
         SalesOffersListFragment fragment = new SalesOffersListFragment();
@@ -94,20 +97,125 @@ public class SalesOffersListFragment extends Fragment implements
         Log.v(TAG, "Entering onCreateView()");
         offersFragmentView = inflater.inflate(R.layout.fragment_offers_list, container, false);
 
+        setUpViewsForFilters();
+        initView();
+        setLayoutManager();
+        makeGetDataRequest();
+        getCategoriesFromDB();
+        setOffersSortButtonOnClickListener();
+        setDateButtonsOnClickListener();
+        setOffersFilterButtonOnClickListener();
+        setOffersFilterSpinnerAdapter();
+        setCloseViewsOnClickListeners();
+        adjustLayoutForAdmin();
+        return offersFragmentView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == -1) {
+                offersStartDateButton.setText(data.getExtras().getString("data"));
+            }
+        }
+        if(requestCode==2){
+            if(resultCode==-1){
+                offersEndDateButton.setText(data.getExtras().getString("data"));
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        makeGetDataRequest();
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.v(TAG, "onItemClick()");
+        Intent intent = new Intent(getActivity().getApplicationContext(), SalesOfferActivity.class);
+        intent.putExtra("salesOfferId", salesOffers[position].getId());
+        intent.putExtra("userId", salesOffers[position].getUserId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Spinner categorySpinner = (Spinner) parent;
+        Spinner filterSpinner = (Spinner) parent;
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        if(categorySpinner.getId()==R.id.categorySpinnerInOfferFilter){
+            for(CategoryDto c : categoryDtos){
+                if(c.getName().equals(selectedItem)) selectedCategory = c;
+            }
+        }
+        if(filterSpinner.getId()==R.id.filterOffersSpinner){
+            switch (position){
+                case 1:
+                    offersTagsEditText.setVisibility(View.VISIBLE);
+                    tagLinearLayout.setVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    getCategoriesFromDB();
+                    categoryLinearLayout.setVisibility(View.VISIBLE);
+                    break;
+                case 3:
+                    offersStartDateButton.setVisibility(View.VISIBLE);
+                    offersEndDateButton.setVisibility(View.VISIBLE);
+                    datesLinearLayout.setVisibility(View.VISIBLE);
+                    break;
+            }
+            filterSpinner.setSelection(0);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
+
+    private void setUpViewsForFilters() {
         offersSortButton = offersFragmentView.findViewById(R.id.sortOffersButton);
         offersFilterButton = offersFragmentView.findViewById(R.id.filterOffersButton);
         offersFilterSpinner = offersFragmentView.findViewById(R.id.filterOffersSpinner);
         offersStartDateButton = offersFragmentView.findViewById(R.id.startDateButtonInOfferFilter);
         offersEndDateButton = offersFragmentView.findViewById(R.id.endDateButtonInOfferFilter);
         offersTagsEditText = offersFragmentView.findViewById(R.id.tagEditTextInOfferFilter);
-        initView();
-        setLayoutManager();
-        makeGetDataRequest();
-        setOffersSortButtonOnClickListener();
-        setDateButtonsOnClickListener();
-        setOffersFilterButtonOnClickListener();
-        setOffersFilterSpinnerAdapter();
-        return offersFragmentView;
+        closeTagFiler = offersFragmentView.findViewById(R.id.closeTagFilterOffer);
+        closeCategoryFilter = offersFragmentView.findViewById(R.id.closeCategoryFilterOffer);
+        closeDateFilters = offersFragmentView.findViewById(R.id.closeDateFiltersOffer);
+        tagLinearLayout = offersFragmentView.findViewById(R.id.tagFilterLinearLayoutOffer);
+        categoryLinearLayout = offersFragmentView.findViewById(R.id.categoryFilterLinearLayoutOffer);
+        datesLinearLayout = offersFragmentView.findViewById(R.id.datesFilterLinearLayoutOffer);
+    }
+
+    private void setCloseViewsOnClickListeners(){
+        closeTagFiler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                offersTagsEditText.setVisibility(View.GONE);
+                tagLinearLayout.setVisibility(View.GONE);
+            }
+        });
+
+        closeCategoryFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categorySpinner.setVisibility(View.GONE);
+                selectedCategory=null;
+                categoryLinearLayout.setVisibility(View.GONE);
+            }
+        });
+
+        closeDateFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                offersStartDateButton.setVisibility(View.GONE);
+                offersEndDateButton.setVisibility(View.GONE);
+                datesLinearLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void setDateButtonsOnClickListener(){
@@ -130,25 +238,19 @@ public class SalesOffersListFragment extends Fragment implements
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == -1) {
-                offersStartDateButton.setText(data.getExtras().getString("data"));
-            }
-        }
-        if(requestCode==2){
-            if(resultCode==-1){
-                offersEndDateButton.setText(data.getExtras().getString("data"));
-            }
+    private void adjustLayoutForAdmin() {
+        if(config.getUserRoles().contains(ROLE_ADMIN)){
+            offersRecyclerView.setPadding(
+                    offersRecyclerView.getPaddingLeft(),
+                    offersRecyclerView.getPaddingTop(),
+                    offersRecyclerView.getPaddingRight(), 0);
         }
     }
 
     private void setOffersFilterSpinnerAdapter(){
         offersFilterSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(),
+                android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         offersFilterSpinner.setAdapter(dtoArrayAdapter);
     }
@@ -176,7 +278,6 @@ public class SalesOffersListFragment extends Fragment implements
                 for (int i=0;i<offerDtos.size();i++){
                     newOffers[i] = offerDtos.get(i);
                 }
-
                 salesOffers = newOffers;
                 setAdapter();
             }
@@ -188,43 +289,19 @@ public class SalesOffersListFragment extends Fragment implements
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                makeGetDataRequestWithParam();
                 if(filterClick%2==0){
-                    offersFilterButton.setText(R.string.cleanButton);
+                    offersFilterButton.setText(R.string.clean_button);
                     makeGetDataRequestWithParam();
                     selectedCategory=null;
                 }
                 else {
-                    offersFilterButton.setText(R.string.filterButton);
+                    offersFilterButton.setText(R.string.filter_button);
                     makeGetDataRequest();
                 }
                 offersFilterSpinner.setSelection(0);
                 filterClick++;
-                if(offersTagsEditText.getVisibility()==View.VISIBLE)tagClick++;
-                if(categorySpinner !=null && categorySpinner.getVisibility()==View.VISIBLE)categoryClick++;
-                if(offersStartDateButton.getVisibility()==View.VISIBLE)dataClick++;
-                offersTagsEditText.setVisibility(View.GONE);
-                if(categorySpinner !=null)
-                    categorySpinner.setVisibility(View.GONE);
-                offersStartDateButton.setVisibility(View.GONE);
-                offersEndDateButton.setVisibility(View.GONE);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        makeGetDataRequest();
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Log.v(TAG, "onItemClick()");
-        Intent intent = new Intent(getActivity().getApplicationContext(), SalesOfferActivity.class);
-        intent.putExtra("salesOfferId", salesOffers[position].getId());
-        intent.putExtra("userId", salesOffers[position].getUserId());
-        startActivity(intent);
     }
 
     private void makeGetDataRequest(){
@@ -268,18 +345,18 @@ public class SalesOffersListFragment extends Fragment implements
         if(offersStartDateButton.getVisibility()== View.VISIBLE
                 && offersStartDateButton.getText()!=null && !offersStartDateButton.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
-            url += "startDate=" + offersStartDateButton.getText().toString().substring(0, 10);
+            url += "startDate=" + offersStartDateButton.getText().toString().substring(0, 10).trim();
         }
         if(offersEndDateButton.getVisibility()==View.VISIBLE
                 && offersEndDateButton.getText()!=null && !offersEndDateButton.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
-            url += "endDate=" + offersEndDateButton.getText().toString().substring(0, 10);
+            url += "endDate=" + offersEndDateButton.getText().toString().substring(0, 10).trim();
         }
         if(offersTagsEditText.getVisibility()==View.VISIBLE && offersTagsEditText.getText()!=null && !offersTagsEditText.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
             if(offersTagsEditText.getText().toString().charAt(0)=='#')
-                url += "tag=" + offersTagsEditText.getText().toString().substring(1, offersTagsEditText.getText().toString().length());
-            else  url += "tag=" + offersTagsEditText.getText().toString();
+                url += "tag=" + offersTagsEditText.getText().toString().substring(1, offersTagsEditText.getText().toString().length()).trim();
+            else  url += "tag=" + offersTagsEditText.getText().toString().trim();
         }
         if(selectedCategory!=null) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
@@ -361,54 +438,4 @@ public class SalesOffersListFragment extends Fragment implements
         categorySpinner.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner categorySpinner = (Spinner) parent;
-        Spinner filterSpinner = (Spinner) parent;
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        if(categorySpinner.getId()==R.id.categorySpinnerInOfferFilter){
-            for(CategoryDto c : categoryDtos){
-                if(c.getName().equals(selectedItem)) selectedCategory = c;
-            }
-        }
-        if(filterSpinner.getId()==R.id.filterOffersSpinner){
-            switch (position){
-                case 1:
-                    if(tagClick%2==0){
-                        offersTagsEditText.setVisibility(View.VISIBLE);
-                        offersFilterButton.setVisibility(View.VISIBLE);
-                    }
-                    else offersTagsEditText.setVisibility(View.GONE);
-                    tagClick++;
-                    break;
-                case 2:
-                    if(categoryClick%2==0){
-                        getCategoriesFromDB();
-                        offersFilterButton.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        if(this.categorySpinner !=null) this.categorySpinner.setVisibility(View.GONE);
-                    }
-                    categoryClick++;
-                    break;
-                case 3:
-                    if(dataClick%2==0){
-                        offersStartDateButton.setVisibility(View.VISIBLE);
-                        offersEndDateButton.setVisibility(View.VISIBLE);
-                        offersFilterButton.setVisibility(View.VISIBLE);
-                    }else{
-                        offersStartDateButton.setVisibility(View.GONE);
-                        offersEndDateButton.setVisibility(View.GONE);
-                    }
-                    dataClick++;
-                    break;
-            }
-            filterSpinner.setSelection(0);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 }

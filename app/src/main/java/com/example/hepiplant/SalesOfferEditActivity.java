@@ -27,7 +27,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SalesOfferDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -46,12 +45,10 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class SalesOfferEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -278,7 +275,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         Button buttonHome = findViewById(R.id.buttonDom);
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlantsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                 startActivity(intent);
             }
         });

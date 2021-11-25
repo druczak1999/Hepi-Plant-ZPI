@@ -31,6 +31,7 @@ import java.util.Locale;
 public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOffersRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "SalesOffersRVAdapter";
+
     private static final String CURRENCY = "zł";
     private List<SalesOfferDto> dataSet;
     private ItemClickListener clickListener;
@@ -137,6 +138,28 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
         viewHolder.getComments().setText(commentsText);
     }
 
+    @Override
+    public int getItemCount() {
+        return dataSet.size();
+    }
+
+    public SalesOfferDto getItem(int id) {
+        return dataSet.get(id);
+    }
+
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.clickListener = itemClickListener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    // Change the dataset of the adapter (call adapter.notifyItemRangeChanged() afterwards)
+    public void updateData(SalesOfferDto[] newDataSet){
+        this.dataSet = new ArrayList<>(Arrays.asList(newDataSet));
+    }
+
     private static void getImageFromFirebase(int position, ImageView photoImageView, List<SalesOfferDto> dataSet) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -163,27 +186,5 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
                 Log.v(TAG,exception.getCause().toString());
             }
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return dataSet.size();
-    }
-
-    public SalesOfferDto getItem(int id) {
-        return dataSet.get(id);
-    }
-
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.clickListener = itemClickListener;
-    }
-
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    // Change the dataset of the adapter (call adapter.notifyItemRangeChanged() afterwards)
-    public void updateData(SalesOfferDto[] newDataSet){
-        this.dataSet = new ArrayList<>(Arrays.asList(newDataSet));
     }
 }

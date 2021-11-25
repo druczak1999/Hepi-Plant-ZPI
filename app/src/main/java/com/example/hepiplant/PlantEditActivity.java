@@ -33,7 +33,6 @@ import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.PlantDto;
-import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.dto.SpeciesDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
@@ -60,21 +59,22 @@ import java.util.List;
 
 public class PlantEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
+    private static final String TAG = "PlantEditActivity";
+
     private EditText plantName, watering, fertilizing, misting, placement;
     private Spinner spinnerGat;
     private ImageView plantImage;
     private Button date, editPlant;
-    private Configuration config;
-    private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<PlantDto> plantResponseHandler;
-    private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
-    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
-    private static final String TAG = "PlantEditActivity";
     private SpeciesDto speciesDto;
     private SpeciesDto[] speciesDtos;
     private String img_str;
     private Long plantId;
     private PlantDto plant;
+    private Configuration config;
+    private JSONRequestProcessor requestProcessor;
+    private JSONResponseHandler<PlantDto> plantResponseHandler;
+    private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
+    private JSONResponseHandler<CategoryDto> categoryResponseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,49 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         setBottomBarOnItemClickListeners();
         setupViewsData();
         makeGetDataRequest();
+    }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(SpeciesDto s : speciesDtos){
+            if(s.getName().equals(selectedItem)){
+                speciesDto = s;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Log.v(TAG, plant.getPurchaseDate());
+                date.setText(plant.getPurchaseDate());
+                Log.v(TAG, plant.getPurchaseDate());
+            }
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Log.v(TAG, "cropActivity");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                plantImage.setImageURI(resultUri);
+                img_str=resultUri.toString();
+                saveImageToFirebase();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    plantImage.setClipToOutline(true);
+                }
+                Log.v(TAG, img_str);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 
     private void setupViewsData(){
@@ -232,19 +274,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        for(SpeciesDto s : speciesDtos){
-            if(s.getName().equals(selectedItem)){
-                speciesDto = s;
-            }
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {}
-
     @NonNull
     private String getRequestUrl() {
         try {
@@ -307,36 +336,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                Log.v(TAG, plant.getPurchaseDate());
-                date.setText(plant.getPurchaseDate());
-                Log.v(TAG, plant.getPurchaseDate());
-            }
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Log.v(TAG, "cropActivity");
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                plantImage.setImageURI(resultUri);
-                img_str=resultUri.toString();
-                saveImageToFirebase();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    plantImage.setClipToOutline(true);
-                }
-                Log.v(TAG, img_str);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
     }
 
     private void saveImageToFirebase() {
@@ -453,7 +452,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                 postData.put("purchaseDate", null);
             else {
                 Log.v(TAG, "put: "+date.getText().toString());
-                postData.put("purchaseDate", date.getText().toString().trim() + " 00:00:00");
+                postData.put("purchaseDate", date.getText().toString().trim() + " "+config.getHourOfNotifications());
             }
             Log.v(TAG,placement.getText().toString());
             if (placement.getText()==null){
@@ -508,7 +507,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     try {
                         Log.v(TAG, simpleDateFormat.parse(event.getEventDate()).toString());
-                        calendar.setTime(simpleDateFormat.parse(event.getEventDate()));
+                        calendar.setTime(simpleDateFormat.parse(event.getEventDate()+ " "+config.getHourOfNotifications()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

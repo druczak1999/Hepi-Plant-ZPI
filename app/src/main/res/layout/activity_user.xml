@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/toolbarTest"
-        layout="@layout/toolbar"></include>
+        layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/userName"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Nazwa użytkownika"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
@@ -55,7 +55,7 @@
         style="@style/DetailsFontValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="35dp"
         android:alpha="0.8"
         android:text="..."
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="20dp"
         android:text="Email"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameValueUserView" />
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="15dp"
         android:alpha="0.8"
         android:text="..."
         app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +95,7 @@
         android:layout_height="27dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:text="Powiadomienia"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change" />
@@ -104,7 +104,7 @@
         android:id="@+id/change"
         android:layout_width="151dp"
         android:layout_height="39dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/rounded_button"
         android:fontFamily="@font/cantata_one"
         android:text="Zmień dane"
@@ -119,21 +119,58 @@
         android:layout_width="80dp"
         android:layout_height="24dp"
 
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:checked="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change" />
 
+    <TextView
+        android:id="@+id/notificationTimeUserView"
+        style="@style/DetailsFontValue"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/hour_of_notifications"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationUserView"/>
+
+    <TextView
+        android:id="@+id/notificationTimeUserValue"
+        style="@style/DetailsFontValue"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        android:text=""
+        app:layout_constraintStart_toEndOf="@+id/notificationTimeUserView"
+        app:layout_constraintTop_toBottomOf="@+id/notificationUserView" />
+
+    <Button
+        android:id="@+id/changeNotificationsTimeButton"
+        style="@style/ButtonSmallWhite"
+        android:layout_width="88dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/change_hour"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/noticeSwitch" />
+
     <include
         android:id="@+id/plantsListBottomBar"
-        layout="@layout/bottom_bar" ></include>
+        layout="@layout/bottom_bar" />
 
     <include
         android:id="@+id/UserViewFloatingButton"
         layout="@layout/floatingbutton"
         tools:layout_editor_absoluteX="48dp"
-        tools:layout_editor_absoluteY="-236dp"></include>
+        tools:layout_editor_absoluteY="-236dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

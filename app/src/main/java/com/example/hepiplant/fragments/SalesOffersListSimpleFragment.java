@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +19,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.R;
-import com.example.hepiplant.TagTabsAdminActivity;
-import com.example.hepiplant.adapter.recyclerview.TagsRecyclerViewAdapter;
+import com.example.hepiplant.SalesOfferActivity;
+import com.example.hepiplant.adapter.recyclerview.SalesOffersRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
-import com.example.hepiplant.dto.TagDto;
+import com.example.hepiplant.dto.SalesOfferDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
@@ -31,26 +32,21 @@ import org.json.JSONArray;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter.ItemClickListener {
+public class SalesOffersListSimpleFragment extends Fragment implements SalesOffersRecyclerViewAdapter.ItemClickListener  {
 
-    private static final String TAG = "TagListFragment";
+    private static final String TAG = "OffersListSmplFragment";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<TagDto> tagResponseHandler;
-    private View tagFragmentView;
-    private RecyclerView tagsRecyclerView;
-    private TagsRecyclerViewAdapter adapter;
-    private TagDto[] tags = new TagDto[]{};
+    private JSONResponseHandler<SalesOfferDto> salesOffersResponseHandler;
+    private View salesOffersFragmentView;
+    private RecyclerView salesOffersRecyclerView;
+    private SalesOffersRecyclerViewAdapter salesOffersRecyclerViewAdapter;
+    private SalesOfferDto[] salesOffers = new SalesOfferDto[]{};
+    private final String tag;
 
-    public TagListFragment() {
-    }
-
-    public static TagListFragment newInstance() {
-        TagListFragment fragment = new TagListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+    public SalesOffersListSimpleFragment(String tag) {
+        this.tag = tag;
     }
 
     @Override
@@ -59,20 +55,18 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
         super.onCreate(savedInstanceState);
         config = (Configuration) getActivity().getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
-        tagResponseHandler = new JSONResponseHandler<>(config);
+        salesOffersResponseHandler = new JSONResponseHandler<>(config);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreateView()");
-        tagFragmentView = inflater.inflate(R.layout.fragment_tag_list, container, false);
-
+        salesOffersFragmentView = inflater.inflate(R.layout.fragment_simple_list, container, false);
         initView();
         setLayoutManager();
         makeGetDataRequest();
-
-        return tagFragmentView;
+        return salesOffersFragmentView;
     }
 
     @Override
@@ -84,13 +78,14 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
     @Override
     public void onItemClick(View view, int position) {
         Log.v(TAG, "onItemClick()");
-        Intent intent = new Intent(config, TagTabsAdminActivity.class);
-        intent.putExtra("tag", tags[position].getName());
+        Intent intent = new Intent(config, SalesOfferActivity.class);
+        intent.putExtra("salesOfferId", salesOffers[position].getId());
+        intent.putExtra("userId", salesOffers[position].getUserId());
         startActivity(intent);
     }
 
     private void makeGetDataRequest(){
-        String url = getRequestUrl();
+        String url = getRequestUrl() + "salesoffers/tag/" + tag;
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
@@ -103,12 +98,17 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return config.getUrl() + "tags";
+        return config.getUrl();
     }
 
     private void onGetResponseReceived(JSONArray response){
-        Log.v(TAG, "onGetResponseReceived()");
-        tags = tagResponseHandler.handleArrayResponse(response, TagDto[].class);
+        Log.v(TAG, "onGetResponseReceived(). Data is " + response);
+        salesOffers = salesOffersResponseHandler.handleArrayResponse(response, SalesOfferDto[].class);
+        if(salesOffers.length == 0){
+            TextView noDataTextView = salesOffersFragmentView.findViewById(R.id.noDataSimpleListTextView);
+            noDataTextView.setVisibility(View.VISIBLE);
+            noDataTextView.setText(getText(R.string.no_sales_offers_to_display));
+        }
         setAdapter();
     }
 
@@ -122,21 +122,17 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
     }
 
     private void initView() {
-        Log.v(TAG, "initView()");
-        tagsRecyclerView = tagFragmentView.findViewById(R.id.tagRecyclerView);
+        salesOffersRecyclerView = salesOffersFragmentView.findViewById(R.id.postsRecyclerView);
     }
 
     private void setLayoutManager() {
-        Log.v(TAG, "setLayoutManager()");
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        tagsRecyclerView.setLayoutManager(layoutManager);
+        salesOffersRecyclerView.setLayoutManager(layoutManager);
     }
 
     private void setAdapter() {
-        Log.v(TAG, "setAdapter()");
-        adapter = new TagsRecyclerViewAdapter(getActivity(), tags);
-        adapter.setClickListener(this);
-        tagsRecyclerView.setAdapter(adapter);
+        salesOffersRecyclerViewAdapter = new SalesOffersRecyclerViewAdapter(getActivity(), salesOffers);
+        salesOffersRecyclerViewAdapter.setClickListener(this);
+        salesOffersRecyclerView.setAdapter(salesOffersRecyclerViewAdapter);
     }
-
 }

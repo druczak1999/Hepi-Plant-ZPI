@@ -10,20 +10,19 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Set;
 
 public class Configuration extends Application {
     private String url;
     private Long userId;
-    //backend security
     private Set<String> userRoles;
     private String token;
     private RequestQueue queue;
     private Gson gson;
     private Uri photo;
     private boolean notifications;
+    private String hourOfNotifications;
 
     public Uri getPhoto() { return photo; }
 
@@ -59,6 +58,14 @@ public class Configuration extends Application {
 
     public void setNotifications(boolean notifications) {
         this.notifications = notifications;
+    }
+
+    public String getHourOfNotifications() {
+        return hourOfNotifications;
+    }
+
+    public void setHourOfNotifications(String hourOfNotifications) {
+        this.hourOfNotifications = hourOfNotifications;
     }
 
     public String getToken() {

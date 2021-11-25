@@ -76,5 +76,13 @@ public class ForumTabsActivity extends AppCompatActivity {
                 layoutManager.scrollToPositionWithOffset(0, 0);
             }
         });
+
+        FloatingActionButton buttonAdd = findViewById(R.id.floatingActionButton);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent2 = new Intent(getApplicationContext(), QuestionActivity.class);
+                startActivity(intent2);
+            }
+        });
     }
 }

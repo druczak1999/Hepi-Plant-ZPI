@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TagTabsAdminActivity">
+
+        <include
+            android:id="@+id/tagsToolbar"
+            layout="@layout/toolbar" />
+
+        <TextView
+            android:id="@+id/tagTabsTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginVertical="@dimen/margin_medium"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:text="@string/tag_tabs_title"
+            style="@style/ListItemTitleFont"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tagTabsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tagTabsTitleTextView" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/tagViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/margin_big"/>
+
+</LinearLayout>
