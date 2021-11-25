@@ -41,7 +41,6 @@ public class SalesOffersListSimpleFragment extends Fragment implements SalesOffe
     private JSONResponseHandler<SalesOfferDto> salesOffersResponseHandler;
     private View salesOffersFragmentView;
     private RecyclerView salesOffersRecyclerView;
-    private SalesOffersRecyclerViewAdapter salesOffersRecyclerViewAdapter;
     private SalesOfferDto[] salesOffers = new SalesOfferDto[]{};
     private final String tag;
 
@@ -131,7 +130,7 @@ public class SalesOffersListSimpleFragment extends Fragment implements SalesOffe
     }
 
     private void setAdapter() {
-        salesOffersRecyclerViewAdapter = new SalesOffersRecyclerViewAdapter(getActivity(), salesOffers);
+        SalesOffersRecyclerViewAdapter salesOffersRecyclerViewAdapter = new SalesOffersRecyclerViewAdapter(getActivity(), salesOffers);
         salesOffersRecyclerViewAdapter.setClickListener(this);
         salesOffersRecyclerView.setAdapter(salesOffersRecyclerViewAdapter);
     }

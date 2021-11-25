@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,8 +21,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -77,6 +80,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
 
+        setupToolbar();
         setBottomBarOnItemClickListeners();
         setupViewsData();
         makeGetDataRequest();
@@ -120,13 +124,46 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
+                return true;
+            case R.id.miProfile:
+                Intent intent = new Intent(this, UserActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.plantAddToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
+
     private void setupViewsData(){
         postName = findViewById(R.id.editTitle);
         spinnerCat = findViewById(R.id.editCategory);
         postBody = findViewById(R.id.editBody);
         postTags = findViewById(R.id.editTags);
         postImage = findViewById(R.id.editImageBut);
-        editPost = findViewById(R.id.editPost);
+        editPost = findViewById(R.id.editPostButton);
     }
 
     private void makeGetDataRequest() {
@@ -159,7 +196,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
@@ -366,7 +404,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private JSONArray hashReading()
     {
         int listSize = 0;
-        List<String> hashList = new ArrayList<String>(Arrays.asList(postTags.getText().toString().replace(" ", "").split("#")));
+        List<String> hashList = new ArrayList(Arrays.asList(postTags.getText().toString().replace(" ", "").split("#")));
         hashList.removeAll(Arrays.asList("", null));
         Log.v(TAG, String.valueOf(hashList));
         JSONArray hash = new JSONArray();
@@ -389,7 +427,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         NetworkResponse networkResponse = error.networkResponse;
         Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 }

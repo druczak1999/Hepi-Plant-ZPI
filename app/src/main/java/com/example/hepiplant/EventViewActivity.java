@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,8 +22,11 @@ import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
+
 import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.Arrays;
 
 public class EventViewActivity extends AppCompatActivity {
 
@@ -139,7 +141,7 @@ public class EventViewActivity extends AppCompatActivity {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode + " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

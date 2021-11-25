@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -18,20 +17,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
-import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
-import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class PopUpDeleteEvent extends AppCompatActivity {
 
     private static final String TAG = "PopUpDeleteEvent";
 
-    private Button yes, no;
     private Configuration config;
-    private JSONResponseHandler<EventDto> eventResponseHandler;
     private JSONRequestProcessor requestProcessor;
 
 
@@ -41,7 +37,6 @@ public class PopUpDeleteEvent extends AppCompatActivity {
         setContentView(R.layout.activity_pop_up_delete_event);
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
-        eventResponseHandler = new JSONResponseHandler<>(config);
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
@@ -51,22 +46,12 @@ public class PopUpDeleteEvent extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        yes = findViewById(R.id.buttonYesEvent);
-        no = findViewById(R.id.buttonNoEvent);
+        Button yes = findViewById(R.id.buttonYesEvent);
+        Button no = findViewById(R.id.buttonNoEvent);
 
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        no.setOnClickListener(v -> finish());
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteEvent();
-            }
-        });
+        yes.setOnClickListener(v -> deleteEvent());
     }
 
     @NonNull
@@ -82,23 +67,16 @@ public class PopUpDeleteEvent extends AppCompatActivity {
     private void deleteEvent(){
         String url = getRequestUrl(getIntent().getExtras().getLong("eventId"));
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.v(TAG, response);
-                        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.cancel((int) getIntent().getExtras().getLong("eventId"));
-                        Toast.makeText(getApplicationContext(),R.string.delete_event,Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+            (Response.Listener<String>) response -> {
+                Log.v(TAG, response);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel((int) getIntent().getExtras().getLong("eventId"));
+                Toast.makeText(getApplicationContext(),R.string.delete_event,Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }, this::onErrorResponseReceived);
     }
 
     private void onErrorResponseReceived(VolleyError error){
@@ -106,7 +84,8 @@ public class PopUpDeleteEvent extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         Toast.makeText(getApplicationContext(),R.string.delete_event_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 }

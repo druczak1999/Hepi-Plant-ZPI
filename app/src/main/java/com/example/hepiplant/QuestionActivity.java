@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -20,21 +19,17 @@ public class QuestionActivity extends AppCompatActivity {
 
         setupToolbar();
         Button post = (Button) findViewById(R.id.post);
-        post.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PostAddActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        post.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), PostAddActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         Button salesOffer = (Button) findViewById(R.id.oferta);
-        salesOffer.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent2 = new Intent(getApplicationContext(), SalesOfferAddActivity.class);
-                startActivity(intent2);
-                finish();
-            }
+        salesOffer.setOnClickListener(v -> {
+            Intent intent2 = new Intent(getApplicationContext(), SalesOfferAddActivity.class);
+            startActivity(intent2);
+            finish();
         });
     }
 

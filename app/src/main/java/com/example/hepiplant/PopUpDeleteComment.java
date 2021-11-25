@@ -3,12 +3,10 @@ package com.example.hepiplant;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.NetworkResponse;
@@ -20,12 +18,12 @@ import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.RequestType;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class PopUpDeleteComment extends AppCompatActivity {
 
     private static final String TAG = "PopUpDeleteComment";
 
-    private Button yes, no;
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
 
@@ -45,22 +43,12 @@ public class PopUpDeleteComment extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        yes = findViewById(R.id.buttonYes);
-        no = findViewById(R.id.buttonNo);
+        Button yes = findViewById(R.id.buttonYes);
+        Button no = findViewById(R.id.buttonNo);
 
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        no.setOnClickListener(v -> finish());
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteComment();
-            }
-        });
+        yes.setOnClickListener(v -> deleteComment());
     }
 
     @NonNull
@@ -77,19 +65,11 @@ public class PopUpDeleteComment extends AppCompatActivity {
         String url = getRequestUrl(getIntent().getExtras().getString("type"),getIntent().getExtras().getLong("postId"), getIntent().getExtras().getLong("commentId"));
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.v(TAG, response);
-                        Toast.makeText(getApplicationContext(),R.string.delete_comment,Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+            (Response.Listener<String>) response -> {
+                Log.v(TAG, response);
+                Toast.makeText(getApplicationContext(),R.string.delete_comment,Toast.LENGTH_LONG).show();
+                finish();
+            }, this::onErrorResponseReceived);
     }
 
     private void onErrorResponseReceived(VolleyError error){
@@ -97,7 +77,8 @@ public class PopUpDeleteComment extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         Toast.makeText(getApplicationContext(),R.string.delete_comment_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 }

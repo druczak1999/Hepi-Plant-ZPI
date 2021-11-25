@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -32,7 +35,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+
 public class EventEditActivity extends AppCompatActivity {
 
     private static final String TAG = "EventEditActivity";
@@ -66,12 +71,46 @@ public class EventEditActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
+                return true;
+            case R.id.miProfile:
+                Intent intent = new Intent(this, UserActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.eventEditToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
+
     private void setupViewsData(){
         eventName = findViewById(R.id.eventEditTitle);
         eventDescription = findViewById(R.id.eventDescriptionEdit);
         eventDate = findViewById(R.id.eventDateEdit);
         saveEvent = findViewById(R.id.editEventButton);
         eventImage = findViewById(R.id.editImageBut);
+        setupToolbar();
         setBottomBarOnItemClickListeners();
         setOnClickListeners();
         makeGetDataRequest();
@@ -81,17 +120,7 @@ public class EventEditActivity extends AppCompatActivity {
         String url = getRequestUrl()+ +getIntent().getExtras().getLong("eventId");
         Log.v(TAG,url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceived(error);
-                    }
-                });
+                (Response.Listener<JSONObject>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void onGetResponseReceived(JSONObject response){
@@ -105,7 +134,8 @@ public class EventEditActivity extends AppCompatActivity {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
@@ -114,52 +144,42 @@ public class EventEditActivity extends AppCompatActivity {
         eventName.setText(name);
         eventDate.setText(event.getEventDate());
         eventDescription.setText(event.getEventDescription());
-        if(name.toLowerCase().equals("podlewanie"))
+        if(name.equalsIgnoreCase("podlewanie"))
             eventImage.setImageResource(R.drawable.watering_icon);
-        else if(name.toLowerCase().equals("zraszanie"))
+        else if(name.equalsIgnoreCase("zraszanie"))
             eventImage.setImageResource(R.drawable.misting_icon);
-        else if(name.toLowerCase().equals("nawożenie"))
+        else if(name.equalsIgnoreCase("nawożenie"))
             eventImage.setImageResource(R.drawable.fertilization_icon);
     }
 
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
+        buttonHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+            startActivity(intent);
         });
 
         Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
+        buttonForum.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+            startActivity(intent);
         });
     }
 
     private void setOnClickListeners(){
-        eventDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
-                intent.putExtra("event","event");
-                startActivityForResult(intent, 1);
-            }
+        eventDate.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+            intent.putExtra("event","event");
+            startActivityForResult(intent, 1);
         });
         onClickEditEvent();
     }
 
     private void onClickEditEvent(){
         Log.v(TAG,"onClick Edit");
-        saveEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(eventName.getText()!=null && !eventName.getText().toString().equals(" ")) patchEventResponse();
-                else Toast.makeText(getApplicationContext(),R.string.event_title,Toast.LENGTH_LONG).show();
-            }
+        saveEvent.setOnClickListener(v -> {
+            if(eventName.getText()!=null && !eventName.getText().toString().equals(" ")) patchEventResponse();
+            else Toast.makeText(getApplicationContext(),R.string.event_title,Toast.LENGTH_LONG).show();
         });
     }
 
@@ -167,20 +187,12 @@ public class EventEditActivity extends AppCompatActivity {
         JSONObject postData = prepareJSONEventObject();
         String url = getRequestUrl()+getIntent().getExtras().getLong("eventId");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData,RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG,"onResponse");
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            onPatchResponseEvent(response);
-                        }
+                (Response.Listener<JSONObject>) response -> {
+                    Log.v(TAG,"onResponse");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        onPatchResponseEvent(response);
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseEvent(error);
-            }
-        });
+                }, this::onErrorResponseEvent);
     }
 
     private JSONObject prepareJSONEventObject() {
@@ -217,7 +229,8 @@ public class EventEditActivity extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         Toast.makeText(getApplicationContext(),R.string.edit_saved_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

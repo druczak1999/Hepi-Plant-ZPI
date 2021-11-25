@@ -1,7 +1,6 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -31,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class CategoryEditActivity extends AppCompatActivity {
 
@@ -113,35 +112,17 @@ public class CategoryEditActivity extends AppCompatActivity {
         String url = getRequestUrl();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    onGetResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONObject>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void makePatchDataRequest(JSONObject postData) {
         String url = getRequestUrl();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
+                (Response.Listener<JSONObject>) response -> {
                     makeInfoToast(R.string.edit_category + category.getId().toString());
                     finish();
-                }
-            }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                }, this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -165,7 +146,8 @@ public class CategoryEditActivity extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         makeInfoToast(String.valueOf(R.string.edit_saved_failed));
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

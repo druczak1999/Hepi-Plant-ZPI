@@ -33,6 +33,7 @@ public class ForumTabsActivity extends AppCompatActivity {
 
         setupToolbar();
         setBottomBarOnItemClickListeners();
+        setFloatingButtonOnItemClickListener();
         setupViewPager();
     }
 
@@ -103,11 +104,13 @@ public class ForumTabsActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
             layoutManager.scrollToPositionWithOffset(0, 0);
         });
+    }
 
+    private void setFloatingButtonOnItemClickListener(){
         FloatingActionButton buttonAdd = findViewById(R.id.floatingActionButton);
         buttonAdd.setOnClickListener(v -> {
-            Intent intent2 = new Intent(getApplicationContext(), QuestionActivity.class);
-            startActivity(intent2);
+            Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
+            startActivity(intent);
         });
     }
 }

@@ -22,7 +22,7 @@
 
                 />
             <item
-            android:id="@+id/editPost"
+            android:id="@+id/editPostButton"
             android:title="@string/edit_post"
             app:showAsAction="never"
 
