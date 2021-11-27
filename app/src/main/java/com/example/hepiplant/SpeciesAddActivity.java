@@ -292,5 +292,4 @@ public class SpeciesAddActivity extends AppCompatActivity {
     private void makeInfoToast(String info) {
         Toast.makeText(getApplicationContext(),info,Toast.LENGTH_LONG).show();
     }
-
 }

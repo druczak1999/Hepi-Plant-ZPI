@@ -53,7 +53,6 @@ import java.util.Map;
 public class SalesOfferAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "SalesOfferAddActivity";
-    private static final int PICK_IMAGE = 2;
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
@@ -82,6 +81,41 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         onClickAddSalesOffer();
         setBottomBarOnItemClickListeners();
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.v(TAG, "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Log.v(TAG, "cropActivity");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                img_str = resultUri.toString();
+                addImageButton.setImageURI(resultUri);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addImageButton.setClipToOutline(true);
+                }
+                saveImageToFirebase();
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selectedItem = (String) parent.getItemAtPosition(position);
+        for(CategoryDto c : categoryDtos){
+            if(c.getName().equals(selectedItem)){
+                selectedCategory = c;
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     private void setOnClickListeners(){
         addImageButton.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +160,6 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.v(TAG, "ONResponse");
@@ -182,27 +215,6 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                 .start(this);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(TAG, "onActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Log.v(TAG, "cropActivity");
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                img_str = resultUri.toString();
-                addImageButton.setImageURI(resultUri);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    addImageButton.setClipToOutline(true);
-                }
-                saveImageToFirebase();
-
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-    }
-
     private void saveImageToFirebase() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -231,12 +243,11 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         Log.v(TAG, img_str);
     }
 
-    public void getCategoriesFromDB() {
+    private void getCategoriesFromDB() {
         String url = getRequestUrl() + "categories";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
                         categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
@@ -264,35 +275,13 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         return config.getUrl();
     }
 
-    public void getCategories(List<String> categories) {
+    private void getCategories(List<String> categories) {
         Log.v(TAG, "Categories size" + categories.size());
         spinnerCat = findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        for(CategoryDto c : categoryDtos){
-            if(c.getName().equals(selectedItem)){
-                selectedCategory = c;
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 
     private void setBottomBarOnItemClickListeners(){

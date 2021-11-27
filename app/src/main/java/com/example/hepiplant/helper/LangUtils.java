@@ -15,9 +15,9 @@ public class LangUtils {
         return comments_base + "y";
     }
 
-    public static String getFrequency(final String action, Intent intent){
+    public static String getFrequency(final String frequency){
         final String what = "Co";
         final String days = "dni";
-        return what +" "+ intent.getExtras().getString(action) +" "+ days;
+        return what +" "+ frequency +" "+ days;
     }
 }

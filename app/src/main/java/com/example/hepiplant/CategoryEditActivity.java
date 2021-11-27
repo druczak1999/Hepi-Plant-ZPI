@@ -113,7 +113,6 @@ public class CategoryEditActivity extends AppCompatActivity {
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
                     onGetResponseReceived(response);
@@ -131,7 +130,6 @@ public class CategoryEditActivity extends AppCompatActivity {
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
             new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(JSONObject response) {
                     makeInfoToast(R.string.edit_category + category.getId().toString());
@@ -173,5 +171,4 @@ public class CategoryEditActivity extends AppCompatActivity {
     private void makeInfoToast(String info) {
         Toast.makeText(getApplicationContext(),info,Toast.LENGTH_LONG).show();
     }
-
 }
