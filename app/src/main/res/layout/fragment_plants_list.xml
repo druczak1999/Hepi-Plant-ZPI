@@ -45,12 +45,16 @@
                     android:layout_marginLeft="@dimen/marginSortingSmall"
                     android:layout_marginTop="@dimen/marginSorting"
                     android:text="Filtruj"
-                    android:visibility="gone">
+                    >
 
                 </Button>
-
             </LinearLayout>
-
+        <LinearLayout
+            android:id="@+id/nameFilterLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/SortLienarLayout"
+            android:visibility="gone"
+            >
             <EditText
                 android:id="@+id/nameEditTextInPlantFilter"
                 android:layout_width="@dimen/categorySpinnerFilter"
@@ -60,8 +64,26 @@
                 android:layout_marginTop="@dimen/marginSorting"
                 android:hint="Nazwa"
                 style="@style/DetailsFontValue"
-                android:visibility="gone"/>
+                />
 
+            <TextView
+                android:id="@+id/closeNameFilter"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginSorting"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:alpha="0.4"
+                android:text="x"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/speciesFilterLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/SortLienarLayout"
+            android:visibility="gone"
+            >
             <Spinner
                 android:id="@+id/speciesSpinnerInPlantFilter"
                 style="@style/DetailsFontValue"
@@ -71,8 +93,25 @@
                 android:layout_marginTop="@dimen/marginSorting"
                 android:background="@drawable/rounded_spinner"
                 android:ems="10"
-                android:visibility="gone"/>
+                />
 
+            <TextView
+                android:id="@+id/closeSpeciesFilter"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginSorting"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:alpha="0.4"
+                android:text="x"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/locationFilterLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/SortLienarLayout"
+            android:visibility="gone"
+            >
             <Spinner
                 android:id="@+id/locationSpinnerInPlantFilter"
                 style="@style/DetailsFontValue"
@@ -82,14 +121,24 @@
                 android:layout_marginTop="@dimen/marginSorting"
                 android:background="@drawable/rounded_spinner"
                 android:ems="10"
-                android:visibility="gone"/>
-
+                />
+            <TextView
+                android:id="@+id/closeLocationFilters"
+                style="@style/DetailsFontTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginSorting"
+                android:layout_marginLeft="@dimen/marginSorting"
+                android:alpha="0.4"
+                android:text="x"
+                />
+        </LinearLayout>
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/plantsRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="570dp"
+                android:layout_height="600dp"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:paddingBottom="@dimen/padding_bottom"
                 android:visibility="visible"
