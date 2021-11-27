@@ -3,7 +3,6 @@ package com.example.hepiplant;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,13 +19,13 @@ import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.RequestType;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class PopUpDeleteCategory extends AppCompatActivity {
 
     private static final String TAG = "PopUpDeleteCategory";
 
-    private Button yes, no;
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
 
@@ -47,27 +46,17 @@ public class PopUpDeleteCategory extends AppCompatActivity {
 
     private void setupViewsData(){
         TextView questionView = findViewById(R.id.adminDeleteQuestionTextView);
-        yes = findViewById(R.id.adminButtonYes);
-        no = findViewById(R.id.adminButtonNo);
+        Button yes = findViewById(R.id.adminButtonYes);
+        Button no = findViewById(R.id.adminButtonNo);
 
         String deleteQuestion = getResources().getString(R.string.category_delete_question) +
                 " " + getIntent().getExtras().getLong("categoryId") +
                 "?";
         questionView.setText(deleteQuestion);
 
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        no.setOnClickListener(v -> finish());
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteCategory();
-            }
-        });
+        yes.setOnClickListener(v -> deleteCategory());
     }
 
     @NonNull
@@ -84,17 +73,7 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         String url = getRequestUrl(getIntent().getExtras().getLong("categoryId"));
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
-            new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    onResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<String>) this::onResponseReceived, this::onErrorResponseReceived);
     }
 
     private void onResponseReceived(String response) {
@@ -111,7 +90,8 @@ public class PopUpDeleteCategory extends AppCompatActivity {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 }

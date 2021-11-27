@@ -40,17 +40,9 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
     private JSONResponseHandler<TagDto> tagResponseHandler;
     private View tagFragmentView;
     private RecyclerView tagsRecyclerView;
-    private TagsRecyclerViewAdapter adapter;
     private TagDto[] tags = new TagDto[]{};
 
     public TagListFragment() {
-    }
-
-    public static TagListFragment newInstance() {
-        TagListFragment fragment = new TagListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -134,7 +126,7 @@ public class TagListFragment extends Fragment implements TagsRecyclerViewAdapter
 
     private void setAdapter() {
         Log.v(TAG, "setAdapter()");
-        adapter = new TagsRecyclerViewAdapter(getActivity(), tags);
+        TagsRecyclerViewAdapter adapter = new TagsRecyclerViewAdapter(getActivity(), tags);
         adapter.setClickListener(this);
         tagsRecyclerView.setAdapter(adapter);
     }

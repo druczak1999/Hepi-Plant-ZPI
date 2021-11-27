@@ -1,7 +1,6 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,10 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -30,6 +27,7 @@ import com.example.hepiplant.helper.RequestType;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class UserAdminActivity extends AppCompatActivity {
 
@@ -77,7 +75,8 @@ public class UserAdminActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
                 return true;
             case R.id.miProfile:
                 Intent intent = new Intent(this, UserActivity.class);
@@ -96,14 +95,11 @@ public class UserAdminActivity extends AppCompatActivity {
 
     private void setGrantRoleButtonOnClickListener(){
         grantRoleButton = findViewById(R.id.userGrantRoleButton);
-        grantRoleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG, "onItemClick() Grant Role");
-                Intent intent = new Intent(v.getContext(), PopUpGrantAdminRole.class);
-                intent.putExtra("userId", userStatistics.getUser().getId());
-                startActivity(intent);
-            }
+        grantRoleButton.setOnClickListener(v -> {
+            Log.v(TAG, "onItemClick() Grant Role");
+            Intent intent = new Intent(v.getContext(), PopUpGrantAdminRole.class);
+            intent.putExtra("userId", userStatistics.getUser().getId());
+            startActivity(intent);
         });
     }
 
@@ -143,18 +139,7 @@ public class UserAdminActivity extends AppCompatActivity {
     private void makeGetDataRequest() {
         String url = getRequestUrl() + "/statistics";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    onGetResponseReceived(response);
-                }
-            }
-            , new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    onErrorResponseReceived(error);
-                }
-            });
+                (Response.Listener<JSONObject>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -177,7 +162,8 @@ public class UserAdminActivity extends AppCompatActivity {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 }

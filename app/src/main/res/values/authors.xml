@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="app_authors">
+        <item>Aleksandra Raszewska</item>
+        <item>Aleksandra Druczak</item>
+        <item>Patrycja Zmilczak</item>
+    </string-array>
+    <string-array name="icon_authors">
+        <item>Freepik</item>
+        <item>Kirill Kazachek</item>
+        <item>bqlqn</item>
+    </string-array>
+</resources>

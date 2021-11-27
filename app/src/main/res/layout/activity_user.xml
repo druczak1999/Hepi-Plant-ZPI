@@ -7,7 +7,7 @@
     tools:context=".UserActivity">
 
     <include
-        android:id="@+id/toolbarTest"
+        android:id="@+id/userToolbar"
         layout="@layout/toolbar" />
 
     <TextView
@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:inputType = "textMultiLine"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarTest" />
+        app:layout_constraintTop_toBottomOf="@+id/userToolbar" />
 
     <ImageView
         android:id="@+id/profilePhoto"
@@ -162,15 +162,5 @@
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noticeSwitch" />
-
-    <include
-        android:id="@+id/plantsListBottomBar"
-        layout="@layout/bottom_bar" />
-
-    <include
-        android:id="@+id/UserViewFloatingButton"
-        layout="@layout/floatingbutton"
-        tools:layout_editor_absoluteX="48dp"
-        tools:layout_editor_absoluteY="-236dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

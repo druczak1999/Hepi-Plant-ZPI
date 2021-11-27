@@ -1,7 +1,5 @@
 package com.example.hepiplant.helper;
 
-import android.content.Intent;
-
 public class LangUtils {
 
     public static String getCommentsSuffix(final int commentsCount){

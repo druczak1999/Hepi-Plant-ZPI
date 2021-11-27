@@ -1,5 +1,7 @@
 package com.example.hepiplant;
 
+import static com.example.hepiplant.helper.LangUtils.getFrequency;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -36,9 +37,8 @@ import com.google.firebase.storage.StorageReference;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
-
-import static com.example.hepiplant.helper.LangUtils.getFrequency;
 
 public class PlantViewActivity extends AppCompatActivity {
 
@@ -82,7 +82,8 @@ public class PlantViewActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
                 return true;
             case R.id.deletePlant:
                 Intent intent3 = new Intent(this, PopUpDelete.class);
@@ -190,7 +191,8 @@ public class PlantViewActivity extends AppCompatActivity {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
@@ -279,7 +281,8 @@ public class PlantViewActivity extends AppCompatActivity {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

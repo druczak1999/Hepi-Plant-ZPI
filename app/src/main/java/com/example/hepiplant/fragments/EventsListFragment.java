@@ -29,7 +29,9 @@ import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
 
 import org.json.JSONArray;
+
 import java.io.IOException;
+import java.util.Arrays;
 
 public class EventsListFragment extends Fragment implements EventsRecyclerViewAdapter.ItemClickListener {
 
@@ -90,18 +92,7 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
     private void makeGetDataRequest() {
         String url = getRequestUrl()+ "events/user/"+config.getUserId();
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -126,7 +117,8 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

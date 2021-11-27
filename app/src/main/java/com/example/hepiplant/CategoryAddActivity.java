@@ -1,7 +1,6 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -30,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class CategoryAddActivity extends AppCompatActivity {
 
@@ -67,7 +66,8 @@ public class CategoryAddActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(), R.string.informations,Toast.LENGTH_SHORT).show();
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
                 return true;
             case R.id.miProfile:
                 Intent intent = new Intent(this, UserActivity.class);
@@ -102,17 +102,7 @@ public class CategoryAddActivity extends AppCompatActivity {
         String url = getRequestUrl();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    onPostResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONObject>) this::onPostResponseReceived, this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -137,7 +127,8 @@ public class CategoryAddActivity extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         makeInfoToast(String.valueOf(R.string.add_category_failed));
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

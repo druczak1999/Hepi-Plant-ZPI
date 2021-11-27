@@ -1,7 +1,6 @@
 package com.example.hepiplant.fragments;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +30,7 @@ import com.example.hepiplant.helper.RequestType;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class SpeciesListFragment extends Fragment implements SpeciesRecyclerViewAdapter.ItemClickListener {
 
@@ -42,17 +41,9 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
     private JSONResponseHandler<SpeciesDto> speciesResponseHandler;
     private View speciesFragmentView;
     private RecyclerView speciesRecyclerView;
-    private SpeciesRecyclerViewAdapter adapter;
     private SpeciesDto[] species = new SpeciesDto[]{};
 
     public SpeciesListFragment() {
-    }
-
-    public static SpeciesListFragment newInstance() {
-        SpeciesListFragment fragment = new SpeciesListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -93,18 +84,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
         String url = getRequestUrl();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(JSONArray response) {
-                    onGetResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -127,7 +107,8 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
@@ -141,19 +122,16 @@ public class SpeciesListFragment extends Fragment implements SpeciesRecyclerView
     }
 
     private void setAdapter() {
-        adapter = new SpeciesRecyclerViewAdapter(getActivity(), species);
+        SpeciesRecyclerViewAdapter adapter = new SpeciesRecyclerViewAdapter(getActivity(), species);
         adapter.setClickListener(this);
         speciesRecyclerView.setAdapter(adapter);
     }
 
     private void setButtonOnClickListener() {
         Button addButton = speciesFragmentView.findViewById(R.id.speciesAddButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), SpeciesAddActivity.class);
-                startActivity(intent);
-            }
+        addButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity().getApplicationContext(), SpeciesAddActivity.class);
+            startActivity(intent);
         });
     }
 

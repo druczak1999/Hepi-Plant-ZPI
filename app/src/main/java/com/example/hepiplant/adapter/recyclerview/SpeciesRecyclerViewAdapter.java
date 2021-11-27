@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hepiplant.PopUpDeleteSpecies;
@@ -68,6 +69,7 @@ public class SpeciesRecyclerViewAdapter extends RecyclerView.Adapter<SpeciesRecy
         this.dataSet = new ArrayList<>(Arrays.asList(dataSet));
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
@@ -81,24 +83,17 @@ public class SpeciesRecyclerViewAdapter extends RecyclerView.Adapter<SpeciesRecy
         Log.v(TAG, "onBindViewHolder() position: " + position);
         viewHolder.getId().setText(String.format(Locale.GERMANY,"%d", dataSet.get(position).getId()));
         viewHolder.getName().setText(dataSet.get(position).getName());
-        // todo implement
-        viewHolder.getEdit().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG, "onItemClick() Edit");
-                Intent intent = new Intent(viewHolder.getId().getContext(), SpeciesEditActivity.class);
-                intent.putExtra("speciesId", dataSet.get(viewHolder.getAdapterPosition()).getId());
-                viewHolder.getId().getContext().startActivity(intent);
-            }
+        viewHolder.getEdit().setOnClickListener(v -> {
+            Log.v(TAG, "onItemClick() Edit");
+            Intent intent = new Intent(viewHolder.getId().getContext(), SpeciesEditActivity.class);
+            intent.putExtra("speciesId", dataSet.get(viewHolder.getAdapterPosition()).getId());
+            viewHolder.getId().getContext().startActivity(intent);
         });
-        viewHolder.getDelete().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG, "onItemClick() Delete");
-                Intent intent = new Intent(viewHolder.getId().getContext(), PopUpDeleteSpecies.class);
-                intent.putExtra("speciesId", dataSet.get(viewHolder.getAdapterPosition()).getId());
-                viewHolder.getId().getContext().startActivity(intent);
-            }
+        viewHolder.getDelete().setOnClickListener(v -> {
+            Log.v(TAG, "onItemClick() Delete");
+            Intent intent = new Intent(viewHolder.getId().getContext(), PopUpDeleteSpecies.class);
+            intent.putExtra("speciesId", dataSet.get(viewHolder.getAdapterPosition()).getId());
+            viewHolder.getId().getContext().startActivity(intent);
         });
     }
 

@@ -194,59 +194,44 @@ public class SalesOffersListFragment extends Fragment implements
     }
 
     private void setCloseViewsOnClickListeners(){
-        closeTagFiler.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                offersTagsEditText.setVisibility(View.GONE);
-                tagLinearLayout.setVisibility(View.GONE);
-            }
+        closeTagFiler.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(1);
+            offersTagsEditText.setVisibility(View.GONE);
+            tagLinearLayout.setVisibility(View.GONE);
         });
 
-        closeCategoryFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                categorySpinner.setVisibility(View.GONE);
-                selectedCategory=null;
-                categoryLinearLayout.setVisibility(View.GONE);
-            }
+        closeCategoryFilter.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(1);
+            categorySpinner.setVisibility(View.GONE);
+            selectedCategory=null;
+            categoryLinearLayout.setVisibility(View.GONE);
         });
 
-        closeDateFilters.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                offersStartDateButton.setVisibility(View.GONE);
-                offersEndDateButton.setVisibility(View.GONE);
-                datesLinearLayout.setVisibility(View.GONE);
-            }
+        closeDateFilters.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(1);
+            offersStartDateButton.setVisibility(View.GONE);
+            offersEndDateButton.setVisibility(View.GONE);
+            datesLinearLayout.setVisibility(View.GONE);
         });
     }
 
-    private void setRecyclerViewLayoutParams(int pluOrMinus) {
+    private void setRecyclerViewLayoutParams(int plusOrMinus) {
         ViewGroup.LayoutParams params = offersRecyclerView.getLayoutParams();
-        params.height = params.height + (pluOrMinus*130);
+        params.height = params.height + (plusOrMinus*130);
         offersRecyclerView.setLayoutParams(params);
     }
 
     private void setDateButtonsOnClickListener(){
-        offersStartDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CalendarActivity.class);
-                intent.putExtra("event","plant");
-                startActivityForResult(intent, 1);
-            }
+        offersStartDateButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), CalendarActivity.class);
+            intent.putExtra("event","plant");
+            startActivityForResult(intent, 1);
         });
 
-        offersEndDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CalendarActivity.class);
-                intent.putExtra("event","plant");
-                startActivityForResult(intent, 2);
-            }
+        offersEndDateButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), CalendarActivity.class);
+            intent.putExtra("event","plant");
+            startActivityForResult(intent, 2);
         });
     }
 
@@ -297,22 +282,18 @@ public class SalesOffersListFragment extends Fragment implements
     }
 
     private void setOffersFilterButtonOnClickListener() {
-        offersFilterButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                if(filterClick%2==0){
-                    offersFilterButton.setText(R.string.clean_button);
-                    makeGetDataRequestWithParam();
-                    selectedCategory=null;
-                }
-                else {
-                    offersFilterButton.setText(R.string.filter_button);
-                    makeGetDataRequest();
-                }
-                offersFilterSpinner.setSelection(0);
-                filterClick++;
+        offersFilterButton.setOnClickListener(v -> {
+            if(filterClick%2==0){
+                offersFilterButton.setText(R.string.clean_button);
+                makeGetDataRequestWithParam();
+                selectedCategory=null;
             }
+            else {
+                offersFilterButton.setText(R.string.filter_button);
+                makeGetDataRequest();
+            }
+            offersFilterSpinner.setSelection(0);
+            filterClick++;
         });
     }
 
@@ -320,18 +301,7 @@ public class SalesOffersListFragment extends Fragment implements
         String url = getRequestUrl() + "salesoffers";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(JSONArray response) {
-                    onGetResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    onErrorResponseReceived(error);
-                }
-        });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void makeGetDataRequestWithParam(){
@@ -339,18 +309,7 @@ public class SalesOffersListFragment extends Fragment implements
         url = prepareUrlForGetDataRequest(url);
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceived(error);
-                    }
-                });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private String prepareUrlForGetDataRequest(String url) {
@@ -412,13 +371,14 @@ public class SalesOffersListFragment extends Fragment implements
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
     private void onGetResponseCategories(JSONArray response){
         categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
-        List<String> categories = new ArrayList<String>();
+        List<String> categories = new ArrayList<>();
         for (int i = 0; i < categoryDtos.length; i++) {
             categories.add(categoryDtos[i].getName());
         }
@@ -429,22 +389,14 @@ public class SalesOffersListFragment extends Fragment implements
     private void getCategoriesFromDB() {
         String url = getRequestUrl() + "categories";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseCategories(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) { onErrorResponse(error);}
-                });
+                (Response.Listener<JSONArray>) this::onGetResponseCategories, this::onErrorResponseReceived);
     }
 
     private void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
         categorySpinner = offersFragmentView.findViewById(R.id.categorySpinnerInOfferFilter);
         categorySpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(dtoArrayAdapter);
         categorySpinner.setVisibility(View.VISIBLE);

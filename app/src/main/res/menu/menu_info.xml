@@ -10,27 +10,10 @@
         >
         <menu>
             <item
-                android:id="@+id/informationAboutApp"
-                android:title="@string/informations"
-                app:showAsAction="never"
-
-                />
-            <item
                 android:id="@+id/logoff"
                 android:title="@string/sign_out"
                 app:showAsAction="never"
 
-                />
-            <item
-            android:id="@+id/editPostButton"
-            android:title="@string/edit_post"
-            app:showAsAction="never"
-
-            />
-            <item
-                android:id="@+id/deletePost"
-                android:title="@string/delete_post"
-                app:showAsAction="never"
                 />
         </menu>
     </item>

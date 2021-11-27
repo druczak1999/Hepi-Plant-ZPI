@@ -3,17 +3,20 @@ package com.example.hepiplant;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.android.volley.Request;
@@ -57,6 +60,7 @@ public class UserActivity extends AppCompatActivity {
         requestProcessor = new JSONRequestProcessor(config);
         userResponseHandler = new JSONResponseHandler<>(config);
         eventResponseHandler = new JSONResponseHandler<>(config);
+        setupToolbar();
         setupViewsData();
         getRequestUser();
     }
@@ -66,6 +70,35 @@ public class UserActivity extends AppCompatActivity {
         super.onResume();
         getRequestUser();
         refreshDisplayedData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.userToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
     }
 
     private void setupViewsData(){

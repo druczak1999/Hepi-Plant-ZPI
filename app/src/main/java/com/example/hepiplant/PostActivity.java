@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -44,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class PostActivity extends AppCompatActivity implements CommentsRecyclerViewAdapter.ItemClickListener {
 
@@ -96,6 +96,53 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
             intent3.putExtra("commentId", post.getComments().get(position).getId());
             startActivity(intent3);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        if(getIntent().getExtras().get("userId") == config.getUserId()) {
+            menuInflater.inflate(R.menu.menu_post, menu);
+        } else if (config.getUserRoles().contains(ROLE_ADMIN)){
+            menuInflater.inflate(R.menu.menu_post_admin, menu);
+        } else {
+            menuInflater.inflate(R.menu.menu_main, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
+                return true;
+            case R.id.deletePost:
+                Intent intent3 = new Intent(this, PopUpDeletePost.class);
+                intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
+                if(post.getPhoto()!=null)
+                    intent3.putExtra("photo", post.getPhoto());
+                else intent3.putExtra("photo", "");
+                startActivity(intent3);
+                return true;
+            case R.id.editPostButton:
+                Intent intent = new Intent(getApplicationContext(),PostEditActivity.class);
+                intent.putExtra("postId", post.getId());
+                intent.putExtra("tags", tagsTextView.getText().toString());
+                startActivity(intent);
+                return true;
+            case R.id.miProfile:
+                Intent intent2 = new Intent(this, UserActivity.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -200,7 +247,8 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
@@ -289,51 +337,5 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
                 Log.v(TAG,exception.getCause().toString());
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        if(getIntent().getExtras().get("userId") == config.getUserId()) {
-            menuInflater.inflate(R.menu.menu_post, menu);
-        } else if (config.getUserRoles().contains(ROLE_ADMIN)){
-            menuInflater.inflate(R.menu.menu_post_admin, menu);
-        } else {
-            menuInflater.inflate(R.menu.menu_main, menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logoff:
-                FireBase fireBase = new FireBase();
-                fireBase.signOut();
-                return true;
-            case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(), R.string.informations, Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.deletePost:
-                    Intent intent3 = new Intent(this, PopUpDeletePost.class);
-                    intent3.putExtra("postId", getIntent().getExtras().getLong("postId"));
-                if(post.getPhoto()!=null)
-                    intent3.putExtra("photo", post.getPhoto());
-                else intent3.putExtra("photo", "");
-                    startActivity(intent3);
-                return true;
-            case R.id.editPost:
-                Intent intent = new Intent(getApplicationContext(),PostEditActivity.class);
-                intent.putExtra("postId", post.getId());
-                intent.putExtra("tags", tagsTextView.getText().toString());
-                startActivity(intent);
-                return true;
-            case R.id.miProfile:
-                Intent intent2 = new Intent(this, UserActivity.class);
-                startActivity(intent2);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }
