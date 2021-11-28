@@ -134,9 +134,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/plantsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="@dimen/scroll_view_height_big"
             android:layout_marginTop="@dimen/marginSorting"
-            android:paddingBottom="@dimen/padding_bottom"
+            android:paddingBottom="@dimen/spaceForBottomBar"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
