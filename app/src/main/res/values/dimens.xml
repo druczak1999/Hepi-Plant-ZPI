@@ -25,7 +25,7 @@
     <dimen name="filerSortButtonsHeight">35dp</dimen>
     <dimen name="marginSorting">10dp</dimen>
     <dimen name="marginSortingSmall">5dp</dimen>
-    <dimen name="SortLienarLayout">48dp</dimen>
+    <dimen name="SortLinearLayout">48dp</dimen>
     <dimen name="categorySpinnerFilter">250dp</dimen>
     <dimen name="filerSpinnerHeight">11dp</dimen>
     <dimen name="simple_row_item_height">40sp</dimen>

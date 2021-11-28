@@ -21,7 +21,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/SortLienarLayout">
+                android:layout_height="@dimen/SortLinearLayout">
 
                 <Button
                     android:id="@+id/sortOffersButton"
@@ -60,7 +60,7 @@
         <LinearLayout
             android:id="@+id/tagFilterLinearLayoutOffer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/SortLienarLayout"
+            android:layout_height="@dimen/SortLinearLayout"
             android:visibility="gone">
             <EditText
                 android:id="@+id/tagEditTextInOfferFilter"
@@ -86,7 +86,7 @@
         <LinearLayout
             android:id="@+id/categoryFilterLinearLayoutOffer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/SortLienarLayout"
+            android:layout_height="@dimen/SortLinearLayout"
             android:visibility="gone">
             <Spinner
                 android:id="@+id/categorySpinnerInOfferFilter"
@@ -112,7 +112,7 @@
             <LinearLayout
                 android:id="@+id/datesFilterLinearLayoutOffer"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/SortLienarLayout"
+                android:layout_height="@dimen/SortLinearLayout"
                 android:visibility="gone">
                 <Button
                     android:id="@+id/startDateButtonInOfferFilter"

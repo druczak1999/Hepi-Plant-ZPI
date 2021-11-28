@@ -21,7 +21,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/SortLienarLayout">
+                android:layout_height="@dimen/SortLinearLayout">
 
                 <Button
                     android:id="@+id/sortPostsButton"
@@ -62,7 +62,7 @@
             <LinearLayout
                 android:id="@+id/tagFilterLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/SortLienarLayout"
+                android:layout_height="@dimen/SortLinearLayout"
                 android:visibility="gone">
                 <EditText
                     android:id="@+id/tagEditTextInPostFilter"
@@ -90,7 +90,7 @@
             <LinearLayout
                 android:id="@+id/categoryFilterLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/SortLienarLayout"
+                android:layout_height="@dimen/SortLinearLayout"
                 android:visibility="gone">
                 <Spinner
                     android:id="@+id/categorySpinnerInPostFilter"
@@ -116,7 +116,7 @@
             <LinearLayout
                 android:id="@+id/datesFilterLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/SortLienarLayout"
+                android:layout_height="@dimen/SortLinearLayout"
                 android:visibility="gone">
             <Button
                 android:id="@+id/startDateButtonInPostFilter"
@@ -162,9 +162,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/scroll_view_height_big"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/marginSorting"
             android:paddingBottom="@dimen/spaceForBottomBar"
+            android:clipToPadding="false"
             android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/linearLayout" />
 
