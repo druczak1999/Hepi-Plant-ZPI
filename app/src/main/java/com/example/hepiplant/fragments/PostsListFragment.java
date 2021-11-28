@@ -190,6 +190,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                 Intent intent = new Intent(getContext(), PostAddActivity.class);
                 startActivity(intent);
             });
+            setRecyclerViewLayoutParams(1);
         }
     }
 
