@@ -117,7 +117,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Log.v(TAG, plant.getPurchaseDate());
-                date.setText(plant.getPurchaseDate());
+                date.setText(data.getExtras().getString("date"));
                 Log.v(TAG, plant.getPurchaseDate());
             }
         }

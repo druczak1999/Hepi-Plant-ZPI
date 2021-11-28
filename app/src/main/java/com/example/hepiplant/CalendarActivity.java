@@ -39,7 +39,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("data", dateTextView.getText());
+                intent.putExtra("date", dateTextView.getText());
                 setResult(RESULT_OK,intent);
                finish();
             }
