@@ -140,7 +140,6 @@ public class PlantViewActivity extends AppCompatActivity {
         watering.setText(getFrequency(String.valueOf(plant.getSchedule().getWateringFrequency())));
         fertilizing.setText(getFrequency(String.valueOf(plant.getSchedule().getFertilizingFrequency())));
         misting.setText(getFrequency(String.valueOf(plant.getSchedule().getMistingFrequency())));
-        placement.setText(plant.getSpecies().getPlacement().getName());
         if(plant.getSpecies().getSoil()!=null && !plant.getSpecies().getSoil().isEmpty())
             soil.setText(plant.getSpecies().getSoil());
         else
@@ -184,7 +183,6 @@ public class PlantViewActivity extends AppCompatActivity {
         Log.v(TAG, "onGetResponseReceived()");
         plant = plantResponseHandler.handleResponse(response, PlantDto.class);
         setTextsToRealValues();
-        Log.v(TAG, "co jest w plant name:" + plant.getName());
     }
 
     private void onErrorResponseReceived(VolleyError error) {
