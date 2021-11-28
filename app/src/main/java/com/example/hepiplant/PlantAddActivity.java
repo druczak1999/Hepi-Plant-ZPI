@@ -102,7 +102,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                dateEditText.setText(data.getExtras().getString("data"));
+                dateEditText.setText(data.getExtras().getString("date"));
             }
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
