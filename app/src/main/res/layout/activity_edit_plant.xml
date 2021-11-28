@@ -12,7 +12,7 @@
     </include>
 
     <ScrollView
-        android:layout_width="414dp"
+        android:layout_width="match_parent"
         android:layout_height="578dp"
         android:layout_marginTop="@dimen/spaceForToolbar"
         android:layout_marginBottom="@dimen/spaceForBottomBar"
