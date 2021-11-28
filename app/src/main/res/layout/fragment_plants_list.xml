@@ -133,7 +133,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/plantsRecyclerView"
-            android:layout_width="413dp"
+            android:layout_width="match_parent"
             android:layout_height="600dp"
             android:layout_marginTop="@dimen/marginSorting"
             android:paddingBottom="@dimen/padding_bottom"
