@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoActivity">
+
+    <include
+        android:id="@+id/infoToolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:id="@+id/infoScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/spaceForToolbar"
+        android:layout_marginBottom="@dimen/padding_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoToolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_big"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/infoTitleTextView"
+                style="@style/PageTitleFont"
+                android:textSize="30sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_big"
+                android:layout_gravity="center"
+                android:text="@string/app_info_title" />
+
+            <TextView
+                android:id="@+id/infoAuthorsTextView"
+                style="@style/ListItemTitleFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/app_authors"
+                android:textSize="20sp" />
+
+            <ListView
+                android:id="@+id/infoAuthorsListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_medium" />
+
+            <TextView
+                android:id="@+id/infoIconAuthorsTextView"
+                style="@style/ListItemTitleFont"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:text="@string/icon_authors"
+                android:textSize="20sp" />
+
+            <ListView
+                android:id="@+id/infoIconAuthorsListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_medium" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/infoCopyrightTextView"
+        style="@style/ForumDateFont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_copyright"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoScrollView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

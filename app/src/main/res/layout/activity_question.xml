@@ -7,25 +7,8 @@
     tools:context=".PostAddActivity">
 
     <include
-        android:id="@+id/include"
-        layout="@layout/toolbar"></include>
-
-    <include
-        android:id="@+id/include2"
-        layout="@layout/bottom_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></include>
-
-
-    <include
-        android:id="@+id/forumBottomBar"
-        layout="@layout/bottom_bar" />
-
-    <include
-        android:id="@+id/floatongButtonForum"
-        layout="@layout/floatingbuttonpost"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:id="@+id/questionToolbar"
+        layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/textView"

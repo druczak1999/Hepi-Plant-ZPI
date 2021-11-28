@@ -7,14 +7,14 @@
     tools:context=".SalesOfferEditActivity">
 
     <include
-        android:id="@+id/include"
-        layout="@layout/toolbar"></include>
+        android:id="@+id/salesOfferEditToolbar"
+        layout="@layout/toolbar" />
 
     <include
         android:id="@+id/include2"
         layout="@layout/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></include>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/Add"
@@ -25,7 +25,7 @@
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintTop_toBottomOf="@+id/salesOfferEditToolbar"
         style="@style/PageTitleFont"/>
 
     <ScrollView

@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,32 +31,8 @@ public class TagTabsAdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tag_tabs_admin);
         tag = getIntent().getExtras().getString("tag");
         setupToolbar();
-        setupViewPager();
         setupPageTitle();
-    }
-
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.tagsToolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-    }
-
-    private void setupViewPager() {
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        viewPager = (ViewPager) findViewById(R.id.tagViewPager);
-        tagTabsFragmentPagerAdapter = new TagTabsFragmentPagerAdapter(getSupportFragmentManager(),
-                this, tag);
-        viewPager.setAdapter(tagTabsFragmentPagerAdapter);
-
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tagTabsLayout);
-        tabLayout.setupWithViewPager(viewPager);
-    }
-
-    private void setupPageTitle() {
-        TextView titleTextView = findViewById(R.id.tagTabsTitleTextView);
-        String titleString = getText(R.string.tag_tabs_title) + " #" + tag;
-        titleTextView.setText(titleString);
+        setupViewPager();
     }
 
     @Override
@@ -75,7 +50,8 @@ public class TagTabsAdminActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(), R.string.informations, Toast.LENGTH_SHORT).show();
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
                 return true;
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);
@@ -84,5 +60,29 @@ public class TagTabsAdminActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.tagsToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
+
+    private void setupPageTitle() {
+        TextView titleTextView = findViewById(R.id.tagTabsTitleTextView);
+        String titleString = getText(R.string.tag_tabs_title) + " #" + tag;
+        titleTextView.setText(titleString);
+    }
+
+    private void setupViewPager() {
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        viewPager = (ViewPager) findViewById(R.id.tagViewPager);
+        tagTabsFragmentPagerAdapter = new TagTabsFragmentPagerAdapter(getSupportFragmentManager(),
+                this, tag);
+        viewPager.setAdapter(tagTabsFragmentPagerAdapter);
+
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tagTabsLayout);
+        tabLayout.setupWithViewPager(viewPager);
     }
 }

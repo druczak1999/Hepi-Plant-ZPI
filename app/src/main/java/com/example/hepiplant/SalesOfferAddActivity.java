@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,8 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -46,9 +49,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SalesOfferAddActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -76,6 +77,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         categoryResponseHandler = new JSONResponseHandler<>(config);
         getCategoriesFromDB();
         getCategoriesFromDB();
+        setupToolbar();
         setupViewsData();
         setOnClickListeners();
         onClickAddSalesOffer();
@@ -116,6 +118,39 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
+                return true;
+            case R.id.miProfile:
+                Intent intent = new Intent(this, UserActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.salesOfferAddToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
 
     private void setOnClickListeners(){
         addImageButton.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +212,8 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                 NetworkResponse networkResponse = error.networkResponse;
                 Toast.makeText(getApplicationContext(), R.string.add_sales_offer_failed, Toast.LENGTH_LONG).show();
                 if (networkResponse != null) {
-                    Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+                    Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                            " Data: " + Arrays.toString(networkResponse.data));
                 }
             }
         });
@@ -286,19 +322,15 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
 
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
+        buttonHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+            startActivity(intent);
         });
 
         Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
+        buttonForum.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+            startActivity(intent);
         });
     }
 }

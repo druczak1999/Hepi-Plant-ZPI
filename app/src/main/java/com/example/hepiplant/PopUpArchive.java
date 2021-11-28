@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 public class PopUpArchive extends AppCompatActivity {
 
@@ -131,7 +132,8 @@ public class PopUpArchive extends AppCompatActivity {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
@@ -221,7 +223,7 @@ public class PopUpArchive extends AppCompatActivity {
         EventDto data = new EventDto();
         data =eventResponseHandler.handleResponse(response,EventDto.class);
         Toast.makeText(getApplicationContext(), R.string.archive_event, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
         startActivity(intent);
         finish();
     }
@@ -256,7 +258,8 @@ public class PopUpArchive extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         Toast.makeText(getApplicationContext(), R.string.archive_event_fail, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 }

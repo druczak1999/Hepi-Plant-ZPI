@@ -41,7 +41,6 @@ public class PostsListSimpleFragment extends Fragment implements PostsRecyclerVi
     private JSONResponseHandler<PostDto> postResponseHandler;
     private View postsFragmentView;
     private RecyclerView postsRecyclerView;
-    private PostsRecyclerViewAdapter postsRecyclerViewAdapter;
     private PostDto[] posts = new PostDto[]{};
     private final String tag;
 
@@ -131,7 +130,7 @@ public class PostsListSimpleFragment extends Fragment implements PostsRecyclerVi
     }
 
     private void setAdapter() {
-        postsRecyclerViewAdapter = new PostsRecyclerViewAdapter(getActivity(), posts);
+        PostsRecyclerViewAdapter postsRecyclerViewAdapter = new PostsRecyclerViewAdapter(getActivity(), posts);
         postsRecyclerViewAdapter.setClickListener(this);
         postsRecyclerView.setAdapter(postsRecyclerViewAdapter);
     }

@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,8 +33,8 @@ public class MainTabsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_tabs);
         setupToolbar();
         setBottomBarOnItemClickListeners();
+        setFloatingButtonOnItemClickListener();
         setupViewPager();
-        setupToolbar();
     }
 
     @Override
@@ -53,7 +52,8 @@ public class MainTabsActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(), R.string.informations, Toast.LENGTH_SHORT).show();
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
                 return true;
             case R.id.miProfile:
                 Intent intent2 = new Intent(this, UserActivity.class);
@@ -95,39 +95,37 @@ public class MainTabsActivity extends AppCompatActivity {
     }
 
     private void setBottomBarOnItemClickListeners(){
-        Button buttonHome = findViewById(R.id.buttonForum);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
+        Button buttonForum = findViewById(R.id.buttonForum);
+        buttonForum.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
-        Button buttonForum = findViewById(R.id.buttonDom);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                RecyclerView recyclerView = null;
-                int currentItem = viewPager.getCurrentItem();
-                Log.v(TAG, "Current item: "+currentItem);
-                switch (currentItem){
-                    case 0:
-                        recyclerView = findViewById(R.id.plantsRecyclerView);
-                        break;
-                    case 1:
-                        recyclerView =  findViewById(R.id.eventsRecyclerView);
-                        break;
-                }
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                layoutManager.scrollToPositionWithOffset(0, 0);
+        Button buttonHome = findViewById(R.id.buttonDom);
+        buttonHome.setOnClickListener(v -> {
+            RecyclerView recyclerView = null;
+            int currentItem = viewPager.getCurrentItem();
+            Log.v(TAG, "Current item: "+currentItem);
+            switch (currentItem){
+                case 0:
+                    recyclerView = findViewById(R.id.plantsRecyclerView);
+                    break;
+                case 1:
+                    recyclerView =  findViewById(R.id.eventsRecyclerView);
+                    break;
             }
-        });
-
-        FloatingActionButton buttonAdd = findViewById(R.id.floatingActionButton);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent2 = new Intent(getApplicationContext(), PlantAddActivity.class);
-                startActivity(intent2);
-            }
+            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            layoutManager.scrollToPositionWithOffset(0, 0);
         });
     }
+
+    private void setFloatingButtonOnItemClickListener(){
+        FloatingActionButton buttonAdd = findViewById(R.id.floatingActionButton);
+        buttonAdd.setOnClickListener(v -> {
+            Intent intent2 = new Intent(getApplicationContext(), PlantAddActivity.class);
+            startActivity(intent2);
+        });
+    }
+
 }

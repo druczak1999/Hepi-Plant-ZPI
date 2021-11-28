@@ -20,6 +20,9 @@
         <activity android:name=".TimePickerActivity"
             android:theme="@style/AppTheme.CustomTheme"/>
         <activity
+            android:name=".InfoActivity"
+            android:exported="true" />
+        <activity
             android:name=".TagTabsAdminActivity"
             android:exported="true" />
         <activity

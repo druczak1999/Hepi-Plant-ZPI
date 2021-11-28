@@ -7,8 +7,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class PopUpDelete extends AppCompatActivity {
@@ -129,8 +128,8 @@ public class PopUpDelete extends AppCompatActivity {
                         Log.v(TAG, response);
                         Toast.makeText(getApplicationContext(),R.string.delete_plant_message,Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -161,7 +160,8 @@ public class PopUpDelete extends AppCompatActivity {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 }

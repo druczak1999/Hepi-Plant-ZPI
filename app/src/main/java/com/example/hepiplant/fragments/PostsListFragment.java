@@ -141,33 +141,24 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
     private void setCloseViewsOnClickListeners(){
 
-        closeTagFiler.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                postTagsEditText.setVisibility(View.GONE);
-                tagLinearLayout.setVisibility(View.GONE);
-            }
+        closeTagFiler.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(1);
+            postTagsEditText.setVisibility(View.GONE);
+            tagLinearLayout.setVisibility(View.GONE);
         });
 
-        closeCategoryFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                categorySpinner.setVisibility(View.GONE);
-                selectedCategory=null;
-                categoryLinearLayout.setVisibility(View.GONE);
-            }
+        closeCategoryFilter.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(1);
+            categorySpinner.setVisibility(View.GONE);
+            selectedCategory=null;
+            categoryLinearLayout.setVisibility(View.GONE);
         });
 
-        closeDateFilters.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                postStartDateButton.setVisibility(View.GONE);
-                postEndDateButton.setVisibility(View.GONE);
-                datesLinearLayout.setVisibility(View.GONE);
-            }
+        closeDateFilters.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(1);
+            postStartDateButton.setVisibility(View.GONE);
+            postEndDateButton.setVisibility(View.GONE);
+            datesLinearLayout.setVisibility(View.GONE);
         });
     }
 
@@ -178,22 +169,16 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     }
 
     private void setDateButtonsOnClickListener(){
-        postStartDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CalendarActivity.class);
-                intent.putExtra("event","plant");
-                startActivityForResult(intent, 1);
-            }
+        postStartDateButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), CalendarActivity.class);
+            intent.putExtra("event","plant");
+            startActivityForResult(intent, 1);
         });
 
-        postEndDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CalendarActivity.class);
-                intent.putExtra("event","plant");
-                startActivityForResult(intent, 2);
-            }
+        postEndDateButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), CalendarActivity.class);
+            intent.putExtra("event","plant");
+            startActivityForResult(intent, 2);
         });
     }
 
@@ -262,7 +247,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
     private void setPostsFilterSpinnerAdapter(){
         postFilterSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         postFilterSpinner.setAdapter(dtoArrayAdapter);
     }
@@ -297,21 +282,17 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     }
 
     private void setPostsFilterButtonOnClickListener() {
-        postFilterButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                if(filterClick%2==0){
-                    makeGetDataRequestWithParam();
-                    postFilterButton.setText(R.string.clean_button);
-                }
-                else{
-                    makeGetDataRequest();
-                    postFilterButton.setText(R.string.filter_button);
-                }
-                postFilterSpinner.setSelection(0);
-                filterClick++;
+        postFilterButton.setOnClickListener(v -> {
+            if(filterClick%2==0){
+                makeGetDataRequestWithParam();
+                postFilterButton.setText(R.string.clean_button);
             }
+            else{
+                makeGetDataRequest();
+                postFilterButton.setText(R.string.filter_button);
+            }
+            postFilterSpinner.setSelection(0);
+            filterClick++;
         });
     }
 
@@ -319,18 +300,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         String url = getRequestUrl()+"posts";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(JSONArray response) {
-                    onGetResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void makeGetDataRequestWithParam(){
@@ -338,18 +308,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         url = prepareUrlForGetDataRequest(url);
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceived(error);
-                    }
-                });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private String prepareUrlForGetDataRequest(String url) {
@@ -396,7 +355,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
@@ -417,7 +377,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
     private void onGetResponseCategories(JSONArray response){
         categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
-        List<String> categories = new ArrayList<String>();
+        List<String> categories = new ArrayList<>();
         for (int i = 0; i < categoryDtos.length; i++) {
             categories.add(categoryDtos[i].getName());
         }
@@ -428,22 +388,14 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private void getCategoriesFromDB() {
         String url = getRequestUrl() + "categories";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseCategories(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) { onErrorResponse(error);}
-                });
+                (Response.Listener<JSONArray>) this::onGetResponseCategories, this::onErrorResponseReceived);
     }
 
     private void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
         categorySpinner = postsFragmentView.findViewById(R.id.categorySpinnerInPostFilter);
         categorySpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(dtoArrayAdapter);
         categorySpinner.setVisibility(View.VISIBLE);

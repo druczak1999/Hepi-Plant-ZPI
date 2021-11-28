@@ -64,6 +64,10 @@
     <string name="tag_tabs_title">Posty i oferty sprzedaży zawierające tag</string>
     <string name="no_posts_to_display">Brak postów do wyświetlenia</string>
     <string name="no_sales_offers_to_display">Brak ofert sprzedaży do wyświetlenia</string>
+    <string name="app_authors">Autorzy aplikacji:</string>
+    <string name="icon_authors">Ikonki wykorzystane w aplikacji pochodzą z witryny flaticon.com. Autorzy:</string>
+    <string name="app_info_title">Informacje o aplikacji</string>
+    <string name="app_copyright">Copyright © YEAR, HepiPlant </string>
     <string name="hour_of_notifications">Godzina:</string>
     <string name="change_hour">Zmień</string>
     <string name="hour_twelve">12:00</string>

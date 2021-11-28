@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,13 +24,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class PopUpDeleteSalesOffer extends AppCompatActivity {
 
     private static final String TAG = "PopUpDeleteSalesOffer";
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
-    private Button yes, no;
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
     private TextView announcement;
@@ -54,22 +53,12 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
     private void setupViewsData(){
         announcement = findViewById(R.id.textView);
         announcement.setText(R.string.popup_message_offer);
-        yes = findViewById(R.id.buttonYes);
-        no = findViewById(R.id.buttonNo);
+        Button yes = findViewById(R.id.buttonYes);
+        Button no = findViewById(R.id.buttonNo);
 
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        no.setOnClickListener(v -> finish());
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteSalesOffer();
-            }
-        });
+        yes.setOnClickListener(v -> deleteSalesOffer());
     }
 
     @NonNull
@@ -86,17 +75,7 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         String url = getRequestUrl(getIntent().getExtras().getLong("salesOfferId"));
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
-            new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    onDeleteResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<String>) this::onDeleteResponseReceived, this::onErrorResponseReceived);
     }
 
     private void onDeleteResponseReceived(String response) {
@@ -118,7 +97,8 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         Toast.makeText(getApplicationContext(),R.string.delete_sales_offer_failed,Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

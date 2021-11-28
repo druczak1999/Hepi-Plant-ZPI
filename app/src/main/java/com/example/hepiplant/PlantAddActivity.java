@@ -11,6 +11,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -53,6 +57,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -141,6 +146,39 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
+                return true;
+            case R.id.miProfile:
+                Intent intent = new Intent(this, UserActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.plantAddToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
+
     private void setupViewsData() {
         plantName = findViewById(R.id.editPlantName);
         location = findViewById(R.id.editPlantLocation);
@@ -150,6 +188,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         addImageButton = findViewById(R.id.editImageBut);
         getSpeciesFromDB();
         getCategoriesFromDB();
+        setupToolbar();
         setOnClickListeners();
         createNotificationChannel();
     }
@@ -170,21 +209,13 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private void setOnClickListeners(){
         setBottomBarOnItemClickListeners();
 
-        dateEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
-                intent.putExtra("event","plant");
-                startActivityForResult(intent, 1);
-            }
+        dateEditText.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+            intent.putExtra("event","plant");
+            startActivityForResult(intent, 1);
         });
 
-        addImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cropImage();
-            }
-        });
+        addImageButton.setOnClickListener(v -> cropImage());
 
         onClickAddPlant();
     }
@@ -201,19 +232,15 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
+        buttonHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+            startActivity(intent);
         });
 
         Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
+        buttonForum.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -226,21 +253,13 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, "Invoking requestProcessor");
         Log.v(TAG, String.valueOf(postData));Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            onPostResponsePlant(response);
-                        }
-                        Toast.makeText(getApplicationContext(), R.string.add_plant, Toast.LENGTH_LONG).show();
-                        finish();
+                (Response.Listener<JSONObject>) response -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        onPostResponsePlant(response);
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponsePlant(error);
-            }
-        });
+                    Toast.makeText(getApplicationContext(), R.string.add_plant, Toast.LENGTH_LONG).show();
+                    finish();
+                }, this::onErrorResponsePlant);
     }
 
     private JSONObject makeSpeciesJSON(){
@@ -357,7 +376,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         NetworkResponse networkResponse = error.networkResponse;
         Toast.makeText(getApplicationContext(), R.string.add_plant_failed, Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 
@@ -418,17 +438,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private void getSpeciesFromDB() {
         String url = getRequestUrl() + "species";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseSpecies(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponsePlant(error);
-            }
-        });
+                (Response.Listener<JSONArray>) this::onGetResponseSpecies, this::onErrorResponsePlant);
     }
 
     private void getSpecies(List<String> species) {
@@ -454,15 +464,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private void getCategoriesFromDB() {
         String url = getRequestUrl() + "categories";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseCategories(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) { onErrorResponsePlant(error);}
-        });
+                (Response.Listener<JSONArray>) this::onGetResponseCategories, this::onErrorResponsePlant);
     }
 
     private void getCategories(List<String> categories) {

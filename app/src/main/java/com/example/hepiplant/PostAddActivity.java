@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,8 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -74,6 +77,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         postResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
 
+        setupToolbar();
         setupViewsData();
         getCategoriesFromDB();
         getCategoriesFromDB();
@@ -115,6 +119,39 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logoff:
+                FireBase fireBase = new FireBase();
+                fireBase.signOut();
+                return true;
+            case R.id.informationAboutApp:
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
+                return true;
+            case R.id.miProfile:
+                Intent intent = new Intent(this, UserActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.plantAddToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+    }
 
     private void onClickAddPost() {
         add.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +201,8 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                 NetworkResponse networkResponse = error.networkResponse;
                 Toast.makeText(getApplicationContext(), R.string.add_post_failed, Toast.LENGTH_LONG).show();
                 if (networkResponse != null) {
-                    Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+                    Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                            " Data: " + Arrays.toString(networkResponse.data));
                 }
             }
         });
@@ -193,13 +231,13 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         title = findViewById(R.id.editTitle);
         body = findViewById(R.id.editBody);
         addImageButton =  findViewById(R.id.editImageBut);
-        add = findViewById(R.id.buttonDodajPost);
+        add = findViewById(R.id.editPostButton);
         tags = findViewById(R.id.editTags);
     }
 
     private JSONArray hashReading() {
         int listSize = 0;
-        List<String> hashList = new ArrayList<String>(Arrays.asList(tags.getText().toString().replace(" ", "").split("#")));
+        List<String> hashList = new ArrayList<>(Arrays.asList(tags.getText().toString().replace(" ", "").split("#")));
         hashList.removeAll(Arrays.asList("", null));
         Log.v(TAG, String.valueOf(hashList));
         JSONArray hash = new JSONArray();
@@ -252,7 +290,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                     @Override
                     public void onResponse(JSONArray response) {
                         categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
-                        List<String> categories = new ArrayList<String>();
+                        List<String> categories = new ArrayList<>();
                         for (int i=0;i<categoryDtos.length;i++){
                             categories.add(categoryDtos[i].getName());
                         }
@@ -270,7 +308,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         Log.v(TAG,"Categories size"+categories.size());
         spinnerCat = findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener( this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
     }
@@ -280,19 +318,15 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             findViewById(R.id.postAddBottomBar).setVisibility(View.GONE);
         } else {
             Button buttonHome = findViewById(R.id.buttonDom);
-            buttonHome.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                    startActivity(intent);
-                }
+            buttonHome.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+                startActivity(intent);
             });
 
             Button buttonForum = findViewById(R.id.buttonForum);
-            buttonForum.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                    startActivity(intent);
-                }
+            buttonForum.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+                startActivity(intent);
             });
         }
     }

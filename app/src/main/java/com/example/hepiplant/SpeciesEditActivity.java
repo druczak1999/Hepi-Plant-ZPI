@@ -3,7 +3,6 @@ package com.example.hepiplant;
 import static com.google.android.gms.common.util.ArrayUtils.newArrayList;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -93,7 +91,8 @@ public class SpeciesEditActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
                 return true;
             case R.id.miProfile:
                 Intent intent = new Intent(this, UserActivity.class);
@@ -102,6 +101,12 @@ public class SpeciesEditActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.includeToolbarSpeciesEdit);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
     }
 
     public void onSaveButtonClick(View view){
@@ -148,12 +153,6 @@ public class SpeciesEditActivity extends AppCompatActivity {
             }
         }
         makePatchDataRequest(postData);
-    }
-
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.includeToolbarSpeciesEdit);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
     }
 
     private void setupViewsData() {
@@ -251,41 +250,18 @@ public class SpeciesEditActivity extends AppCompatActivity {
 
     private void makeGetDataRequest(String url, boolean isArrayRequest) {
         requestProcessor.makeRequest(Request.Method.GET, url, null, isArrayRequest ? RequestType.ARRAY : RequestType.OBJECT,
-            isArrayRequest ? new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                } :  new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponseReceived(response);
-                    }
-                }
-                , new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+            isArrayRequest ? (Response.Listener<JSONArray>) this::onGetResponseReceived : (Response.Listener<JSONObject>) this::onGetResponseReceived
+                , this::onErrorResponseReceived);
     }
 
     private void makePatchDataRequest(JSONObject postData) {
         String url = getRequestUrl() + "species/" + getIntent().getExtras().get("speciesId");
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
+                (Response.Listener<JSONObject>) response -> {
                     makeInfoToast(R.string.edit_species + species.getId().toString());
                     finish();
-                }
-            }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                }, this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -315,7 +291,8 @@ public class SpeciesEditActivity extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         makeInfoToast(String.valueOf(R.string.edit_saved_failed));
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

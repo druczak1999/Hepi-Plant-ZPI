@@ -1,7 +1,6 @@
 package com.example.hepiplant.fragments;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,14 +36,10 @@ import com.example.hepiplant.helper.RequestType;
 import com.example.hepiplant.dto.SpeciesDto;
 
 import org.json.JSONArray;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAdapter.ItemClickListener, AdapterView.OnItemSelectedListener {
 
@@ -203,18 +197,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
     private void makeGetDataRequest(){
         String url = getRequestUrl();
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -241,7 +224,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
         plants = plantResponseHandler.handleArrayResponse(response, PlantDto[].class);
-        ArrayList plantsIdList = new ArrayList();
+        ArrayList<Long> plantsIdList = new ArrayList<>();
         for (PlantDto plant: plants) {
            plantsIdList.add(plant.getId());
         }
@@ -252,7 +235,8 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

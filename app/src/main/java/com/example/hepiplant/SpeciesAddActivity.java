@@ -3,7 +3,6 @@ package com.example.hepiplant;
 import static com.google.android.gms.common.util.ArrayUtils.newArrayList;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -71,7 +69,7 @@ public class SpeciesAddActivity extends AppCompatActivity {
         requestProcessor = new JSONRequestProcessor(config);
         speciesResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
-        makeGetDataRequest(getRequestUrl() + "categories", true);
+        makeGetDataRequest(getRequestUrl() + "categories");
         setupToolbar();
     }
 
@@ -90,7 +88,8 @@ public class SpeciesAddActivity extends AppCompatActivity {
                 fireBase.signOut();
                 return true;
             case R.id.informationAboutApp:
-                Toast.makeText(this.getApplicationContext(),R.string.informations,Toast.LENGTH_SHORT).show();
+                Intent intentInfo = new Intent(this, InfoActivity.class);
+                startActivity(intentInfo);
                 return true;
             case R.id.miProfile:
                 Intent intent = new Intent(this, UserActivity.class);
@@ -99,6 +98,12 @@ public class SpeciesAddActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.includeToolbarSpeciesAdd);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
     }
 
     public void onSaveButtonClick(View view){
@@ -145,12 +150,6 @@ public class SpeciesAddActivity extends AppCompatActivity {
             }
         }
         makePostDataRequest(postData);
-    }
-
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.includeToolbarSpeciesAdd);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
     }
 
     private void setupViewsData() {
@@ -225,37 +224,16 @@ public class SpeciesAddActivity extends AppCompatActivity {
         placementSpinner.setOnItemSelectedListener(placementListener);
     }
 
-    private void makeGetDataRequest(String url, boolean isArrayRequest) {
-        requestProcessor.makeRequest(Request.Method.GET, url, null, isArrayRequest ? RequestType.ARRAY : RequestType.OBJECT,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceived(error);
-                    }
-                });
+    private void makeGetDataRequest(String url) {
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void makePostDataRequest(JSONObject postData) {
         String url = getRequestUrl() + "species";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onPostResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceived(error);
-                    }
-                });
+                (Response.Listener<JSONObject>) this::onPostResponseReceived, this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -285,7 +263,8 @@ public class SpeciesAddActivity extends AppCompatActivity {
         NetworkResponse networkResponse = error.networkResponse;
         makeInfoToast(String.valueOf(R.string.add_species_failed));
         if (networkResponse != null) {
-            Log.e(TAG, "Status code: " + String.valueOf(networkResponse.statusCode) + " Data: " + networkResponse.data);
+            Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                    " Data: " + Arrays.toString(networkResponse.data));
         }
     }
 

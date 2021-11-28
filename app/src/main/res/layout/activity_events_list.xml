@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/plantsListToolbar"
+        android:id="@+id/eventsListToolbar"
         layout="@layout/toolbar" />
 
     <LinearLayout
@@ -38,7 +38,7 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/plantsListBottomBar"
+        android:id="@+id/eventsListBottomBar"
         layout="@layout/bottom_bar" />
     <include layout="@layout/floatingbutton" />
 
