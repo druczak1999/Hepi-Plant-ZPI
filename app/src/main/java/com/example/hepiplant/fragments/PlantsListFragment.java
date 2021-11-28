@@ -185,21 +185,6 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void sortPlants(){
-        List<PlantDto> plantDtoList = new ArrayList<>(Arrays.asList(plants));
-        List<PlantDto> plantDtos= new ArrayList<>();
-            plantDtos = plantDtoList.stream()
-                    .sorted(Comparator.comparing(PlantDto::getPurchaseDate))
-                    .collect(Collectors.toList());
-        PlantDto [] newPlant = new PlantDto[plantDtos.size()];
-        for (int i=0;i<plantDtos.size();i++){
-            newPlant[i] = plantDtos.get(i);
-        }
-        plants = newPlant;
-        setAdapter();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -260,7 +245,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         for (PlantDto plant: plants) {
            plantsIdList.add(plant.getId());
         }
-        sortPlants();
+        setAdapter();
     }
 
     private void onErrorResponseReceived(VolleyError error){
@@ -284,12 +269,6 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         adapter = new PlantsRecyclerViewAdapter(getActivity(), plants);
         adapter.setClickListener(this);
         plantsRecyclerView.setAdapter(adapter);
-    }
-
-    private Map<String, String> prepareRequestHeaders(){
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + config.getToken());
-        return headers;
     }
 
     private void getSpecies(List<String> species) {

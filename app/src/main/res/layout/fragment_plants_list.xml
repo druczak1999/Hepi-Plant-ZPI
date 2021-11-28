@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/plantFilterLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -44,8 +44,7 @@
                     android:layout_marginStart="@dimen/marginSortingSmall"
                     android:layout_marginLeft="@dimen/marginSortingSmall"
                     android:layout_marginTop="@dimen/marginSorting"
-                    android:text="Filtruj"
-                    >
+                    android:text="Filtruj">
 
                 </Button>
             </LinearLayout>
@@ -53,8 +52,8 @@
             android:id="@+id/nameFilterLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/SortLienarLayout"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
+
             <EditText
                 android:id="@+id/nameEditTextInPlantFilter"
                 android:layout_width="@dimen/categorySpinnerFilter"
@@ -63,8 +62,7 @@
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:hint="Nazwa"
-                style="@style/DetailsFontValue"
-                />
+                style="@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/closeNameFilter"
@@ -74,16 +72,15 @@
                 android:layout_marginTop="@dimen/marginSorting"
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:alpha="0.4"
-                android:text="x"
-                />
+                android:text="x" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/speciesFilterLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/SortLienarLayout"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
+
             <Spinner
                 android:id="@+id/speciesSpinnerInPlantFilter"
                 style="@style/DetailsFontValue"
@@ -92,8 +89,7 @@
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:background="@drawable/rounded_spinner"
-                android:ems="10"
-                />
+                android:ems="10" />
 
             <TextView
                 android:id="@+id/closeSpeciesFilter"
@@ -103,15 +99,15 @@
                 android:layout_marginTop="@dimen/marginSorting"
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:alpha="0.4"
-                android:text="x"
-                />
+                android:text="x" />
+
         </LinearLayout>
         <LinearLayout
             android:id="@+id/locationFilterLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/SortLienarLayout"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
+
             <Spinner
                 android:id="@+id/locationSpinnerInPlantFilter"
                 style="@style/DetailsFontValue"
@@ -120,8 +116,8 @@
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:background="@drawable/rounded_spinner"
-                android:ems="10"
-                />
+                android:ems="10" />
+
             <TextView
                 android:id="@+id/closeLocationFilters"
                 style="@style/DetailsFontTitle"
@@ -130,10 +126,10 @@
                 android:layout_marginTop="@dimen/marginSorting"
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:alpha="0.4"
-                android:text="x"
-                />
+                android:text="x" />
+            
         </LinearLayout>
-            </LinearLayout>
+        </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/plantsRecyclerView"
