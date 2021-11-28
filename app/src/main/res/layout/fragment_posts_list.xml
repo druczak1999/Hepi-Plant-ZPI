@@ -63,7 +63,7 @@
                 android:id="@+id/tagFilterLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/SortLienarLayout"
-                >
+                android:visibility="gone">
                 <EditText
                     android:id="@+id/tagEditTextInPostFilter"
                     android:layout_width="@dimen/editTextButtonWidthSort"
@@ -73,7 +73,7 @@
                     android:layout_marginTop="@dimen/marginSorting"
                     android:hint="Tag"
                     style="@style/DetailsFontValue"
-                    />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/closeTagFilter"
@@ -84,14 +84,14 @@
                     android:layout_marginLeft="@dimen/marginSorting"
                     android:alpha="0.4"
                     android:text="x"
-                    />
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/categoryFilterLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/SortLienarLayout"
-                >
+                android:visibility="gone">
                 <Spinner
                     android:id="@+id/categorySpinnerInPostFilter"
                     style="@style/DetailsFontValue"
@@ -101,7 +101,7 @@
                     android:layout_marginTop="@dimen/marginSorting"
                     android:background="@drawable/rounded_spinner"
                     android:ems="10"
-                    />
+                    android:visibility="gone" />
                 <TextView
                     android:id="@+id/closeCategoryFilter"
                     style="@style/DetailsFontTitle"
@@ -111,12 +111,13 @@
                     android:layout_marginLeft="@dimen/marginSorting"
                     android:alpha="0.4"
                     android:text="x"
-                    />
+                    android:visibility="gone" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/datesFilterLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/SortLienarLayout">
+                android:layout_height="@dimen/SortLienarLayout"
+                android:visibility="gone">
             <Button
                 android:id="@+id/startDateButtonInPostFilter"
                 android:layout_width="@dimen/editTextButtonWidthSort"
@@ -129,7 +130,8 @@
                 android:gravity="start|center_vertical"
                 android:hint="..."
                 style="@style/DetailsFontValue"
-                android:textAlignment="viewStart" />
+                android:textAlignment="viewStart"
+                android:visibility="gone"/>
             <Button
                 android:id="@+id/endDateButtonInPostFilter"
                 android:layout_width="@dimen/editTextButtonWidthSort"
@@ -142,7 +144,8 @@
                 android:gravity="start|center_vertical"
                 android:hint="..."
                 style="@style/DetailsFontValue"
-                android:textAlignment="viewStart" />
+                android:textAlignment="viewStart"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/closeDateFilters"
                 style="@style/DetailsFontTitle"
@@ -152,14 +155,14 @@
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:alpha="0.4"
                 android:text="x"
-                />
+                android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="@dimen/scroll_view_height"
             android:layout_marginTop="@dimen/marginSorting"
             android:paddingBottom="@dimen/spaceForBottomBar"
             android:visibility="visible"
