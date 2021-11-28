@@ -145,6 +145,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             setRecyclerViewLayoutParams(1);
             postTagsEditText.setVisibility(View.GONE);
             tagLinearLayout.setVisibility(View.GONE);
+            closeTagFiler.setVisibility(View.GONE);
         });
 
         closeCategoryFilter.setOnClickListener(v -> {
@@ -152,6 +153,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             categorySpinner.setVisibility(View.GONE);
             selectedCategory=null;
             categoryLinearLayout.setVisibility(View.GONE);
+            closeCategoryFilter.setVisibility(View.GONE);
         });
 
         closeDateFilters.setOnClickListener(v -> {
@@ -159,6 +161,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             postStartDateButton.setVisibility(View.GONE);
             postEndDateButton.setVisibility(View.GONE);
             datesLinearLayout.setVisibility(View.GONE);
+            closeDateFilters.setVisibility(View.GONE);
         });
     }
 
@@ -224,12 +227,14 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             switch (position){
                 case 1:
                     setRecyclerViewLayoutParams(-1);
+                    closeTagFiler.setVisibility(View.VISIBLE);
                     postTagsEditText.setVisibility(View.VISIBLE);
                     tagLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     getCategoriesFromDB();
                     setRecyclerViewLayoutParams(-1);
+                    closeCategoryFilter.setVisibility(View.VISIBLE);
                     categoryLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 3:
@@ -237,6 +242,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                     postStartDateButton.setVisibility(View.VISIBLE);
                     postEndDateButton.setVisibility(View.VISIBLE);
                     datesLinearLayout.setVisibility(View.VISIBLE);
+                    closeDateFilters.setVisibility(View.VISIBLE);
                     break;
             }
             filterSpinner.setSelection(0);

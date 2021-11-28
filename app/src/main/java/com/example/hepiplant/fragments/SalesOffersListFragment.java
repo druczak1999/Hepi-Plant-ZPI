@@ -158,17 +158,20 @@ public class SalesOffersListFragment extends Fragment implements
                     setRecyclerViewLayoutParams(-1);
                     offersTagsEditText.setVisibility(View.VISIBLE);
                     tagLinearLayout.setVisibility(View.VISIBLE);
+                    closeTagFiler.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     getCategoriesFromDB();
                     setRecyclerViewLayoutParams(-1);
                     categoryLinearLayout.setVisibility(View.VISIBLE);
+                    closeCategoryFilter.setVisibility(View.VISIBLE);
                     break;
                 case 3:
                     setRecyclerViewLayoutParams(-1);
                     offersStartDateButton.setVisibility(View.VISIBLE);
                     offersEndDateButton.setVisibility(View.VISIBLE);
                     datesLinearLayout.setVisibility(View.VISIBLE);
+                    closeDateFilters.setVisibility(View.VISIBLE);
                     break;
             }
             filterSpinner.setSelection(0);
@@ -198,6 +201,7 @@ public class SalesOffersListFragment extends Fragment implements
             setRecyclerViewLayoutParams(1);
             offersTagsEditText.setVisibility(View.GONE);
             tagLinearLayout.setVisibility(View.GONE);
+            closeTagFiler.setVisibility(View.GONE);
         });
 
         closeCategoryFilter.setOnClickListener(v -> {
@@ -205,6 +209,7 @@ public class SalesOffersListFragment extends Fragment implements
             categorySpinner.setVisibility(View.GONE);
             selectedCategory=null;
             categoryLinearLayout.setVisibility(View.GONE);
+            closeCategoryFilter.setVisibility(View.GONE);
         });
 
         closeDateFilters.setOnClickListener(v -> {
@@ -212,6 +217,7 @@ public class SalesOffersListFragment extends Fragment implements
             offersStartDateButton.setVisibility(View.GONE);
             offersEndDateButton.setVisibility(View.GONE);
             datesLinearLayout.setVisibility(View.GONE);
+            closeDateFilters.setVisibility(View.GONE);
         });
     }
 

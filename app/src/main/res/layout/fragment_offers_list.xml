@@ -61,7 +61,7 @@
             android:id="@+id/tagFilterLinearLayoutOffer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/SortLienarLayout"
-            >
+            android:visibility="gone">
             <EditText
                 android:id="@+id/tagEditTextInOfferFilter"
                 android:layout_width="@dimen/editTextButtonWidthSort"
@@ -70,7 +70,8 @@
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:hint="Tag"
-                style="@style/DetailsFontValue" />
+                style="@style/DetailsFontValue"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/closeTagFilterOffer"
                 style="@style/DetailsFontTitle"
@@ -80,13 +81,13 @@
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:alpha="0.4"
                 android:text="x"
-                />
+                android:visibility="gone"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/categoryFilterLinearLayoutOffer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/SortLienarLayout"
-            >
+            android:visibility="gone">
             <Spinner
                 android:id="@+id/categorySpinnerInOfferFilter"
                 style="@style/DetailsFontValue"
@@ -95,7 +96,8 @@
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:background="@drawable/rounded_spinner"
-                android:ems="10" />
+                android:ems="10"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/closeCategoryFilterOffer"
                 style="@style/DetailsFontTitle"
@@ -105,12 +107,13 @@
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:alpha="0.4"
                 android:text="x"
-                />
+                android:visibility="gone"/>
         </LinearLayout>
             <LinearLayout
                 android:id="@+id/datesFilterLinearLayoutOffer"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/SortLienarLayout">
+                android:layout_height="@dimen/SortLienarLayout"
+                android:visibility="gone">
                 <Button
                     android:id="@+id/startDateButtonInOfferFilter"
                     android:layout_width="@dimen/editTextButtonWidthSort"
@@ -123,7 +126,8 @@
                     android:gravity="start|center_vertical"
                     android:hint="..."
                     style="@style/DetailsFontValue"
-                    android:textAlignment="viewStart" />
+                    android:textAlignment="viewStart"
+                    android:visibility="gone"/>
                 <Button
                     android:id="@+id/endDateButtonInOfferFilter"
                     android:layout_width="@dimen/editTextButtonWidthSort"
@@ -136,7 +140,8 @@
                     android:gravity="start|center_vertical"
                     android:hint="..."
                     style="@style/DetailsFontValue"
-                    android:textAlignment="viewStart" />
+                    android:textAlignment="viewStart"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/closeDateFiltersOffer"
                     style="@style/DetailsFontTitle"
@@ -146,14 +151,14 @@
                     android:layout_marginLeft="@dimen/marginSorting"
                     android:alpha="0.4"
                     android:text="x"
-                    />
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/offersRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="@dimen/scroll_view_height"
             android:layout_marginTop="@dimen/marginSorting"
             android:paddingBottom="@dimen/spaceForBottomBar"
             android:visibility="visible"
