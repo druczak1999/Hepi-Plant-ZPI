@@ -410,6 +410,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
     private void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
+        categories.add(0," ");
         categorySpinner = postsFragmentView.findViewById(R.id.categorySpinnerInPostFilter);
         categorySpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, categories);

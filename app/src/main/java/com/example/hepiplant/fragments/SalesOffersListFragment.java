@@ -407,6 +407,7 @@ public class SalesOffersListFragment extends Fragment implements
 
     private void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
+        categories.add(0,"");
         categorySpinner = offersFragmentView.findViewById(R.id.categorySpinnerInOfferFilter);
         categorySpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, categories);

@@ -250,6 +250,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
 
     private void getSpecies(List<String> species) {
         Log.v(TAG, "Species size" + species.size());
+        species.add(0,"");
         speciesSpinner = plantsFragmentView.findViewById(R.id.speciesSpinnerInPlantFilter);
         speciesSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, species);
@@ -325,8 +326,10 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         String selectedItem = (String) parent.getItemAtPosition(position);
         if(speciesSpinner.getId()==R.id.speciesSpinnerInPlantFilter){
             for(SpeciesDto c : speciesDtos){
-                if(c.getName().equals(selectedItem)) selectedSpecies = c;
-                Log.v(TAG, "Species id after filtering : "+selectedSpecies.getId());
+                if(c.getName().equals(selectedItem)) {
+                    selectedSpecies = c;
+                    Log.v(TAG, "Species id after filtering : " + selectedSpecies.getId());
+                }
             }
         }
         if(locationSpinner.getId()==R.id.locationSpinnerInPlantFilter){
