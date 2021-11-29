@@ -26,14 +26,14 @@
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/misting_icon"
-                android:padding="10dp"
+                android:padding="@dimen/marginSorting"
                 />
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="@dimen/marginSorting">
 
                 <TextView
                     android:id="@+id/eventDateTextView"
@@ -61,8 +61,6 @@
                     android:text="@string/plant_species_holder"
                     android:textAppearance="@style/ListItemDescriptionFont"
                     android:textSize="20sp"/>
-
-
 
             </LinearLayout>
             <CheckBox
