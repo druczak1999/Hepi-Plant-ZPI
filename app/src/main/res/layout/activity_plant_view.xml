@@ -36,7 +36,7 @@
                 android:gravity="center_horizontal"
                 style="@style/PageTitleFont"
                 android:textSize="30dp"
-                android:text="Nazwa rośliny"
+                android:text="@string/plant_name_view"
                  />
 
             <ImageView
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Kategoria"
+                android:text="@string/category"
                 style = "@style/DetailsFontTitle"
                  />
 
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:text="Kategoria"
+                android:text="@string/category"
                 style = "@style/DetailsFontValue"/>
 
             <TextView
@@ -110,7 +110,7 @@
                 android:layout_marginLeft="30dp"
                 style = "@style/DetailsFontValue"
                 android:layout_marginTop="10dp"
-                android:text="Co 3 dni"
+                android:text=""
 
                  />
 
@@ -131,7 +131,7 @@
                 android:layout_marginLeft="30dp"
 
                 android:layout_marginTop="10dp"
-                android:text="Co 14 dni"
+                android:text=""
                 style = "@style/DetailsFontValue"/>
 
             <TextView
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:text="Co 4 dni"
+                android:text=""
                 style = "@style/DetailsFontValue" />
 
             <TextView
@@ -159,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Rodzaj gleby"
+                android:text="@string/soil_type"
                 style = "@style/DetailsFontTitle"
                  />
 
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:text="Żyzna"
+                android:text=""
                 style = "@style/DetailsFontValue" />
 
             <TextView
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Stanowisko"
+                android:text="@string/placement"
                 style = "@style/DetailsFontTitle"
                 />
 
@@ -188,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:text="Jasne"
+                android:text=""
                 style = "@style/DetailsFontValue"/>
 
             <TextView
@@ -197,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Pomieszczenie"
+                android:text="@string/location"
                 style = "@style/DetailsFontTitle"
                  />
 
@@ -208,7 +208,7 @@
                 android:layout_marginLeft="30dp"
                 style = "@style/DetailsFontValue"
                 android:layout_marginTop="10dp"
-                android:text="Pokój"
+                android:text=""
                  />
 
             <TextView
@@ -218,7 +218,7 @@
                 android:layout_marginLeft="20dp"
 
                 android:layout_marginTop="10dp"
-                android:text="Data zakupu"
+                android:text="@string/buy_date"
                 style = "@style/DetailsFontTitle"
                  />
 
@@ -229,7 +229,7 @@
                 android:layout_marginLeft="30dp"
                 style = "@style/DetailsFontValue"
                 android:layout_marginTop="10dp"
-                android:text="14 lipca 2021"
+                android:text=""
                 />
         </LinearLayout>
 

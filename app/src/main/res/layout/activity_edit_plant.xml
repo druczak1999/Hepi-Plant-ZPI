@@ -31,12 +31,14 @@
             <EditText
                 android:id="@+id/PlantNameEdit"
                 style="@style/PageTitleFont"
+                android:textSize="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:layout_marginTop="15dp"
                 android:alpha="0.8"
-                android:text="Nazwa rośliny" />
+                android:text="@string/plant_name_view" />
 
             <ImageView
                 android:id="@+id/plantImageEdit"
@@ -58,7 +60,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/roboto"
-                android:text="Gatunek" />
+                android:text="@string/species" />
 
             <Spinner
                 android:id="@+id/speciesEdit"
@@ -149,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Pomieszczenie" />
+                android:text="@string/location" />
 
             <EditText
                 android:id="@+id/placementEdit"
@@ -169,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Data zakupu" />
+                android:text="@string/buy_date" />
 
             <Button
                 android:id="@+id/dateEdit"

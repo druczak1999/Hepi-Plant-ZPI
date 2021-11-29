@@ -143,6 +143,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
         closeTagFiler.setOnClickListener(v -> {
             setRecyclerViewLayoutParams(-1);
+            postTagsEditText.setText("");
             postTagsEditText.setVisibility(View.GONE);
             tagLinearLayout.setVisibility(View.GONE);
             closeTagFiler.setVisibility(View.GONE);
@@ -158,6 +159,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
         closeDateFilters.setOnClickListener(v -> {
             setRecyclerViewLayoutParams(-1);
+            postStartDateButton.setText("");
+            postEndDateButton.setText("");
             postStartDateButton.setVisibility(View.GONE);
             postEndDateButton.setVisibility(View.GONE);
             datesLinearLayout.setVisibility(View.GONE);
@@ -210,12 +213,12 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == -1) {
-               postStartDateButton.setText(data.getExtras().getString("data"));
+               postStartDateButton.setText(data.getExtras().getString("date"));
             }
         }
         if(requestCode==2){
             if(resultCode==-1){
-                postEndDateButton.setText(data.getExtras().getString("data"));
+                postEndDateButton.setText(data.getExtras().getString("date"));
             }
         }
     }
@@ -407,6 +410,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
     private void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
+        categories.add(0," ");
         categorySpinner = postsFragmentView.findViewById(R.id.categorySpinnerInPostFilter);
         categorySpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, categories);
