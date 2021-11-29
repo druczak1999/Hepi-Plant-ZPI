@@ -121,6 +121,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
     private void setCloseViewsOnClickListeners(){
         closeNameFilter.setOnClickListener(v -> {
             setRecyclerViewLayoutParams(-1);
+            plantNameEditText.setText("");
             plantNameEditText.setVisibility(View.GONE);
             nameLinearLayout.setVisibility(View.GONE);
         });
@@ -135,6 +136,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         closeLocationFilter.setOnClickListener(v -> {
             setRecyclerViewLayoutParams(-1);
             locationSpinner.setVisibility(View.GONE);
+            locationSpinner.setSelection(0);
             selectedLocation=null;
             locationLinearLayout.setVisibility(View.GONE);
         });
@@ -268,7 +270,6 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         for (SpeciesDto speciesDto : speciesDtos) {
             species.add(speciesDto.getName());
         }
-        Log.v(TAG,"Species size: "+speciesDtos.length);
         getSpecies(species);
     }
 

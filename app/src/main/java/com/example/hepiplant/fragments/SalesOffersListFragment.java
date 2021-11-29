@@ -117,12 +117,12 @@ public class SalesOffersListFragment extends Fragment implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == -1) {
-                offersStartDateButton.setText(data.getExtras().getString("data"));
+                offersStartDateButton.setText(data.getExtras().getString("date"));
             }
         }
         if(requestCode==2){
             if(resultCode==-1){
-                offersEndDateButton.setText(data.getExtras().getString("data"));
+                offersEndDateButton.setText(data.getExtras().getString("date"));
             }
         }
     }
@@ -199,6 +199,7 @@ public class SalesOffersListFragment extends Fragment implements
     private void setCloseViewsOnClickListeners(){
         closeTagFiler.setOnClickListener(v -> {
             setRecyclerViewLayoutParams(-1);
+            offersTagsEditText.setText("");
             offersTagsEditText.setVisibility(View.GONE);
             tagLinearLayout.setVisibility(View.GONE);
             closeTagFiler.setVisibility(View.GONE);
@@ -214,6 +215,8 @@ public class SalesOffersListFragment extends Fragment implements
 
         closeDateFilters.setOnClickListener(v -> {
             setRecyclerViewLayoutParams(-1);
+            offersEndDateButton.setText("");
+            offersStartDateButton.setText("");
             offersStartDateButton.setVisibility(View.GONE);
             offersEndDateButton.setVisibility(View.GONE);
             datesLinearLayout.setVisibility(View.GONE);

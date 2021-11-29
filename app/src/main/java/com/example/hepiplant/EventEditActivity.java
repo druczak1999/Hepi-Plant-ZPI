@@ -66,7 +66,7 @@ public class EventEditActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                eventDate.setText(data.getExtras().getString("data"));
+                eventDate.setText(data.getExtras().getString("date"));
             }
         }
     }
