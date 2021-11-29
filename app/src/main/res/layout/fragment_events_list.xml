@@ -14,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"
-            android:paddingBottom="@dimen/padding_bottom"/>
+            android:paddingBottom="@dimen/spaceForBottomBarInEvents"
+            android:clipToPadding="false"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

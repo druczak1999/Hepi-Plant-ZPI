@@ -155,19 +155,19 @@ public class SalesOffersListFragment extends Fragment implements
         if(filterSpinner.getId()==R.id.filterOffersSpinner){
             switch (position){
                 case 1:
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     offersTagsEditText.setVisibility(View.VISIBLE);
                     tagLinearLayout.setVisibility(View.VISIBLE);
                     closeTagFiler.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     getCategoriesFromDB();
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     categoryLinearLayout.setVisibility(View.VISIBLE);
                     closeCategoryFilter.setVisibility(View.VISIBLE);
                     break;
                 case 3:
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     offersStartDateButton.setVisibility(View.VISIBLE);
                     offersEndDateButton.setVisibility(View.VISIBLE);
                     datesLinearLayout.setVisibility(View.VISIBLE);
@@ -198,14 +198,14 @@ public class SalesOffersListFragment extends Fragment implements
 
     private void setCloseViewsOnClickListeners(){
         closeTagFiler.setOnClickListener(v -> {
-            setRecyclerViewLayoutParams(1);
+            setRecyclerViewLayoutParams(-1);
             offersTagsEditText.setVisibility(View.GONE);
             tagLinearLayout.setVisibility(View.GONE);
             closeTagFiler.setVisibility(View.GONE);
         });
 
         closeCategoryFilter.setOnClickListener(v -> {
-            setRecyclerViewLayoutParams(1);
+            setRecyclerViewLayoutParams(-1);
             categorySpinner.setVisibility(View.GONE);
             selectedCategory=null;
             categoryLinearLayout.setVisibility(View.GONE);
@@ -213,7 +213,7 @@ public class SalesOffersListFragment extends Fragment implements
         });
 
         closeDateFilters.setOnClickListener(v -> {
-            setRecyclerViewLayoutParams(1);
+            setRecyclerViewLayoutParams(-1);
             offersStartDateButton.setVisibility(View.GONE);
             offersEndDateButton.setVisibility(View.GONE);
             datesLinearLayout.setVisibility(View.GONE);
@@ -222,9 +222,11 @@ public class SalesOffersListFragment extends Fragment implements
     }
 
     private void setRecyclerViewLayoutParams(int plusOrMinus) {
-        ViewGroup.LayoutParams params = offersRecyclerView.getLayoutParams();
-        params.height = params.height + (plusOrMinus*130);
-        offersRecyclerView.setLayoutParams(params);
+        offersRecyclerView.setPadding(offersRecyclerView.getPaddingLeft(),
+                offersRecyclerView.getPaddingTop(),
+                offersRecyclerView.getPaddingRight(),
+                offersRecyclerView.getPaddingBottom()
+                + (int)(plusOrMinus * getResources().getDimension(R.dimen.SortLinearLayout)));
     }
 
     private void setDateButtonsOnClickListener(){
@@ -246,14 +248,16 @@ public class SalesOffersListFragment extends Fragment implements
             offersRecyclerView.setPadding(
                     offersRecyclerView.getPaddingLeft(),
                     offersRecyclerView.getPaddingTop(),
-                    offersRecyclerView.getPaddingRight(), 0);
+                    offersRecyclerView.getPaddingRight(),
+                    (int) getResources().getDimension(R.dimen.padding_bottom_admin_sales_offers));
+            offersRecyclerView.setClipToPadding(true);
         }
     }
 
     private void setOffersFilterSpinnerAdapter(){
         offersFilterSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(),
-                android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(),
+                android.R.layout.simple_spinner_item, Arrays.asList("Filtruj","Tag","Kategoria","Data"));
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         offersFilterSpinner.setAdapter(dtoArrayAdapter);
     }

@@ -142,14 +142,14 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private void setCloseViewsOnClickListeners(){
 
         closeTagFiler.setOnClickListener(v -> {
-            setRecyclerViewLayoutParams(1);
+            setRecyclerViewLayoutParams(-1);
             postTagsEditText.setVisibility(View.GONE);
             tagLinearLayout.setVisibility(View.GONE);
             closeTagFiler.setVisibility(View.GONE);
         });
 
         closeCategoryFilter.setOnClickListener(v -> {
-            setRecyclerViewLayoutParams(1);
+            setRecyclerViewLayoutParams(-1);
             categorySpinner.setVisibility(View.GONE);
             selectedCategory=null;
             categoryLinearLayout.setVisibility(View.GONE);
@@ -157,7 +157,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         });
 
         closeDateFilters.setOnClickListener(v -> {
-            setRecyclerViewLayoutParams(1);
+            setRecyclerViewLayoutParams(-1);
             postStartDateButton.setVisibility(View.GONE);
             postEndDateButton.setVisibility(View.GONE);
             datesLinearLayout.setVisibility(View.GONE);
@@ -166,9 +166,11 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     }
 
     private void setRecyclerViewLayoutParams(int plusOrMinus) {
-        ViewGroup.LayoutParams params = postsRecyclerView.getLayoutParams();
-        params.height =params.height + (plusOrMinus * 130);
-        postsRecyclerView.setLayoutParams(params);
+        postsRecyclerView.setPadding(postsRecyclerView.getPaddingLeft(),
+                postsRecyclerView.getPaddingTop(),
+                postsRecyclerView.getPaddingRight(),
+                postsRecyclerView.getPaddingBottom()
+                + (int)(plusOrMinus * getResources().getDimension(R.dimen.SortLinearLayout)));
     }
 
     private void setDateButtonsOnClickListener(){
@@ -193,7 +195,12 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                 Intent intent = new Intent(getContext(), PostAddActivity.class);
                 startActivity(intent);
             });
-            setRecyclerViewLayoutParams(1);
+            postsRecyclerView.setPadding(postsRecyclerView.getPaddingLeft(),
+                    postsRecyclerView.getPaddingTop(),
+                    postsRecyclerView.getPaddingRight(),
+                    (int)(getResources().getDimension(R.dimen.spaceForBottomBar)
+                            + 2 * getResources().getDimension(R.dimen.margin_medium)));
+            postsRecyclerView.setClipToPadding(true);
         }
     }
 
@@ -226,19 +233,19 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         if(filterSpinner.getId()==R.id.filterPostsSpinner){
             switch (position){
                 case 1:
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     closeTagFiler.setVisibility(View.VISIBLE);
                     postTagsEditText.setVisibility(View.VISIBLE);
                     tagLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     getCategoriesFromDB();
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     closeCategoryFilter.setVisibility(View.VISIBLE);
                     categoryLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 3:
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     postStartDateButton.setVisibility(View.VISIBLE);
                     postEndDateButton.setVisibility(View.VISIBLE);
                     datesLinearLayout.setVisibility(View.VISIBLE);
@@ -254,7 +261,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
     private void setPostsFilterSpinnerAdapter(){
         postFilterSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, Arrays.asList("Filtruj","Tag","Kategoria","Data"));
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         postFilterSpinner.setAdapter(dtoArrayAdapter);
     }
@@ -385,8 +392,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private void onGetResponseCategories(JSONArray response){
         categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
         List<String> categories = new ArrayList<>();
-        for (int i = 0; i < categoryDtos.length; i++) {
-            categories.add(categoryDtos[i].getName());
+        for (CategoryDto categoryDto : categoryDtos) {
+            categories.add(categoryDto.getName());
         }
         Log.v(TAG,"DL: "+categoryDtos.length);
         getCategories(categories);

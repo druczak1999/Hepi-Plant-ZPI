@@ -5,10 +5,12 @@
     <dimen name="margin_medium">8sp</dimen>
     <dimen name="margin_small">4sp</dimen>
     <dimen name="padding_bottom">50sp</dimen>
+    <dimen name="padding_bottom_admin_sales_offers">60sp</dimen>
     <dimen name="spaceForToolbar">56sp</dimen>
     <dimen name="spaceForToolbarAndGap">61sp</dimen>
     <dimen name="spaceForToolbarAndTabs">104sp</dimen>
-    <dimen name="spaceForBottomBar">112sp</dimen>
+    <dimen name="spaceForBottomBar">118sp</dimen>
+    <dimen name="spaceForBottomBarInEvents">60sp</dimen>
     <dimen name="spaceForBottomButton">76sp</dimen>
     <dimen name="spaceForId">35sp</dimen>
     <dimen name="spaceForIdHeader">20sp</dimen>
@@ -25,7 +27,7 @@
     <dimen name="filerSortButtonsHeight">35dp</dimen>
     <dimen name="marginSorting">10dp</dimen>
     <dimen name="marginSortingSmall">5dp</dimen>
-    <dimen name="SortLienarLayout">48dp</dimen>
+    <dimen name="SortLinearLayout">48dp</dimen>
     <dimen name="categorySpinnerFilter">250dp</dimen>
     <dimen name="filerSpinnerHeight">11dp</dimen>
     <dimen name="simple_row_item_height">40sp</dimen>
