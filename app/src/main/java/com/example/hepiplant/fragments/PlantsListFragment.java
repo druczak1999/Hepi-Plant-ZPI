@@ -31,10 +31,10 @@ import com.example.hepiplant.R;
 import com.example.hepiplant.adapter.recyclerview.PlantsRecyclerViewAdapter;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.PlantDto;
+import com.example.hepiplant.dto.SpeciesDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
-import com.example.hepiplant.dto.SpeciesDto;
 
 import org.json.JSONArray;
 
@@ -119,65 +119,54 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
     }
 
     private void setCloseViewsOnClickListeners(){
-        closeNameFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                plantNameEditText.setVisibility(View.GONE);
-                nameLinearLayout.setVisibility(View.GONE);
-            }
+        closeNameFilter.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(-1);
+            plantNameEditText.setVisibility(View.GONE);
+            nameLinearLayout.setVisibility(View.GONE);
         });
 
-        closeSpicesFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                speciesSpinner.setVisibility(View.GONE);
-                selectedSpecies=null;
-                speciesLinearLayout.setVisibility(View.GONE);
-            }
+        closeSpicesFilter.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(-1);
+            speciesSpinner.setVisibility(View.GONE);
+            selectedSpecies=null;
+            speciesLinearLayout.setVisibility(View.GONE);
         });
 
-        closeLocationFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRecyclerViewLayoutParams(1);
-                locationSpinner.setVisibility(View.GONE);
-                selectedLocation=null;
-                locationLinearLayout.setVisibility(View.GONE);
-            }
+        closeLocationFilter.setOnClickListener(v -> {
+            setRecyclerViewLayoutParams(-1);
+            locationSpinner.setVisibility(View.GONE);
+            selectedLocation=null;
+            locationLinearLayout.setVisibility(View.GONE);
         });
     }
 
     private void setRecyclerViewLayoutParams(int plusOrMinus) {
-        ViewGroup.LayoutParams params = plantsRecyclerView.getLayoutParams();
-        params.height =params.height + (plusOrMinus * 130);
-        plantsRecyclerView.setLayoutParams(params);
+        plantsRecyclerView.setPadding(plantsRecyclerView.getPaddingLeft(),
+                plantsRecyclerView.getPaddingTop(),
+                plantsRecyclerView.getPaddingRight(),
+                plantsRecyclerView.getPaddingBottom()
+                + (int)(plusOrMinus * getResources().getDimension(R.dimen.SortLinearLayout)));
     }
 
     private void setPlantFilterSpinnerAdapter(){
         plantFilterSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, List.of("Filtruj","Nazwa","Gatunek","Pomieszczenie"));
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, Arrays.asList("Filtruj","Nazwa","Gatunek","Pomieszczenie"));
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         plantFilterSpinner.setAdapter(dtoArrayAdapter);
     }
 
     private void setPlantFilterButtonOnClickListener() {
-        plantFilterButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                if(filterClick%2==0){
-                    makeGetDataRequestWithParam();
-                    plantFilterButton.setText(R.string.clean_button);
-                }
-                else {
-                    makeGetDataRequest();
-                    plantFilterButton.setText(R.string.filter_button);
-                }
-                plantFilterSpinner.setSelection(0);
-                filterClick++;
+        plantFilterButton.setOnClickListener(v -> {
+            if(filterClick%2==0){
+                makeGetDataRequestWithParam();
+                plantFilterButton.setText(R.string.clean_button);
             }
+            else {
+                makeGetDataRequest();
+                plantFilterButton.setText(R.string.filter_button);
+            }
+            plantFilterSpinner.setSelection(0);
+            filterClick++;
         });
     }
 
@@ -261,7 +250,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         Log.v(TAG, "Species size" + species.size());
         speciesSpinner = plantsFragmentView.findViewById(R.id.speciesSpinnerInPlantFilter);
         speciesSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, species);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         speciesSpinner.setAdapter(dtoArrayAdapter);
         speciesSpinner.setVisibility(View.VISIBLE);
@@ -270,22 +259,14 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
     private void getSpeciesFromDB() {
         String url = getRequestUrlSpecies();
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseSpecies(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) { onErrorResponseReceived(error);}
-                });
+                (Response.Listener<JSONArray>) this::onGetResponseSpecies, this::onErrorResponseReceived);
     }
 
     private void onGetResponseSpecies(JSONArray response){
         speciesDtos = speciesResponseHandler.handleArrayResponse(response, SpeciesDto[].class);
-        List<String> species = new ArrayList<String>();
-        for (int i = 0; i < speciesDtos.length; i++) {
-            species.add(speciesDtos[i].getName());
+        List<String> species = new ArrayList<>();
+        for (SpeciesDto speciesDto : speciesDtos) {
+            species.add(speciesDto.getName());
         }
         Log.v(TAG,"Species size: "+speciesDtos.length);
         getSpecies(species);
@@ -294,22 +275,14 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
     private void getLocationFromDB() {
         String url = getRequestUrl()+ "/locations";
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseLocation(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) { onErrorResponseReceived(error);}
-                });
+                (Response.Listener<JSONArray>) this::onGetResponseLocation, this::onErrorResponseReceived);
     }
 
     private void onGetResponseLocation(JSONArray response){
         locations = locationsResponseHandler.handleArrayResponse(response, String[].class);
         locationSpinner = plantsFragmentView.findViewById(R.id.locationSpinnerInPlantFilter);
         locationSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item, locations);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, locations);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(dtoArrayAdapter);
         locationSpinner.setVisibility(View.VISIBLE);
@@ -320,18 +293,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         url = prepareUrlForGetDataRequest(url);
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceived(error);
-                    }
-                });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private String prepareUrlForGetDataRequest(String url) {
@@ -372,17 +334,17 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         if(filterSpinner.getId()==R.id.filterPlantsSpinner){
             switch (position){
                 case 1:
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     plantNameEditText.setVisibility(View.VISIBLE);
                     nameLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 2:
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     getSpeciesFromDB();
                     speciesLinearLayout.setVisibility(View.VISIBLE);
                     break;
                 case 3:
-                    setRecyclerViewLayoutParams(-1);
+                    setRecyclerViewLayoutParams(1);
                     getLocationFromDB();
                     locationLinearLayout.setVisibility(View.VISIBLE);
                     break;

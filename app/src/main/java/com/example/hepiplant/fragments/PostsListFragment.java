@@ -169,7 +169,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         postsRecyclerView.setPadding(postsRecyclerView.getPaddingLeft(),
                 postsRecyclerView.getPaddingTop(),
                 postsRecyclerView.getPaddingRight(),
-                postsRecyclerView.getPaddingBottom() + (int)(plusOrMinus * getResources().getDimension(R.dimen.SortLinearLayout)));
+                postsRecyclerView.getPaddingBottom()
+                + (int)(plusOrMinus * getResources().getDimension(R.dimen.SortLinearLayout)));
     }
 
     private void setDateButtonsOnClickListener(){
@@ -197,7 +198,9 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
             postsRecyclerView.setPadding(postsRecyclerView.getPaddingLeft(),
                     postsRecyclerView.getPaddingTop(),
                     postsRecyclerView.getPaddingRight(),
-                    (int) getResources().getDimension(R.dimen.spaceForBottomButton));
+                    (int)(getResources().getDimension(R.dimen.spaceForBottomBar)
+                            + 2 * getResources().getDimension(R.dimen.margin_medium)));
+            postsRecyclerView.setClipToPadding(true);
         }
     }
 
@@ -258,7 +261,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
 
     private void setPostsFilterSpinnerAdapter(){
         postFilterSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, List.of("Filtruj","Tag","Kategoria","Data"));
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_spinner_item, Arrays.asList("Filtruj","Tag","Kategoria","Data"));
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         postFilterSpinner.setAdapter(dtoArrayAdapter);
     }
@@ -389,8 +392,8 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private void onGetResponseCategories(JSONArray response){
         categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
         List<String> categories = new ArrayList<>();
-        for (int i = 0; i < categoryDtos.length; i++) {
-            categories.add(categoryDtos[i].getName());
+        for (CategoryDto categoryDto : categoryDtos) {
+            categories.add(categoryDto.getName());
         }
         Log.v(TAG,"DL: "+categoryDtos.length);
         getCategories(categories);
