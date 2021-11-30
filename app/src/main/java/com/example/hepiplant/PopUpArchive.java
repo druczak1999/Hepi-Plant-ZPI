@@ -184,7 +184,6 @@ public class PopUpArchive extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void postEventResponse(){
         JSONObject postData = preparePostEventData();
-        Log.v(TAG,postData.toString());
         String url = getRequestUrl()+"events";
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 new Response.Listener<JSONObject>() {
