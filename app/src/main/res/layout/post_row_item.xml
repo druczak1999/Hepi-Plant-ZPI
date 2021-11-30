@@ -30,15 +30,15 @@
                 android:id="@+id/postTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/post_title_holder"
+                android:text="@string/title"
                 android:textAppearance="@style/ListItemTitleFont" />
 
             <TextView
                 android:id="@+id/postAuthorTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="@string/post_title_holder"
+                android:textSize="15sp"
+                android:text="@string/title"
                 android:textAppearance="@style/ListItemTitleFont" />
 
             <TextView
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:text="@string/post_body_holder"
+                android:text="@string/body"
                 android:textAppearance="@style/ListItemDescriptionFont" />
 
             <ImageView

@@ -38,7 +38,7 @@
     <style name="PageTitleFont" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- być może do zmiany czcionka -->
         <item name="android:fontFamily">@font/cantata_one</item>
-        <item name="android:textSize">36sp</item>
+        <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/colorDarkFont</item>
     </style>
 

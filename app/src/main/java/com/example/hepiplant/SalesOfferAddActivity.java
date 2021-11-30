@@ -201,7 +201,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
                         SalesOfferDto data = new SalesOfferDto();
                         data = salesOfferResponseHandler.handleResponse(response, SalesOfferDto.class);
                         StringBuilder sb = new StringBuilder("Response is: \n" + data.getTitle());
-                        Toast.makeText(getApplicationContext(), R.string.add_sales_offer, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.add_sales_offer_success, Toast.LENGTH_LONG).show();
                         finish();
                     }
                 }, new Response.ErrorListener() {

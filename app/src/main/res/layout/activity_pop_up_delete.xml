@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/cantata_one"
-        android:text="Czy na pewno chcesz usunąć tę roślinę?"
+        android:text="@string/delete_plant_question"
         android:textColor="@color/colorPrimaryLight"
         android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,8 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:background="@drawable/rounded_edittext"
-        android:text="Tak"
+        android:text="@string/yes"
         android:layout_marginLeft="40sp"
+        android:layout_marginStart="40sp"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -39,9 +40,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="40sp"
+        android:layout_marginEnd="40sp"
         android:layout_marginTop="28dp"
         android:background="@drawable/rounded_edittext"
-        android:text="Nie"
+        android:text="@string/no"
         android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -51,10 +53,10 @@
         android:layout_width="75dp"
         android:layout_height="63dp"
         android:layout_marginBottom="12dp"
-        android:tint="#FFFFFF"
+        android:src="@drawable/bin_icon"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/bin_icon" />
+        app:tint="#FFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

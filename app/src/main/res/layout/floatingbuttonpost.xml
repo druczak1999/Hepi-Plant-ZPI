@@ -11,9 +11,9 @@
         android:layout_marginBottom="44dp"
         android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
+        android:focusable="true"
         android:elevation="8dp"
         android:src="@drawable/post_icon"
-
         app:fabCustomSize="70dp"
         app:flow_horizontalAlign="center"
         app:flow_verticalAlign="center"

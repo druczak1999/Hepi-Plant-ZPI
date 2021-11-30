@@ -35,7 +35,6 @@
                 android:layout_marginTop="15dp"
                 android:gravity="center_horizontal"
                 style="@style/PageTitleFont"
-                android:textSize="30dp"
                 android:text="@string/plant_name_view"
                  />
 
@@ -56,99 +55,87 @@
                 android:id="@+id/SpeciesView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:fontFamily="@font/roboto"
                 android:layout_marginTop="30dp"
-                android:text="Gatunek"
-                style = "@style/DetailsFontTitle"
-                />
+                android:text="@string/species"
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/SpeciesValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:text="Gatunek"
-                style = "@style/DetailsFontValue"
-                />
+                android:text="@string/species"
+                style = "@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/CategoryView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/category"
-                style = "@style/DetailsFontTitle"
-                 />
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/CategoryValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/category"
-                style = "@style/DetailsFontValue"/>
+                style = "@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/WateringView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/watering_frequency_placeholder"
-                style = "@style/DetailsFontTitle"
-
-                 />
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/WateringValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginHorizontal="30dp"
                 style = "@style/DetailsFontValue"
-                android:layout_marginTop="10dp"
-                android:text=""
-
-                 />
+                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:id="@+id/FertilizingView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/fertilizing_frequency_placeholder"
-                style = "@style/DetailsFontTitle"
-                />
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/FertilizingValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:text=""
                 style = "@style/DetailsFontValue"/>
 
             <TextView
                 android:id="@+id/MistingView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/misting_frequency_placeholder"
-                style = "@style/DetailsFontTitle"
-                 />
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/MistingValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
                 android:text=""
                 style = "@style/DetailsFontValue" />
@@ -157,7 +144,7 @@
                 android:id="@+id/SoilView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/soil_type"
                 style = "@style/DetailsFontTitle"
@@ -167,75 +154,64 @@
                 android:id="@+id/SoilValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:text=""
                 style = "@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/LocationView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/placement"
-                style = "@style/DetailsFontTitle"
-                />
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/LocationValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:text=""
                 style = "@style/DetailsFontValue"/>
 
             <TextView
                 android:id="@+id/PlacementView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/location"
-                style = "@style/DetailsFontTitle"
-                 />
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/PlacementValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginHorizontal="30dp"
                 style = "@style/DetailsFontValue"
                 android:layout_marginTop="10dp"
-                android:text=""
-                 />
+                android:text="" />
 
             <TextView
                 android:id="@+id/DateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/buy_date"
-                style = "@style/DetailsFontTitle"
-                 />
+                android:text="@string/purchase_date"
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/DateValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginHorizontal="30dp"
                 style = "@style/DetailsFontValue"
-                android:layout_marginTop="10dp"
-                android:text=""
-                />
+                android:layout_marginTop="10dp" />
+
         </LinearLayout>
 
-
-
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

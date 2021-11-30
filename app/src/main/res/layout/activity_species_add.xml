@@ -47,7 +47,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium" />
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textCapSentences" />
 
             <TextView
                 android:id="@+id/speciesAddCategoryHeaderTextView"
@@ -87,15 +89,19 @@
                     style="@style/DetailsFontValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/zero" />
+                    android:text="@string/zero"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/days_hint"
                     android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     style="@style/DetailsFontValue" />
 
             </RelativeLayout>
@@ -121,15 +127,19 @@
                     style="@style/DetailsFontValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/zero" />
+                    android:text="@string/zero"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/days_hint"
                     android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     style="@style/DetailsFontValue" />
 
             </RelativeLayout>
@@ -155,15 +165,19 @@
                     style="@style/DetailsFontValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/zero" />
+                    android:text="@string/zero"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/days_hint"
                     android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     style="@style/DetailsFontValue" />
 
             </RelativeLayout>
@@ -200,7 +214,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium" />
+                android:layout_marginVertical="@dimen/margin_medium"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences" />
 
         </LinearLayout>
 

@@ -488,7 +488,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
             else postData.put("name", plantName.getText().toString());
             Log.v(TAG,date.getText().toString());
             Log.v(TAG, date.getText().toString());
-            if (date.getText()==null || date.getText().toString().equals("Wybierz datę"))
+            if (date.getText()==null || date.getText().toString().equals(getResources().getString(R.string.pick_date)))
                 postData.put("purchaseDate", null);
             else {
                 Log.v(TAG, "put: "+date.getText().toString());

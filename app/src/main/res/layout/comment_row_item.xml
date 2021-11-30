@@ -24,10 +24,10 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4sp"
+                android:layout_marginStart="4sp"
                 android:gravity="left"
-                android:inputType="textMultiLine"
                 android:text="@string/username_holder"
-                android:textAppearance="@style/ForumUsernameFont" />
+                android:textAppearance="@style/ForumUsernameFont"/>
 
             <Space
                 android:layout_width="0sp"
@@ -38,8 +38,8 @@
                 android:id="@+id/commentDateTextView"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
                 android:layout_marginRight="4sp"
+                android:layout_marginEnd="4sp"
                 android:gravity="right"
                 android:text="@string/forum_date_holder"
                 android:textAppearance="@style/ForumDateFont" />
@@ -53,6 +53,7 @@
             android:layout_marginVertical="@dimen/margin_small"
             android:text="@string/comment_body_holder"
             android:textAppearance="@style/ListItemDescriptionFont" />
+
     </LinearLayout>
 
 </FrameLayout>

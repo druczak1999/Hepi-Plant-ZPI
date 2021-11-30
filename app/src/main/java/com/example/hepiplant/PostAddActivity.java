@@ -190,7 +190,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
                         PostDto data = new PostDto();
                         data = postResponseHandler.handleResponse(response, PostDto.class);
                         StringBuilder sb = new StringBuilder("Response is: \n" + data.getTitle());
-                        Toast.makeText(getApplicationContext(), R.string.add_post, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.add_post_success, Toast.LENGTH_LONG).show();
                         finish();
                     }
                 }, new Response.ErrorListener() {

@@ -42,7 +42,7 @@
                     android:background="@drawable/rounded_spinner"
                     android:drawableRight="@drawable/filter_icon"
                     android:fontFamily="@font/roboto"
-                    android:text="Filtruj "
+                    android:text="@string/filter"
                     android:textSize="13dp"
                     />
 
@@ -54,7 +54,7 @@
                     android:layout_marginStart="@dimen/marginSortingSmall"
                     android:layout_marginLeft="@dimen/marginSortingSmall"
                     android:layout_marginTop="@dimen/marginSorting"
-                    android:text="Filtruj" />
+                    android:text="@string/filter" />
 
             </LinearLayout>
         <LinearLayout
@@ -80,7 +80,7 @@
                 android:layout_marginTop="@dimen/marginSorting"
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:alpha="0.4"
-                android:text="x"
+                android:text="@string/x_sign"
                 android:visibility="gone"/>
         </LinearLayout>
         <LinearLayout
@@ -106,7 +106,7 @@
                 android:layout_marginTop="@dimen/marginSorting"
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:alpha="0.4"
-                android:text="x"
+                android:text="@string/x_sign"
                 android:visibility="gone"/>
         </LinearLayout>
             <LinearLayout
@@ -124,7 +124,7 @@
                     android:drawableRight="@drawable/calendar_image"
                     android:ems="10"
                     android:gravity="start|center_vertical"
-                    android:hint="..."
+                    android:hint="@string/three_dots"
                     style="@style/DetailsFontValue"
                     android:textAlignment="viewStart"
                     android:visibility="gone"/>
@@ -138,7 +138,7 @@
                     android:drawableRight="@drawable/calendar_image"
                     android:ems="10"
                     android:gravity="start|center_vertical"
-                    android:hint="..."
+                    android:hint="@string/three_dots"
                     style="@style/DetailsFontValue"
                     android:textAlignment="viewStart"
                     android:visibility="gone"/>
@@ -150,7 +150,7 @@
                     android:layout_marginTop="@dimen/marginSorting"
                     android:layout_marginLeft="@dimen/marginSorting"
                     android:alpha="0.4"
-                    android:text="x"
+                    android:text="@string/x_sign"
                     android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>

@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Dodaj nowy post"
+        android:text="@string/add_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plantAddToolbar"
@@ -63,39 +63,39 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Tytuł" />
+                android:text="@string/title" />
 
             <EditText
                 android:id="@+id/editTitle"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:hint="..." />
+                android:hint="@string/three_dots"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textCapSentences" />
 
             <TextView
                 android:id="@+id/Category"
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="12dp"
-                android:text="Kategoria" />
+                android:text="@string/category" />
 
             <Spinner
                 android:id="@+id/editCategory"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_spinner"
                 android:ems="10" />
 
@@ -104,9 +104,9 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Treść"
+                android:text="@string/body"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
@@ -117,22 +117,23 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:gravity="top|start"
-                android:hint="..." />
+                android:hint="@string/three_dots"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textCapSentences" />
 
             <TextView
                 android:id="@+id/Tags"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                android:text="#Hasztagi"
+                android:text="@string/tags"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
@@ -143,34 +144,31 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:hint="..." />
+                android:hint="@string/three_dots"
+                android:importantForAutofill="no" />
 
         </LinearLayout>
+
     </ScrollView>
 
     <Button
         android:id="@+id/editPostButton"
         android:layout_width="115dp"
         android:layout_height="45dp"
-        android:background="@drawable/rounded_button"
-        android:fontFamily="@font/cantata_one"
-        android:text="Dodaj"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:text="@string/add"
         android:elevation="18dp"
+        style="@style/ButtonUniversal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.935" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
