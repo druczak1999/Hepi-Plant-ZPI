@@ -143,15 +143,16 @@ public class UserUpdateActivity extends AppCompatActivity {
                             public void onResponse(JSONObject response) {
                                 Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
                                 Log.v(TAG, "Request successful. Response is: " + response);
+                                finish();
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
                         Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage());
+                        finish();
                     }
                 });
-                finish();
             }
         });
     }

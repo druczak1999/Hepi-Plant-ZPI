@@ -1,5 +1,7 @@
 package com.example.hepiplant;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -174,6 +176,8 @@ public class PopUpArchive extends AppCompatActivity {
     private void onPatchResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
         event = eventResponseHandler.handleResponse(response,EventDto.class);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel((int) getIntent().getExtras().getLong("eventId"));
         postEventResponse();
     }
 
@@ -203,11 +207,17 @@ public class PopUpArchive extends AppCompatActivity {
             String name = event.getEventName();
             postData.put("eventName", name);
             if(name.toLowerCase().equals("podlewanie"))
-                postData.put("eventDate", LocalDateTime.now().plusDays(plant.getSchedule().getWateringFrequency()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString());
+                postData.put("eventDate",
+                        LocalDateTime.now().plusDays(plant.getSchedule().getWateringFrequency())
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString().substring(0,11)+config.getHourOfNotifications());
             else if(name.toLowerCase().equals("zraszanie"))
-                postData.put("eventDate", LocalDateTime.now().plusDays(plant.getSchedule().getMistingFrequency()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString());
+                postData.put("eventDate",
+                        LocalDateTime.now().plusDays(plant.getSchedule().getMistingFrequency())
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString().substring(0,11)+config.getHourOfNotifications());
             else if(name.toLowerCase().equals("nawożenie"))
-                postData.put("eventDate", LocalDateTime.now().plusDays(plant.getSchedule().getFertilizingFrequency()).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString());
+                postData.put("eventDate",
+                        LocalDateTime.now().plusDays(plant.getSchedule().getFertilizingFrequency())
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString().substring(0,11)+config.getHourOfNotifications());
             postData.put("eventDescription",event.getEventDescription());
             postData.put("plantId",event.getPlantId());
             postData.put("plantName",event.getPlantName());

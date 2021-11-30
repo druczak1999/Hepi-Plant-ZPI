@@ -506,7 +506,6 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
                 postData.put("species", null);
             }
             else postData.put("species", speciesJson);
-            postData.put("userId", config.getUserId());
             postData.put("schedule", scheduleJ);
 
         } catch (JSONException e) {
