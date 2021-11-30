@@ -1,5 +1,7 @@
 package com.example.hepiplant;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -174,6 +176,8 @@ public class PopUpArchive extends AppCompatActivity {
     private void onPatchResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
         event = eventResponseHandler.handleResponse(response,EventDto.class);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel((int) getIntent().getExtras().getLong("eventId"));
         postEventResponse();
     }
 
