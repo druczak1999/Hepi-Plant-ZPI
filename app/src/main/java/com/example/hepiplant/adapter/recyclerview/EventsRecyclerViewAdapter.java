@@ -97,21 +97,20 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(EventsRecyclerViewAdapter.ViewHolder viewHolder, final int position) {
-        Log.v(TAG,"photo for: "+dataSet.get(position).getEventName());
+        Log.v(TAG, "onBindViewHolder position " + position);
         viewHolder.getEvent().setText(dataSet.get(position).getEventName());
         if(dataSet.get(position).getEventDate() != null){
             String str = dataSet.get(position).getEventDate().substring(0,10);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate dateTime = LocalDate.parse(str, formatter);
             LocalDate date = LocalDate.now();
-            Log.v(TAG,dateTime.toString());
-            Log.v(TAG,LocalDate.parse(date.format(formatter),formatter).toString());
             if(dateTime.isBefore(LocalDate.parse(date.format(formatter),formatter))){
                 viewHolder.getDate().setText(dataSet.get(position).getEventDate());
                 viewHolder.getDate().setTextColor(Color.RED);
             }
             else{
                 viewHolder.getDate().setText(dataSet.get(position).getEventDate());
+                viewHolder.getDate().setTextColor(Color.BLACK);
             }
 
         } else {
