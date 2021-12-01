@@ -61,6 +61,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private PostDto[] posts = new PostDto[]{};
     private Button postSortButton, postFilterButton, postStartDateButton, postEndDateButton;
     private TextView closeTagFiler, closeCategoryFilter, closeDateFilters;
+    private TextView noDataTextView;
     private LinearLayout tagLinearLayout, categoryLinearLayout,datesLinearLayout;
     private Spinner postFilterSpinner, categorySpinner;
     private EditText postTagsEditText;
@@ -137,6 +138,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         tagLinearLayout = postsFragmentView.findViewById(R.id.tagFilterLinearLayout);
         categoryLinearLayout = postsFragmentView.findViewById(R.id.categoryFilterLinearLayout);
         datesLinearLayout = postsFragmentView.findViewById(R.id.datesFilterLinearLayout);
+        noDataTextView = postsFragmentView.findViewById(R.id.noDataSimpleListTextViewPosts);
     }
 
     private void setCloseViewsOnClickListeners(){
@@ -305,6 +307,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                 postFilterButton.setText(R.string.clean_button);
             }
             else{
+                noDataTextView.setVisibility(View.GONE);
                 makeGetDataRequest();
                 postFilterButton.setText(R.string.filter_button);
             }
@@ -365,6 +368,10 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived(). Data is " + response);
         posts = postResponseHandler.handleArrayResponse(response, PostDto[].class);
+        if(posts.length == 0){
+            noDataTextView.setVisibility(View.VISIBLE);
+            noDataTextView.setText(getText(R.string.no_posts_to_display));
+        }
         setAdapter();
     }
 

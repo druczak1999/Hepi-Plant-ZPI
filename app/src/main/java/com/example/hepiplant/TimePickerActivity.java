@@ -46,6 +46,7 @@ public class TimePickerActivity extends AppCompatActivity {
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private Button saveTimeButton;
     private EventDto[] events;
+    private boolean patchError = false;
 
     @SuppressLint("ResourceAsColor")
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -147,6 +148,7 @@ public class TimePickerActivity extends AppCompatActivity {
         for (EventDto event:events) {
             patchEventResponse(event.getId().intValue(), event.getEventDate());
         }
+        if(!patchError) Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
     }
 
     private void patchEventResponse(int eventId, String eventDate){
@@ -164,6 +166,7 @@ public class TimePickerActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        patchError = true;
                         onErrorResponseEvent(error);
                     }
                 });
@@ -194,7 +197,6 @@ public class TimePickerActivity extends AppCompatActivity {
         data = eventResponseHandler.handleResponse(response,EventDto.class);
         if(config.isNotifications())
             setupNotifications(data);
-        Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
         finish();
     }
 
