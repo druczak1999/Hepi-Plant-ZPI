@@ -106,14 +106,13 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
             LocalDate date = LocalDate.now();
             Log.v(TAG,dateTime.toString());
             Log.v(TAG,LocalDate.parse(date.format(formatter),formatter).toString());
+            viewHolder.getDate().setText(dataSet.get(position).getEventDate());
             if(dateTime.isBefore(LocalDate.parse(date.format(formatter),formatter))){
-                viewHolder.getDate().setText(dataSet.get(position).getEventDate());
                 viewHolder.getDate().setTextColor(Color.RED);
             }
             else{
-                viewHolder.getDate().setText(dataSet.get(position).getEventDate());
+                viewHolder.getDate().setTextColor(Color.parseColor("#66AD66"));
             }
-
         } else {
             viewHolder.getDate().setText("");
         }
