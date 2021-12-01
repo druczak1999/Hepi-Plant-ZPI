@@ -1,4 +1,4 @@
-package com.example.hepiplant.adapter.recyclerview;
+package com.example.hepiplant.helper;
 
 import android.content.Context;
 
@@ -20,4 +20,5 @@ public class MyAppGlideModule extends AppGlideModule {
         registry.append(StorageReference.class, InputStream.class,
                 new FirebaseImageLoader.Factory());
     }
+
 }

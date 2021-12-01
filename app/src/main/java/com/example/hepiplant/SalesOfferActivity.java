@@ -332,4 +332,5 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
                 .load(storageRef)
                 .into(photoImageView);
     }
+
 }

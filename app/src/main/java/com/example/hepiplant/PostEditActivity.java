@@ -274,8 +274,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                 .load(storageRef)
                 .into(photoImageView);
     }
-
-
+    
     private void saveImageToFirebase() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -421,4 +420,5 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                     " Data: " + Arrays.toString(networkResponse.data));
         }
     }
+
 }
