@@ -59,6 +59,7 @@ public class SalesOffersListFragment extends Fragment implements
     private Button offersSortButton, offersFilterButton, offersStartDateButton, offersEndDateButton;
     private Spinner offersFilterSpinner, categorySpinner;
     private TextView closeTagFiler, closeCategoryFilter, closeDateFilters;
+    private TextView noDataTextView;
     private LinearLayout tagLinearLayout, categoryLinearLayout,datesLinearLayout;
     private EditText offersTagsEditText;
     private CategoryDto[] categoryDtos;
@@ -194,6 +195,7 @@ public class SalesOffersListFragment extends Fragment implements
         tagLinearLayout = offersFragmentView.findViewById(R.id.tagFilterLinearLayoutOffer);
         categoryLinearLayout = offersFragmentView.findViewById(R.id.categoryFilterLinearLayoutOffer);
         datesLinearLayout = offersFragmentView.findViewById(R.id.datesFilterLinearLayoutOffer);
+        noDataTextView = offersFragmentView.findViewById(R.id.noDataSimpleListTextViewOffers);
     }
 
     private void setCloseViewsOnClickListeners(){
@@ -302,6 +304,7 @@ public class SalesOffersListFragment extends Fragment implements
                 selectedCategory=null;
             }
             else {
+                noDataTextView.setVisibility(View.GONE);
                 offersFilterButton.setText(R.string.filter_button);
                 makeGetDataRequest();
             }
@@ -377,6 +380,10 @@ public class SalesOffersListFragment extends Fragment implements
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
         salesOffers = salesOfferResponseHandler.handleArrayResponse(response, SalesOfferDto[].class);
+        if(salesOffers.length == 0){
+            noDataTextView.setVisibility(View.VISIBLE);
+            noDataTextView.setText(getText(R.string.no_sales_offers_to_display));
+        }
         setAdapter();
     }
 
