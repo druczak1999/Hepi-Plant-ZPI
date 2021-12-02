@@ -98,22 +98,34 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         postsFragmentView = inflater.inflate(R.layout.fragment_posts_list, container, false);
         initView();
         setLayoutManager();
-        makeGetDataRequest();
         setUpViewsForFilters();
+        if(getArguments()==null){
+            makeGetDataRequest();
+            setPostsFilterButtonOnClickListener();
+            setPostsFilterSpinnerAdapter();
+            setDateButtonsOnClickListener();
+            getCategoriesFromDB();
+            setCloseViewsOnClickListeners();
+            adjustLayoutForAdmin();
+        }
+        if(getArguments()!=null && !getArguments().isEmpty()){
+            if(getArguments().getString("view").equals("user")){
+                postFilterSpinner.setVisibility(View.GONE);
+                postFilterButton.setVisibility(View.GONE);
+                makeGetDataRequestByUser();
+            }
+        }
         setPostsSortButtonOnClickListener();
-        setPostsFilterButtonOnClickListener();
-        setPostsFilterSpinnerAdapter();
-        setDateButtonsOnClickListener();
-        getCategoriesFromDB();
-        setCloseViewsOnClickListeners();
-        adjustLayoutForAdmin();
         return postsFragmentView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        makeGetDataRequest();
+        if(getArguments()!=null){
+            makeGetDataRequestByUser();
+        }
+        else makeGetDataRequest();
     }
 
     @Override
@@ -326,6 +338,13 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private void makeGetDataRequestWithParam(){
         String url = getRequestUrl()+"posts?";
         url = prepareUrlForGetDataRequest(url);
+        Log.v(TAG, "Invoking requestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
+    }
+
+    private void makeGetDataRequestByUser(){
+        String url = getRequestUrl()+"posts/user/"+config.getUserId();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
