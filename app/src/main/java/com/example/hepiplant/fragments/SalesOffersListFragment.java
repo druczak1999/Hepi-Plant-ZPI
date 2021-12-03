@@ -97,18 +97,27 @@ public class SalesOffersListFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "Entering onCreateView()");
         offersFragmentView = inflater.inflate(R.layout.fragment_offers_list, container, false);
-
-        setUpViewsForFilters();
         initView();
         setLayoutManager();
-        makeGetDataRequest();
-        getCategoriesFromDB();
+        setUpViewsForFilters();
+        if(getArguments()!=null && !getArguments().isEmpty()){
+            if(getArguments().getString("view").equals("user")){
+                offersFilterSpinner.setVisibility(View.GONE);
+                offersFilterButton.setVisibility(View.GONE);
+                makeGetDataRequestByUser();
+            }
+        }
+       else{
+            makeGetDataRequest();
+            getCategoriesFromDB();
+            setDateButtonsOnClickListener();
+            setOffersFilterButtonOnClickListener();
+            setOffersFilterSpinnerAdapter();
+            setCloseViewsOnClickListeners();
+            adjustLayoutForAdmin();
+       }
+
         setOffersSortButtonOnClickListener();
-        setDateButtonsOnClickListener();
-        setOffersFilterButtonOnClickListener();
-        setOffersFilterSpinnerAdapter();
-        setCloseViewsOnClickListeners();
-        adjustLayoutForAdmin();
         return offersFragmentView;
     }
 
@@ -131,7 +140,10 @@ public class SalesOffersListFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        makeGetDataRequest();
+        if(getArguments()!=null){
+            makeGetDataRequestByUser();
+        }
+        else makeGetDataRequest();
     }
 
     @Override
@@ -323,6 +335,13 @@ public class SalesOffersListFragment extends Fragment implements
     private void makeGetDataRequestWithParam(){
         String url = getRequestUrl()+"salesoffers?";
         url = prepareUrlForGetDataRequest(url);
+        Log.v(TAG, "Invoking requestProcessor");
+        requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
+    }
+
+    private void makeGetDataRequestByUser(){
+        String url = getRequestUrl()+"salesoffers/user/"+config.getUserId();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
                 (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);

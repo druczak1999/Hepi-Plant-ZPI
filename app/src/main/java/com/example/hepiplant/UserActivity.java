@@ -47,7 +47,7 @@ public class UserActivity extends AppCompatActivity {
     private JSONResponseHandler<UserDto> userResponseHandler;
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private TextView usernameValue, username, userEmail, notificationsTimeText, notificationsTimeValue;
-    private Button changeUserData, changeNotificationsTime;
+    private Button changeUserData, changeNotificationsTime, goToUserPostsButton;
     private ImageView profilePhoto;
     private Switch notifications;
     private EventDto[] events;
@@ -62,6 +62,7 @@ public class UserActivity extends AppCompatActivity {
         eventResponseHandler = new JSONResponseHandler<>(config);
         setupToolbar();
         setupViewsData();
+        setGoToPostsButtonOnClickListener();
         getRequestUser();
     }
 
@@ -112,7 +113,19 @@ public class UserActivity extends AppCompatActivity {
         notificationsTimeValue = findViewById(R.id.notificationTimeUserValue);
         notificationsTimeValue.setText(config.getHourOfNotifications());
         notifications = findViewById(R.id.noticeSwitch);
+        goToUserPostsButton = findViewById(R.id.goToUsersPosts);
         setUpNotifications();
+    }
+
+    private void setGoToPostsButtonOnClickListener(){
+        goToUserPostsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
+                intent.putExtra("view", "user");
+                startActivity(intent);
+            }
+        });
     }
 
     private void setUpNotifications() {

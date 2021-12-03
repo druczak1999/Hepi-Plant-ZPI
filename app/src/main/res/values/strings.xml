@@ -90,5 +90,6 @@
     <string name="category">Kategoria</string>
     <string name="soil_type">Rodzaj gleby</string>
     <string name="placement">Stanowisko</string>
+    <string name="go_to_users_posts">Twoje posty i oferty sprzedaży</string>
 
 </resources>
