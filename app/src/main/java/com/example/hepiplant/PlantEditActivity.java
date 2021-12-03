@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public class PlantEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -296,7 +297,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         spinnerGat.setAdapter(dtoArrayAdapter);
         if(plant.getSpecies().getId() != null) {
             for(SpeciesDto s : speciesDtos) {
-                if(s.getId() == plant.getSpecies().getId()) {
+                if(Objects.equals(s.getId(), plant.getSpecies().getId())) {
                     speciesDto = s;
                     spinnerGat.setSelection(species.indexOf(s.getName()));
                 }

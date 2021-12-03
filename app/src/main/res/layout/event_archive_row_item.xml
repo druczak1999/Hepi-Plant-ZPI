@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_marginHorizontal="@dimen/margin_medium"
-    android:layout_marginVertical="@dimen/margin_small"
+    android:layout_marginHorizontal="@dimen/margin_small"
+    android:layout_marginVertical="@dimen/margin_very_small"
     android:gravity="center_vertical">
 
     <FrameLayout
@@ -21,7 +21,7 @@
                 android:id="@+id/eventIcon"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_margin="@dimen/margin_medium"
+                android:layout_margin="@dimen/margin_small"
                 android:adjustViewBounds="true"
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
@@ -33,15 +33,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp">
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_small">
 
                 <TextView
                     android:id="@+id/eventDateTextView"
                     android:layout_width="159dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_big"
-                    android:text="@string/plant_species_holder"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:text="@string/event_date"
                     android:textAppearance="@style/ListItemDescriptionFont"
                     android:textColor="@color/colorPrimary"/>
 
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="@string/plant_name_holder"
+                    android:text="@string/description"
                     android:textAppearance="@style/ListItemDescriptionFont"
                     />
                 <TextView
@@ -58,8 +58,8 @@
                     android:layout_width="159dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:layout_marginBottom="@dimen/margin_small"
-                    android:text="@string/plant_species_holder"
+                    android:layout_marginBottom="@dimen/margin_very_small"
+                    android:text="@string/plant_name_holder"
                     android:textAppearance="@style/ListItemDescriptionFont"
                     android:textSize="20sp"/>
 

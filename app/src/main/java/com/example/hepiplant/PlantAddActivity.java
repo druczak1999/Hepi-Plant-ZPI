@@ -68,10 +68,8 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     private Button dateEditText, addPlantButton;
     private ImageView addImageButton;
-    private Spinner spinnerGat, spinnerCat;
     private EditText plantName, location, wateringText;
     private String img_str;
-    private int watering;
     private SpeciesDto speciesDto;
     private SpeciesDto[] speciesDtos;
     private CategoryDto[] categoryDtos;
@@ -285,7 +283,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private JSONObject makeScheduleJSON() {
         JSONObject scheduleJ = new JSONObject();
         try {
-            watering = Integer.parseInt(String.valueOf(wateringText.getText()));
+            int watering = Integer.parseInt(String.valueOf(wateringText.getText()));
             Log.v(TAG, String.valueOf(watering));
             scheduleJ.put("wateringFrequency", watering);
             if(speciesDto!=null){
@@ -443,7 +441,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     private void getSpecies(List<String> species) {
         Log.v(TAG, "Species size" + species.size());
-        spinnerGat = (Spinner) findViewById(R.id.editSpecies);
+        Spinner spinnerGat = (Spinner) findViewById(R.id.editSpecies);
         spinnerGat.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, species);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -469,7 +467,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
 
     private void getCategories(List<String> categories) {
         Log.v(TAG, "Species size" + categories.size());
-        spinnerCat = findViewById(R.id.editCategory);
+        Spinner spinnerCat = findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener(this);
         ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

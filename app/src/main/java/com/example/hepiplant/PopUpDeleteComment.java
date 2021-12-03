@@ -27,7 +27,6 @@ public class PopUpDeleteComment extends AppCompatActivity {
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
-    private TextView announcement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public class PopUpDeleteComment extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        announcement = findViewById(R.id.textView);
+        TextView announcement = findViewById(R.id.textView);
         announcement.setText(R.string.popup_message_comment);
         Button yes = findViewById(R.id.buttonYes);
         Button no = findViewById(R.id.buttonNo);

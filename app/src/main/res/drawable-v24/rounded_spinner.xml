@@ -25,6 +25,7 @@
 
 </shape>
     </item>
-    <item android:drawable="@drawable/arrow_drop"
-        android:gravity="right"></item>
+    <item
+        android:drawable="@drawable/arrow_drop"
+        android:gravity="right" />
 </layer-list>

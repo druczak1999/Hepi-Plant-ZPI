@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="list_item_height">150sp</dimen>
-    <dimen name="margin_big">16sp</dimen>
-    <dimen name="margin_medium">8sp</dimen>
-    <dimen name="margin_small">4sp</dimen>
+    <dimen name="margin_very_big">40dp</dimen>
+    <dimen name="margin_big">32dp</dimen>
+    <dimen name="margin_medium">16sp</dimen>
+    <dimen name="margin_small">8sp</dimen>
+    <dimen name="margin_very_small">4sp</dimen>
     <dimen name="padding_bottom">50sp</dimen>
     <dimen name="padding_bottom_admin_sales_offers">60sp</dimen>
     <dimen name="spaceForToolbar">56sp</dimen>
@@ -32,4 +34,11 @@
     <dimen name="filerSpinnerHeight">11dp</dimen>
     <dimen name="simple_row_item_height">40sp</dimen>
     <dimen name="editTextButtonWidthSort">130dp</dimen>
+    <dimen name="margin_twelve">12dp</dimen>
+    <dimen name="floating_button_elevation">18dp</dimen>
+    <dimen name="floating_button_width">115dp</dimen>
+    <dimen name="small_image_button_size">115dp</dimen>
+    <dimen name="floating_button_height">45dp</dimen>
+    <dimen name="big_image_button_size">200dp</dimen>
+    <dimen name="input_field_height">46dp</dimen>
 </resources>

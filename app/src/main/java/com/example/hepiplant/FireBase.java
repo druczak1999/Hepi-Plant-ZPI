@@ -66,7 +66,7 @@ public class FireBase extends AppCompatActivity {
 
     public void createSignInIntent() {
         Log.v(TAG, "Entering createSignInIntent()");
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
+        List<AuthUI.IdpConfig> providers = Collections.singletonList(
                 new AuthUI.IdpConfig.EmailBuilder().build());
 
         Intent signInIntent = AuthUI.getInstance()

@@ -54,7 +54,6 @@ public class SalesOffersListFragment extends Fragment implements
 
     private View offersFragmentView;
     private RecyclerView offersRecyclerView;
-    private SalesOffersRecyclerViewAdapter adapter;
     private SalesOfferDto[] salesOffers = new SalesOfferDto[]{};
     private Button offersSortButton, offersFilterButton, offersStartDateButton, offersEndDateButton;
     private Spinner offersFilterSpinner, categorySpinner;
@@ -339,7 +338,7 @@ public class SalesOffersListFragment extends Fragment implements
         if(offersTagsEditText.getVisibility()==View.VISIBLE && offersTagsEditText.getText()!=null && !offersTagsEditText.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
             if(offersTagsEditText.getText().toString().charAt(0)=='#')
-                url += "tag=" + offersTagsEditText.getText().toString().substring(1, offersTagsEditText.getText().toString().length()).trim();
+                url += "tag=" + offersTagsEditText.getText().toString().substring(1).trim();
             else  url += "tag=" + offersTagsEditText.getText().toString().trim();
         }
         if(selectedCategory!=null) {
@@ -369,7 +368,7 @@ public class SalesOffersListFragment extends Fragment implements
     }
 
     private void setAdapter() {
-        adapter = new SalesOffersRecyclerViewAdapter(getActivity(), salesOffers);
+        SalesOffersRecyclerViewAdapter adapter = new SalesOffersRecyclerViewAdapter(getActivity(), salesOffers);
         adapter.setClickListener(this);
         offersRecyclerView.setAdapter(adapter);
     }

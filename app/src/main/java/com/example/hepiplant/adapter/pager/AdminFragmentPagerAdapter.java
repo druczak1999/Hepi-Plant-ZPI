@@ -15,17 +15,15 @@ import com.example.hepiplant.fragments.UsersListFragment;
 
 public class AdminFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private final int PAGE_COUNT = 6;
     private final String[] tabTitles = new String[] { "Kategorie", "Gatunki", "Tagi", "Forum", "Bazarek", "Użytkownicy" };
-    private Context context;
 
     public AdminFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
-        this.context = context;
     }
 
     @Override
     public int getCount() {
+        int PAGE_COUNT = 6;
         return PAGE_COUNT;
     }
 

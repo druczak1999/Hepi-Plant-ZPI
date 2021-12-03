@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,13 +20,13 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.dto.UserDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +48,7 @@ public class UserActivity extends AppCompatActivity {
     private TextView usernameValue, username, userEmail, notificationsTimeText, notificationsTimeValue;
     private Button changeUserData, changeNotificationsTime;
     private ImageView profilePhoto;
-    private Switch notifications;
+    private SwitchMaterial notifications;
     private EventDto[] events;
 
     @Override
@@ -125,31 +124,25 @@ public class UserActivity extends AppCompatActivity {
             notificationsTimeText.setVisibility(View.GONE);
             changeNotificationsTime.setVisibility(View.GONE);
         }
-        notifications.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                config.setNotifications(notifications.isChecked());
-                if(notifications.isChecked()){
-                    notificationsTimeValue.setVisibility(View.VISIBLE);
-                    notificationsTimeText.setVisibility(View.VISIBLE);
-                    changeNotificationsTime.setVisibility(View.VISIBLE);
-                }
-                else{
-                    notificationsTimeValue.setVisibility(View.GONE);
-                    notificationsTimeText.setVisibility(View.GONE);
-                    changeNotificationsTime.setVisibility(View.GONE);
-                }
-                editRequestUser();
-                makeGetDataRequest();
+        notifications.setOnClickListener(v -> {
+            config.setNotifications(notifications.isChecked());
+            if(notifications.isChecked()){
+                notificationsTimeValue.setVisibility(View.VISIBLE);
+                notificationsTimeText.setVisibility(View.VISIBLE);
+                changeNotificationsTime.setVisibility(View.VISIBLE);
             }
+            else{
+                notificationsTimeValue.setVisibility(View.GONE);
+                notificationsTimeText.setVisibility(View.GONE);
+                changeNotificationsTime.setVisibility(View.GONE);
+            }
+            editRequestUser();
+            makeGetDataRequest();
         });
 
-        changeNotificationsTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TimePickerActivity.class);
-                startActivity(intent);
-            }
+        changeNotificationsTime.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), TimePickerActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -157,17 +150,7 @@ public class UserActivity extends AppCompatActivity {
         String url = getRequestUrl()+"events/user/"+ config.getUserId();
 
        requestProcessor.makeRequest(Request.Method.GET, url, null,RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage());
-            }
-        });
+               (Response.Listener<JSONArray>) this::onGetResponseReceived, error -> Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage()));
     }
 
     private void onGetResponseReceived(JSONArray response){
@@ -227,17 +210,8 @@ public class UserActivity extends AppCompatActivity {
         Log.v(TAG, "On Click. Attempting patch request"+usernameValue.getText().toString());
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG, "Request successful. Response is: " + response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage());
-                    }
-                });
+                (Response.Listener<JSONObject>) response -> Log.v(TAG, "Request successful. Response is: " + response),
+                error -> Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage()));
     }
 
     private void getRequestUser(){
@@ -245,18 +219,10 @@ public class UserActivity extends AppCompatActivity {
         profilePhoto.setImageURI(config.getPhoto());
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponse(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-                usernameValue.setText(error.getMessage());
-            }
-        });
+                (Response.Listener<JSONObject>) this::onGetResponse, error -> {
+                    Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+                    usernameValue.setText(error.getMessage());
+                });
     }
 
     private void onGetResponse(JSONObject response) {
@@ -267,12 +233,9 @@ public class UserActivity extends AppCompatActivity {
         usernameValue.setText(data.getUsername());
         userEmail.setText(data.getEmail());
         username.setText("Witaj "+data.getUsername()+"!");
-        changeUserData.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserUpdateActivity.class);
-                startActivity(intent);
-            }
+        changeUserData.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), UserUpdateActivity.class);
+            startActivity(intent);
         });
     }
 

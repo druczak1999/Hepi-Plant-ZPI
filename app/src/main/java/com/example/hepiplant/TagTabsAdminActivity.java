@@ -20,8 +20,6 @@ public class TagTabsAdminActivity extends AppCompatActivity {
 
     private static final String TAG = "TagTabsAdminActivity";
 
-    private ViewPager viewPager;
-    private TagTabsFragmentPagerAdapter tagTabsFragmentPagerAdapter;
     private String tag;
 
     @Override
@@ -76,8 +74,8 @@ public class TagTabsAdminActivity extends AppCompatActivity {
 
     private void setupViewPager() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        viewPager = (ViewPager) findViewById(R.id.tagViewPager);
-        tagTabsFragmentPagerAdapter = new TagTabsFragmentPagerAdapter(getSupportFragmentManager(),
+        ViewPager viewPager = (ViewPager) findViewById(R.id.tagViewPager);
+        TagTabsFragmentPagerAdapter tagTabsFragmentPagerAdapter = new TagTabsFragmentPagerAdapter(getSupportFragmentManager(),
                 this, tag);
         viewPager.setAdapter(tagTabsFragmentPagerAdapter);
 

@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.427"
-        android:layout_marginBottom="@dimen/margin_big"
+        android:layout_marginBottom="@dimen/margin_medium"
         android:layout_marginTop="@dimen/spaceForToolbar">
 
         <LinearLayout
@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:gravity="center_horizontal"
                 style="@style/PageTitleFont"
                 android:text="@string/plant_name_view"
@@ -40,10 +40,10 @@
 
             <ImageView
                 android:id="@+id/plantImage"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/big_image_button_size"
+                android:layout_height="@dimen/big_image_button_size"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/margin_big"
                 android:background="@drawable/rounded_square"
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
@@ -55,9 +55,9 @@
                 android:id="@+id/SpeciesView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
                 android:fontFamily="@font/roboto"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/margin_big"
                 android:text="@string/species"
                 style = "@style/DetailsFontTitle" />
 
@@ -65,8 +65,8 @@
                 android:id="@+id/SpeciesValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/species"
                 style = "@style/DetailsFontValue" />
 
@@ -74,8 +74,8 @@
                 android:id="@+id/CategoryView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/category"
                 style = "@style/DetailsFontTitle" />
 
@@ -83,8 +83,8 @@
                 android:id="@+id/CategoryValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/category"
                 style = "@style/DetailsFontValue" />
 
@@ -92,8 +92,8 @@
                 android:id="@+id/WateringView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/watering_frequency_placeholder"
                 style = "@style/DetailsFontTitle" />
 
@@ -101,16 +101,16 @@
                 android:id="@+id/WateringValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
                 style = "@style/DetailsFontValue"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/FertilizingView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/fertilizing_frequency_placeholder"
                 style = "@style/DetailsFontTitle" />
 
@@ -118,16 +118,16 @@
                 android:id="@+id/FertilizingValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_small"
                 style = "@style/DetailsFontValue"/>
 
             <TextView
                 android:id="@+id/MistingView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/misting_frequency_placeholder"
                 style = "@style/DetailsFontTitle" />
 
@@ -135,8 +135,8 @@
                 android:id="@+id/MistingValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text=""
                 style = "@style/DetailsFontValue" />
 
@@ -144,8 +144,8 @@
                 android:id="@+id/SoilView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/soil_type"
                 style = "@style/DetailsFontTitle"
                  />
@@ -154,16 +154,16 @@
                 android:id="@+id/SoilValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_small"
                 style = "@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/LocationView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/placement"
                 style = "@style/DetailsFontTitle" />
 
@@ -171,16 +171,16 @@
                 android:id="@+id/LocationValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_small"
                 style = "@style/DetailsFontValue"/>
 
             <TextView
                 android:id="@+id/PlacementView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/location"
                 style = "@style/DetailsFontTitle" />
 
@@ -188,17 +188,17 @@
                 android:id="@+id/PlacementValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
                 style = "@style/DetailsFontValue"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="" />
 
             <TextView
                 android:id="@+id/DateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/purchase_date"
                 style = "@style/DetailsFontTitle" />
 
@@ -206,9 +206,9 @@
                 android:id="@+id/DateValueView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="@dimen/margin_big"
                 style = "@style/DetailsFontValue"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="@dimen/margin_small" />
 
         </LinearLayout>
 

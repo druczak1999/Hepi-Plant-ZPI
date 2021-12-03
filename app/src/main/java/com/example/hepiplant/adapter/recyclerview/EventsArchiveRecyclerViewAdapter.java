@@ -24,8 +24,6 @@ public class EventsArchiveRecyclerViewAdapter extends RecyclerView.Adapter<Event
     private List<EventDto> dataSet;
     private EventsArchiveRecyclerViewAdapter.ItemClickListener clickListener;
     private static final String TAG = "EventsListAdapter";
-    private Context contextAll;
-    private Intent intent;
 
     // Provide a reference to the type of views that you are using (custom ViewHolder).
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -66,8 +64,7 @@ public class EventsArchiveRecyclerViewAdapter extends RecyclerView.Adapter<Event
 
     // Initialize the dataset of the Adapter.
     public EventsArchiveRecyclerViewAdapter(Context context, EventDto[] dataSet) {
-        intent = new Intent(context,PopUpArchive.class);
-        contextAll =context;
+        Intent intent = new Intent(context, PopUpArchive.class);
         this.dataSet = new ArrayList<EventDto>(Arrays.asList(dataSet));
     }
 

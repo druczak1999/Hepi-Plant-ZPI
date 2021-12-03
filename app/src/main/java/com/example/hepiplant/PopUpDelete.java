@@ -38,9 +38,7 @@ public class PopUpDelete extends AppCompatActivity {
 
     private static final String TAG = "PopUpDelete";
 
-    private Button yes, no;
     private Configuration config;
-    private EventDto [] events;
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private JSONRequestProcessor requestProcessor;
 
@@ -61,8 +59,8 @@ public class PopUpDelete extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        yes = findViewById(R.id.buttonYes);
-        no = findViewById(R.id.buttonNo);
+        Button yes = findViewById(R.id.buttonYes);
+        Button no = findViewById(R.id.buttonNo);
 
         no.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,9 +106,9 @@ public class PopUpDelete extends AppCompatActivity {
 
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
-        events = eventResponseHandler.handleArrayResponse(response, EventDto[].class);
+        EventDto[] events = eventResponseHandler.handleArrayResponse(response, EventDto[].class);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-        for (EventDto event:events) {
+        for (EventDto event: events) {
             notificationManagerCompat.cancel(event.getId().intValue());
         }
     }

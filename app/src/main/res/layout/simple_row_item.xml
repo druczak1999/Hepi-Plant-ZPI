@@ -2,7 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="@dimen/simple_row_item_height"
     android:layout_width="match_parent"
-    android:layout_marginHorizontal="@dimen/margin_medium"
+    android:layout_marginHorizontal="@dimen/margin_small"
     android:gravity="center_vertical"
     android:id="@+id/simpleRowItemNameTextView"
     android:text="@string/name_placeholder"

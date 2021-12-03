@@ -47,8 +47,6 @@ public class PopUpArchive extends AppCompatActivity {
     private JSONResponseHandler<PlantDto> plantResponseHandler;
     private JSONRequestProcessor requestProcessor;
     private EventDto event;
-    private TextView announcement;
-    private ImageView imageOfPopUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +63,9 @@ public class PopUpArchive extends AppCompatActivity {
         eventResponseHandler = new JSONResponseHandler<>(config);
         plantResponseHandler= new JSONResponseHandler<>(config);
 
-        announcement = findViewById(R.id.textView);
+        TextView announcement = findViewById(R.id.textView);
         announcement.setText(R.string.popup_message_archive);
-        imageOfPopUp = findViewById(R.id.imageViewPopUp);
+        ImageView imageOfPopUp = findViewById(R.id.imageViewPopUp);
         imageOfPopUp.setImageResource(R.drawable.check_box);
         setupViewsData();
     }
@@ -206,18 +204,18 @@ public class PopUpArchive extends AppCompatActivity {
         try {
             String name = event.getEventName();
             postData.put("eventName", name);
-            if(name.toLowerCase().equals("podlewanie"))
+            if(name.equalsIgnoreCase("podlewanie"))
                 postData.put("eventDate",
                         LocalDateTime.now().plusDays(plant.getSchedule().getWateringFrequency())
-                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString().substring(0,11)+config.getHourOfNotifications());
-            else if(name.toLowerCase().equals("zraszanie"))
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).substring(0,11)+config.getHourOfNotifications());
+            else if(name.equalsIgnoreCase("zraszanie"))
                 postData.put("eventDate",
                         LocalDateTime.now().plusDays(plant.getSchedule().getMistingFrequency())
-                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString().substring(0,11)+config.getHourOfNotifications());
-            else if(name.toLowerCase().equals("nawożenie"))
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).substring(0,11)+config.getHourOfNotifications());
+            else if(name.equalsIgnoreCase("nawożenie"))
                 postData.put("eventDate",
                         LocalDateTime.now().plusDays(plant.getSchedule().getFertilizingFrequency())
-                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString().substring(0,11)+config.getHourOfNotifications());
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).substring(0,11)+config.getHourOfNotifications());
             postData.put("eventDescription",event.getEventDescription());
             postData.put("plantId",event.getPlantId());
             postData.put("plantName",event.getPlantName());

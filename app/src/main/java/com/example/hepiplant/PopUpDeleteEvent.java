@@ -30,7 +30,6 @@ public class PopUpDeleteEvent extends AppCompatActivity {
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
-    private TextView announcement;
 
 
     @Override
@@ -48,7 +47,7 @@ public class PopUpDeleteEvent extends AppCompatActivity {
     }
 
     private void setupViewsData(){
-        announcement = findViewById(R.id.textView);
+        TextView announcement = findViewById(R.id.textView);
         announcement.setText(R.string.popu_message_event);
         Button yes = findViewById(R.id.buttonYes);
         Button no = findViewById(R.id.buttonNo);

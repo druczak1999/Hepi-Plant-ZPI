@@ -308,7 +308,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         Log.v(TAG,"Categories size"+categories.size());
         spinnerCat = findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener( this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
     }

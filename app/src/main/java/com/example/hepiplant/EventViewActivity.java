@@ -149,11 +149,11 @@ public class EventViewActivity extends AppCompatActivity {
         plantName.setText(event.getPlantName());
         String name = event.getEventName();
         eventName.setText(name);
-        if(name.toLowerCase().equals(WATERING))
+        if(name.equalsIgnoreCase(WATERING))
             eventImage.setImageResource(R.drawable.watering_icon);
-        else if(name.toLowerCase().equals(MISTING))
+        else if(name.equalsIgnoreCase(MISTING))
             eventImage.setImageResource(R.drawable.misting_icon);
-        else if(name.toLowerCase().equals(FERTILIZING))
+        else if(name.equalsIgnoreCase(FERTILIZING))
             eventImage.setImageResource(R.drawable.fertilization_icon);
         eventDate.setText(event.getEventDate());
         eventDescription.setText(event.getEventDescription());

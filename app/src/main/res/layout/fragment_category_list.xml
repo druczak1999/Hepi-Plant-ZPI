@@ -15,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginHorizontal="@dimen/margin_big"
-            android:layout_marginVertical="@dimen/margin_medium"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginVertical="@dimen/margin_small"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -55,7 +55,7 @@
             android:id="@+id/categoryRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
             android:paddingBottom="@dimen/spaceForBottomBar"
             android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/categoryHeaderLinearLayout" />
@@ -65,7 +65,7 @@
             style="@style/ButtonSmallAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_medium"
+            android:layout_marginVertical="@dimen/margin_small"
             android:text="@string/add"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

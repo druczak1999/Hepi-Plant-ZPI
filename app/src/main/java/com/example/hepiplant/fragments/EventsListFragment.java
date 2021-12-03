@@ -39,7 +39,6 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
 
     private View eventsFragmentView;
     private RecyclerView eventsRecyclerView;
-    private EventsRecyclerViewAdapter adapter;
     private EventDto[] events = new EventDto[]{};
     private Configuration config;
     private JSONResponseHandler<EventDto> eventResponseHandler;
@@ -132,7 +131,7 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
     }
 
     private void setAdapter() {
-        adapter = new EventsRecyclerViewAdapter(getActivity(), events);
+        EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter(getActivity(), events);
         adapter.setClickListener(this);
         eventsRecyclerView.setAdapter(adapter);
     }

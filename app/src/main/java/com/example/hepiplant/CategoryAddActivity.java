@@ -37,7 +37,6 @@ public class CategoryAddActivity extends AppCompatActivity {
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
-    private EditText nameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +78,7 @@ public class CategoryAddActivity extends AppCompatActivity {
     }
 
     public void onSaveButtonClick(View view){
-        nameEditText = findViewById(R.id.categoryNameAddEditText);
+        EditText nameEditText = findViewById(R.id.categoryNameAddEditText);
         String name = nameEditText.getText().toString().trim();
         if(!name.isEmpty()){
             JSONObject postData = new JSONObject();

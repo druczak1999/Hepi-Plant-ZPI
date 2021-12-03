@@ -21,7 +21,7 @@
         android:id="@+id/Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:text="@string/add_sales_offer"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,11 +48,11 @@
 
             <ImageButton
                 android:id="@+id/editImageBut"
-                android:layout_width="115dp"
-                android:layout_height="115dp"
+                android:layout_width="@dimen/small_image_button_size"
+                android:layout_height="@dimen/small_image_button_size"
                 android:layout_gravity="center"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="@dimen/margin_very_big"
+                android:layout_marginBottom="@dimen/margin_small"
                 android:adjustViewBounds="true"
                 android:background="@drawable/rounded_square"
                 android:elevation="@dimen/elevation_3sp"
@@ -64,8 +64,8 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:text="@string/title" />
 
             <EditText
@@ -73,8 +73,8 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:hint="@string/three_dots" />
@@ -84,16 +84,16 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:text="@string/category" />
 
             <Spinner
                 android:id="@+id/editCategory"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_spinner"
                 android:ems="10"
                 style="@style/DetailsFontValue"/>
@@ -103,8 +103,8 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:text="@string/body" />
 
             <EditText
@@ -112,8 +112,8 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:gravity="top|start"
@@ -125,8 +125,8 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:text="@string/city" />
 
             <EditText
@@ -134,8 +134,8 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:hint="@string/three_dots" />
@@ -145,8 +145,8 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:text="@string/price" />
 
             <EditText
@@ -154,8 +154,8 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:inputType="numberDecimal"
@@ -166,8 +166,8 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:text="@string/tags" />
 
             <EditText
@@ -175,8 +175,8 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:gravity="top|start"
@@ -189,9 +189,9 @@
 
     <Button
         android:id="@+id/buttonDodajOferte"
-        android:layout_width="115dp"
-        android:layout_height="45dp"
-        android:elevation="18dp"
+        android:layout_width="@dimen/floating_button_width"
+        android:layout_height="@dimen/floating_button_height"
+        android:elevation="@dimen/floating_button_elevation"
         android:text="@string/add"
         style="@style/ButtonUniversal"
         app:layout_constraintBottom_toBottomOf="parent"
