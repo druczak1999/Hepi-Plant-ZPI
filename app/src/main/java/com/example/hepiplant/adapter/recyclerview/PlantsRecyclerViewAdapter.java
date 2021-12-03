@@ -1,8 +1,6 @@
 package com.example.hepiplant.adapter.recyclerview;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,13 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.hepiplant.R;
 import com.example.hepiplant.dto.PlantDto;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -30,6 +26,7 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
     private List<PlantDto> dataSet;
     private ItemClickListener clickListener;
     private static final String TAG = "PlantsListAdapter";
+    private int withFireBaseQuestion;
 
     // Provide a reference to the type of views that you are using (custom ViewHolder).
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -106,32 +103,21 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
         }
     }
 
-    private static void getImageFromFirebase(int position, ImageView photoImageView, List<PlantDto> dataSet) {
+    private void getImageFromFirebase(int position, ImageView photoImageView, List<PlantDto> dataSet) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-
         Log.v(TAG, dataSet.get(position).getPhoto());
         StorageReference pathReference = storageRef.child(dataSet.get(position).getPhoto());
-        final long ONE_MEGABYTE = 2048 * 2048;
-        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Log.v(TAG,"IN on success");
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
-                        bytes.length);
-                photoImageView.setImageBitmap(bitmap);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    photoImageView.setClipToOutline(true);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.v(TAG,"IN on failure");
-                Log.v(TAG,exception.getMessage());
-                Log.v(TAG,exception.getCause().toString());
-            }
-        });
+            cacheImage(pathReference,photoImageView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            photoImageView.setClipToOutline(true);
+        }
+    }
+
+    private void cacheImage(StorageReference storageRef, ImageView photoImageView){
+        Glide.with(photoImageView.getContext())
+                .load(storageRef)
+                .into(photoImageView);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -160,3 +146,4 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
         this.dataSet = new ArrayList<>(Arrays.asList(newDataSet));
     }
 }
+

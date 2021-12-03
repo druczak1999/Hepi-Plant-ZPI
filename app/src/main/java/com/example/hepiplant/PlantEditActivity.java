@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -33,6 +32,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
 import com.example.hepiplant.dto.EventDto;
@@ -199,31 +199,21 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         Log.v(TAG,"plant Id: "+plantId);
     }
 
-    private static void getPhotoFromFirebase(ImageView photoImageView, String post) {
+    private void getPhotoFromFirebase(ImageView photoImageView, String post) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         Log.v(TAG, post);
         StorageReference pathReference = storageRef.child(post);
-        final long ONE_MEGABYTE = 2048 * 2048;
-        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Log.v(TAG,"IN on success");
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
-                        bytes.length);
-                photoImageView.setImageBitmap(bitmap);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    photoImageView.setClipToOutline(true);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.v(TAG,"IN on failure");
-                Log.v(TAG,exception.getMessage());
-                Log.v(TAG,exception.getCause().toString());
-            }
-        });
+        cacheImage(pathReference,photoImageView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            photoImageView.setClipToOutline(true);
+        }
+    }
+
+    private void cacheImage(StorageReference storageRef, ImageView photoImageView){
+        Glide.with(this.getApplicationContext())
+                .load(storageRef)
+                .into(photoImageView);
     }
 
     private void makeGetDataRequest() {

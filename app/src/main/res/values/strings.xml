@@ -63,6 +63,7 @@
     <string name="tag_tabs_title">Posty i oferty sprzedaży zawierające tag</string>
     <string name="no_posts_to_display">Brak postów do wyświetlenia</string>
     <string name="no_sales_offers_to_display">Brak ofert sprzedaży do wyświetlenia</string>
+    <string name="no_plants_to_display">Brak roślin do wyświetlenia</string>
     <string name="app_authors">Autorzy aplikacji:</string>
     <string name="icon_authors">Ikonki wykorzystane w aplikacji pochodzą z witryny flaticon.com. Autorzy:</string>
     <string name="app_info_title">Informacje o aplikacji</string>
@@ -88,6 +89,7 @@
     <string name="category">Kategoria</string>
     <string name="soil_type">Rodzaj gleby</string>
     <string name="placement">Stanowisko</string>
+    <string name="go_to_users_posts">Twoje posty i oferty sprzedaży</string>
     <string name="add_new_plant">Dodaj nową roślinę</string>
     <string name="three_dots">...</string>
     <string name="pick_date">Wybierz datę</string>

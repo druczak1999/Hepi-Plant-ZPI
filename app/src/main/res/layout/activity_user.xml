@@ -162,4 +162,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noticeSwitch" />
 
+    <Button
+        android:id="@+id/goToUsersPosts"
+        style="@style/ButtonSmallGreen"
+        android:layout_width="300dp"
+        android:text="@string/go_to_users_posts"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeNotificationsTimeButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

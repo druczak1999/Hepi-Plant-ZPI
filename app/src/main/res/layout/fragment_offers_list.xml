@@ -155,6 +155,21 @@
             </LinearLayout>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/noDataSimpleListTextViewOffers"
+            style="@style/DetailsFontValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="@dimen/margin_big"
+            android:layout_marginTop="@dimen/marginSorting"
+            android:gravity="center"
+            android:text="@string/no_posts_to_display"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/offersRecyclerView"
             android:layout_width="match_parent"

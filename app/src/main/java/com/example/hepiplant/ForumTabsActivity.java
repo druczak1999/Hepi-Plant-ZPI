@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.hepiplant.adapter.pager.ForumFragmentPagerAdapter;
+import com.example.hepiplant.adapter.pager.UserForumFragmentPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -23,6 +24,7 @@ public class ForumTabsActivity extends AppCompatActivity {
 
     private static final String TAG = "ForumTabsActivity";
     private ViewPager viewPager;
+    private UserForumFragmentPagerAdapter userForumFragmentStateAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class ForumTabsActivity extends AppCompatActivity {
         setBottomBarOnItemClickListeners();
         setFloatingButtonOnItemClickListener();
         setupViewPager();
+
     }
 
     @Override
@@ -73,7 +76,16 @@ public class ForumTabsActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.forumViewPager);
         ForumFragmentPagerAdapter forumFragmentStateAdapter = new ForumFragmentPagerAdapter(getSupportFragmentManager(),
                 this);
+        userForumFragmentStateAdapter = new UserForumFragmentPagerAdapter(getSupportFragmentManager(),
+                this);
         viewPager.setAdapter(forumFragmentStateAdapter);
+        if(getIntent()!=null) {
+            if (getIntent().getExtras() != null) {
+                if (getIntent().getExtras().getString("view") != null && getIntent().getExtras().getString("view").equals("user")) {
+                        viewPager.setAdapter(userForumFragmentStateAdapter);
+                }
+            }
+        }
 
         TabLayout tabLayout = findViewById(R.id.forumTabsLayout);
         tabLayout.setupWithViewPager(viewPager);

@@ -55,6 +55,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
     private Button plantFilterButton;
     private EditText plantNameEditText;
     private TextView closeNameFilter, closeSpicesFilter, closeLocationFilter;
+    private TextView noDataTextView;
     private SpeciesDto[] speciesDtos;
     private SpeciesDto selectedSpecies;
     private String[] locations;
@@ -116,6 +117,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         nameLinearLayout = plantsFragmentView.findViewById(R.id.nameFilterLinearLayout);
         speciesLinearLayout = plantsFragmentView.findViewById(R.id.speciesFilterLinearLayout);
         locationLinearLayout = plantsFragmentView.findViewById(R.id.locationFilterLinearLayout);
+        noDataTextView = plantsFragmentView.findViewById(R.id.noDataSimpleListTextViewPlants);
     }
 
     private void setCloseViewsOnClickListeners(){
@@ -164,6 +166,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
                 plantFilterButton.setText(R.string.clean_button);
             }
             else {
+                noDataTextView.setVisibility(View.GONE);
                 makeGetDataRequest();
                 plantFilterButton.setText(R.string.filter_button);
             }
@@ -220,6 +223,10 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         ArrayList<Long> plantsIdList = new ArrayList<>();
         for (PlantDto plant: plants) {
            plantsIdList.add(plant.getId());
+        }
+        if(plants.length == 0){
+            noDataTextView.setVisibility(View.VISIBLE);
+            noDataTextView.setText(getText(R.string.no_plants_to_display));
         }
         setAdapter();
     }
