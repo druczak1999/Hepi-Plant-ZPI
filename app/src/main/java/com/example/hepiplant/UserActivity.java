@@ -40,6 +40,7 @@ import java.util.Calendar;
 public class UserActivity extends AppCompatActivity {
 
     private static final String TAG = "UserActivity";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
@@ -63,6 +64,7 @@ public class UserActivity extends AppCompatActivity {
         setupViewsData();
         setGoToPostsButtonOnClickListener();
         getRequestUser();
+        adjustLayoutForAdmin();
     }
 
     @Override
@@ -117,13 +119,10 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void setGoToPostsButtonOnClickListener(){
-        goToUserPostsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
-                intent.putExtra("view", "user");
-                startActivity(intent);
-            }
+        goToUserPostsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
+            intent.putExtra("view", "user");
+            startActivity(intent);
         });
     }
 
@@ -259,5 +258,11 @@ public class UserActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return config.getUrl();
+    }
+
+    private void adjustLayoutForAdmin() {
+        if(config.getUserRoles().contains(ROLE_ADMIN)){
+            goToUserPostsButton.setVisibility(View.GONE);
+        }
     }
 }
