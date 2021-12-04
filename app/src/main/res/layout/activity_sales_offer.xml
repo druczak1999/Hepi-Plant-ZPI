@@ -157,7 +157,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:onClick="onAddButtonClick"
-                            android:text="@string/add"/>
+                            android:text="@string/add" />
 
                     </RelativeLayout>
 

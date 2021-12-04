@@ -1,16 +1,13 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -23,8 +20,6 @@ import com.example.hepiplant.dto.EventDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -62,19 +57,9 @@ public class PopUpDelete extends AppCompatActivity {
         Button yes = findViewById(R.id.buttonYes);
         Button no = findViewById(R.id.buttonNo);
 
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        no.setOnClickListener(v -> finish());
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deletePlant();
-            }
-        });
+        yes.setOnClickListener(v -> deletePlant());
     }
 
     @NonNull
@@ -90,18 +75,7 @@ public class PopUpDelete extends AppCompatActivity {
     private void makeGetDataRequest(){
         String url = getRequestUrl()+"events/plant/"+Objects.requireNonNull(getIntent().getExtras()).getLong("plantId");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONArray>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONArray>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void onGetResponseReceived(JSONArray response){
@@ -118,39 +92,24 @@ public class PopUpDelete extends AppCompatActivity {
         Log.v(TAG,String.valueOf(getIntent().getExtras().getLong("plantId")));
         String url = getRequestUrl()+"plants/"+Objects.requireNonNull(getIntent().getExtras()).getLong("plantId");
         requestProcessor.makeRequest(Request.Method.DELETE, url,null,RequestType.STRING,
-                new Response.Listener<String>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(String response) {
-                        if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
-                        Log.v(TAG, response);
-                        Toast.makeText(getApplicationContext(),R.string.delete_plant_message,Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),R.string.delete_plant_failed,Toast.LENGTH_LONG).show();
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<String>) response -> {
+                    if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
+                    Log.v(TAG, response);
+                    Toast.makeText(getApplicationContext(),R.string.delete_plant_message,Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }, error -> {
+                    Toast.makeText(getApplicationContext(),R.string.delete_plant_failed,Toast.LENGTH_LONG).show();
+                    onErrorResponseReceived(error);
+                });
     }
 
     private void deletePhotoFromFirebase(){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference imageRef = storageRef.child(getIntent().getExtras().getString("photo"));
-        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        });
+        imageRef.delete().addOnSuccessListener(aVoid -> {}).addOnFailureListener(exception -> {});
 
     }
 

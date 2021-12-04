@@ -156,7 +156,8 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:inputType="numberDecimal"
-                android:hint="@string/three_dots" />
+                android:hint="@string/three_dots"
+                android:importantForAutofill="no" />
 
             <TextView
                 android:id="@+id/Tags"
@@ -178,7 +179,8 @@
                 android:ems="10"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:hint="@string/three_dots" />
+                android:hint="@string/three_dots"
+                android:importantForAutofill="no" />
 
         </LinearLayout>
     </ScrollView>

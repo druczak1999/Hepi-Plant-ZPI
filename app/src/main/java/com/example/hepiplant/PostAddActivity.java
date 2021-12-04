@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,15 +25,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.CategoryDto;
-import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -58,7 +53,6 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
-    private JSONResponseHandler<PostDto> postResponseHandler;
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private Spinner spinnerCat;
     private CategoryDto selectedCategory;
@@ -74,7 +68,6 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         setContentView(R.layout.activity_post_add);
         config = (Configuration) getApplicationContext();
         requestProcessor = new JSONRequestProcessor(config);
-        postResponseHandler = new JSONResponseHandler<>(config);
         categoryResponseHandler = new JSONResponseHandler<>(config);
 
         setupToolbar();
@@ -95,9 +88,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
                 addImageButton.setImageURI(resultUri);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    addImageButton.setClipToOutline(true);
-                }
+                addImageButton.setClipToOutline(true);
                 img_str = resultUri.toString();
                 saveImageToFirebase();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -154,12 +145,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void onClickAddPost() {
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addRequestPost();
-            }
-        });
+        add.setOnClickListener(v -> addRequestPost());
     }
 
     private JSONObject makePostDataJson(){
@@ -183,29 +169,20 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         JSONObject postData = makePostDataJson();
         Log.v(TAG, String.valueOf(postData));
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG, "OnResponse");
-                        PostDto data = new PostDto();
-                        data = postResponseHandler.handleResponse(response, PostDto.class);
-                        StringBuilder sb = new StringBuilder("Response is: \n" + data.getTitle());
-                        Toast.makeText(getApplicationContext(), R.string.add_post_success, Toast.LENGTH_LONG).show();
-                        finish();
+                (Response.Listener<JSONObject>) response -> {
+                    Log.v(TAG, "OnResponse");
+                    Toast.makeText(getApplicationContext(), R.string.add_post_success, Toast.LENGTH_LONG).show();
+                    finish();
+                }, error -> {
+                    Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+                    Log.v(TAG, String.valueOf(postData));
+                    NetworkResponse networkResponse = error.networkResponse;
+                    Toast.makeText(getApplicationContext(), R.string.add_post_failed, Toast.LENGTH_LONG).show();
+                    if (networkResponse != null) {
+                        Log.e(TAG, "Status code: " + networkResponse.statusCode +
+                                " Data: " + Arrays.toString(networkResponse.data));
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-                Log.v(TAG, String.valueOf(postData));
-                NetworkResponse networkResponse = error.networkResponse;
-                Toast.makeText(getApplicationContext(), R.string.add_post_failed, Toast.LENGTH_LONG).show();
-                if (networkResponse != null) {
-                    Log.e(TAG, "Status code: " + networkResponse.statusCode +
-                            " Data: " + Arrays.toString(networkResponse.data));
-                }
-            }
-        });
+                });
     }
 
     private String getRequestUrl() {
@@ -218,12 +195,7 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void setOnClickListeners(){
-        addImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cropImage();
-            }
-        });
+        addImageButton.setOnClickListener(v -> cropImage());
     }
 
     private void setupViewsData() {
@@ -236,13 +208,11 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private JSONArray hashReading() {
-        int listSize = 0;
         List<String> hashList = new ArrayList<>(Arrays.asList(tags.getText().toString().replace(" ", "").split("#")));
         hashList.removeAll(Arrays.asList("", null));
         Log.v(TAG, String.valueOf(hashList));
         JSONArray hash = new JSONArray();
-        if(hashList.size()>5) listSize = 5;
-        else listSize = hashList.size();
+        int listSize = Math.min(hashList.size(), 5);
         for(int i=0; i<listSize; i++) {
             hash.put(hashList.get(i));
         }
@@ -269,16 +239,8 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         byte[] dataB = baos.toByteArray();
 
         UploadTask uploadTask = imagesRef.putBytes(dataB);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-            }
-        });
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG)
+                .show()).addOnSuccessListener(taskSnapshot -> {});
         img_str = path;
     }
 
@@ -286,22 +248,14 @@ public class PostAddActivity extends AppCompatActivity implements AdapterView.On
         String url = getRequestUrl() + "categories";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
-                        List<String> categories = new ArrayList<>();
-                        for (int i=0;i<categoryDtos.length;i++){
-                            categories.add(categoryDtos[i].getName());
-                        }
-                        getCategories(categories);
+                (Response.Listener<JSONArray>) response -> {
+                    categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
+                    List<String> categories = new ArrayList<>();
+                    for (CategoryDto categoryDto : categoryDtos) {
+                        categories.add(categoryDto.getName());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-            }
-        });
+                    getCategories(categories);
+                }, error -> Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage()));
     }
 
     private void getCategories(List<String> categories){

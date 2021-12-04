@@ -3,7 +3,6 @@ package com.example.hepiplant;
 import static com.example.hepiplant.helper.LangUtils.getFrequency;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -152,9 +150,7 @@ public class PlantViewActivity extends AppCompatActivity {
         date.setText(plant.getPurchaseDate().replaceFirst(getString(R.string.no_time),""));
         if(plant.getPhoto()!=null){
             getPhotoFromFirebase(plantImage, plant.getPhoto());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                plantImage.setClipToOutline(true);
-            }
+            plantImage.setClipToOutline(true);
         }
     }
 
@@ -162,18 +158,7 @@ public class PlantViewActivity extends AppCompatActivity {
         String url = getRequestUrl()+"plants/" + getIntent().getExtras().get("plantId");
         Log.v(TAG, "Invoking plantRequestProcessor"+ url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG, "onResponse");
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceived(error);
-                    }
-                });
+                (Response.Listener<JSONObject>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void onGetResponseReceived(JSONObject response) {
@@ -206,9 +191,7 @@ public class PlantViewActivity extends AppCompatActivity {
         StorageReference storageRef = storage.getReference();
         StorageReference pathReference = storageRef.child(post);
         cacheImage(pathReference,photoImageView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            photoImageView.setClipToOutline(true);
-        }
+        photoImageView.setClipToOutline(true);
     }
 
     private void cacheImage(StorageReference storageRef, ImageView photoImageView){
@@ -224,22 +207,13 @@ public class PlantViewActivity extends AppCompatActivity {
     private void makeGetDataRequest(int id){
         String url = getRequestUrlById(id);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        categoryName = onGetResponseReceivedCategory(response);
-                        Log.v(TAG,"In set category "+categoryName);
-                        if(categoryName!=null && !categoryName.equals("Brak"))
-                        category.setText(categoryName);
-                        else category.setText(R.string.no_category);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceivedCategory(error);
-            }
-        });
+                (Response.Listener<JSONObject>) response -> {
+                    categoryName = onGetResponseReceivedCategory(response);
+                    Log.v(TAG,"In set category "+categoryName);
+                    if(categoryName!=null && !categoryName.equals("Brak"))
+                    category.setText(categoryName);
+                    else category.setText(R.string.no_category);
+                }, this::onErrorResponseReceivedCategory);
     }
 
     @NonNull

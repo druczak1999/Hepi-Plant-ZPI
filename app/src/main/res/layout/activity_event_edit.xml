@@ -79,7 +79,6 @@
                 android:importantForAutofill="no"
                 android:inputType="textCapSentences" />
 
-
             <TextView
                 android:id="@+id/eventDescription"
                 style="@style/DetailsFontTitle"

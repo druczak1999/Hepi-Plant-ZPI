@@ -26,8 +26,7 @@
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/misting_icon"
-                android:padding="10dp"
-                />
+                android:padding="10dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -43,7 +42,7 @@
                     android:layout_marginTop="@dimen/margin_medium"
                     android:text="@string/event_date"
                     android:textAppearance="@style/ListItemDescriptionFont"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/eventDescriptionTextView"
@@ -51,8 +50,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="@string/description"
-                    android:textAppearance="@style/ListItemDescriptionFont"
-                    />
+                    android:textAppearance="@style/ListItemDescriptionFont" />
+
                 <TextView
                     android:id="@+id/plantNameTextView"
                     android:layout_width="159dp"
@@ -61,7 +60,7 @@
                     android:layout_marginBottom="@dimen/margin_very_small"
                     android:text="@string/plant_name_holder"
                     android:textAppearance="@style/ListItemDescriptionFont"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp" />
 
             </LinearLayout>
 

@@ -3,7 +3,6 @@ package com.example.hepiplant;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -55,8 +54,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     private RecyclerView recyclerView;
     private SalesOfferDto salesOffer;
     private CommentDto[] comments = new CommentDto[]{};
-    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, priceTextView, postAuthorTextView;
-    private ImageView photoImageView;
+    private TextView tagsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,34 +170,14 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         String url = getRequestUrl();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    onGetResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONObject>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void makePostDataRequest(JSONObject postData){
         String url = getRequestUrl() + "/comments";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    makeGetDataRequest();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONObject>) response -> makeGetDataRequest(), this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -217,16 +195,15 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         salesOffer = salesOfferResponseHandler.handleResponse(response, SalesOfferDto.class);
         comments = salesOffer.getComments().toArray(comments);
         int tempSize = 0;
-        for (int i = 0; i < comments.length; i++) {
-            if (comments[i]!= null) tempSize+=1;
+        for (CommentDto comment : comments) {
+            if (comment != null) tempSize += 1;
 
         }
         CommentDto[] tempComments = new CommentDto[tempSize];
         int a = 0;
-        for (int i = 0; i < comments.length; i++) {
-            if (comments[i]!= null)
-            {
-                tempComments[a] = comments[i];
+        for (CommentDto comment : comments) {
+            if (comment != null) {
+                tempComments[a] = comment;
                 a++;
             }
         }
@@ -275,14 +252,14 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
     }
 
     private void setupViewsData() {
-        priceTextView = findViewById(R.id.offerPriceTextViewSingle);
+        TextView priceTextView = findViewById(R.id.offerPriceTextViewSingle);
         priceTextView.setText(String.format(Locale.GERMANY,"%.2f %s",
                 salesOffer.getPrice().doubleValue(), CURRENCY));
-        dateTextView = findViewById(R.id.offerLocationTextViewSingle);
+        TextView dateTextView = findViewById(R.id.offerLocationTextViewSingle);
         dateTextView.setText(salesOffer.getLocation());
-        titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
+        TextView titleTextView = findViewById(R.id.salesOfferTitleTextViewSingle);
         titleTextView.setText(salesOffer.getTitle());
-        postAuthorTextView = findViewById(R.id.postAuthorTextView);
+        TextView postAuthorTextView = findViewById(R.id.postAuthorTextView);
         postAuthorTextView.setText(salesOffer.getUsername());
         tagsTextView = findViewById(R.id.salesOfferTagsTextViewSingle);
         StringBuilder tags = new StringBuilder();
@@ -295,16 +272,14 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
         }
-        bodyTextView = findViewById(R.id.salesOfferBodyTextViewSingle);
+        TextView bodyTextView = findViewById(R.id.salesOfferBodyTextViewSingle);
         bodyTextView.setText(salesOffer.getBody());
-        photoImageView = findViewById(R.id.salesOfferPhotoImageViewSingle);
+        ImageView photoImageView = findViewById(R.id.salesOfferPhotoImageViewSingle);
         if(salesOffer.getPhoto()!=null){
             Log.v(TAG,"Attempting photo bind for data: " + salesOffer.getPhoto());
             try {
                 getPhotoFromFirebase(photoImageView, salesOffer);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    photoImageView.setClipToOutline(true);
-                }
+                photoImageView.setClipToOutline(true);
             } catch (Exception e) {
                 e.getMessage();
             }
@@ -322,9 +297,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         StorageReference storageRef = storage.getReference();
         StorageReference pathReference = storageRef.child(post.getPhoto());
         cacheImage(pathReference,photoImageView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            photoImageView.setClipToOutline(true);
-        }
+        photoImageView.setClipToOutline(true);
     }
 
     private void cacheImage(StorageReference storageRef, ImageView photoImageView){

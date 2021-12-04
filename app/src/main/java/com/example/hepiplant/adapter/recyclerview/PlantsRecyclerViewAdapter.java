@@ -1,7 +1,6 @@
 package com.example.hepiplant.adapter.recyclerview;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
     private List<PlantDto> dataSet;
     private ItemClickListener clickListener;
     private static final String TAG = "PlantsListAdapter";
-    private int withFireBaseQuestion;
 
     // Provide a reference to the type of views that you are using (custom ViewHolder).
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -39,7 +37,6 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
             view.setOnClickListener(this);
 
             image = view.findViewById(R.id.plantIconImageView);
-
             name = view.findViewById(R.id.postBodyTextView);
             species = view.findViewById(R.id.postCommentsCountTextView);
         }
@@ -93,9 +90,7 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
             try {
                 ImageView photoImageView = viewHolder.getImage();
                 getImageFromFirebase(position, photoImageView, dataSet);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    viewHolder.getImage().setClipToOutline(true);
-                }
+                viewHolder.getImage().setClipToOutline(true);
             } catch (Exception e) {
                 e.getMessage();
 
@@ -108,10 +103,8 @@ public class PlantsRecyclerViewAdapter extends RecyclerView.Adapter<PlantsRecycl
         StorageReference storageRef = storage.getReference();
         Log.v(TAG, dataSet.get(position).getPhoto());
         StorageReference pathReference = storageRef.child(dataSet.get(position).getPhoto());
-            cacheImage(pathReference,photoImageView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            photoImageView.setClipToOutline(true);
-        }
+        cacheImage(pathReference,photoImageView);
+        photoImageView.setClipToOutline(true);
     }
 
     private void cacheImage(StorageReference storageRef, ImageView photoImageView){

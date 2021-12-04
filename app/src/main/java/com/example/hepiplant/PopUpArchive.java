@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -78,19 +77,9 @@ public class PopUpArchive extends AppCompatActivity {
     }
 
     private void setUpYesNoButtonsOnClickListeners() {
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        no.setOnClickListener(v -> finish());
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                makeGetEventRequest();
-            }
-        });
+        yes.setOnClickListener(v -> makeGetEventRequest());
     }
 
     @NonNull
@@ -107,18 +96,7 @@ public class PopUpArchive extends AppCompatActivity {
         String url = getRequestUrl()+ "events/"+getIntent().getExtras().getLong("eventId");
         Log.v(TAG,url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG,"onresponse");
-                        onGetResponseReceivedEvent(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceivedEvent(error);
-                    }
-                });
+                (Response.Listener<JSONObject>) this::onGetResponseReceivedEvent, this::onErrorResponseReceivedEvent);
     }
 
     private void onGetResponseReceivedEvent(JSONObject response){
@@ -141,20 +119,12 @@ public class PopUpArchive extends AppCompatActivity {
         JSONObject postData = preparePatchDataEvent();
         String url = getRequestUrl()+"events/"+getIntent().getExtras().getLong("eventId");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG,"onResponse");
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            onPatchResponseEvent(response);
-                        }
+                (Response.Listener<JSONObject>) response -> {
+                    Log.v(TAG,"onResponse");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        onPatchResponseEvent(response);
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponsePlant(error);
-            }
-        });
+                }, this::onErrorResponsePlant);
     }
 
     private JSONObject preparePatchDataEvent() {
@@ -184,18 +154,7 @@ public class PopUpArchive extends AppCompatActivity {
         JSONObject postData = preparePostEventData();
         String url = getRequestUrl()+"events";
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG,"onResponse");
-                        onPostResponseEvent(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponsePlant(error);
-            }
-        });
+                (Response.Listener<JSONObject>) this::onPostResponseEvent, this::onErrorResponsePlant);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -228,8 +187,6 @@ public class PopUpArchive extends AppCompatActivity {
 
     private void onPostResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
-        EventDto data = new EventDto();
-        data =eventResponseHandler.handleResponse(response,EventDto.class);
         Toast.makeText(getApplicationContext(), R.string.archive_event, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
         startActivity(intent);
@@ -240,18 +197,7 @@ public class PopUpArchive extends AppCompatActivity {
         String url = getRequestUrl()+"plants/"+event.getPlantId();
         Log.v(TAG, url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.v(TAG,"plant onRespone");
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponsePlant(error);
-            }
-        });
+                (Response.Listener<JSONObject>) this::onGetResponseReceived, this::onErrorResponsePlant);
     }
 
     private void onGetResponseReceived(JSONObject response){

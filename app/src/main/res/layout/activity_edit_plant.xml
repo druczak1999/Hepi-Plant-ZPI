@@ -144,7 +144,6 @@
                 android:text="@string/zero"
                 android:importantForAutofill="no"/>
 
-
             <TextView
                 android:id="@+id/PlacementView"
                 style="@style/DetailsFontTitle"

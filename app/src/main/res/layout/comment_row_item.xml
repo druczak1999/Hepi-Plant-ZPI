@@ -27,7 +27,7 @@
                 android:layout_marginStart="4sp"
                 android:gravity="left"
                 android:text="@string/username_holder"
-                android:textAppearance="@style/ForumUsernameFont"/>
+                android:textAppearance="@style/ForumUsernameFont" />
 
             <Space
                 android:layout_width="0sp"

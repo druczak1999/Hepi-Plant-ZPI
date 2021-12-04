@@ -41,10 +41,10 @@
                     android:layout_marginTop="@dimen/filerSpinnerHeight"
                     android:background="@drawable/rounded_spinner"
                     android:drawableRight="@drawable/filter_icon"
+                    android:drawableEnd="@drawable/filter_icon"
                     android:fontFamily="@font/roboto"
                     android:text="@string/filter"
-                    android:textSize="13sp"
-                    />
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/filterPostsButton"
@@ -140,6 +140,7 @@
                 android:layout_marginStart="@dimen/marginSorting"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/calendar_image"
+                android:drawableEnd="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
                 android:hint="@string/three_dots"
@@ -156,6 +157,7 @@
                 android:background="@drawable/rounded_edittext"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:drawableRight="@drawable/calendar_image"
+                android:drawableEnd="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
                 android:hint="@string/three_dots"
@@ -170,9 +172,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:layout_marginLeft="@dimen/marginSorting"
+                android:layout_marginStart="@dimen/marginSorting"
                 android:alpha="0.4"
                 android:text="@string/x_sign"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             </LinearLayout>
 
@@ -192,7 +195,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayout" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postsRecyclerView"

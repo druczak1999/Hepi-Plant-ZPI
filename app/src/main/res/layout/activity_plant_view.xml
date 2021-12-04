@@ -48,8 +48,7 @@
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                app:srcCompat="@drawable/plant_icon"
-                />
+                app:srcCompat="@drawable/plant_icon" />
 
             <TextView
                 android:id="@+id/SpeciesView"
@@ -103,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_big"
                 style = "@style/DetailsFontValue"
-                android:layout_marginTop="@dimen/margin_small"/>
+                android:layout_marginTop="@dimen/margin_small" />
 
             <TextView
                 android:id="@+id/FertilizingView"
@@ -120,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_big"
                 android:layout_marginTop="@dimen/margin_small"
-                style = "@style/DetailsFontValue"/>
+                style = "@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/MistingView"
@@ -147,8 +146,7 @@
                 android:layout_marginHorizontal="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/soil_type"
-                style = "@style/DetailsFontTitle"
-                 />
+                style = "@style/DetailsFontTitle" />
 
             <TextView
                 android:id="@+id/SoilValueView"

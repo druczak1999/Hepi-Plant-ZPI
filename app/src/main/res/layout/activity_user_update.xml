@@ -33,7 +33,7 @@
         android:text="@string/user_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
-        style="@style/DetailsFontTitle"/>
+        style="@style/DetailsFontTitle" />
 
     <TextView
         android:id="@+id/emailUserView"
@@ -45,7 +45,7 @@
         android:text="@string/email_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
-        style="@style/DetailsFontTitle"/>
+        style="@style/DetailsFontTitle" />
 
     <EditText
         android:id="@+id/usernameValueUserView"
@@ -73,7 +73,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
         app:layout_constraintVertical_bias="0.045"
-        style="@style/DetailsFontValue"/>
+        style="@style/DetailsFontValue" />
 
     <Button
         android:id="@+id/save"

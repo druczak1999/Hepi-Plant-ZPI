@@ -67,7 +67,7 @@
                 android:layout_height="@dimen/spinner_height"
                 android:layout_marginHorizontal="@dimen/margin_medium"
                 android:layout_marginVertical="@dimen/margin_small"
-                style="@style/DetailsFontValue"/>
+                style="@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/speciesEditWateringFrequencyHeaderTextView"
@@ -175,7 +175,7 @@
                     android:text="@string/days_hint"
                     android:layout_marginRight="@dimen/margin_small"
                     android:layout_marginEnd="@dimen/margin_small"
-                    style="@style/DetailsFontValue"/>
+                    style="@style/DetailsFontValue" />
 
             </RelativeLayout>
 
@@ -194,7 +194,7 @@
                 android:layout_height="@dimen/spinner_height"
                 android:layout_marginHorizontal="@dimen/margin_medium"
                 android:layout_marginVertical="@dimen/margin_small"
-                style="@style/DetailsFontValue"/>
+                style="@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/speciesEditSoilHeaderTextView"
@@ -230,6 +230,6 @@
         android:layout_marginVertical="@dimen/margin_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -94,6 +95,7 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
         this.dataSet = new ArrayList<>(Arrays.asList(dataSet));
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
@@ -162,9 +164,7 @@ public class SalesOffersRecyclerViewAdapter extends RecyclerView.Adapter<SalesOf
         Log.v(TAG, dataSet.get(position).getPhoto());
         StorageReference pathReference = storageRef.child(dataSet.get(position).getPhoto());
         cacheImage(pathReference,photoImageView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            photoImageView.setClipToOutline(true);
-        }
+        photoImageView.setClipToOutline(true);
     }
 
     private void cacheImage(StorageReference storageRef, ImageView photoImageView){

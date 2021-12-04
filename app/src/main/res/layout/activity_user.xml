@@ -86,7 +86,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailUserView" />
 
-
     <TextView
         android:id="@+id/notificationUserView"
         style="@style/DetailsFontTitle"
@@ -117,7 +116,6 @@
         android:id="@+id/noticeSwitch"
         android:layout_width="80dp"
         android:layout_height="24dp"
-
         android:layout_marginTop="25dp"
         android:layout_marginEnd="@dimen/margin_big"
         android:layout_marginRight="@dimen/margin_big"
