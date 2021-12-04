@@ -330,11 +330,12 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private JSONArray hashReading(){
-        List<String> hashList = Arrays.asList(postTags.getText().toString().replace(" ", "").split("#"));
+        int listSize = 0;
+        List<String> hashList = new ArrayList<>(Arrays.asList(postTags.getText().toString().replace(" ", "").split("#")));
         hashList.removeAll(Arrays.asList("", null));
         Log.v(TAG, String.valueOf(hashList));
         JSONArray hash = new JSONArray();
-        int listSize = Math.min(hashList.size(), 5);
+        listSize = Math.min(hashList.size(), 5);
         for(int i=0; i<listSize; i++) {
             hash.put(hashList.get(i));
         }
@@ -345,8 +346,8 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         Log.v(TAG, "OnResponse");
         Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
     }
 
     private void onErrorResponsePost(VolleyError error){

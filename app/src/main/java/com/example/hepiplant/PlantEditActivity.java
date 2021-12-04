@@ -435,9 +435,8 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         setupNotifications(data);
         Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
-        if(config.isNotifications())
-            startActivity(intent);
-        finish();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void setupNotifications(PlantDto data) {

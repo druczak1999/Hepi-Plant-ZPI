@@ -204,11 +204,12 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
     }
 
     private JSONArray hashReading(){
-        List<String> hashList = Arrays.asList(tags.getText().toString().replace(" ", "").split("#"));
+        int listSize = 0;
+        List<String> hashList = new ArrayList<>(Arrays.asList(tags.getText().toString().replace(" ", "").split("#")));
         hashList.removeAll(Arrays.asList("", null));
         Log.v(TAG, String.valueOf(hashList));
         JSONArray hash = new JSONArray();
-        int listSize = Math.min(hashList.size(), 5);
+        listSize = Math.min(hashList.size(), 5);
         for(int i=0; i<listSize; i++) {
             hash.put(hashList.get(i));
         }

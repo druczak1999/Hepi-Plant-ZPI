@@ -69,7 +69,7 @@
                 android:hint="@string/three_dots"
                 style="@style/DetailsFontValue"
                 android:importantForAutofill="no"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences|textMultiLine" />
 
             <TextView
                 android:id="@+id/Species"

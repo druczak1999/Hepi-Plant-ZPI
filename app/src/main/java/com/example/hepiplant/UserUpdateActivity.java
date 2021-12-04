@@ -89,18 +89,10 @@ public class UserUpdateActivity extends AppCompatActivity {
         String url = getRequestUrl() +"users/"+config.getUserId();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponse(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
-                usernameValue.setText(error.getMessage());
-            }
-        });
+                (Response.Listener<JSONObject>) this::onGetResponse, error -> {
+                    Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
+                    usernameValue.setText(error.getMessage());
+                });
     }
 
     private void onGetResponse(JSONObject response) {
@@ -123,37 +115,28 @@ public class UserUpdateActivity extends AppCompatActivity {
 
     private void editRequestUser(){
         String url = getRequestUrl() + "users/"+config.getUserId();
-        save.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG, "On Click. Attempting patch request"+userDto.getUsername());
-                JSONObject postData = new JSONObject();
-                try {
-                    postData.put("username", usernameValue.getText().toString());
-                    postData.put("notifications", config.isNotifications());
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.v(TAG, "On Click. Attempting patch request"+usernameValue.getText().toString());
-                Log.v(TAG, "Invoking requestProcessor");
-                requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
-                                Log.v(TAG, "Request successful. Response is: " + response);
-                                finish();
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+        save.setOnClickListener(v -> {
+            Log.v(TAG, "On Click. Attempting patch request"+userDto.getUsername());
+            JSONObject postData = new JSONObject();
+            try {
+                postData.put("username", usernameValue.getText().toString());
+                postData.put("notifications", config.isNotifications());
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.v(TAG, "On Click. Attempting patch request"+usernameValue.getText().toString());
+            Log.v(TAG, "Invoking requestProcessor");
+            requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
+                    (Response.Listener<JSONObject>) response -> {
+                        Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
+                        Log.v(TAG, "Request successful. Response is: " + response);
+                        finish();
+                    }, error -> {
                         Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
                         Log.v(TAG, "User request unsuccessful. Error message: " + error.getMessage());
                         finish();
-                    }
-                });
-            }
+                    });
         });
     }
 

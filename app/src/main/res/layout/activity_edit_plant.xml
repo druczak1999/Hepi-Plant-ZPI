@@ -39,7 +39,7 @@
                 android:alpha="0.8"
                 android:text="@string/plant_name_view"
                 android:importantForAutofill="no"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences|textMultiLine" />
 
             <ImageView
                 android:id="@+id/plantImageEdit"
