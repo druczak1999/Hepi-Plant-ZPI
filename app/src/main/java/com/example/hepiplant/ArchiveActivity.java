@@ -38,7 +38,6 @@ public class ArchiveActivity extends AppCompatActivity implements EventsArchiveR
 
     private EventDto[] events;
     private RecyclerView rv;
-    private EventsArchiveRecyclerViewAdapter adapter;
     private Configuration config;
     private JSONResponseHandler<EventDto> eventResponseHandler;
     private JSONRequestProcessor requestProcessor;
@@ -166,7 +165,7 @@ public class ArchiveActivity extends AppCompatActivity implements EventsArchiveR
     }
 
     private void setAdapter() {
-        adapter = new EventsArchiveRecyclerViewAdapter(this, events);
+        EventsArchiveRecyclerViewAdapter adapter = new EventsArchiveRecyclerViewAdapter(this, events);
         adapter.setClickListener((EventsArchiveRecyclerViewAdapter.ItemClickListener) this);
         rv.setAdapter(adapter);
     }

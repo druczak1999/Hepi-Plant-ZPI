@@ -41,10 +41,10 @@
                     android:layout_marginTop="@dimen/filerSpinnerHeight"
                     android:background="@drawable/rounded_spinner"
                     android:drawableRight="@drawable/filter_icon"
+                    android:drawableEnd="@drawable/filter_icon"
                     android:fontFamily="@font/roboto"
-                    android:text="Filtruj "
-                    android:textSize="13dp"
-                    />
+                    android:text="@string/filter"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/filterPostsButton"
@@ -54,16 +54,18 @@
                     android:layout_marginStart="@dimen/marginSortingSmall"
                     android:layout_marginLeft="@dimen/marginSortingSmall"
                     android:layout_marginTop="@dimen/marginSorting"
-                    android:text="Filtruj"
+                    android:text="@string/filter"
                     >
 
                 </Button>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/tagFilterLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/SortLinearLayout"
                 android:visibility="gone">
+
                 <EditText
                     android:id="@+id/tagEditTextInPostFilter"
                     android:layout_width="@dimen/editTextButtonWidthSort"
@@ -71,9 +73,12 @@
                     android:background="@drawable/rounded_edittext"
                     android:layout_marginLeft="@dimen/marginSorting"
                     android:layout_marginTop="@dimen/marginSorting"
-                    android:hint="Tag"
+                    android:layout_marginStart="@dimen/marginSorting"
+                    android:hint="@string/tag"
                     style="@style/DetailsFontValue"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:importantForAutofill="no"
+                    android:inputType="text" />
 
                 <TextView
                     android:id="@+id/closeTagFilter"
@@ -82,8 +87,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/marginSorting"
                     android:layout_marginLeft="@dimen/marginSorting"
+                    android:layout_marginStart="@dimen/marginSorting"
                     android:alpha="0.4"
-                    android:text="x"
+                    android:text="@string/x_sign"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -92,6 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/SortLinearLayout"
                 android:visibility="gone">
+
                 <Spinner
                     android:id="@+id/categorySpinnerInPostFilter"
                     style="@style/DetailsFontValue"
@@ -99,9 +106,11 @@
                     android:layout_height="@dimen/filerSortButtonsHeight"
                     android:layout_marginLeft="@dimen/marginSorting"
                     android:layout_marginTop="@dimen/marginSorting"
+                    android:layout_marginStart="@dimen/marginSorting"
                     android:background="@drawable/rounded_spinner"
                     android:ems="10"
                     android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/closeCategoryFilter"
                     style="@style/DetailsFontTitle"
@@ -109,43 +118,53 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/marginSorting"
                     android:layout_marginLeft="@dimen/marginSorting"
+                    android:layout_marginStart="@dimen/marginSorting"
                     android:alpha="0.4"
-                    android:text="x"
+                    android:text="@string/x_sign"
                     android:visibility="gone" />
+
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/datesFilterLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/SortLinearLayout"
                 android:visibility="gone">
+
             <Button
                 android:id="@+id/startDateButtonInPostFilter"
                 android:layout_width="@dimen/editTextButtonWidthSort"
                 android:layout_height="@dimen/filerSortButtonsHeight"
                 android:layout_marginLeft="@dimen/marginSorting"
                 android:layout_marginTop="@dimen/marginSorting"
+                android:layout_marginStart="@dimen/marginSorting"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/calendar_image"
+                android:drawableEnd="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
-                android:hint="..."
+                android:hint="@string/three_dots"
                 style="@style/DetailsFontValue"
                 android:textAlignment="viewStart"
-                android:visibility="gone"/>
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/endDateButtonInPostFilter"
                 android:layout_width="@dimen/editTextButtonWidthSort"
                 android:layout_height="@dimen/filerSortButtonsHeight"
                 android:layout_marginLeft="@dimen/marginSortingSmall"
+                android:layout_marginStart="@dimen/marginSortingSmall"
                 android:background="@drawable/rounded_edittext"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:drawableRight="@drawable/calendar_image"
+                android:drawableEnd="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
-                android:hint="..."
+                android:hint="@string/three_dots"
                 style="@style/DetailsFontValue"
                 android:textAlignment="viewStart"
-                android:visibility="gone"/>
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/closeDateFilters"
                 style="@style/DetailsFontTitle"
@@ -153,10 +172,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginSorting"
                 android:layout_marginLeft="@dimen/marginSorting"
+                android:layout_marginStart="@dimen/marginSorting"
                 android:alpha="0.4"
-                android:text="x"
-                android:visibility="gone"/>
+                android:text="@string/x_sign"
+                android:visibility="gone" />
+
             </LinearLayout>
+
         </LinearLayout>
 
         <TextView
@@ -165,7 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="@dimen/margin_big"
+            android:layout_marginVertical="@dimen/margin_medium"
             android:layout_marginTop="@dimen/marginSorting"
             android:gravity="center"
             android:text="@string/no_posts_to_display"
@@ -173,7 +195,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayout" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postsRecyclerView"
@@ -190,7 +211,7 @@
             style="@style/ButtonSmallAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_medium"
+            android:layout_marginVertical="@dimen/margin_small"
             android:text="@string/add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -13,21 +13,19 @@
     <TextView
         android:id="@+id/userName"
         style="@style/PageTitleFont"
-        android:textSize="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:hint="..."
+        android:layout_marginTop="@dimen/margin_medium"
+        android:hint="@string/three_dots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        android:inputType = "textMultiLine"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/userToolbar" />
 
     <ImageView
         android:id="@+id/profilePhoto"
-        android:layout_width="115dp"
+        android:layout_width="@dimen/floating_button_width"
         android:layout_height="113dp"
         android:background="@drawable/rounded_edittext"
         android:padding="20sp"
@@ -44,9 +42,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:text="Nazwa użytkownika"
+        android:layout_marginLeft="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="@string/user_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
@@ -55,10 +53,11 @@
         style="@style/DetailsFontValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:layout_marginLeft="35dp"
+        android:layout_marginStart="35dp"
         android:alpha="0.8"
-        android:text="..."
+        android:text="@string/three_dots"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userNameUserViewSmall" />
 
@@ -68,9 +67,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:text="Email"
+        android:layout_marginLeft="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="@string/email_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameValueUserView" />
 
@@ -81,22 +80,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:alpha="0.8"
-        android:text="..."
+        android:text="@string/three_dots"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailUserView" />
-
 
     <TextView
         android:id="@+id/notificationUserView"
         style="@style/DetailsFontTitle"
         android:layout_width="wrap_content"
         android:layout_height="27dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginLeft="@dimen/margin_big"
         android:layout_marginTop="25dp"
-        android:text="Powiadomienia"
+        android:text="@string/notifications"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change" />
 
@@ -104,24 +102,23 @@
         android:id="@+id/change"
         android:layout_width="151dp"
         android:layout_height="39dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:background="@drawable/rounded_button"
         android:fontFamily="@font/cantata_one"
-        android:text="Zmień dane"
+        android:text="@string/change_data"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailValueUserView" />
 
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/noticeSwitch"
         android:layout_width="80dp"
         android:layout_height="24dp"
-
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:layout_marginRight="@dimen/margin_big"
         android:checked="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change" />
@@ -133,7 +130,7 @@
         android:layout_height="27dp"
         android:layout_marginStart="28dp"
         android:layout_marginLeft="28dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:text="@string/hour_of_notifications"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notificationUserView"/>
@@ -143,9 +140,9 @@
         style="@style/DetailsFontValue"
         android:layout_width="wrap_content"
         android:layout_height="27dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="@dimen/margin_very_small"
+        android:layout_marginLeft="@dimen/margin_very_small"
+        android:layout_marginTop="@dimen/margin_medium"
         android:text=""
         app:layout_constraintStart_toEndOf="@+id/notificationTimeUserView"
         app:layout_constraintTop_toBottomOf="@+id/notificationUserView" />
@@ -155,11 +152,11 @@
         style="@style/ButtonSmallWhite"
         android:layout_width="88dp"
         android:layout_height="34dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:layout_marginRight="@dimen/margin_medium"
         android:text="@string/change_hour"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noticeSwitch" />
 

@@ -28,8 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="@dimen/margin_medium"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/add_species_title" />
 
             <TextView
@@ -37,8 +37,8 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_medium"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/name_placeholder" />
 
             <EditText
@@ -46,24 +46,26 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium" />
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textCapSentences" />
 
             <TextView
                 android:id="@+id/speciesAddCategoryHeaderTextView"
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_medium"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/category_placeholder" />
 
             <Spinner
                 android:id="@+id/speciesCategoryAddSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small"
                 style="@style/DetailsFontValue"/>
 
             <TextView
@@ -71,31 +73,35 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_medium"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/watering_frequency_placeholder" />
 
             <RelativeLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium" >
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small" >
 
                 <EditText
                     android:id="@+id/speciesWateringFrequencyAddEditText"
                     style="@style/DetailsFontValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/zero" />
+                    android:text="@string/zero"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/days_hint"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/margin_small"
+                    android:layout_marginEnd="@dimen/margin_small"
                     style="@style/DetailsFontValue" />
 
             </RelativeLayout>
@@ -105,31 +111,35 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_medium"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/fertilizing_frequency_placeholder" />
 
             <RelativeLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium" >
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small" >
 
                 <EditText
                     android:id="@+id/speciesFertilizingFrequencyAddEditText"
                     style="@style/DetailsFontValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/zero" />
+                    android:text="@string/zero"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/days_hint"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/margin_small"
+                    android:layout_marginEnd="@dimen/margin_small"
                     style="@style/DetailsFontValue" />
 
             </RelativeLayout>
@@ -139,31 +149,35 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_medium"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/misting_frequency_placeholder" />
 
             <RelativeLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium" >
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small" >
 
                 <EditText
                     android:id="@+id/speciesMistingFrequencyAddEditText"
                     style="@style/DetailsFontValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/zero" />
+                    android:text="@string/zero"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/days_hint"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/margin_small"
+                    android:layout_marginEnd="@dimen/margin_small"
                     style="@style/DetailsFontValue" />
 
             </RelativeLayout>
@@ -173,16 +187,16 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_medium"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/placement_placeholder" />
 
             <Spinner
                 android:id="@+id/speciesPlacementAddSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small"
                 style="@style/DetailsFontValue"/>
 
             <TextView
@@ -190,8 +204,8 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_medium"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/soil_placeholder" />
 
             <EditText
@@ -199,8 +213,10 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_big"
-                android:layout_marginVertical="@dimen/margin_medium" />
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences" />
 
         </LinearLayout>
 
@@ -214,7 +230,7 @@
         android:layout_gravity="center"
         android:text="@string/save"
         android:onClick="onSaveButtonClick"
-        android:layout_marginVertical="@dimen/margin_big"
+        android:layout_marginVertical="@dimen/margin_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

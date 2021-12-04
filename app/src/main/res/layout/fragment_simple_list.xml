@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:text="@string/no_posts_to_display"
         android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="@dimen/margin_big"
+        android:layout_marginVertical="@dimen/margin_medium"
         style="@style/DetailsFontValue"
         android:visibility="gone" />
 
@@ -17,6 +17,6 @@
         android:id="@+id/postsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/margin_big"/>
+        android:layout_marginVertical="@dimen/margin_medium"/>
 
 </FrameLayout>

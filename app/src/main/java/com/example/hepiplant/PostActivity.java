@@ -3,7 +3,6 @@ package com.example.hepiplant;
 import static com.example.hepiplant.helper.LangUtils.getCommentsSuffix;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,8 +52,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     private RecyclerView recyclerView;
     private PostDto post;
     private CommentDto[] comments = new CommentDto[]{};
-    private TextView dateTextView, titleTextView, tagsTextView, bodyTextView, postAuthorTextView;
-    private ImageView photoImageView;
+    private TextView tagsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,35 +169,14 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         String url = getRequestUrl();
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-            new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(JSONObject response) {
-                    onGetResponseReceived(response);
-                }
-            }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONObject>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void makePostDataRequest(JSONObject postData) {
         String url = getRequestUrl() + "/comments";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        makeGetDataRequest();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponseReceived(error);
-            }
-        });
+                (Response.Listener<JSONObject>) response -> makeGetDataRequest(), this::onErrorResponseReceived);
     }
 
     @NonNull
@@ -218,15 +194,14 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         post = postResponseHandler.handleResponse(response, PostDto.class);
         comments = post.getComments().toArray(comments);
         int tempSize = 0;
-        for (int i = 0; i < comments.length; i++) {
-            if (comments[i]!= null) tempSize+=1;
+        for (CommentDto comment : comments) {
+            if (comment != null) tempSize += 1;
         }
         CommentDto[] tempComments = new CommentDto[tempSize];
         int a = 0;
-        for (int i = 0; i < comments.length; i++) {
-            if (comments[i]!= null)
-            {
-                tempComments[a] = comments[i];
+        for (CommentDto comment : comments) {
+            if (comment != null) {
+                tempComments[a] = comment;
                 a++;
             }
         }
@@ -275,12 +250,12 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     }
 
     private void setupViewsData() {
-        dateTextView = findViewById(R.id.postDateTextViewSingle);
+        TextView dateTextView = findViewById(R.id.postDateTextViewSingle);
         dateTextView.setText(post.getCreatedDate().substring(0,16));
-        titleTextView = findViewById(R.id.postTitleTextViewSingle);
+        TextView titleTextView = findViewById(R.id.postTitleTextViewSingle);
         titleTextView.setText(post.getTitle());
         tagsTextView = findViewById(R.id.postTagsTextViewSingle);
-        postAuthorTextView = findViewById(R.id.postAuthorTextView);
+        TextView postAuthorTextView = findViewById(R.id.postAuthorTextView);
         postAuthorTextView.setText(post.getUsername());
         StringBuilder tags = new StringBuilder();
         for (String s : post.getTags()) {
@@ -292,9 +267,9 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
         }
-        bodyTextView = findViewById(R.id.postBodyTextViewSingle);
+        TextView bodyTextView = findViewById(R.id.postBodyTextViewSingle);
         bodyTextView.setText(post.getBody());
-        photoImageView = findViewById(R.id.postPhotoImageViewSingle);
+        ImageView photoImageView = findViewById(R.id.postPhotoImageViewSingle);
         if (post.getPhoto() != null) {
             Log.v(TAG, "Attempting photo bind for data: " + post.getPhoto());
             getPhotoFromFirebase(photoImageView, post);
@@ -313,9 +288,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
 
         StorageReference pathReference = storageRef.child(post.getPhoto());
         cacheImage(pathReference,photoImageView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            photoImageView.setClipToOutline(true);
-        }
+        photoImageView.setClipToOutline(true);
     }
 
     private void cacheImage(StorageReference storageRef, ImageView photoImageView){

@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,8 +33,8 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
 
     private List<EventDto> dataSet;
     private EventsRecyclerViewAdapter.ItemClickListener clickListener;
-    private Context contextAll;
-    private Intent intent;
+    private final Context contextAll;
+    private final Intent intent;
 
     // Provide a reference to the type of views that you are using (custom ViewHolder).
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -79,10 +80,11 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     public EventsRecyclerViewAdapter(Context context, EventDto[] dataSet) {
         intent = new Intent(context, PopUpArchive.class);
         contextAll =context;
-        this.dataSet = new ArrayList<EventDto>(Arrays.asList(dataSet));
+        this.dataSet = new ArrayList<>(Arrays.asList(dataSet));
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
     public EventsRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Log.v(TAG,"viewholder");
@@ -97,7 +99,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(EventsRecyclerViewAdapter.ViewHolder viewHolder, final int position) {
-        Log.v(TAG,"photo for: "+dataSet.get(position).getEventName());
+        Log.v(TAG, "onBindViewHolder position " + position);
         viewHolder.getEvent().setText(dataSet.get(position).getEventName());
         if(dataSet.get(position).getEventDate() != null){
             String str = dataSet.get(position).getEventDate().substring(0,10);
@@ -105,7 +107,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
             LocalDate dateTime = LocalDate.parse(str, formatter);
             LocalDate date = LocalDate.now();
             Log.v(TAG,dateTime.toString());
-            Log.v(TAG,LocalDate.parse(date.format(formatter),formatter).toString());
+            Log.v(TAG,date.toString());
             viewHolder.getDate().setText(dataSet.get(position).getEventDate());
             if(dateTime.isBefore(LocalDate.parse(date.format(formatter),formatter))){
                 viewHolder.getDate().setTextColor(Color.RED);
@@ -152,13 +154,10 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     }
 
     private void setCheckBoxOnClickListener(ViewHolder viewHolder, int position) {
-        viewHolder.getCheckBox().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(viewHolder.getCheckBox().isChecked()){
-                    intent.putExtra("eventId",dataSet.get(position).getId());
-                    contextAll.startActivity(intent);
-                }
+        viewHolder.getCheckBox().setOnClickListener(v -> {
+            if(viewHolder.getCheckBox().isChecked()){
+                intent.putExtra("eventId",dataSet.get(position).getId());
+                contextAll.startActivity(intent);
             }
         });
     }

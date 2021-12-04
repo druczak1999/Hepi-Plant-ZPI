@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -34,8 +33,6 @@ import com.example.hepiplant.dto.PostDto;
 import com.example.hepiplant.helper.JSONRequestProcessor;
 import com.example.hepiplant.helper.JSONResponseHandler;
 import com.example.hepiplant.helper.RequestType;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -98,9 +95,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                 Uri resultUri = result.getUri();
                 postImage.setImageURI(resultUri);
                 img_str=resultUri.toString();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    postImage.setClipToOutline(true);
-                }
+                postImage.setClipToOutline(true);
                 saveImageToFirebase();
                 Log.v(TAG, img_str);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -170,17 +165,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         String url = getRequestUrl()+"posts/" + getIntent().getExtras().get("postId");
         Log.v(TAG, "Invoking requestProcessor"+ url);
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onGetResponseReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onErrorResponseReceived(error);
-                    }
-                });
+                (Response.Listener<JSONObject>) this::onGetResponseReceived, this::onErrorResponseReceived);
     }
 
     private void onGetResponseReceived(JSONObject response) {
@@ -207,9 +192,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         postTags.setText(getIntent().getExtras().getString("tags"));
         if(post.getPhoto()!= null)
             getPhotoFromFirebase(postImage, post.getPhoto());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            postImage.setClipToOutline(true);
-        }
+        postImage.setClipToOutline(true);
     }
 
     @NonNull
@@ -226,29 +209,21 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         String url = getRequestUrl() + "categories";
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.GET, url, null, RequestType.ARRAY,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
-                        List<String> categories = new ArrayList<String>();
-                        for (int i=0;i<categoryDtos.length;i++){
-                            categories.add(categoryDtos[i].getName());
-                        }
-                        getCategories(categories);
+                (Response.Listener<JSONArray>) response -> {
+                    categoryDtos = categoryResponseHandler.handleArrayResponse(response, CategoryDto[].class);
+                    List<String> categories = new ArrayList<>();
+                    for (CategoryDto categoryDto : categoryDtos) {
+                        categories.add(categoryDto.getName());
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponsePost(error);
-            }
-        });
+                    getCategories(categories);
+                }, this::onErrorResponsePost);
     }
 
     public void getCategories(List<String> categories){
         Log.v(TAG,"Categories size"+categories.size());
         spinnerCat = (Spinner)findViewById(R.id.editCategory);
         spinnerCat.setOnItemSelectedListener( this);
-        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dtoArrayAdapter = new ArrayAdapter<>(this.getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         dtoArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(dtoArrayAdapter);
         for(CategoryDto c : categoryDtos){
@@ -264,9 +239,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         StorageReference storageRef = storage.getReference();
         StorageReference pathReference = storageRef.child(post);
         cacheImage(pathReference,photoImageView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            photoImageView.setClipToOutline(true);
-        }
+        photoImageView.setClipToOutline(true);
     }
 
     private void cacheImage(StorageReference storageRef, ImageView photoImageView){
@@ -289,81 +262,47 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
         byte[] dataB = baos.toByteArray();
 
         UploadTask uploadTask = imagesRef.putBytes(dataB);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-            }
-        });
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG)
+                .show()).addOnSuccessListener(taskSnapshot -> {});
         img_str = path;
     }
 
     private void setBottomBarOnItemClickListeners(){
         Button buttonHome = findViewById(R.id.buttonDom);
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
-                startActivity(intent);
-            }
+        buttonHome.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
+            startActivity(intent);
         });
 
         Button buttonForum = findViewById(R.id.buttonForum);
-        buttonForum.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
-                startActivity(intent);
-            }
+        buttonForum.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+            startActivity(intent);
         });
     }
 
     private void setOnClickListeners(){
         setBottomBarOnItemClickListeners();
-        postImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cropImage();
-            }
-        });
+        postImage.setOnClickListener(v -> cropImage());
 
         onClickAddPost();
     }
 
     private void onClickAddPost(){
         Log.v(TAG,"onClick Edit");
-        editPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(postName.getText()!=null) patchRequestPost();
-                else Toast.makeText(getApplicationContext(),R.string.post_title,Toast.LENGTH_LONG).show();
-            }
+        editPost.setOnClickListener(v -> {
+            if(postName.getText()!=null) patchRequestPost();
+            else Toast.makeText(getApplicationContext(),R.string.post_title,Toast.LENGTH_LONG).show();
         });
     }
 
     private void patchRequestPost(){
-        String url = getRequestUrl()+"posts/"+getIntent().getExtras().getLong("postId");
+        String url = getRequestUrl()+"posts/" + postId;
         JSONObject postData = makePostDataJson();
         Log.v(TAG, String.valueOf(postData));
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onPostResponsePost(response);
-                        Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onErrorResponsePost(error);
-            }
-        });
+                (Response.Listener<JSONObject>) this::onPostResponsePost, this::onErrorResponsePost);
     }
 
     private JSONObject makePostDataJson(){
@@ -390,15 +329,13 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
                 .start(this);
     }
 
-    private JSONArray hashReading()
-    {
+    private JSONArray hashReading(){
         int listSize = 0;
-        List<String> hashList = new ArrayList(Arrays.asList(postTags.getText().toString().replace(" ", "").split("#")));
+        List<String> hashList = new ArrayList<>(Arrays.asList(postTags.getText().toString().replace(" ", "").split("#")));
         hashList.removeAll(Arrays.asList("", null));
         Log.v(TAG, String.valueOf(hashList));
         JSONArray hash = new JSONArray();
-        if(hashList.size()>5) listSize = 5;
-        else listSize = hashList.size();
+        listSize = Math.min(hashList.size(), 5);
         for(int i=0; i<listSize; i++) {
             hash.put(hashList.get(i));
         }
@@ -407,8 +344,10 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
 
     private void onPostResponsePost(JSONObject response){
         Log.v(TAG, "OnResponse");
-        PostDto data = new PostDto();
-        data = postResponseHandler.handleResponse(response, PostDto.class);
+        Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void onErrorResponsePost(VolleyError error){

@@ -1,7 +1,6 @@
 package com.example.hepiplant.fragments;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,7 +37,6 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
 
     private View eventsFragmentView;
     private RecyclerView eventsRecyclerView;
-    private EventsRecyclerViewAdapter adapter;
     private EventDto[] events = new EventDto[]{};
     private Configuration config;
     private JSONResponseHandler<EventDto> eventResponseHandler;
@@ -105,11 +102,10 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
         return config.getUrl() ;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
         events = eventResponseHandler.handleArrayResponse(response,EventDto[].class);
-        Log.v(TAG, "DL: "+events.length);
+        Log.v(TAG, "DL: " + events.length);
         setAdapter();
     }
 
@@ -132,7 +128,7 @@ public class EventsListFragment extends Fragment implements EventsRecyclerViewAd
     }
 
     private void setAdapter() {
-        adapter = new EventsRecyclerViewAdapter(getActivity(), events);
+        EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter(getActivity(), events);
         adapter.setClickListener(this);
         eventsRecyclerView.setAdapter(adapter);
     }

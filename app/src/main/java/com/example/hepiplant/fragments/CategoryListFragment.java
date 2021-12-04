@@ -41,7 +41,6 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
     private JSONResponseHandler<CategoryDto> categoryResponseHandler;
     private View categoriesFragmentView;
     private RecyclerView categoriesRecyclerView;
-    private CategoriesRecyclerViewAdapter adapter;
     private CategoryDto[] categories = new CategoryDto[]{};
 
     public CategoryListFragment() {
@@ -130,7 +129,7 @@ public class CategoryListFragment extends Fragment implements CategoriesRecycler
     }
 
     private void setAdapter() {
-        adapter = new CategoriesRecyclerViewAdapter(getActivity(), categories);
+        CategoriesRecyclerViewAdapter adapter = new CategoriesRecyclerViewAdapter(getActivity(), categories);
         adapter.setClickListener(this);
         categoriesRecyclerView.setAdapter(adapter);
     }

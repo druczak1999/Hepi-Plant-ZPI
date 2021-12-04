@@ -16,7 +16,7 @@
         android:layout_height="578dp"
         android:layout_marginTop="@dimen/spaceForToolbar"
         android:layout_marginBottom="@dimen/spaceForBottomBar"
-        app:layout_constraintBottom_toBottomOf="@+id/include2"
+        app:layout_constraintBottom_toBottomOf="@+id/BottomBarEditPlant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,21 +31,22 @@
             <EditText
                 android:id="@+id/PlantNameEdit"
                 style="@style/PageTitleFont"
-                android:textSize="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:alpha="0.8"
-                android:text="@string/plant_name_view" />
+                android:text="@string/plant_name_view"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences|textMultiLine" />
 
             <ImageView
                 android:id="@+id/plantImageEdit"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/big_image_button_size"
+                android:layout_height="@dimen/big_image_button_size"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/margin_big"
                 android:adjustViewBounds="true"
                 android:background="@drawable/rounded_square"
                 android:elevation="@dimen/elevation_3sp"
@@ -57,8 +58,8 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_big"
                 android:fontFamily="@font/roboto"
                 android:text="@string/species" />
 
@@ -67,9 +68,8 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_spinner" />
 
             <TextView
@@ -77,33 +77,32 @@
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/watering_frequency_placeholder"
-
-                />
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/watering_frequency_placeholder" />
 
             <EditText
                 android:id="@+id/wateringEdit"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/days"
+                android:drawableEnd="@drawable/days"
                 android:ems="10"
-                android:inputType="numberSigned"
-                android:text="@string/zero" />
+                android:inputType="number"
+                android:text="@string/zero"
+                android:importantForAutofill="no" />
 
             <TextView
                 android:id="@+id/FertilizingView"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/fertilizing_frequency_placeholder" />
 
             <EditText
@@ -111,22 +110,23 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/days"
+                android:drawableEnd="@drawable/days"
                 android:ems="10"
-                android:inputType="numberSigned"
-                android:text="@string/zero" />
+                android:inputType="number"
+                android:text="@string/zero"
+                android:importantForAutofill="no" />
 
             <TextView
                 android:id="@+id/MistingView"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/misting_frequency_placeholder" />
 
             <EditText
@@ -134,23 +134,23 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/days"
+                android:drawableEnd="@drawable/days"
                 android:ems="10"
-                android:inputType="numberSigned"
-                android:text="@string/zero" />
-
+                android:inputType="number"
+                android:text="@string/zero"
+                android:importantForAutofill="no"/>
 
             <TextView
                 android:id="@+id/PlacementView"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/location" />
 
             <EditText
@@ -158,34 +158,35 @@
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:background="@drawable/rounded_edittext"
-                android:hint="..." />
+                android:hint="@string/three_dots"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences" />
 
             <TextView
                 android:id="@+id/DateView"
                 style="@style/DetailsFontTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/buy_date" />
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/purchase_date" />
 
             <Button
                 android:id="@+id/dateEdit"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/calendar_image"
+                android:drawableEnd="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
-                android:hint="..."
+                android:hint="@string/three_dots"
                 android:textAlignment="viewStart" />
         </LinearLayout>
 
@@ -195,22 +196,19 @@
         android:id="@+id/BottomBarEditPlant"
         layout="@layout/bottom_bar">
     </include>
+
     <Button
         android:id="@+id/buttonEditPlant"
-        android:layout_width="115dp"
-        android:layout_height="45dp"
-        android:background="@drawable/rounded_button"
-        android:fontFamily="@font/cantata_one"
-        android:text="Zapisz"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:elevation="18dp"
+        android:layout_width="@dimen/floating_button_width"
+        android:layout_height="@dimen/floating_button_height"
+        android:text="@string/save"
+        android:elevation="@dimen/floating_button_elevation"
+        style="@style/ButtonUniversal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.935" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

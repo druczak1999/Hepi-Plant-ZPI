@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_marginHorizontal="@dimen/margin_medium"
-    android:layout_marginVertical="@dimen/margin_small"
+    android:layout_marginHorizontal="@dimen/margin_small"
+    android:layout_marginVertical="@dimen/margin_very_small"
     android:gravity="center_vertical">
 
     <FrameLayout
@@ -15,8 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginVertical="@dimen/margin_medium"
-            android:layout_marginHorizontal="@dimen/margin_big"
+            android:layout_marginVertical="@dimen/margin_small"
+            android:layout_marginHorizontal="@dimen/margin_medium"
             android:orientation="vertical">
 
             <TextView
@@ -30,15 +30,15 @@
                 android:id="@+id/postTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/post_title_holder"
+                android:text="@string/title"
                 android:textAppearance="@style/ListItemTitleFont" />
 
             <TextView
                 android:id="@+id/postAuthorTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="@string/post_title_holder"
+                android:textSize="15sp"
+                android:text="@string/title"
                 android:textAppearance="@style/ListItemTitleFont" />
 
             <TextView
@@ -52,16 +52,16 @@
                 android:id="@+id/postBodyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:text="@string/post_body_holder"
+                android:layout_marginTop="@dimen/margin_very_small"
+                android:layout_marginBottom="@dimen/margin_very_small"
+                android:text="@string/body"
                 android:textAppearance="@style/ListItemDescriptionFont" />
 
             <ImageView
                 android:id="@+id/postPhotoImageView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/forum_photo_height"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:background="@drawable/rounded_square"
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
@@ -72,7 +72,7 @@
                 android:id="@+id/postCommentsCountTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_very_small"
                 android:text="@string/post_comments_holder"
                 android:textAppearance="@style/ForumDateFont" />
         </LinearLayout>

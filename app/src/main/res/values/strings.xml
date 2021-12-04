@@ -1,13 +1,12 @@
 <resources>
     <string name="app_name">Hepi Plant</string>
-    <string name="plant_name_holder">Name of plant</string>
-    <string name="plant_species_holder">Plant species</string>
+    <string name="plant_name_holder">Nazwa rośliny</string>
     <string name="plants_list_title">Twoje rośliny</string>
     <string name="forum_date_holder">1 stycznia 2021</string>
     <string name="sales_offer_location_holder">Kraków</string>
-    <string name="post_title_holder">Tytuł</string>
+    <string name="title">Tytuł</string>
     <string name="post_tags_holder">#tagi</string>
-    <string name="post_body_holder">Treść</string>
+    <string name="body">Treść</string>
     <string name="post_comments_holder">0 komentarzy</string>
     <string name="post_price_holder">10 zł</string>
     <string name="username_holder">Username</string>
@@ -86,10 +85,37 @@
     <string name="plant_name_view">Nazwa rośliny</string>
     <string name="species">Gatunek</string>
     <string name="location">Pomieszczenie</string>
-    <string name="buy_date">Data zakupu</string>
+    <string name="purchase_date">Data zakupu</string>
     <string name="category">Kategoria</string>
     <string name="soil_type">Rodzaj gleby</string>
     <string name="placement">Stanowisko</string>
     <string name="go_to_users_posts">Twoje posty i oferty sprzedaży</string>
+    <string name="add_new_plant">Dodaj nową roślinę</string>
+    <string name="three_dots">...</string>
+    <string name="pick_date">Wybierz datę</string>
+    <string name="save_date">Zapisz datę</string>
+    <string name="edit_event">Edytuj wydarzenie</string>
+    <string name="event_date">Data wydarzenia</string>
+    <string name="archive">Archiwum</string>
+    <string name="delete_plant_question">Czy na pewno chcesz usunąć tę roślinę?</string>
+    <string name="author">Autor</string>
+    <string name="add_post">Dodaj nowy post</string>
+    <string name="tags">#Hasztagi</string>
+    <string name="add_object_question">Co chcesz dodać?</string>
+    <string name="post">Post</string>
+    <string name="sales_offer">Ofertę sprzedaży</string>
+    <string name="add_sales_offer">Dodaj nową ofertę sprzedaży</string>
+    <string name="city">Lokalizacja</string>
+    <string name="price">Cena</string>
+    <string name="user_name">Nazwa użytkownika</string>
+    <string name="notifications">Powiadomienia</string>
+    <string name="change_data">Zmień dane</string>
+    <string name="filter">Filtruj</string>
+    <string name="x_sign">x</string>
+    <string name="tag">Tag</string>
+    <string name="event_name">Nazwa eventu</string>
+    <string name="plant">Roślina</string>
+    <string name="event_description">Opis wydarzenia</string>
+    <string name="description">Opis</string>
 
 </resources>

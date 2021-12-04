@@ -25,16 +25,15 @@
 
         </shape>
     </item>
-    <item android:drawable="@drawable/camera_icon"
+    <item
+        android:drawable="@drawable/camera_icon"
         android:gravity="center"
         android:height="30dp"
         android:width="30dp"
         android:top="5dp"
         android:right="5dp"
         android:left="5dp"
-        android:bottom="5dp"
-
-        ></item>
+        android:bottom="5dp" />
     <item android:drawable="@drawable/plus_icon"
         android:gravity="top|right"
         android:height="10dp"

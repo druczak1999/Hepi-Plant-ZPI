@@ -12,7 +12,7 @@
 
     <ImageView
         android:id="@+id/profilePhoto"
-        android:layout_width="115dp"
+        android:layout_width="@dimen/floating_button_width"
         android:layout_height="113dp"
         android:background="@drawable/rounded_edittext"
         android:padding="20sp"
@@ -30,10 +30,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="68dp"
-        android:text="Nazwa użytkownika"
+        android:text="@string/user_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
-        style="@style/DetailsFontTitle"/>
+        style="@style/DetailsFontTitle" />
 
     <TextView
         android:id="@+id/emailUserView"
@@ -42,27 +42,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="164dp"
-        android:text="Email"
+        android:text="@string/email_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
-        style="@style/DetailsFontTitle"/>
-
-
-    <TextView
-        android:id="@+id/notificationUserView"
-        style="@style/DetailsFontTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:fontFamily="@font/cantata_one"
-        android:text="Powiadomienia"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/noticeSwitch"
-        app:layout_constraintHorizontal_bias="0.59"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/save"
-        app:layout_constraintVertical_bias="0.0" />
+        style="@style/DetailsFontTitle" />
 
     <EditText
         android:id="@+id/usernameValueUserView"
@@ -72,10 +55,11 @@
         android:layout_marginLeft="32dp"
         android:layout_marginTop="104dp"
         android:alpha="0.8"
-        android:text=" "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
-        style="@style/DetailsFontValue"/>
+        style="@style/DetailsFontValue"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/emailValueUserView"
@@ -85,12 +69,11 @@
         android:layout_marginLeft="32dp"
         android:layout_marginTop="204dp"
         android:alpha="0.8"
-        android:text=" "
-        app:layout_constraintBottom_toTopOf="@+id/notificationUserView"
+        app:layout_constraintBottom_toTopOf="@id/notificationUserView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
         app:layout_constraintVertical_bias="0.045"
-        style="@style/DetailsFontValue"/>
+        style="@style/DetailsFontValue" />
 
     <Button
         android:id="@+id/save"
@@ -98,7 +81,7 @@
         android:layout_height="39dp"
         android:background="@drawable/rounded_button"
         android:fontFamily="@font/cantata_one"
-        android:text="Zapisz dane"
+        android:text="@string/save"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -107,18 +90,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.71" />
 
-    <Switch
-        android:id="@+id/noticeSwitch"
-        android:layout_width="80dp"
-        android:layout_height="24dp"
-
-        android:layout_marginEnd="68dp"
-        android:layout_marginRight="68dp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/save"
-        app:layout_constraintVertical_bias="0.3" />
 
     <include
         android:id="@+id/userUpdateBottomBar"
@@ -129,4 +100,5 @@
         layout="@layout/floatingbutton"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="43dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

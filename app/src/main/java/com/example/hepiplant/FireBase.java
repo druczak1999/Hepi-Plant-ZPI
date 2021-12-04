@@ -1,19 +1,13 @@
 package com.example.hepiplant;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hepiplant.configuration.Configuration;
 import com.example.hepiplant.dto.AuthenticationResponseDto;
@@ -23,8 +17,6 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -32,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,12 +36,7 @@ public class FireBase extends AppCompatActivity {
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
-            }
+            this::onSignInResult
     );
 
     @Override
@@ -66,7 +52,7 @@ public class FireBase extends AppCompatActivity {
 
     public void createSignInIntent() {
         Log.v(TAG, "Entering createSignInIntent()");
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
+        List<AuthUI.IdpConfig> providers = Collections.singletonList(
                 new AuthUI.IdpConfig.EmailBuilder().build());
 
         Intent signInIntent = AuthUI.getInstance()
@@ -100,11 +86,7 @@ public class FireBase extends AppCompatActivity {
         Log.v(TAG, "Entering signOut()");
         AuthUI.getInstance()
                 .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), FireBase.class));
-                    }
-                });
+                .addOnCompleteListener(task -> startActivity(new Intent(getApplicationContext(), FireBase.class)));
     }
 
     public void themeAndLogo() {
@@ -146,19 +128,10 @@ public class FireBase extends AppCompatActivity {
             e.printStackTrace();
         }
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
-            new Response.Listener<JSONObject>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(JSONObject response) {
+                response -> {
                     onPostResponseReceived(response);
                     makeTokenRequest(user);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.v(TAG, "POST user request unsuccessful. Error message: " + error.getMessage());
-                }
-        });
+                }, error -> Log.v(TAG, "POST user request unsuccessful. Error message: " + error.getMessage()));
         config.getQueue().add(jsonArrayRequest);
     }
 
@@ -172,18 +145,7 @@ public class FireBase extends AppCompatActivity {
             e.printStackTrace();
         }
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.POST, url, postData,
-                new Response.Listener<JSONObject>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        onTokenReceived(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.v(TAG, "POST authenticate request unsuccessful. Error message: " + error.getMessage());
-            }
-        });
+                this::onTokenReceived, error -> Log.v(TAG, "POST authenticate request unsuccessful. Error message: " + error.getMessage()));
         config.getQueue().add(jsonArrayRequest);
     }
 

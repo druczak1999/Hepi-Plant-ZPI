@@ -1,7 +1,6 @@
 package com.example.hepiplant.fragments;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +47,6 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
 
     private View plantsFragmentView;
     private RecyclerView plantsRecyclerView;
-    private PlantsRecyclerViewAdapter adapter;
     private PlantDto[] plants = new PlantDto[]{};
     private Spinner plantFilterSpinner, speciesSpinner, locationSpinner;
     private Button plantFilterButton;
@@ -216,7 +213,6 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
         return config.getUrl() + "species";
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onGetResponseReceived(JSONArray response){
         Log.v(TAG, "onGetResponseReceived()");
         plants = plantResponseHandler.handleArrayResponse(response, PlantDto[].class);
@@ -250,7 +246,7 @@ public class PlantsListFragment extends Fragment implements PlantsRecyclerViewAd
     }
 
     private void setAdapter() {
-        adapter = new PlantsRecyclerViewAdapter(getActivity(), plants);
+        PlantsRecyclerViewAdapter adapter = new PlantsRecyclerViewAdapter(getActivity(), plants);
         adapter.setClickListener(this);
         plantsRecyclerView.setAdapter(adapter);
     }

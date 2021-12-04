@@ -24,7 +24,6 @@ public class ForumTabsActivity extends AppCompatActivity {
 
     private static final String TAG = "ForumTabsActivity";
     private ViewPager viewPager;
-    private ForumFragmentPagerAdapter forumFragmentStateAdapter;
     private UserForumFragmentPagerAdapter userForumFragmentStateAdapter;
 
     @Override
@@ -75,7 +74,7 @@ public class ForumTabsActivity extends AppCompatActivity {
 
     private void setupViewPager() {
         viewPager = findViewById(R.id.forumViewPager);
-        forumFragmentStateAdapter = new ForumFragmentPagerAdapter(getSupportFragmentManager(),
+        ForumFragmentPagerAdapter forumFragmentStateAdapter = new ForumFragmentPagerAdapter(getSupportFragmentManager(),
                 this);
         userForumFragmentStateAdapter = new UserForumFragmentPagerAdapter(getSupportFragmentManager(),
                 this);

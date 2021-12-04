@@ -12,7 +12,6 @@
 
     <include layout="@layout/bottom_bar" />
 
-
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
@@ -34,84 +33,77 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/margin_medium"
                 style="@style/PageTitleFont"
-                android:textSize="32dp"
-                android:text="Dodaj nową roślinę"
+                android:text="@string/add_new_plant"
                 />
 
             <ImageView
                 android:id="@+id/editImageBut"
-                android:layout_width="115dp"
-                android:layout_height="115dp"
+                android:layout_width="@dimen/small_image_button_size"
+                android:layout_height="@dimen/small_image_button_size"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/margin_big"
                 android:background="@drawable/rounded_square"
                 android:elevation="@dimen/elevation_3sp"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                app:srcCompat="@drawable/addimagebutton"
-                />
+                app:srcCompat="@drawable/addimagebutton" />
 
             <TextView
                 android:id="@+id/Name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="0dp"
-                android:text="Nazwa"
-                style="@style/DetailsFontTitle"
-                />
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:text="@string/name_placeholder"
+                style="@style/DetailsFontTitle" />
 
             <EditText
                 android:id="@+id/editPlantName"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:hint="..."
-                style="@style/DetailsFontValue" />
+                android:hint="@string/three_dots"
+                style="@style/DetailsFontValue"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences|textMultiLine" />
 
             <TextView
                 android:id="@+id/Species"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:text="Gatunek"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
+                android:text="@string/species"
                 style="@style/DetailsFontTitle" />
 
             <Spinner
                 android:id="@+id/editSpecies"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_spinner"
-                style="@style/DetailsFontValue"
-                />
+                style="@style/DetailsFontValue" />
 
             <TextView
                 android:id="@+id/Category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 style="@style/DetailsFontTitle"
-                android:text="Kategoria"
-                 />
+                android:text="@string/category" />
 
             <Spinner
                 android:id="@+id/editCategory"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_spinner"
                 style="@style/DetailsFontValue" />
 
@@ -119,96 +111,90 @@
                 android:id="@+id/Watering"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 style="@style/DetailsFontTitle"
-                android:text="@string/watering_frequency_placeholder"
-                 />
+                android:text="@string/watering_frequency_placeholder" />
 
             <EditText
                 android:id="@+id/editWatering"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:text="@string/zero"
                 style="@style/DetailsFontValue"
-                android:inputType="numberSigned"
-                android:drawableRight="@drawable/days"/>
+                android:inputType="number"
+                android:drawableRight="@drawable/days"
+                android:importantForAutofill="no"
+                android:drawableEnd="@drawable/days" />
 
 
             <TextView
                 android:id="@+id/Location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 style="@style/DetailsFontTitle"
-                android:text="Pomieszczenie"
-                />
+                android:text="@string/location" />
 
             <EditText
                 android:id="@+id/editPlantLocation"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 style="@style/DetailsFontValue"
-                android:hint="..."
-                 />
+                android:hint="@string/three_dots"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences" />
 
             <TextView
                 android:id="@+id/PlantDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 style="@style/DetailsFontTitle"
-                android:text="Data zakupu"
+                android:text="@string/purchase_date"
                 />
 
             <Button
                 android:id="@+id/editPlantDate"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:drawableRight="@drawable/calendar_image"
+                android:drawableEnd="@drawable/calendar_image"
                 android:ems="10"
                 android:gravity="start|center_vertical"
-                android:hint="..."
+                android:hint="@string/three_dots"
                 style="@style/DetailsFontValue"
-                android:textAlignment="viewStart"
-                 />
+                android:textAlignment="viewStart" />
 
         </LinearLayout>
+
     </ScrollView>
 
     <Button
         android:id="@+id/buttonAddPlant"
-        android:layout_width="115dp"
-        android:layout_height="45dp"
-        android:background="@drawable/rounded_button"
-        android:fontFamily="@font/cantata_one"
-        android:text="Dodaj"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:elevation="18dp"
+        android:layout_width="@dimen/floating_button_width"
+        android:layout_height="@dimen/floating_button_height"
+        android:text="@string/add"
+        style="@style/ButtonUniversal"
+        android:elevation="@dimen/floating_button_elevation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.935" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

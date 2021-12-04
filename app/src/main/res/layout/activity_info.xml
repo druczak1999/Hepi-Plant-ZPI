@@ -22,7 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_big"
+            android:layout_marginHorizontal="@dimen/margin_medium"
             android:orientation="vertical">
 
             <TextView
@@ -31,7 +31,7 @@
                 android:textSize="30sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_big"
+                android:layout_marginVertical="@dimen/margin_medium"
                 android:layout_gravity="center"
                 android:text="@string/app_info_title" />
 
@@ -40,7 +40,7 @@
                 style="@style/ListItemTitleFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/app_authors"
                 android:textSize="20sp" />
 
@@ -48,15 +48,15 @@
                 android:id="@+id/infoAuthorsListView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_medium"
-                android:layout_marginHorizontal="@dimen/margin_medium" />
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginHorizontal="@dimen/margin_small" />
 
             <TextView
                 android:id="@+id/infoIconAuthorsTextView"
                 style="@style/ListItemTitleFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:text="@string/icon_authors"
                 android:textSize="20sp" />
 
@@ -64,8 +64,8 @@
                 android:id="@+id/infoIconAuthorsListView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_medium"
-                android:layout_marginHorizontal="@dimen/margin_medium" />
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginHorizontal="@dimen/margin_small" />
 
         </LinearLayout>
 

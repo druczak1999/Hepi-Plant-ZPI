@@ -57,7 +57,6 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     private JSONResponseHandler<PostDto> postResponseHandler;
     private View postsFragmentView;
     private RecyclerView postsRecyclerView;
-    private PostsRecyclerViewAdapter postsRecyclerViewAdapter;
     private PostDto[] posts = new PostDto[]{};
     private Button postSortButton, postFilterButton, postStartDateButton, postEndDateButton;
     private TextView closeTagFiler, closeCategoryFilter, closeDateFilters;
@@ -216,7 +215,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
                     postsRecyclerView.getPaddingTop(),
                     postsRecyclerView.getPaddingRight(),
                     (int)(getResources().getDimension(R.dimen.spaceForBottomBar)
-                            + 2 * getResources().getDimension(R.dimen.margin_medium)));
+                            + 2 * getResources().getDimension(R.dimen.margin_small)));
             postsRecyclerView.setClipToPadding(true);
         }
     }
@@ -364,7 +363,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
         if(postTagsEditText.getVisibility()==View.VISIBLE && postTagsEditText.getText()!=null && !postTagsEditText.getText().toString().isEmpty()) {
             if (url.charAt(url.length() - 1) != '?') url += "&";
             if(postTagsEditText.getText().toString().charAt(0)=='#')
-                url += "tag=" + postTagsEditText.getText().toString().substring(1, postTagsEditText.getText().toString().length()).trim();
+                url += "tag=" + postTagsEditText.getText().toString().substring(1).trim();
             else  url += "tag=" + postTagsEditText.getText().toString().trim();
         }
         if(selectedCategory!=null) {
@@ -413,7 +412,7 @@ public class PostsListFragment extends Fragment implements PostsRecyclerViewAdap
     }
 
     private void setAdapter() {
-        postsRecyclerViewAdapter = new PostsRecyclerViewAdapter(getActivity(), posts);
+        PostsRecyclerViewAdapter postsRecyclerViewAdapter = new PostsRecyclerViewAdapter(getActivity(), posts);
         postsRecyclerViewAdapter.setClickListener(this);
         postsRecyclerView.setAdapter(postsRecyclerViewAdapter);
     }

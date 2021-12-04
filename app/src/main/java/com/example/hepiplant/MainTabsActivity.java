@@ -24,7 +24,6 @@ public class MainTabsActivity extends AppCompatActivity {
 
     private static final String TAG = "MainTabsActivity";
     private ViewPager viewPager;
-    private MainFragmentPagerAdapter mainFragmentStateAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +84,7 @@ public class MainTabsActivity extends AppCompatActivity {
     private void setupViewPager() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = findViewById(R.id.mainViewPager);
-        mainFragmentStateAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(),
+        MainFragmentPagerAdapter mainFragmentStateAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(),
                 this);
         viewPager.setAdapter(mainFragmentStateAdapter);
 

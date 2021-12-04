@@ -3,7 +3,6 @@ package com.example.hepiplant;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -189,9 +187,7 @@ public class EventEditActivity extends AppCompatActivity {
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData,RequestType.OBJECT,
                 (Response.Listener<JSONObject>) response -> {
                     Log.v(TAG,"onResponse");
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        onPatchResponseEvent(response);
-                    }
+                    onPatchResponseEvent(response);
                 }, this::onErrorResponseEvent);
     }
 
@@ -211,7 +207,6 @@ public class EventEditActivity extends AppCompatActivity {
         return postData;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void onPatchResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
         EventDto data = new EventDto();
