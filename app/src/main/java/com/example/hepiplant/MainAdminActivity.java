@@ -70,5 +70,12 @@ public class MainAdminActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.adminTabsLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
+
+        String tabTitle = getIntent().getStringExtra("tabTitle");
+        int tabIndex = adminFragmentStateAdapter.getIndexByTitle(tabTitle);
+        TabLayout.Tab tab = tabLayout.getTabAt(tabIndex);
+        if (tab != null) {
+            tab.select();
+        }
     }
 }

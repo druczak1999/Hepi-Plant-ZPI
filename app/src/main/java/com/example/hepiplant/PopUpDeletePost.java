@@ -84,6 +84,7 @@ public class PopUpDeletePost extends AppCompatActivity {
         Intent intent;
         if (config.getUserRoles().contains(ROLE_ADMIN)){
             intent = new Intent(getApplicationContext(), MainAdminActivity.class);
+            intent.putExtra("tabTitle", "Forum");
         } else {
             intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
         }
@@ -105,14 +106,6 @@ public class PopUpDeletePost extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference imageRef = storageRef.child(getIntent().getExtras().getString("photo"));
-        imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        });
+        imageRef.delete().addOnSuccessListener(aVoid -> {}).addOnFailureListener(exception -> {});
     }
 }

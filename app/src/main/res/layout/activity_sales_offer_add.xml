@@ -77,7 +77,9 @@
                 android:layout_marginTop="@dimen/margin_twelve"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
-                android:hint="@string/three_dots" />
+                android:hint="@string/three_dots"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textCapSentences" />
 
             <TextView
                 android:id="@+id/Category"

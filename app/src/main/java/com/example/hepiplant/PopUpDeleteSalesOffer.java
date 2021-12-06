@@ -84,6 +84,7 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
         Intent intent;
         if (config.getUserRoles().contains(ROLE_ADMIN)){
             intent = new Intent(getApplicationContext(), MainAdminActivity.class);
+            intent.putExtra("tabTitle", "Bazarek");
         } else {
             intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
         }
