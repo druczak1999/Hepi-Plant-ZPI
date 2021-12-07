@@ -313,7 +313,7 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
             else postData.put("title", postName.getText().toString());
             if(postBody.getText()==null)  postData.put("body", "");
             else postData.put("body", postBody.getText().toString());
-            if(postTags.getText()==null ) postData.put("tags", "");
+            if(postTags.getText()==null) postData.put("tags", "");
             else postData.put("tags", hashReading());
             postData.put("photo", img_str);
             postData.put("categoryId", selectedCategory.getId());
