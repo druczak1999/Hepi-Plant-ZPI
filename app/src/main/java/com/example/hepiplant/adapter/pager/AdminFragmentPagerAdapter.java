@@ -52,4 +52,11 @@ public class AdminFragmentPagerAdapter extends FragmentPagerAdapter {
         // Generate title based on item position
         return tabTitles[position];
     }
+
+    public int getIndexByTitle(String title) {
+        for(int i=0; i< tabTitles.length; i++){
+            if(tabTitles[i].equalsIgnoreCase(title)) return i;
+        }
+        return -1;
+    }
 }

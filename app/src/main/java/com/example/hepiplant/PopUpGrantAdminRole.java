@@ -80,9 +80,9 @@ public class PopUpGrantAdminRole extends AppCompatActivity {
     private void onResponseReceived(String response) {
         Log.v(TAG, response);
         if(response.toLowerCase(Locale.ROOT).contains("successfully granted")){
-            Toast.makeText(getApplicationContext(),"Użytkownikowi nadano rolę administratora",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getResources().getText(R.string.admin_role_granted_success), Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(),"Nie udało się nadać użytkownikowi roli administratora",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getResources().getText(R.string.admin_role_granted_fail), Toast.LENGTH_LONG).show();
         }
         finish();
     }

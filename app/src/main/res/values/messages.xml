@@ -37,4 +37,6 @@
     <string name="edit_species">Edytowano gatunek o id </string>
     <string name="archive_event">Zarchiwizowano wydarzenie</string>
     <string name="archive_event_fail">Wystąpił błąd - nie zarchiwizowano wydarzenia.</string>
+    <string name="admin_role_granted_success">Użytkownikowi nadano rolę administratora</string>
+    <string name="admin_role_granted_fail">Nie udało się nadać użytkownikowi roli administratora</string>
 </resources>

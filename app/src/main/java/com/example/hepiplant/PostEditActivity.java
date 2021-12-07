@@ -52,6 +52,7 @@ import java.util.List;
 public class PostEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private static final String TAG = "EditPost";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private Configuration config;
     private JSONRequestProcessor requestProcessor;
@@ -345,7 +346,13 @@ public class PostEditActivity extends AppCompatActivity implements AdapterView.O
     private void onPostResponsePost(JSONObject response){
         Log.v(TAG, "OnResponse");
         Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
+        Intent intent;
+        if(config.getUserRoles().contains(ROLE_ADMIN)){
+            intent = new Intent(getApplicationContext(), MainAdminActivity.class);
+            intent.putExtra("tabTitle", "Forum");
+        } else {
+            intent = new Intent(getApplicationContext(), ForumTabsActivity.class);
+        }
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
