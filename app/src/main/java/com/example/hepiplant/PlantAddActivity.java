@@ -333,7 +333,6 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         if(data.getEvents()!=null && !data.getEvents().isEmpty()){
             for (EventDto event: data.getEvents()) {
                 if(!event.isDone()){
-                    Log.v(TAG,event.getEventName());
                     Intent intent = new Intent(this, AlarmBroadcast.class);
                     intent.putExtra("eventName",event.getEventName());
                     intent.putExtra("eventDescription",event.getEventDescription());
@@ -344,12 +343,10 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     try {
-                        Log.v(TAG,"Not:"+event.getEventDate().substring(0,9)+ " "+config.getHourOfNotifications());
-                        calendar.setTime(simpleDateFormat.parse(event.getEventDate().substring(0,9)+ " "+config.getHourOfNotifications()));
+                        calendar.setTime(simpleDateFormat.parse(event.getEventDate().substring(0,10)+ " "+config.getHourOfNotifications()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    Log.v(TAG, String.valueOf(calendar.getTime()));
                     alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
 
                 }

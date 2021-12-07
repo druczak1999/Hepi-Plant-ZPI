@@ -268,6 +268,7 @@ public class SalesOfferActivity extends AppCompatActivity implements CommentsRec
         }
         if(tags.toString().length() == 0){
             tagsTextView.setVisibility(View.GONE);
+            tagsTextView.setText("");
         } else {
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
