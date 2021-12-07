@@ -139,7 +139,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
 
             <EditText
-                android:id="@+id/editTags"
+                android:id="@+id/editTagsEditPost"
                 style="@style/DetailsFontValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

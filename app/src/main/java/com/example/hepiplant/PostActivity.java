@@ -263,6 +263,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
         }
         if (tags.toString().length() == 0) {
             tagsTextView.setVisibility(View.GONE);
+            tagsTextView.setText("");
         } else {
             tagsTextView.setVisibility(View.VISIBLE);
             tagsTextView.setText(tags.toString().trim());
