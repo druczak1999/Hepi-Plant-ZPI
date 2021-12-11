@@ -148,7 +148,7 @@ public class TimePickerActivity extends AppCompatActivity {
         for (EventDto event:events) {
             patchEventResponse(event.getId().intValue(), event.getEventDate());
         }
-        if(!patchError) Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
+        if(!patchError) Toast.makeText(getApplicationContext(),getText(R.string.edit_saved),Toast.LENGTH_LONG).show();
     }
 
     private void patchEventResponse(int eventId, String eventDate){
@@ -203,7 +203,7 @@ public class TimePickerActivity extends AppCompatActivity {
     private void onErrorResponseEvent(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(),R.string.edit_saved_failed,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getText(R.string.edit_saved_failed),Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

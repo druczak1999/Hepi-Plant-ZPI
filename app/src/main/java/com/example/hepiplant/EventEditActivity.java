@@ -177,7 +177,7 @@ public class EventEditActivity extends AppCompatActivity {
         Log.v(TAG,"onClick Edit");
         saveEvent.setOnClickListener(v -> {
             if(eventName.getText()!=null && !eventName.getText().toString().equals(" ")) patchEventResponse();
-            else Toast.makeText(getApplicationContext(),R.string.event_title,Toast.LENGTH_LONG).show();
+            else Toast.makeText(getApplicationContext(),getResources().getString(R.string.event_title),Toast.LENGTH_LONG).show();
         });
     }
 
@@ -214,7 +214,7 @@ public class EventEditActivity extends AppCompatActivity {
         if(config.isNotifications())
             setupNotifications(data);
         Intent intent = new Intent(this, MainTabsActivity.class);
-        Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getResources().getString(R.string.edit_saved),Toast.LENGTH_LONG).show();
         startActivity(intent);
         finish();
     }
@@ -222,7 +222,7 @@ public class EventEditActivity extends AppCompatActivity {
     private void onErrorResponseEvent(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(),R.string.edit_saved_failed,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getResources().getString(R.string.edit_saved_failed),Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

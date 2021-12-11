@@ -264,7 +264,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
     private void onErrorResponsePlant(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getText(R.string.edit_saved_failed), Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));
@@ -310,7 +310,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         Log.v(TAG,"onClick Edit");
         editPlant.setOnClickListener(v -> {
             if(plantName.getText()!=null) patchRequestPlant();
-            else Toast.makeText(getApplicationContext(),R.string.plant_name,Toast.LENGTH_LONG).show();
+            else Toast.makeText(getApplicationContext(),getText(R.string.plant_name),Toast.LENGTH_LONG).show();
         });
     }
 
@@ -334,7 +334,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         byte[] dataB = baos.toByteArray();
 
         UploadTask uploadTask = imagesRef.putBytes(dataB);
-        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show())
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),getText(R.string.upload_photo_failed),Toast.LENGTH_LONG).show())
                 .addOnSuccessListener(taskSnapshot -> {});
         img_str = path;
         Log.v(TAG, img_str);
@@ -433,7 +433,7 @@ public class PlantEditActivity extends AppCompatActivity implements AdapterView.
         data = plantResponseHandler.handleResponse(response, PlantDto.class);
         Log.v(TAG,"Events: "+data.getEvents());
         setupNotifications(data);
-        Toast.makeText(getApplicationContext(),R.string.edit_saved,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getText(R.string.edit_saved),Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

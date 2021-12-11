@@ -254,7 +254,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         byte[] dataB = baos.toByteArray();
 
         UploadTask uploadTask = imagesRef.putBytes(dataB);
-        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG)
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),getText(R.string.upload_photo_failed),Toast.LENGTH_LONG)
                 .show()).addOnSuccessListener(taskSnapshot -> {});
         img_str = path;
         Log.v(TAG, img_str);
@@ -299,7 +299,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
         Log.v(TAG,"onClick Edit");
         editSalesOffer.setOnClickListener(v -> {
             if(salesOfferName.getText()!=null) patchRequestSalesOffer();
-            else Toast.makeText(getApplicationContext(),R.string.sales_offer_title,Toast.LENGTH_LONG).show();
+            else Toast.makeText(getApplicationContext(),getText(R.string.sales_offer_title),Toast.LENGTH_LONG).show();
         });
     }
 
@@ -354,7 +354,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
 
     private void onPostResponseSalesOffer(JSONObject response){
         Log.v(TAG, "ONResponse");
-        Toast.makeText(getApplicationContext(), R.string.edit_saved, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getText(R.string.edit_saved), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(),ForumTabsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -363,7 +363,7 @@ public class SalesOfferEditActivity extends AppCompatActivity implements Adapter
     private void onErrorResponseSalesOffer(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(), R.string.edit_saved_failed, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getText(R.string.edit_saved_failed), Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

@@ -254,14 +254,14 @@ public class SpeciesAddActivity extends AppCompatActivity {
 
     private void onPostResponseReceived(JSONObject response) {
         SpeciesDto species = speciesResponseHandler.handleResponse(response, SpeciesDto.class);
-        makeInfoToast(R.string.add_species + species.getId().toString());
+        makeInfoToast(getText(R.string.add_species) + " "  + species.getId().toString());
         finish();
     }
 
     private void onErrorResponseReceived(VolleyError error) {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        makeInfoToast(String.valueOf(R.string.add_species_failed));
+        makeInfoToast(getResources().getString(R.string.add_species_failed));
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

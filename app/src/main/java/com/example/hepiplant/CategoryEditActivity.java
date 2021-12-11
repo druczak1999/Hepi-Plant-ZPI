@@ -120,7 +120,7 @@ public class CategoryEditActivity extends AppCompatActivity {
         Log.v(TAG, "Invoking requestProcessor");
         requestProcessor.makeRequest(Request.Method.PATCH, url, postData, RequestType.OBJECT,
                 (Response.Listener<JSONObject>) response -> {
-                    makeInfoToast(R.string.edit_category + category.getId().toString());
+                    makeInfoToast(getResources().getString(R.string.edit_category) + " "  + category.getId().toString());
                     finish();
                 }, this::onErrorResponseReceived);
     }
@@ -144,7 +144,7 @@ public class CategoryEditActivity extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error) {
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        makeInfoToast(String.valueOf(R.string.edit_saved_failed));
+        makeInfoToast(getResources().getString(R.string.edit_saved_failed));
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

@@ -95,12 +95,12 @@ public class PopUpDelete extends AppCompatActivity {
                 (Response.Listener<String>) response -> {
                     if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
                     Log.v(TAG, response);
-                    Toast.makeText(getApplicationContext(),R.string.delete_plant_message,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),getText(R.string.delete_plant_message),Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(),MainTabsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }, error -> {
-                    Toast.makeText(getApplicationContext(),R.string.delete_plant_failed,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),getText(R.string.delete_plant_failed),Toast.LENGTH_LONG).show();
                     onErrorResponseReceived(error);
                 });
     }

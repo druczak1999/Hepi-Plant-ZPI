@@ -187,7 +187,7 @@ public class PopUpArchive extends AppCompatActivity {
 
     private void onPostResponseEvent(JSONObject response){
         Log.v(TAG, "ONResponse");
-        Toast.makeText(getApplicationContext(), R.string.archive_event, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getText(R.string.archive_event), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
         startActivity(intent);
         finish();
@@ -210,7 +210,7 @@ public class PopUpArchive extends AppCompatActivity {
     private void onErrorResponsePlant(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(), R.string.archive_event_fail, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getText(R.string.archive_event_fail), Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

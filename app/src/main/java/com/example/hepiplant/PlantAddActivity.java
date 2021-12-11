@@ -215,7 +215,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private void onClickAddPlant(){
         addPlantButton.setOnClickListener(v -> {
             if(plantName.getText()!=null) postRequestPlant();
-            else Toast.makeText(getApplicationContext(),R.string.plant_name,Toast.LENGTH_LONG).show();
+            else Toast.makeText(getApplicationContext(),getText(R.string.plant_name),Toast.LENGTH_LONG).show();
         });
     }
 
@@ -244,7 +244,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 (Response.Listener<JSONObject>) response -> {
                     onPostResponsePlant(response);
-                    Toast.makeText(getApplicationContext(), R.string.add_plant, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getText(R.string.add_plant), Toast.LENGTH_LONG).show();
                     finish();
                 }, this::onErrorResponsePlant);
     }
@@ -357,7 +357,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
     private void onErrorResponsePlant(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(), R.string.add_plant_failed, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getText(R.string.add_plant_failed), Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));
@@ -394,7 +394,7 @@ public class PlantAddActivity extends AppCompatActivity implements AdapterView.O
         byte[] dataB = baos.toByteArray();
 
         UploadTask uploadTask = imagesRef.putBytes(dataB);
-        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG).show())
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),getText(R.string.upload_photo_failed),Toast.LENGTH_LONG).show())
                 .addOnSuccessListener(taskSnapshot -> {});
         img_str = path;
     }
