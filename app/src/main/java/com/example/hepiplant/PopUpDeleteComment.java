@@ -70,7 +70,7 @@ public class PopUpDeleteComment extends AppCompatActivity {
         requestProcessor.makeRequest(Request.Method.DELETE, url, null, RequestType.STRING,
             (Response.Listener<String>) response -> {
                 Log.v(TAG, response);
-                Toast.makeText(getApplicationContext(),R.string.delete_comment,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getText(R.string.delete_comment),Toast.LENGTH_LONG).show();
                 finish();
             }, this::onErrorResponseReceived);
     }
@@ -78,7 +78,7 @@ public class PopUpDeleteComment extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(),R.string.delete_comment_failed,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getText(R.string.delete_comment_failed),Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

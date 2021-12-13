@@ -80,7 +80,7 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
     private void onDeleteResponseReceived(String response) {
         Log.v(TAG, response);
         if(!getIntent().getExtras().getString("photo", "").isEmpty()) deletePhotoFromFirebase();
-        Toast.makeText(getApplicationContext(),R.string.delete_sales_offer_message,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getResources().getString(R.string.delete_sales_offer_message),Toast.LENGTH_LONG).show();
         Intent intent;
         if (config.getUserRoles().contains(ROLE_ADMIN)){
             intent = new Intent(getApplicationContext(), MainAdminActivity.class);
@@ -95,7 +95,7 @@ public class PopUpDeleteSalesOffer extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(),R.string.delete_sales_offer_failed,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getResources().getString(R.string.delete_sales_offer_failed),Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

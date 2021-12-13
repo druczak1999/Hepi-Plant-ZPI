@@ -178,13 +178,13 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         requestProcessor.makeRequest(Request.Method.POST, url, postData, RequestType.OBJECT,
                 (Response.Listener<JSONObject>) response -> {
                     Log.v(TAG, "ONResponse");
-                    Toast.makeText(getApplicationContext(), R.string.add_sales_offer_success, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getText(R.string.add_sales_offer_success), Toast.LENGTH_LONG).show();
                     finish();
                 }, error -> {
                     Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
                     Log.v(TAG, String.valueOf(postData));
                     NetworkResponse networkResponse = error.networkResponse;
-                    Toast.makeText(getApplicationContext(), R.string.add_sales_offer_failed, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getText(R.string.add_sales_offer_failed), Toast.LENGTH_LONG).show();
                     if (networkResponse != null) {
                         Log.e(TAG, "Status code: " + networkResponse.statusCode +
                                 " Data: " + Arrays.toString(networkResponse.data));
@@ -236,7 +236,7 @@ public class SalesOfferAddActivity extends AppCompatActivity implements AdapterV
         byte[] dataB = baos.toByteArray();
 
         UploadTask uploadTask = imagesRef.putBytes(dataB);
-        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),R.string.upload_photo_failed,Toast.LENGTH_LONG)
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(getApplicationContext(),getText(R.string.upload_photo_failed),Toast.LENGTH_LONG)
                 .show()).addOnSuccessListener(taskSnapshot -> {});
         img_str = path;
         Log.v(TAG, img_str);

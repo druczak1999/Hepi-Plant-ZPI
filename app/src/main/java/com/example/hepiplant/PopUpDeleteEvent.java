@@ -74,7 +74,7 @@ public class PopUpDeleteEvent extends AppCompatActivity {
                 Log.v(TAG, response);
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.cancel((int) getIntent().getExtras().getLong("eventId"));
-                Toast.makeText(getApplicationContext(),R.string.delete_event,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getText(R.string.delete_event),Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), MainTabsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -85,7 +85,7 @@ public class PopUpDeleteEvent extends AppCompatActivity {
     private void onErrorResponseReceived(VolleyError error){
         Log.e(TAG, "Request unsuccessful. Message: " + error.getMessage());
         NetworkResponse networkResponse = error.networkResponse;
-        Toast.makeText(getApplicationContext(),R.string.delete_event_failed,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getText(R.string.delete_event_failed),Toast.LENGTH_LONG).show();
         if (networkResponse != null) {
             Log.e(TAG, "Status code: " + networkResponse.statusCode +
                     " Data: " + Arrays.toString(networkResponse.data));

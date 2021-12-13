@@ -149,7 +149,7 @@ public class PostActivity extends AppCompatActivity implements CommentsRecyclerV
     public void onAddButtonClick(View v) {
         EditText editText = findViewById(R.id.addPostCommentEditText);
         String commentBody = editText.getText().toString();
-        String placeholder = String.valueOf(R.string.add_comment);
+        String placeholder = getResources().getString(R.string.add_comment);
         if (!placeholder.equals(commentBody)) {
             JSONObject postData = new JSONObject();
             try {
